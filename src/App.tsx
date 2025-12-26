@@ -1,8 +1,6 @@
 import "./App.css";
 
 function App() {
-  const test = { a: 1, b: 2 }; // husky test
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-primary">
       <h1 className="text-3xl font-bold text-white">Tailwind is working!</h1>
