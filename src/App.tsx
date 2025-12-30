@@ -1,12 +1,18 @@
-import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ColorGuide from "./pages/guide/ColorGuide";
 
-function App() {
+const App = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-primary">
-      <h1 className="text-3xl font-bold text-white">Tailwind is working!</h1>
-      <h1 className="text-2xl text-white">폰트 테스트</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* tailwind custom color 시각화 */}
+        <Route path="/color-guide" element={<ColorGuide />} />
+
+        {/* 404 처리 */}
+        <Route path="*" element={<div className="p-8">Not Found</div>} />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
