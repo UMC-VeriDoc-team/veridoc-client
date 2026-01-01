@@ -40,6 +40,7 @@ export default {
       fontFamily: {
         kr: ["Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "system-ui", "sans-serif"],
         en: ["Roboto", "system-ui", "sans-serif"],
+        brand: ["Montserrat", "system-ui", "sans-serif"],
       },
     },
   },
