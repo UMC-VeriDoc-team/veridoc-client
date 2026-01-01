@@ -16,7 +16,7 @@ const Header = () => {
     <header className="w-full border-b border-gray-100 px-12 py-5">
       <nav className="flex items-center justify-between">
         {/* Logo */}
-        <div className="h-9 w-40 bg-gray-50" />
+        <div className="font-brand text-xl font-bold text-layout-footerTitle">VeriDoc</div>
 
         {/* Navigation */}
         <div className="flex items-center gap-8">
