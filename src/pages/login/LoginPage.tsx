@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import LoginHeader from "./components/LoginHeader";
 import LoginForm from "./components/LoginForm";
 import BottomLinks from "./components/BottomLinks";
+import AuthHeader from "../common/components/AuthHeader";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ const LoginPage = () => {
     <div className="min-h-screen bg-white">
       <div className="h-20 border-b" />
       <div className="h-[50px]" />
-      <LoginHeader />
+      <AuthHeader />
       <div className="flex justify-center pt-[0px]">
         <div className="flex w-full max-w-[404px] flex-col items-center">
           <div className="h-[40px]" />

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import arrowBack from "@/assets/icons/arrow-back.svg";
 import logo from "@/assets/images/logo.svg";
 
-const LoginHeader = () => {
+const AuthHeader = () => {
   const navigate = useNavigate();
 
   return (
@@ -27,4 +27,4 @@ const LoginHeader = () => {
   );
 };
 
-export default LoginHeader;
+export default AuthHeader;
