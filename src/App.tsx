@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ColorGuide from "./pages/guide/ColorGuide";
+import LoginPage from "./pages/login/LoginPage";
 
 const App = () => {
   return (
@@ -10,6 +11,9 @@ const App = () => {
 
         {/* 404 처리 */}
         <Route path="*" element={<div className="p-8">Not Found</div>} />
+
+        {/* 로그인 */}
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );
