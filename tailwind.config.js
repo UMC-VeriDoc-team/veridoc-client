@@ -27,6 +27,13 @@ export default {
           900: "#292A2D",
           950: "#171719",
         },
+
+        layout: {
+          footerBg: "#FBFAFA",
+          footerBorder: "#D9D9D9",
+          footerTitle: "#212121",
+          footerText: "#30333C",
+        },
       },
 
       // Font system
