@@ -15,7 +15,7 @@ const Header = () => {
   return (
     <header className="w-full border-b border-gray-100 px-12 py-5">
       <nav className="flex items-center justify-between">
-        {/* Logo */}
+        {/* 임시: Logo */}
         <div className="font-brand text-xl font-bold text-layout-footerTitle">VeriDoc</div>
 
         {/* Navigation */}
