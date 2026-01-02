@@ -5,4 +5,5 @@
 /* 공통 폰트 Pretendard 적용 */
 body {
   @apply font-kr;
+  user-select: none;
 }

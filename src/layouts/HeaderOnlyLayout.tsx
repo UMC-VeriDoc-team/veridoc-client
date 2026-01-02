@@ -3,13 +3,15 @@ import { Outlet } from "react-router-dom";
 
 const HeaderOnlyLayout = () => {
   return (
-    <>
-      {/* 온보딩/로그인 전용: Header만 */}
+    <div className="flex h-screen flex-col overflow-hidden">
+      {/* 온보딩/로그인/회원가입 전용: Header만 */}
       <Header />
-      <main className="min-h-[calc(100vh-64px)]">
+
+      {/* Header 제외 영역 */}
+      <main className="flex-1 overflow-hidden">
         <Outlet />
       </main>
-    </>
+    </div>
   );
 };
 
