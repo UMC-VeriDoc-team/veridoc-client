@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ColorGuide from "./pages/guide/ColorGuide";
 import LoginPage from "./pages/login/LoginPage";
 import PasswordEmailPage from "./pages/password/PasswordEmailPage";
+import PasswordResetPage from "./pages/password/PasswordResetPage";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
 
         {/* 비밀번호 찾기 */}
         <Route path="/password/email" element={<PasswordEmailPage />} />
+        <Route path="/password/reset" element={<PasswordResetPage />} />
       </Routes>
     </BrowserRouter>
   );
