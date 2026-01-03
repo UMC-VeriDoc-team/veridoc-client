@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ColorGuide from "./pages/guide/ColorGuide";
-import HeaderOnlyLayout from "./layouts/HeaderOnlyLayout";
-import DefaultLayout from "./layouts/DefaultLayout";
-import OnboardingPage from "./pages/onboarding/OnboardingPage";
-import ModalPage from "./pages/modal/ModalPage";
-import ModalGuidePage from "./pages/guide/ModalGuidePage";
+import ColorGuide from "@/pages/guide/ColorGuide";
+import HeaderOnlyLayout from "@/layouts/HeaderOnlyLayout";
+import DefaultLayout from "@/layouts/DefaultLayout";
+import OnboardingPage from "@/pages/onboarding/OnboardingPage";
+import ModalPage from "@/components/modal/ModalPage";
+import ModalGuidePage from "@/pages/guide/ModalGuidePage";
 
 const App = () => {
   return (

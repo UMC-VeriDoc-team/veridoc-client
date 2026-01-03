@@ -1,4 +1,4 @@
-import type { ModalType } from "@/pages/modal/types/modal";
+import type { ModalType } from "@/components/modal/types/modal";
 import { create } from "zustand";
 
 interface BaseModal {
