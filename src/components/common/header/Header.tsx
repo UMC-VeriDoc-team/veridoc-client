@@ -27,7 +27,7 @@ const Header = () => {
               className={({ isActive }) =>
                 [
                   "cursor-pointer text-lg font-semibold transition-colors",
-                  isActive ? "text-brand-primary" : "text-gray-600 hover:text-gray-900",
+                  isActive ? "text-black" : "text-gray-600 hover:text-gray-900",
                 ].join(" ")
               }
             >
