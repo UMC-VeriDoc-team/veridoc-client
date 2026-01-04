@@ -1,14 +1,7 @@
 import Button from "@/components/Button/Button";
 import Input from "@/components/Input/Input";
+import { validateEmail } from "@/utils/vaildateEmail";
 import { useState } from "react";
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const validateEmail = (email: string) => {
-  if (!email.trim()) return "필수 입력 사항입니다";
-  if (!emailRegex.test(email)) return "이메일 형식이 올바르지 않습니다";
-  return "";
-};
 
 const EmailRequestForm = () => {
   const [email, setEmail] = useState("");
