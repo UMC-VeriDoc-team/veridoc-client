@@ -1,4 +1,5 @@
 import Button from "@/components/Button/Button";
+import Icon from "@/components/icon/Icon";
 import Input from "@/components/Input/Input";
 import { useMemo, useState } from "react";
 
@@ -152,23 +153,10 @@ const PasswordResetForm = () => {
             ) : null}
 
             {!confirmNewPasswordError && isPasswordMatchSuccess ? (
-              <div className="flex items-center gap-[3px] text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-brand-green">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M20 6L9 17L4 12"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+              <div className="flex items-center gap-[5px] text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-brand-green">
+                <span className="flex h-[22px] w-[22px] items-center justify-center px-[3px] py-[5px]">
+                  <Icon name="check" className="h-full w-full" />
+                </span>
 
                 <span>입력한 비밀번호가 서로 일치합니다</span>
               </div>
