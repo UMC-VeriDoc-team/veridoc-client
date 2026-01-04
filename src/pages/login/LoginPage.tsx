@@ -21,8 +21,6 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-
-      <div className="h-16" />
     </div>
   );
 };
