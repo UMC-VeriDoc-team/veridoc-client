@@ -1,10 +1,10 @@
-import AuthHeader from "@/components/header/AuthHeader";
+import AuthHeader from "@/components/Header/AuthHeader";
 import PasswordResetForm from "@/pages/password/components/PasswordResetForm";
 
 const PasswordResetPage = () => {
   return (
     <div className="flex flex-col bg-white pt-9">
-      <AuthHeader />
+      <AuthHeader backTo="/find-password" />
 
       <div className="flex justify-center pt-[40px]">
         <div className="flex w-full max-w-[404px] flex-col items-center">

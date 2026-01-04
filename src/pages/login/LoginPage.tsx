@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import LoginForm from "@/pages/login/components/LoginForm";
 import BottomLinks from "@/pages/login/components/BottomLinks";
-import AuthHeader from "@/components/header/AuthHeader";
+import AuthHeader from "@/components/Header/AuthHeader";
 
 const LoginPage = () => {
   const navigate = useNavigate();
