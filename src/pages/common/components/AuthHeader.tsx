@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
-import arrowBack from "@/assets/icons/arrow-back.svg";
 import logo from "@/assets/images/logo.svg";
+import Icon from "@/components/icon/Icon";
 
 const AuthHeader = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const AuthHeader = () => {
         aria-label="돌아가기"
         className="absolute left-4 flex h-[45px] w-[37px] items-center justify-center p-[10px] md:left-12"
       >
-        <img src={arrowBack} alt="돌아가기" className="h-full w-full" />
+        <Icon name="arrow-back" className="h-full w-full" />
       </button>
 
       <img
