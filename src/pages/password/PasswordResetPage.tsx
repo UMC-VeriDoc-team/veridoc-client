@@ -3,9 +3,7 @@ import PasswordResetForm from "./components/PasswordResetForm";
 
 const PasswordResetPage = () => {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="h-20 border-b" />
-      <div className="h-[50px]" />
+    <div className="flex flex-col bg-white pt-9">
       <AuthHeader />
 
       <div className="flex justify-center pt-[40px]">

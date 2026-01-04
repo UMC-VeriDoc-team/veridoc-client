@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ColorGuide from "@/pages/guide/ColorGuide";
-import LoginPage from "./pages/login/LoginPage";
-import PasswordEmailPage from "./pages/password/PasswordEmailPage";
-import PasswordResetPage from "./pages/password/PasswordResetPage";
+import LoginPage from "@/pages/login/LoginPage";
+import PasswordEmailPage from "@/pages/password/PasswordEmailPage";
+import PasswordResetPage from "@/pages/password/PasswordResetPage";
 import HeaderOnlyLayout from "@/layouts/HeaderOnlyLayout";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import OnboardingPage from "@/pages/onboarding/OnboardingPage";
@@ -17,6 +17,13 @@ const App = () => {
         {/* 헤더만 있는 레이아웃 (온보딩/로그인/회원가입) */}
         <Route path="/" element={<HeaderOnlyLayout />}>
           <Route index element={<OnboardingPage />} />
+
+          {/* 로그인 */}
+          <Route path="/login" element={<LoginPage />} />
+
+          {/* 비밀번호 찾기 */}
+          <Route path="/password/email" element={<PasswordEmailPage />} />
+          <Route path="/password/reset" element={<PasswordResetPage />} />
         </Route>
 
         {/* 기본 레이아웃 (헤더+푸터) */}
@@ -34,13 +41,6 @@ const App = () => {
 
         {/* 404 처리 */}
         <Route path="*" element={<div className="p-8">Not Found</div>} />
-
-        {/* 로그인 */}
-        <Route path="/login" element={<LoginPage />} />
-
-        {/* 비밀번호 찾기 */}
-        <Route path="/password/email" element={<PasswordEmailPage />} />
-        <Route path="/password/reset" element={<PasswordResetPage />} />
       </Routes>
     </BrowserRouter>
   );
