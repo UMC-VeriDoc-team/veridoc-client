@@ -1,5 +1,5 @@
-import AuthHeader from "../common/components/AuthHeader";
-import EmailRequestForm from "./components/EmailRequestForm";
+import AuthHeader from "@/pages/common/components/AuthHeader";
+import EmailRequestForm from "@/pages/password/components/EmailRequestForm";
 
 const PasswordEmailPage = () => {
   return (

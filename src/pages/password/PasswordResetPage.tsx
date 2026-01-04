@@ -1,5 +1,5 @@
-import AuthHeader from "../common/components/AuthHeader";
-import PasswordResetForm from "./components/PasswordResetForm";
+import AuthHeader from "@/pages/common/components/AuthHeader";
+import PasswordResetForm from "@/pages/password/components/PasswordResetForm";
 
 const PasswordResetPage = () => {
   return (
