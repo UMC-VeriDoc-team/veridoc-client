@@ -1,4 +1,4 @@
-import Icon from "@/components/icon/Icon";
+import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 
 // 로그인 실패 모달
