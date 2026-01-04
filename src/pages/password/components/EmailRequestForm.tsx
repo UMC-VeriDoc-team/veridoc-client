@@ -1,6 +1,6 @@
 import Button from "@/components/Button/Button";
 import EmailDomainInput from "@/components/Input/EmailDomainInput";
-import { validateEmail } from "@/utils/vaildateEmail";
+import { validateEmail } from "@/utils/validateEmail";
 import { useState } from "react";
 
 const EmailRequestForm = () => {

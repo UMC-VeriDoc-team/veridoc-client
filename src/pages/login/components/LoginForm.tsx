@@ -1,7 +1,7 @@
 import Button from "@/components/Button/Button";
 import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import Input from "@/components/Input/Input";
-import { validateEmail } from "@/utils/vaildateEmail";
+import { validateEmail } from "@/utils/validateEmail";
 import { useMemo, useState } from "react";
 
 const LoginForm = () => {

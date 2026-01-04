@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { EMAIL_DOMAIN_OPTIONS, type EmailDomainOption } from "@/constants/email";
-import Icon from "../icon/Icon";
+import Icon from "@/components/Icon/Icon";
 
 interface EmailDomainInputProps {
   value: string; // full email: local@domain

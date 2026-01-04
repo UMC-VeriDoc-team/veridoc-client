@@ -1,5 +1,5 @@
 import Button from "@/components/Button/Button";
-import Icon from "@/components/icon/Icon";
+import Icon from "@/components/Icon/Icon";
 import Input from "@/components/Input/Input";
 import { useMemo, useState } from "react";
 
