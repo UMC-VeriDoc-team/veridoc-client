@@ -1,4 +1,4 @@
-import Icon from "@/components/icon/Icon";
+import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 
 // 선택 증상 변경 완료 모달
