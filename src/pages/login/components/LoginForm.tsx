@@ -1,4 +1,5 @@
 import Button from "@/components/Button/Button";
+import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import Input from "@/components/Input/Input";
 import { validateEmail } from "@/utils/vaildateEmail";
 import { useMemo, useState } from "react";
@@ -45,10 +46,9 @@ const LoginForm = () => {
               이메일 <span className="text-error">*</span>
             </label>
 
-            <Input
-              placeholder="이메일을 입력해주세요"
+            <EmailDomainInput
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(nextEmail) => setEmail(nextEmail)}
               onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
               hasError={!!emailError}
             />

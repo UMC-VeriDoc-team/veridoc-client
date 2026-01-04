@@ -1,5 +1,5 @@
 import Button from "@/components/Button/Button";
-import Input from "@/components/Input/Input";
+import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import { validateEmail } from "@/utils/vaildateEmail";
 import { useState } from "react";
 
@@ -35,10 +35,9 @@ const EmailRequestForm = () => {
               이메일 <span className="text-error">*</span>
             </label>
 
-            <Input
-              placeholder="이메일을 입력해주세요"
+            <EmailDomainInput
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(nextEmail) => setEmail(nextEmail)}
               onBlur={() => setTouchedEmail(true)}
               hasError={!!emailError}
             />
