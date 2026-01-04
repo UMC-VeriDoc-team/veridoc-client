@@ -16,6 +16,7 @@ import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding
 import HomePreview from "@/pages/home/components/HomePreview";
 import MobileSplashPage from "@/pages/splash/MobileSplashPage";
 import useIsMobile from "./hooks/useIsMobile";
+import MyPage from "@/pages/mypage/Mypage";
 
 const App = () => {
   const isMobile = useIsMobile();
@@ -53,7 +54,9 @@ const App = () => {
 
             {/* 증상 */}
             <Route path="/symptom" element={<SymptomPage />} />
-            {/* <Route path="/my" element={<MyPage />} /> */}
+            
+            {/* 마이페이지 */}
+            <Route path="/my" element={<MyPage />} />
 
             {/* 추후 메인 홈과 합쳐질 예정 */}
             {/* 임시: 범용가이드 */}
