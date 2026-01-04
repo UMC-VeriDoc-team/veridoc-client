@@ -10,6 +10,14 @@ import MySymptomNotSelectedModal from "@/components/Modal/components/my/MySympto
 import MyProfileUpdatedModal from "@/components/Modal/components/my/MyProfileUpdatedModal";
 import MyWithdrawNoticeModal from "@/components/Modal/components/my/MyWithdrawNoticeModal";
 import MyWithdrawDoneModal from "@/components/Modal/components/my/MyWithdrawDoneModal";
+import HomeTermsAgreementModal from "@/components/Modal/components/home/HomeTermsAgreementModal";
+import HomeTermsDetailModal from "@/components/Modal/components/home/HomeTermsDetailModal";
+
+// 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
+const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
+  [ModalType.HOME_TERMS_AGREEMENT]: false,
+  [ModalType.HOME_TERMS_DETAIL]: false,
+};
 
 const ModalPage = () => {
   const { isModalOpen, modalType } = useBaseModal();
@@ -41,6 +49,10 @@ const ModalPage = () => {
         return <AuthPasswordChangedModal />;
 
       // 홈
+      case ModalType.HOME_TERMS_AGREEMENT: // 서비스 약관 동의
+        return <HomeTermsAgreementModal />;
+      case ModalType.HOME_TERMS_DETAIL: // 약관 상세
+        return <HomeTermsDetailModal />;
 
       // 마이페이지
       case ModalType.MY_SYMPTOM_CHANGED: // 선택 증상 변경 완료
@@ -58,7 +70,11 @@ const ModalPage = () => {
     }
   };
 
-  return <ModalBackground>{renderModal()}</ModalBackground>;
+  return (
+    <ModalBackground overlayClosable={MODAL_OVERLAY_CLOSABLE[modalType] ?? true}>
+      {renderModal()}
+    </ModalBackground>
+  );
 };
 
 export default ModalPage;
