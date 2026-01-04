@@ -27,12 +27,20 @@ export default {
           900: "#292A2D",
           950: "#171719",
         },
+
+        layout: {
+          footerBg: "#FBFAFA",
+          footerBorder: "#D9D9D9",
+          footerTitle: "#212121",
+          footerText: "#30333C",
+        },
       },
 
       // Font system
       fontFamily: {
         kr: ["Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "system-ui", "sans-serif"],
         en: ["Roboto", "system-ui", "sans-serif"],
+        brand: ["Montserrat", "system-ui", "sans-serif"],
       },
     },
   },
