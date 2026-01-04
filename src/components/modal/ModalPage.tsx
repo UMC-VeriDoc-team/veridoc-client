@@ -1,15 +1,15 @@
 import { useEffect } from "react";
-import { ModalType } from "@/components/modal/types/modal";
+import { ModalType } from "@/components/Modal/types/modal";
 import useBaseModal from "@/stores/modal/useBaseModal";
-import ModalBackground from "@/components/modal/components/ModalBackground";
-import AuthLoginFailedModal from "@/components/modal/components/auth/AuthLoginFailedModal";
-import AuthMailSentModal from "@/components/modal/components/auth/AuthMailSentModal";
-import AuthPasswordChangedModal from "@/components/modal/components/auth/AuthPasswordChangedModal";
-import MySymptomChangedModal from "@/components/modal/components/my/MySymptomChangedModal";
-import MySymptomNotSelectedModal from "@/components/modal/components/my/MySymptomNotSelectedModal";
-import MyProfileUpdatedModal from "@/components/modal/components/my/MyProfileUpdatedModal";
-import MyWithdrawNoticeModal from "@/components/modal/components/my/MyWithdrawNoticeModal";
-import MyWithdrawDoneModal from "@/components/modal/components/my/MyWithdrawDoneModal";
+import ModalBackground from "@/components/Modal/components/ModalBackground";
+import AuthLoginFailedModal from "@/components/Modal/components/auth/AuthLoginFailedModal";
+import AuthMailSentModal from "@/components/Modal/components/auth/AuthMailSentModal";
+import AuthPasswordChangedModal from "@/components/Modal/components/auth/AuthPasswordChangedModal";
+import MySymptomChangedModal from "@/components/Modal/components/my/MySymptomChangedModal";
+import MySymptomNotSelectedModal from "@/components/Modal/components/my/MySymptomNotSelectedModal";
+import MyProfileUpdatedModal from "@/components/Modal/components/my/MyProfileUpdatedModal";
+import MyWithdrawNoticeModal from "@/components/Modal/components/my/MyWithdrawNoticeModal";
+import MyWithdrawDoneModal from "@/components/Modal/components/my/MyWithdrawDoneModal";
 
 const ModalPage = () => {
   const { isModalOpen, modalType } = useBaseModal();

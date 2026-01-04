@@ -1,5 +1,5 @@
 import useBaseModal from "@/stores/modal/useBaseModal";
-import { ModalType } from "@/components/modal/types/modal";
+import { ModalType } from "@/components/Modal/types/modal";
 
 interface ModalTestItem {
   label: string;

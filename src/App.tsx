@@ -3,7 +3,7 @@ import ColorGuide from "@/pages/guide/ColorGuide";
 import HeaderOnlyLayout from "@/layouts/HeaderOnlyLayout";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import OnboardingPage from "@/pages/onboarding/OnboardingPage";
-import ModalPage from "@/components/modal/ModalPage";
+import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
 
 const App = () => {

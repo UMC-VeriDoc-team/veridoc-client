@@ -1,6 +1,6 @@
 import Icon from "@/components/icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
-import { ModalType } from "@/components/modal/types/modal";
+import { ModalType } from "@/components/Modal/types/modal";
 
 // 회원탈퇴 안내 모달
 const MyWithdrawNoticeModal = () => {
