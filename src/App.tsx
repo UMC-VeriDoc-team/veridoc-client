@@ -5,6 +5,7 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import OnboardingPage from "@/pages/onboarding/OnboardingPage";
 import ModalPage from "@/components/modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
+import MyPage from "./pages/mypage/Mypage";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
 
         {/* 404 처리 */}
         <Route path="*" element={<div className="p-8">Not Found</div>} />
+        <Route path="/my" element={<MyPage />} />
       </Routes>
     </BrowserRouter>
   );
