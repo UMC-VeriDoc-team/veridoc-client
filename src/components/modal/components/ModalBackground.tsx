@@ -3,9 +3,10 @@ import { useEffect } from "react";
 
 interface ModalBackgroundProps {
   children: React.ReactNode;
+  overlayClosable?: boolean; // 배경 클릭 시 모달 닫기 여부
 }
 
-const ModalBackground = ({ children }: ModalBackgroundProps) => {
+const ModalBackground = ({ children, overlayClosable = true }: ModalBackgroundProps) => {
   const { closeModal } = useBaseModal();
 
   useEffect(() => {
@@ -16,9 +17,14 @@ const ModalBackground = ({ children }: ModalBackgroundProps) => {
     };
   }, []);
 
+  const handleOverlayClick = () => {
+    if (!overlayClosable) return;
+    closeModal();
+  };
+
   return (
     <div
-      onClick={closeModal}
+      onClick={handleOverlayClick}
       className="fixed inset-0 z-[70] flex items-center justify-center bg-[#0000004A]"
     >
       <div onClick={(e) => e.stopPropagation()} className="z-[70]">
