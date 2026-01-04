@@ -1,4 +1,4 @@
-import Icon from "@/components/icon/Icon";
+import Icon from "@/components/Icon/Icon";
 import { Link } from "react-router-dom";
 
 interface FooterLink {
