@@ -22,7 +22,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
 
           {/* 비밀번호 찾기 */}
-          <Route path="/password/email" element={<PasswordEmailPage />} />
+          <Route path="/find-password" element={<PasswordEmailPage />} />
           <Route path="/password/reset" element={<PasswordResetPage />} />
         </Route>
 
