@@ -12,6 +12,7 @@ import MyWithdrawNoticeModal from "@/components/Modal/components/my/MyWithdrawNo
 import MyWithdrawDoneModal from "@/components/Modal/components/my/MyWithdrawDoneModal";
 import HomeTermsAgreementModal from "@/components/Modal/components/home/HomeTermsAgreementModal";
 import HomeTermsDetailModal from "@/components/Modal/components/home/HomeTermsDetailModal";
+import HomeDoctorOpinionModal from "@/components/Modal/components/home/HomeDoctorOpinionModal";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -53,6 +54,8 @@ const ModalPage = () => {
         return <HomeTermsAgreementModal />;
       case ModalType.HOME_TERMS_DETAIL: // 약관 상세
         return <HomeTermsDetailModal />;
+      case ModalType.HOME_DOCTOR_OPINION: // 전문의 소견 전체 보기
+        return <HomeDoctorOpinionModal />;
 
       // 마이페이지
       case ModalType.MY_SYMPTOM_CHANGED: // 선택 증상 변경 완료
