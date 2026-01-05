@@ -10,7 +10,7 @@ const AuthPasswordChangedModal = () => {
   // 로그인 페이지로 이동
   const handleGoToLogin = () => {
     closeModal();
-    navigate("/login"); // 임시 주소
+    navigate("/login");
   };
 
   return (

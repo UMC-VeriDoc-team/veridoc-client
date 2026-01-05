@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import logo from "@/assets/images/logo.svg";
 
 interface MenuItem {
   label: string;
@@ -12,11 +13,19 @@ const menus: MenuItem[] = [
 ];
 
 const Header = () => {
+  const navigate = useNavigate();
+
   return (
-    <header className="w-full border-b border-gray-100 px-12 py-5">
+    <header className="w-full border-b border-gray-100 px-12 py-4">
       <nav className="flex items-center justify-between">
-        {/* 임시: Logo */}
-        <div className="font-brand text-xl font-bold text-layout-footerTitle">VeriDoc</div>
+        {/* Logo */}
+        <img
+          onClick={() => navigate("/")}
+          src={logo}
+          alt="VeriDoc 로고"
+          className="h-[40px] w-auto cursor-pointer object-contain"
+          draggable={false}
+        />
 
         {/* Navigation */}
         <div className="flex items-center gap-8">
