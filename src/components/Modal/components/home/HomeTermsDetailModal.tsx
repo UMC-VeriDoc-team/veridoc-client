@@ -47,7 +47,7 @@ const HomeTermsDetailModal = () => {
           <p className="text-lg font-bold text-gray-900 sm:text-xl">
             {activeItem.label.includes("전체") ? "전체 약관 내용" : activeItem.label}
           </p>
-          <p className="mt-1 text-base text-gray-500">
+          <p className="mt-1 text-base font-medium text-gray-500">
             안전한 서비스 이용을 위한 약관의 전문입니다.
           </p>
         </div>

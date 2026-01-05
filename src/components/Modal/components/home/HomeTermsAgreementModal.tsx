@@ -91,7 +91,7 @@ const HomeTermsAgreementModal = () => {
                   onChange={() => toggleChecked(t.key)}
                   className="h-6 w-6 accent-brand-primary"
                 />
-                <span className="text-base font-semibold text-gray-900 sm:text-lg">
+                <span className="text-base font-medium text-gray-900 sm:text-lg">
                   {t.required && <span className="text-brand-primary">[필수] </span>}
                   {t.label}
                 </span>
