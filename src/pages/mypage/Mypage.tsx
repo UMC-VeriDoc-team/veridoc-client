@@ -69,15 +69,19 @@ const MyPage = () => {
         {SYMPTOMS.map((item) => (
           <div
             key={item.id}
-            className="flex h-[180px] w-[180px] cursor-pointer flex-col items-center justify-center rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md"
+            // 1. overflow-hidden 추가: 이미지가 둥근 모서리 밖으로 튀어 나가는 것 방지
+            className="flex h-[180px] w-[180px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md"
           >
-            {/* ✨ 여기가 변경되었습니다: div 안에 img 태그 넣기 */}
-            <div
-              className={`h-20 w-20 rounded-full ${item.color} mb-4 flex items-center justify-center`}
-            >
-              <img src={item.icon} alt={item.name} className="h-10 w-10" />
+            {/* 2. 이미지 영역: 높이의 75%를 차지하도록 설정 */}
+            {/* 기존의 패딩(p-4)이나 배경색 로직을 제거하고 w-full h-full로 꽉 채움 */}
+            <div className="h-[75%] w-full bg-gray-50">
+              <img src={item.icon} alt={item.name} className="h-full w-full object-cover" />
             </div>
-            <span className="text-lg font-bold text-gray-700">{item.name}</span>
+
+            {/* 3. 텍스트 영역: 나머지 높이(25%)를 차지 */}
+            <div className="flex h-[25%] w-full items-center justify-center border-t border-gray-50 bg-white">
+              <span className="text-lg font-bold text-gray-700">{item.name}</span>
+            </div>
           </div>
         ))}
       </div>
