@@ -28,7 +28,7 @@ const OnboardingPage = () => {
             <div className="flex w-full flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
               {/* 회원가입 */}
               <Link
-                to="/signup"
+                to="/select-symptom"
                 className="inline-flex h-12 w-full items-center justify-center rounded-[4px] border border-brand-primary bg-white text-base font-semibold leading-none text-brand-primary transition-colors hover:bg-brand-primary/10 sm:w-48 sm:text-lg"
               >
                 회원가입
