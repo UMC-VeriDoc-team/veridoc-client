@@ -109,6 +109,7 @@ const DateOfBirthInput = ({
       >
         <input
           inputMode="numeric"
+          pattern="\d*"
           maxLength={4}
           placeholder="YYYY"
           value={value.year}
@@ -121,6 +122,7 @@ const DateOfBirthInput = ({
 
         <input
           inputMode="numeric"
+          pattern="\d*"
           maxLength={2}
           placeholder="MM"
           value={value.month}
@@ -133,6 +135,7 @@ const DateOfBirthInput = ({
 
         <input
           inputMode="numeric"
+          pattern="\d*"
           maxLength={2}
           placeholder="DD"
           value={value.day}
