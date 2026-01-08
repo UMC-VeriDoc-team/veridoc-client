@@ -3,7 +3,7 @@ import SignUpForm from "./components/SignUpForm";
 
 const SignUpPage = () => {
   return (
-    <div className="flex h-screen flex-col overflow-y-auto bg-white pt-9">
+    <div className="flex min-h-full flex-col bg-white pt-9">
       <AuthHeader backTo="/select-symptom" />
       <div className="flex justify-center pt-[0px]">
         <div className="flex w-full max-w-[404px] flex-col items-center">
