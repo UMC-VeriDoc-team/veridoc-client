@@ -1,9 +1,12 @@
 import Button from "@/components/Button/Button";
 import EmailDomainInput from "@/components/Input/EmailDomainInput";
+import useBaseModal from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useState } from "react";
 
 const EmailRequestForm = () => {
+  const { openModal } = useBaseModal();
+
   const [email, setEmail] = useState("");
   const [touchedEmail, setTouchedEmail] = useState(false);
 
@@ -14,7 +17,8 @@ const EmailRequestForm = () => {
     setTouchedEmail(true);
     if (!isFormValid) return;
 
-    // TODO: 메일 발송 모달 처리
+    // 메일 발송 모달 오픈
+    openModal("AUTH_MAIL_SENT");
   };
 
   return (

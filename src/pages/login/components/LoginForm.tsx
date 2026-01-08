@@ -1,10 +1,12 @@
 import Button from "@/components/Button/Button";
 import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import Input from "@/components/Input/Input";
+import useBaseModal from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useMemo, useState } from "react";
 
 const LoginForm = () => {
+  const { openModal } = useBaseModal();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -33,6 +35,9 @@ const LoginForm = () => {
     if (!isFormValid) return; // 폼이 유효하지 않으면 제출하지 않음
 
     // TODO(feature/login): 로그인 API 연동 후 처리
+
+    // 로그인 실패 모달
+    openModal("AUTH_LOGIN_FAILED");
   };
 
   return (
