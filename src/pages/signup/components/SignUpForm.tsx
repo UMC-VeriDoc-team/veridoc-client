@@ -4,6 +4,7 @@ import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import Input from "@/components/Input/Input";
 import type { Gender } from "@/components/Select/GenderSelect";
 import GenderSelect from "@/components/Select/GenderSelect";
+import useBaseModal from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useMemo, useState } from "react";
 
@@ -15,6 +16,8 @@ type TouchedState = {
 };
 
 const SignUpForm = () => {
+  const { openModal } = useBaseModal();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -66,6 +69,9 @@ const SignUpForm = () => {
     if (!isFormValid) return;
 
     // TODO: API 연동
+
+    // 회원가입 완료 모달 오픈
+    openModal("AUTH_SIGNUP_SUCCESS");
   };
 
   const renderField = (label: string, children: React.ReactNode, error: string | null) => (
