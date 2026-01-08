@@ -8,6 +8,8 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import OnboardingPage from "@/pages/onboarding/OnboardingPage";
 import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
+import SignUpPage from "./pages/signup/SignUpPage";
+import SignUpSymptomPage from "./pages/signup/SignUpSymptomPage";
 
 const App = () => {
   return (
@@ -18,6 +20,9 @@ const App = () => {
         <Route path="/" element={<HeaderOnlyLayout />}>
           <Route index element={<OnboardingPage />} />
 
+          {/* 회원가입 */}
+          <Route path="/select-symptom" element={<SignUpSymptomPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
           {/* 로그인 */}
           <Route path="/login" element={<LoginPage />} />
 

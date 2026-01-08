@@ -6,7 +6,7 @@ const DefaultLayout = () => {
   return (
     <div className="flex min-h-screen flex-col">
       {/* 기본 페이지: Header + Footer */}
-      <Header />
+      <Header className="sticky top-0 z-50" />
 
       {/* Header/Footer 사이 공간 */}
       <main className="flex-1">

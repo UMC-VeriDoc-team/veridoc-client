@@ -16,7 +16,7 @@ const LoginPage = () => {
             <LoginForm />
             <BottomLinks
               onClickFindPassword={() => navigate("/find-password")}
-              onClickSignup={() => navigate("/signup")}
+              onClickSignup={() => navigate("/select-symptom", { state: { from: "/login" } })}
             />
           </div>
         </div>

@@ -12,11 +12,15 @@ const menus: MenuItem[] = [
   { label: "마이페이지", path: "/my" },
 ];
 
-const Header = () => {
+interface HeaderProps {
+  className?: string;
+}
+
+const Header = ({ className }: HeaderProps) => {
   const navigate = useNavigate();
 
   return (
-    <header className="w-full border-b border-gray-100 px-12 py-4">
+    <header className={`w-full border-b border-gray-100 bg-white px-12 py-4 ${className}`}>
       <nav className="flex items-center justify-between">
         {/* Logo */}
         <img
