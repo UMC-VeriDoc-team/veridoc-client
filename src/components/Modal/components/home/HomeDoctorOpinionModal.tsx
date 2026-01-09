@@ -34,7 +34,7 @@ const HomeDoctorOpinionModal = () => {
   const { closeModal } = useBaseModal();
 
   return (
-    <div className="relative flex h-[90vh] max-h-[900px] w-[92vw] max-w-[700px] flex-col overflow-hidden rounded-xl bg-white px-5 py-12 sm:min-w-[380px] sm:px-8 sm:py-14 md:px-11 md:py-16">
+    <div className="relative flex h-[90vh] max-h-[900px] w-[92vw] max-w-[700px] flex-col overflow-hidden rounded-xl bg-white px-4 py-10 sm:min-w-[380px]">
       {/* 모달 닫기 */}
       <button
         type="button"
@@ -46,7 +46,7 @@ const HomeDoctorOpinionModal = () => {
       </button>
 
       {/* 상단: 제목 + 콘텐츠 */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto px-1 py-2 sm:px-4 sm:py-4 md:px-7 md:py-6">
         <div className="flex flex-col gap-6 sm:gap-8">
           <div className="flex gap-4">
             <p className="text-sm text-gray-950 underline">어깨</p>
@@ -55,10 +55,10 @@ const HomeDoctorOpinionModal = () => {
 
           {/* 제목 */}
           <div className="flex flex-col space-y-2">
-            <p className="text-2xl font-extrabold text-gray-950 sm:text-3xl md:text-4xl">
+            <p className="text-4xl font-extrabold text-gray-950 sm:text-3xl md:text-4xl">
               반복되는 두통과 어깨 결림,
             </p>
-            <p className="text-2xl font-extrabold text-gray-950 sm:text-3xl md:text-4xl">
+            <p className="text-4xl font-extrabold text-gray-950 sm:text-3xl md:text-4xl">
               거북목증후군을 의심해보세요
             </p>
           </div>
