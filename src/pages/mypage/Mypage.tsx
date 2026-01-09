@@ -1,56 +1,30 @@
 import React, { useState } from "react";
+// Icon 컴포넌트 불러오기 (경로 확인!)
+import Icon from "../../components/Icon/Icon";
 
-// 1. 아이콘 파일 불러오기 (파일명이 다르면 꼭 수정하세요!)
-// 만약 파일명에 빨간 줄이 뜨면 경로 오타를 확인하세요.
-import iconKnee from "../../assets/icons/icon-knee.svg";
-import iconWaist from "../../assets/icons/icon-waist.svg";
-import iconShoulder from "../../assets/icons/icon-shoulder.svg";
-import iconHead from "../../assets/icons/icon-head.svg";
-import iconStomach from "../../assets/icons/icon-stomach.svg";
-import iconNeck from "../../assets/icons/icon-neck.svg";
-
-// 2. 데이터에 아이콘 변수 연결
+// [데이터] 증상 리스트
 const SYMPTOMS = [
-  { id: 1, name: "무릎", color: "bg-blue-100", icon: iconKnee },
-  { id: 2, name: "허리", color: "bg-yellow-100", icon: iconWaist },
-  { id: 3, name: "어깨", color: "bg-blue-200", icon: iconShoulder },
-  { id: 4, name: "두통", color: "bg-red-100", icon: iconHead },
-  { id: 5, name: "복통", color: "bg-blue-50", icon: iconStomach },
-  { id: 6, name: "목", color: "bg-orange-100", icon: iconNeck },
+  { id: 1, name: "무릎", iconName: "icon-knee" },
+  { id: 2, name: "허리", iconName: "icon-waist" },
+  { id: 3, name: "어깨", iconName: "icon-shoulder" },
+  { id: 4, name: "두통", iconName: "icon-head" },
+  { id: 5, name: "복통", iconName: "icon-stomach" },
+  { id: 6, name: "목", iconName: "icon-neck" },
 ];
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState<"symptom" | "info">("symptom");
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleButtonClick = () => {
-    setIsEditing(!isEditing);
-  };
-
-  return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-white">
-      {/* 상단 탭 */}
-      <div className="mt-10 flex w-full max-w-4xl overflow-hidden rounded-lg border border-gray-200">
-        <button
-          className={`flex-1 py-4 text-center font-bold ${activeTab === "symptom" ? "bg-white text-black" : "bg-gray-100 text-gray-400"}`}
-          onClick={() => setActiveTab("symptom")}
-        >
-          나의 증상 관리
-        </button>
-        <button
-          className={`flex-1 py-4 text-center font-bold ${activeTab === "info" ? "bg-white text-black" : "bg-gray-100 text-gray-400"}`}
-          onClick={() => setActiveTab("info")}
-        >
-          정보 수정
-        </button>
-      </div>
-
-      {/* 메인 타이틀 */}
+  // -----------------------------------------------------------------------
+  // [화면 1] 나의 증상 관리
+  // -----------------------------------------------------------------------
+  const renderSymptomContent = () => (
+    <>
       <div className="mt-16 text-center">
         <h2 className="mb-2 text-3xl font-bold text-blue-500">
           {isEditing ? "현재 확인 중인 증상을 변경해 보세요" : "현재 확인 중인 증상이에요"}
         </h2>
-
         <p className="mt-4 leading-relaxed text-gray-500">
           {isEditing ? (
             <>
@@ -64,21 +38,15 @@ const MyPage = () => {
         </p>
       </div>
 
-      {/* 증상 카드 그리드 */}
       <div className="mt-12 grid grid-cols-3 gap-6">
         {SYMPTOMS.map((item) => (
           <div
             key={item.id}
-            // 1. overflow-hidden 추가: 이미지가 둥근 모서리 밖으로 튀어 나가는 것 방지
             className="flex h-[180px] w-[180px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md"
           >
-            {/* 2. 이미지 영역: 높이의 75%를 차지하도록 설정 */}
-            {/* 기존의 패딩(p-4)이나 배경색 로직을 제거하고 w-full h-full로 꽉 채움 */}
             <div className="h-[75%] w-full bg-gray-50">
-              <img src={item.icon} alt={item.name} className="h-full w-full object-cover" />
+              <Icon name={item.iconName} className="h-full w-full object-cover" />
             </div>
-
-            {/* 3. 텍스트 영역: 나머지 높이(25%)를 차지 */}
             <div className="flex h-[25%] w-full items-center justify-center border-t border-gray-50 bg-white">
               <span className="text-lg font-bold text-gray-700">{item.name}</span>
             </div>
@@ -86,15 +54,167 @@ const MyPage = () => {
         ))}
       </div>
 
-      {/* 버튼 */}
       <div className="mb-20 mt-16">
         <button
-          onClick={handleButtonClick}
+          onClick={() => setIsEditing(!isEditing)}
           className="w-[400px] rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
         >
           {isEditing ? "저장하기" : "수정하기"}
         </button>
       </div>
+    </>
+  );
+
+  // -----------------------------------------------------------------------
+  // [화면 2] 정보 수정 컨텐츠
+  // -----------------------------------------------------------------------
+  const renderInfoContent = () => (
+    <div className="mb-20 mt-12 flex w-full max-w-3xl flex-col">
+      {/* === 상단: 프로필 + 입력 폼 영역 === */}
+      <div className="flex flex-col gap-12 md:flex-row">
+        {/* 1. 왼쪽: 프로필 사진 */}
+        <div className="flex w-full flex-col items-center md:w-1/3">
+          <h3 className="mb-6 w-full text-left text-lg font-bold text-black">개인정보 수정</h3>
+          <div className="relative">
+            <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-blue-500 bg-gray-50">
+              {/* ✨ [수정] 추출하신 'icon-male'을 프로필 이미지로 사용 */}
+              <Icon name="icon-male" className="h-full w-full object-cover" />
+            </div>
+            {/* 카메라 버튼 */}
+            <button className="absolute bottom-2 right-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-gray-300 bg-white shadow-sm hover:bg-gray-50">
+              <span className="text-lg">📷</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 2. 오른쪽: 입력 폼 */}
+        <div className="mt-4 flex w-full flex-col space-y-6 md:mt-16 md:w-2/3">
+          {/* 이름 */}
+          <div>
+            <label className="mb-2 block text-sm font-bold text-gray-500">이름</label>
+            <input
+              type="text"
+              defaultValue="홍길동"
+              className="w-full rounded-md border border-gray-300 p-3 text-black focus:outline-blue-500"
+            />
+          </div>
+
+          {/* 생년월일 */}
+          <div>
+            <label className="mb-2 block text-sm font-bold text-gray-500">생년월일</label>
+            <input
+              type="text"
+              defaultValue="2000 / 11 / 10"
+              className="w-full rounded-md border border-gray-300 p-3 text-black focus:outline-blue-500"
+            />
+          </div>
+
+          {/* 이메일 */}
+          <div>
+            <label className="mb-2 block text-sm font-bold text-gray-500">이메일</label>
+            <div className="relative">
+              <input
+                type="email"
+                defaultValue="honggil2000@naver.com"
+                disabled
+                className="w-full cursor-not-allowed rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-500"
+              />
+              <div className="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 transform items-center justify-center">
+                {/* ✨ [수정] 자물쇠 아이콘 적용 */}
+                <Icon name="icon-lock" className="h-full w-full text-gray-400" />
+              </div>
+            </div>
+          </div>
+
+          {/* 성별 */}
+          <div>
+            <label className="mb-2 block text-sm font-bold text-gray-500">성별</label>
+            <div className="flex gap-2">
+              <button className="flex-1 rounded-md border border-blue-500 bg-white py-3 font-bold text-blue-500 transition-colors">
+                남성
+              </button>
+              <button className="flex-1 rounded-md border border-gray-200 bg-gray-50 py-3 font-bold text-gray-400 transition-colors hover:bg-gray-100">
+                여성
+              </button>
+            </div>
+          </div>
+
+          {/* 저장 버튼 */}
+          <button className="mt-4 w-full rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600">
+            개인정보 저장
+          </button>
+        </div>
+      </div>
+
+      {/* === 하단: 보안설정 & 회원탈퇴 === */}
+      <div className="mt-16 space-y-12">
+        {/* 보안설정 */}
+        <section>
+          <h3 className="mb-1 text-lg font-bold text-black">보안설정</h3>
+          <p className="mb-4 text-sm text-gray-500">
+            계정 보안을 위해 주기적인 비밀번호 변경을 권장해요.
+          </p>
+          <button className="group flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50">
+            <span className="font-bold text-black">비밀번호 변경</span>
+            <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
+              {/* ✨ [수정] 화살표 아이콘 적용 */}
+              <Icon name="icon-arrow" className="h-full w-full text-gray-400" />
+            </div>
+          </button>
+        </section>
+
+        {/* 회원탈퇴 */}
+        <section>
+          <h3 className="mb-1 text-lg font-bold text-black">회원탈퇴</h3>
+          <p className="mb-4 text-sm text-gray-500">
+            회원탈퇴를 신청하기 전에 아래 사항을 꼭 확인해 주세요.
+          </p>
+
+          <div className="mb-4 rounded-lg bg-gray-50 p-6 text-sm leading-relaxed text-gray-700">
+            1. 회원 탈퇴 시 회원님의 개인정보는 관련 법령에 따라 일정 기간 보관 후 삭제됩니다.
+            <br />
+            2. 탈퇴 후에는 아이디 및 보유 혜택이 모두 소멸되며, 복구가 불가능합니다.
+          </div>
+
+          <button className="group flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50">
+            <span className="font-bold text-black">회원탈퇴</span>
+            <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
+              {/* ✨ [수정] 화살표 아이콘 적용 */}
+              <Icon name="icon-arrow" className="h-full w-full text-gray-400" />
+            </div>
+          </button>
+        </section>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex min-h-screen w-full flex-col items-center bg-white">
+      {/* 🚀 상단 로고 영역 */}
+      <div className="mb-8 mt-10 flex items-center justify-center">
+        {/* ✨ [수정] VeriDoc 로고 아이콘 적용 (크기는 h-10 w-auto 등으로 조절 가능) */}
+        <div className="h-12">
+          <Icon name="icon-logo" className="h-full w-auto" />
+        </div>
+      </div>
+
+      {/* 탭 메뉴 */}
+      <div className="flex w-full max-w-4xl overflow-hidden rounded-lg border border-gray-200">
+        <button
+          className={`flex-1 py-4 text-center font-bold transition-colors ${activeTab === "symptom" ? "border-b-2 border-blue-500 bg-white text-blue-500" : "bg-gray-50 text-gray-400"}`}
+          onClick={() => setActiveTab("symptom")}
+        >
+          나의 증상 관리
+        </button>
+        <button
+          className={`flex-1 py-4 text-center font-bold transition-colors ${activeTab === "info" ? "border-b-2 border-blue-500 bg-white text-blue-500" : "bg-gray-50 text-gray-400"}`}
+          onClick={() => setActiveTab("info")}
+        >
+          정보 수정
+        </button>
+      </div>
+
+      {activeTab === "symptom" ? renderSymptomContent() : renderInfoContent()}
     </div>
   );
 };
