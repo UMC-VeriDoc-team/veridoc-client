@@ -23,6 +23,7 @@ const App = () => {
           {/* 회원가입 */}
           <Route path="/select-symptom" element={<SignUpSymptomPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+
           {/* 로그인 */}
           <Route path="/login" element={<LoginPage />} />
 

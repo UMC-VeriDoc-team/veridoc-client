@@ -4,23 +4,19 @@ import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button/Button";
 import Icon from "@/components/Icon/Icon";
 import SymptomGrid from "@/components/Symptom/SymptomGrid";
+import useSignupSymptomStore from "@/stores/signup/useSignupSymptomStore";
 
-type ErrorType = "required" | "multi" | null;
+type ErrorType = "multi" | null;
 
 const SignUpSymptomForm = () => {
   const navigate = useNavigate();
 
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const selectedKey = useSignupSymptomStore((s) => s.selectedKey);
+  const setSelectedKey = useSignupSymptomStore((s) => s.setSelectedKey);
   const [multiAttemptedKey, setMultiAttemptedKey] = useState<string | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>(null);
 
   const errorConfig = useMemo(() => {
-    if (errorType === "required") {
-      return {
-        widthClass: "w-[376px]",
-        message: "정확한 안내를 위해 증상 선택이 필요합니다",
-      };
-    }
     if (errorType === "multi") {
       return {
         widthClass: "w-[232px]",
@@ -30,12 +26,16 @@ const SignUpSymptomForm = () => {
     return null;
   }, [errorType]);
 
+  const confirmSelect = (key: string | null) => {
+    setSelectedKey(key);
+    setMultiAttemptedKey(null);
+    setErrorType(null);
+  };
+
   const handleSelect = (key: string) => {
     // 아무 것도 선택 안 된 상태
     if (selectedKey === null) {
-      setSelectedKey(key);
-      setMultiAttemptedKey(null);
-      setErrorType(null);
+      confirmSelect(key);
       return;
     }
 
@@ -43,17 +43,13 @@ const SignUpSymptomForm = () => {
     if (multiAttemptedKey) {
       // multiAttemptedKey를 누르면 -> 그걸 선택으로 "교체"
       if (key === multiAttemptedKey) {
-        setSelectedKey(multiAttemptedKey);
-        setMultiAttemptedKey(null);
-        setErrorType(null);
+        confirmSelect(multiAttemptedKey);
         return;
       }
 
       // selectedKey를 누르면 -> 노란 해제 + 빨간을 선택으로 "교체"
       if (key === selectedKey) {
-        setSelectedKey(multiAttemptedKey);
-        setMultiAttemptedKey(null);
-        setErrorType(null);
+        confirmSelect(multiAttemptedKey);
         return;
       }
 
@@ -65,9 +61,7 @@ const SignUpSymptomForm = () => {
 
     // 중복 시도 상태가 아닌데, 같은 카드 다시 클릭
     if (selectedKey === key) {
-      setSelectedKey(null);
-      setMultiAttemptedKey(null);
-      setErrorType(null);
+      confirmSelect(null);
       return;
     }
 
@@ -77,12 +71,6 @@ const SignUpSymptomForm = () => {
   };
 
   const handleSubmit = () => {
-    // 선택 안 함
-    if (!selectedKey) {
-      setErrorType("required");
-      return;
-    }
-
     // 중복 선택
     if (multiAttemptedKey) {
       setErrorType("multi");
