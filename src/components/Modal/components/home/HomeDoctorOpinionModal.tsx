@@ -49,8 +49,8 @@ const HomeDoctorOpinionModal = () => {
       <div className="flex-1 overflow-y-auto px-1 py-2 sm:px-4 sm:py-4 md:px-7 md:py-6">
         <div className="flex flex-col gap-6 sm:gap-8">
           <div className="flex gap-4">
-            <p className="text-sm text-gray-950 underline">어깨</p>
-            <p className="text-sm text-gray-950 underline">전문의소견</p>
+            <p className="text-sm text-[#000D2F] underline">어깨</p>
+            <p className="text-sm text-[#000D2F] underline">전문의소견</p>
           </div>
 
           {/* 제목 */}
@@ -114,7 +114,7 @@ const HomeDoctorOpinionModal = () => {
             </pre>
 
             {/* 경고문 */}
-            <div className="flex w-full items-center gap-4 rounded-md border border-brand-orange px-4 py-4 sm:items-center sm:gap-5">
+            <div className="flex w-full items-center gap-4 rounded-md border border-brand-orange px-5 py-4 sm:items-center sm:gap-5">
               <Icon name="info" className="h-5 w-5 shrink-0" />
               <div className="flex flex-col">
                 <p className="text-sm font-medium text-brand-orange">
