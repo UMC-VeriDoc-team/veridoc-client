@@ -23,6 +23,10 @@ const ModalGuidePage = () => {
       label: "비밀번호 변경",
       type: ModalType.AUTH_PASSWORD_CHANGED,
     },
+    {
+      label: "접근 제한",
+      type: ModalType.AUTH_REQUIRED,
+    },
 
     // 홈
     {
