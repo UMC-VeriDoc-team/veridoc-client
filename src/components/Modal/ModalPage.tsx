@@ -15,6 +15,7 @@ import HomeTermsDetailModal from "@/components/Modal/components/home/HomeTermsDe
 import HomeDoctorOpinionModal from "@/components/Modal/components/home/HomeDoctorOpinionModal";
 import AuthSignUpSuccess from "./components/auth/AuthSignUpSuccess";
 import HomeTemporaryMeasure from "./components/home/HomeTemporaryMeasure";
+import AuthLoginRequiredModal from "./components/auth/AuthRequiredModal";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -52,6 +53,8 @@ const ModalPage = () => {
         return <AuthPasswordChangedModal />;
       case ModalType.AUTH_SIGNUP_SUCCESS: // 회원가입 완료
         return <AuthSignUpSuccess />;
+      case ModalType.AUTH_REQUIRED: // 접근 제한
+        return <AuthLoginRequiredModal />;
 
       // 홈
       case ModalType.HOME_TERMS_AGREEMENT: // 서비스 약관 동의
