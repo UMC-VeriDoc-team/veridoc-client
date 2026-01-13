@@ -13,6 +13,9 @@ import MyWithdrawDoneModal from "@/components/Modal/components/my/MyWithdrawDone
 import HomeTermsAgreementModal from "@/components/Modal/components/home/HomeTermsAgreementModal";
 import HomeTermsDetailModal from "@/components/Modal/components/home/HomeTermsDetailModal";
 import HomeDoctorOpinionModal from "@/components/Modal/components/home/HomeDoctorOpinionModal";
+import AuthSignUpSuccess from "./components/auth/AuthSignUpSuccess";
+import HomeTemporaryMeasure from "./components/home/HomeTemporaryMeasure";
+import AuthLoginRequiredModal from "./components/auth/AuthRequiredModal";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -48,6 +51,10 @@ const ModalPage = () => {
         return <AuthMailSentModal />;
       case ModalType.AUTH_PASSWORD_CHANGED: // 비밀번호 변경 완료
         return <AuthPasswordChangedModal />;
+      case ModalType.AUTH_SIGNUP_SUCCESS: // 회원가입 완료
+        return <AuthSignUpSuccess />;
+      case ModalType.AUTH_REQUIRED: // 접근 제한
+        return <AuthLoginRequiredModal />;
 
       // 홈
       case ModalType.HOME_TERMS_AGREEMENT: // 서비스 약관 동의
@@ -56,6 +63,8 @@ const ModalPage = () => {
         return <HomeTermsDetailModal />;
       case ModalType.HOME_DOCTOR_OPINION: // 전문의 소견 전체 보기
         return <HomeDoctorOpinionModal />;
+      case ModalType.HOME_TEMPORARY_MEASURE: // 임시 대처 방안 상세
+        return <HomeTemporaryMeasure />;
 
       // 마이페이지
       case ModalType.MY_SYMPTOM_CHANGED: // 선택 증상 변경 완료

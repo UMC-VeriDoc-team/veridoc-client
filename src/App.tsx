@@ -8,7 +8,11 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import OnboardingPage from "@/pages/onboarding/OnboardingPage";
 import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
+
+// ✅ 충돌 해결: 두 사람의 코드를 모두 가져옵니다.
 import MyPage from "./pages/mypage/Mypage";
+import SignUpPage from "./pages/signup/SignUpPage";
+import SignUpSymptomPage from "./pages/signup/SignUpSymptomPage";
 
 const App = () => {
   return (
@@ -18,6 +22,10 @@ const App = () => {
         {/* 헤더만 있는 레이아웃 (온보딩/로그인/회원가입) */}
         <Route path="/" element={<HeaderOnlyLayout />}>
           <Route index element={<OnboardingPage />} />
+
+          {/* 회원가입 */}
+          <Route path="/select-symptom" element={<SignUpSymptomPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
 
           {/* 로그인 */}
           <Route path="/login" element={<LoginPage />} />
@@ -31,7 +39,9 @@ const App = () => {
         <Route element={<DefaultLayout />}>
           {/* <Route path="/home" element={<HomePage />} /> */}
           {/* <Route path="/symptom" element={<SymptomPage />} /> */}
-          {/* <Route path="/my" element={<MyPage />} /> */}
+
+          {/* ✅ MyPage는 헤더/푸터가 필요하므로 여기(DefaultLayout) 안에 넣는 게 정석입니다! */}
+          <Route path="/my" element={<MyPage />} />
 
           {/* 모달 테스트 페이지 */}
           <Route path="/modal-guide" element={<ModalGuidePage />} />
@@ -42,7 +52,6 @@ const App = () => {
 
         {/* 404 처리 */}
         <Route path="*" element={<div className="p-8">Not Found</div>} />
-        <Route path="/my" element={<MyPage />} />
       </Routes>
     </BrowserRouter>
   );
