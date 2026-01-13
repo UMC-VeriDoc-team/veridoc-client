@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import useBaseModal from "@/stores/modal/useBaseModal";
+import { ModalType } from "@/components/Modal/types/modal";
 // Icon 컴포넌트 불러오기 (경로 확인!)
 import Icon from "../../components/Icon/Icon";
 
@@ -14,7 +16,11 @@ const SYMPTOMS = [
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState<"symptom" | "info">("symptom");
+  //정보 수정탭 안에서 '프로필'을 볼지 '비밀번호'를 볼지 결정하는 상태 <-- 이제 할거임.
+
   const [isEditing, setIsEditing] = useState(false);
+
+  const { openModal } = useBaseModal();
 
   // -----------------------------------------------------------------------
   // [화면 1] 나의 증상 관리
@@ -140,7 +146,11 @@ const MyPage = () => {
           </div>
 
           {/* 저장 버튼 */}
-          <button className="mt-4 w-full rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600">
+          <button
+            //수정완료 모달 연결
+            onClick={() => openModal(ModalType.MY_PROFILE_UPDATED)}
+            className="mt-4 w-full rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
+          >
             개인정보 저장
           </button>
         </div>
@@ -154,7 +164,10 @@ const MyPage = () => {
           <p className="mb-4 text-sm text-gray-500">
             계정 보안을 위해 주기적인 비밀번호 변경을 권장해요.
           </p>
-          <button className="group flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50">
+          <button
+            //비밀번호 변경 모달
+            className="group flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50"
+          >
             <span className="font-bold text-black">비밀번호 변경</span>
             <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
               {/* ✨ [수정] 화살표 아이콘 적용 */}
@@ -176,7 +189,11 @@ const MyPage = () => {
             2. 탈퇴 후에는 아이디 및 보유 혜택이 모두 소멸되며, 복구가 불가능합니다.
           </div>
 
-          <button className="group flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50">
+          <button
+            //회원탈퇴 모달
+            onClick={() => openModal(ModalType.MY_WITHDRAW_NOTICE)}
+            className="group flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50"
+          >
             <span className="font-bold text-black">회원탈퇴</span>
             <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
               {/* ✨ [수정] 화살표 아이콘 적용 */}
