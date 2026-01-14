@@ -15,19 +15,99 @@ const SYMPTOMS = [
 ];
 
 const MyPage = () => {
+  //상태관리
   const [activeTab, setActiveTab] = useState<"symptom" | "info">("symptom");
-  //정보 수정탭 안에서 '프로필'을 볼지 '비밀번호'를 볼지 결정하는 상태
-  const [infoView, setInfoView] = useState<"profile" | "password">("profile");
-
+  const [infoView, setInfoView] = useState<"profile" | "password">("profile"); //정보 수정탭 안에서 '프로필'을 볼지 '비밀번호'를 볼지 결정하는 상태
   const [isEditing, setIsEditing] = useState(false);
-
   const { openModal } = useBaseModal();
 
-  // ✨ [추가/수정] 프로필 데이터를 진짜 State로 관리!
+  //프로필 관련 State
   const [name, setName] = useState("홍길동");
-  const [gender, setGender] = useState<"male" | "female">("male"); // 기본값 남성
+  const [gender, setGender] = useState<"male" | "female">("male");
   const [birth, setBirth] = useState({ year: "2000", month: "11", day: "10" });
-  const [errors, setErrors] = useState({ name: "", birth: "" }); // ✨ 에러 메시지 상태 추가
+  const [errors, setErrors] = useState({ name: "", birth: "" });
+
+  // ✨ [추가] 선택된 증상 관리 (초기값으로 1, 2, 3번 증상이 선택됐다고 가정)
+  const [selectedSymptoms, setSelectedSymptoms] = useState<number[]>([1, 2, 3]);
+
+  // -----------------------------------------------------------------------
+  // [로직] 증상 클릭 시 선택/해제 (토글)
+  // -----------------------------------------------------------------------
+  const handleToggleSymptom = (id: number) => {
+    if (!isEditing) return; // 수정 모드가 아니면 클릭 막기
+
+    setSelectedSymptoms(
+      (prev) =>
+        prev.includes(id)
+          ? prev.filter((s) => s !== id) // 이미 있으면 뺌 (선택 해제)
+          : [...prev, id] // 없으면 넣음 (선택)
+    );
+  };
+
+  // -----------------------------------------------------------------------
+  // [로직 함수들]
+  // -----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
+  // [로직] 증상 저장 버튼 클릭 (모달 분기 처리: 미선택 vs 선택)
+  // -----------------------------------------------------------------------
+  const handleSaveSymptom = () => {
+    // 1. 수정하기 버튼을 눌렀을 때 (View -> Edit)
+    if (!isEditing) {
+      setIsEditing(true);
+      return;
+    }
+
+    // 2. 저장하기 버튼을 눌렀을 때 (Edit -> View)
+    // 일단 저장(편집 종료)은 무조건 시킵니다. (디자인 흐름 반영)
+    setIsEditing(false);
+
+    // 3. 선택된 개수에 따라 다른 모달 띄우기
+    if (selectedSymptoms.length === 0) {
+      // 🚨 0개 선택: "증상을 선택하지 않은 상태로 저장됩니다" 모달
+      openModal(ModalType.MY_SYMPTOM_NOT_SELECTED);
+    } else {
+      // ✅ 1개 이상 선택: "선택한 증상이 변경되었어요" 모달
+      openModal(ModalType.MY_SYMPTOM_CHANGED);
+    }
+  };
+
+  // 이름 및 생년월일 유효성 검사 후 저장 로직
+  const handleSaveProfile = () => {
+    const newErrors = { name: "", birth: "" }; // 일단 에러 없다고 가정
+    let isValid = true; // 통과 여부 플래그
+
+    // 1. 이름 검사
+    if (!name.trim()) {
+      newErrors.name = "이름을 입력해주세요";
+      isValid = false;
+    }
+
+    // 2. 생년월일 검사 (빈칸, 숫자여부, 범위)
+    const { year, month, day } = birth;
+    const y = parseInt(year);
+    const m = parseInt(month);
+    const d = parseInt(day);
+    const currentYear = new Date().getFullYear();
+
+    // 빈칸이 있거나 숫자가 아닌 경우
+    if (!year || !month || !day || isNaN(y) || isNaN(m) || isNaN(d)) {
+      newErrors.birth = "생년월일을 모두 숫자로 입력해주세요";
+      isValid = false;
+    }
+    // 범위가 이상한 경우 (예: 100월, 3000년, 32일 등)
+    else if (y < 1900 || y > currentYear || m < 1 || m > 12 || d < 1 || d > 31) {
+      newErrors.birth = "생년월일 형식이 올바르지 않습니다"; // 👈 피그마 문구
+      isValid = false;
+    }
+
+    // 3. 결과 반영
+    setErrors(newErrors);
+
+    // 4. 전부 통과했으면 모달 열기!
+    if (isValid) {
+      openModal(ModalType.MY_PROFILE_UPDATED);
+    }
+  };
 
   // -----------------------------------------------------------------------
   // [화면 1] 나의 증상 관리
@@ -51,25 +131,42 @@ const MyPage = () => {
         </p>
       </div>
 
+      {/* 증상 그리드 수정된 map 로직*/}
       <div className="mt-12 grid grid-cols-3 gap-6">
-        {SYMPTOMS.map((item) => (
-          <div
-            key={item.id}
-            className="flex h-[180px] w-[180px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md"
-          >
-            <div className="h-[75%] w-full bg-gray-50">
-              <Icon name={item.iconName} className="h-full w-full object-cover" />
+        {SYMPTOMS.map((item) => {
+          // 선택 여부 확인
+          const isSelected = selectedSymptoms.includes(item.id);
+
+          return (
+            <div
+              key={item.id}
+              onClick={() => handleToggleSymptom(item.id)} // 클릭 이벤트
+              className={`flex h-[180px] w-[180px] cursor-pointer flex-col overflow-hidden rounded-2xl border transition-all hover:shadow-md ${
+                isSelected
+                  ? "border-blue-500 shadow-md ring-2 ring-blue-500" // 선택됨: 파란색
+                  : "border-gray-100" // 해제됨: 회색
+              } ${!isEditing ? "cursor-default opacity-80" : ""}`} // 수정 모드 아닐 땐 흐리게
+            >
+              <div className="h-[75%] w-full bg-gray-50">
+                <Icon name={item.iconName} className="h-full w-full object-cover" />
+              </div>
+              <div
+                className={`flex h-[25%] w-full items-center justify-center border-t bg-white ${isSelected ? "border-blue-100" : "border-gray-50"}`}
+              >
+                <span
+                  className={`text-lg font-bold ${isSelected ? "text-blue-600" : "text-gray-700"}`}
+                >
+                  {item.name}
+                </span>
+              </div>
             </div>
-            <div className="flex h-[25%] w-full items-center justify-center border-t border-gray-50 bg-white">
-              <span className="text-lg font-bold text-gray-700">{item.name}</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="mb-20 mt-16">
         <button
-          onClick={() => setIsEditing(!isEditing)}
+          onClick={() => handleSaveSymptom()}
           className="w-[400px] rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
         >
           {isEditing ? "저장하기" : "수정하기"}
@@ -79,7 +176,7 @@ const MyPage = () => {
   );
 
   // -----------------------------------------------------------------------
-  // [화면 2-B] 정보 수정 > 비밀번호 변경 (새로 추가!)
+  // 정보 수정 > 비밀번호 변경
   // -----------------------------------------------------------------------
   const renderPasswordForm = () => (
     <div className="mb-20 mt-16 flex w-full max-w-[400px] flex-col">
@@ -137,47 +234,7 @@ const MyPage = () => {
   );
 
   // -----------------------------------------------------------------------
-  // [로직] 저장 버튼 클릭 시 유효성 검사 (이름만 검사)
-  // -----------------------------------------------------------------------
-  const handleSaveProfile = () => {
-    const newErrors = { name: "", birth: "" }; // 일단 에러 없다고 가정
-    let isValid = true; // 통과 여부 플래그
-
-    // 1. 이름 검사
-    if (!name.trim()) {
-      newErrors.name = "이름을 입력해주세요";
-      isValid = false;
-    }
-
-    // 2. 생년월일 검사 (빈칸, 숫자여부, 범위)
-    const { year, month, day } = birth;
-    const y = parseInt(year);
-    const m = parseInt(month);
-    const d = parseInt(day);
-    const currentYear = new Date().getFullYear();
-
-    // 빈칸이 있거나 숫자가 아닌 경우
-    if (!year || !month || !day || isNaN(y) || isNaN(m) || isNaN(d)) {
-      newErrors.birth = "생년월일을 모두 숫자로 입력해주세요";
-      isValid = false;
-    }
-    // 범위가 이상한 경우 (예: 100월, 3000년, 32일 등)
-    else if (y < 1900 || y > currentYear || m < 1 || m > 12 || d < 1 || d > 31) {
-      newErrors.birth = "생년월일 형식이 올바르지 않습니다"; // 👈 피그마 문구
-      isValid = false;
-    }
-
-    // 3. 결과 반영
-    setErrors(newErrors);
-
-    // 4. 전부 통과했으면 모달 열기!
-    if (isValid) {
-      openModal(ModalType.MY_PROFILE_UPDATED);
-    }
-  };
-
-  // -----------------------------------------------------------------------
-  // [화면 2] 정보 수정 > 프로필 수정 (이름변경 : renderInfoContent -> renderProfileForm 으로 변경)
+  // 정보 수정 > 프로필 수정 (이름변경 : renderInfoContent -> renderProfileForm 으로 변경)
   // -----------------------------------------------------------------------
   const renderProfileForm = () => (
     //renderProfileForm 으로 이름 변경
@@ -281,7 +338,6 @@ const MyPage = () => {
                 className="w-full cursor-not-allowed rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-500"
               />
               <div className="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 transform items-center justify-center">
-                {/* ✨ [수정] 자물쇠 아이콘 적용 */}
                 <Icon name="icon-lock" className="h-full w-full text-gray-400" />
               </div>
             </div>
