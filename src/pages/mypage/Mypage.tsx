@@ -27,6 +27,8 @@ const MyPage = () => {
   const [name, setName] = useState("홍길동");
   const [gender, setGender] = useState<"male" | "female">("male"); // 기본값 남성
 
+  const [errors, setErrors] = useState({ name: "" });
+
   // -----------------------------------------------------------------------
   // [화면 1] 나의 증상 관리
   // -----------------------------------------------------------------------
@@ -135,6 +137,21 @@ const MyPage = () => {
   );
 
   // -----------------------------------------------------------------------
+  // [로직] 저장 버튼 클릭 시 유효성 검사 (이름만 검사)
+  // -----------------------------------------------------------------------
+  const handleSaveProfile = () => {
+    // 1. 이름이 비어있는지 확인 (.trim()은 공백제거)
+    if (!name.trim()) {
+      setErrors({ name: "이름을 입력해주세요" }); // 에러 메시지 세팅
+      return; // 🛑 여기서 함수 종료 (모달 안 열림)
+    }
+
+    // 2. 통과했으면 에러 지우고 성공 모달 띄우기!
+    setErrors({ name: "" });
+    openModal(ModalType.MY_PROFILE_UPDATED);
+  };
+
+  // -----------------------------------------------------------------------
   // [화면 2] 정보 수정 > 프로필 수정 (이름변경 : renderInfoContent -> renderProfileForm 으로 변경)
   // -----------------------------------------------------------------------
   const renderProfileForm = () => (
@@ -169,8 +186,15 @@ const MyPage = () => {
               type="text"
               value={name} // ✨ [수정] state 변수 연결
               onChange={(e) => setName(e.target.value)} // ✨ [수정] 입력할 때마다 state 변경
-              className="w-full rounded-md border border-gray-300 p-3 text-black focus:outline-blue-500"
+              //에러가 있으면 (errors.name) 빨간 테두리 추가, 없으면 회색/파란색
+              className={`w-full rounded-md border p-3 text-black focus:outline-none ${
+                errors.name
+                  ? "border-red-500 focus:border-red-500" // 에러일 때 스타일
+                  : "border-gray-300 focus:border-blue-500" // 정상일 때 스타일
+              }`}
             />
+            {/* ✨ 에러 메시지가 있을 때만 빨간 글씨 보여주기 */}
+            {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
           </div>
 
           {/* 생년월일 */}
@@ -231,8 +255,8 @@ const MyPage = () => {
 
           {/* 저장 버튼 */}
           <button
-            //수정완료 모달 연결
-            onClick={() => openModal(ModalType.MY_PROFILE_UPDATED)}
+            //수정완료 모달 연결 + 유효성 검사 함수 연결
+            onClick={handleSaveProfile}
             className="mt-4 w-full rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
           >
             개인정보 저장
