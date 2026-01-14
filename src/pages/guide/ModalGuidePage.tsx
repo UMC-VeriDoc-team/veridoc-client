@@ -55,6 +55,16 @@ const ModalGuidePage = () => {
       type: ModalType.HOME_TEMPORARY_MEASURE,
     },
 
+    // 증상
+    {
+      label: "전문의 답변 미확인 모달",
+      type: ModalType.STEP_DOCTOR_OPINION_REQUIRED,
+    },
+    {
+      label: "대처 방법 / 병원 정보 미확인",
+      type: ModalType.STEP_TREATMENT_INFO_REQUIRED,
+    },
+
     // 마이페이지
     {
       label: "선택 증상 변경 완료",

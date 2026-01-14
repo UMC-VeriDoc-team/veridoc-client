@@ -17,6 +17,8 @@ import AuthSignUpSuccess from "./components/auth/AuthSignUpSuccess";
 import HomeTemporaryMeasure from "./components/home/HomeTemporaryMeasure";
 import AuthLoginRequiredModal from "./components/auth/AuthRequiredModal";
 import GuideDetailModal from "./components/guide/GuideDetailModal";
+import StepDoctorOpinionRequiredModal from "./components/symptom/StepDoctorOpinionRequiredModal";
+import StepTreatmentInfoRequiredModal from "./components/symptom/StepTreatmentInfoRequiredModal";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -68,6 +70,12 @@ const ModalPage = () => {
         return <HomeTemporaryMeasure />;
       case ModalType.HOME_GUIDE_DETAIL: // 범용 가이드 상세
         return <GuideDetailModal />;
+
+      // 증상
+      case ModalType.STEP_DOCTOR_OPINION_REQUIRED: // 전문의 답변 미확인
+        return <StepDoctorOpinionRequiredModal />;
+      case ModalType.STEP_TREATMENT_INFO_REQUIRED: // 대처 방법 / 병원 정보 미확인
+        return <StepTreatmentInfoRequiredModal />;
 
       // 마이페이지
       case ModalType.MY_SYMPTOM_CHANGED: // 선택 증상 변경 완료
