@@ -23,11 +23,11 @@ const MyPage = () => {
 
   const { openModal } = useBaseModal();
 
-  // ✨ [추가/수정] 프로필 데이터를 진짜 State로 관리! <-- 이제 할거임.
+  // ✨ [추가/수정] 프로필 데이터를 진짜 State로 관리!
   const [name, setName] = useState("홍길동");
   const [gender, setGender] = useState<"male" | "female">("male"); // 기본값 남성
-
-  const [errors, setErrors] = useState({ name: "" });
+  const [birth, setBirth] = useState({ year: "2000", month: "11", day: "10" });
+  const [errors, setErrors] = useState({ name: "", birth: "" }); // ✨ 에러 메시지 상태 추가
 
   // -----------------------------------------------------------------------
   // [화면 1] 나의 증상 관리
@@ -140,15 +140,40 @@ const MyPage = () => {
   // [로직] 저장 버튼 클릭 시 유효성 검사 (이름만 검사)
   // -----------------------------------------------------------------------
   const handleSaveProfile = () => {
-    // 1. 이름이 비어있는지 확인 (.trim()은 공백제거)
+    const newErrors = { name: "", birth: "" }; // 일단 에러 없다고 가정
+    let isValid = true; // 통과 여부 플래그
+
+    // 1. 이름 검사
     if (!name.trim()) {
-      setErrors({ name: "이름을 입력해주세요" }); // 에러 메시지 세팅
-      return; // 🛑 여기서 함수 종료 (모달 안 열림)
+      newErrors.name = "이름을 입력해주세요";
+      isValid = false;
     }
 
-    // 2. 통과했으면 에러 지우고 성공 모달 띄우기!
-    setErrors({ name: "" });
-    openModal(ModalType.MY_PROFILE_UPDATED);
+    // 2. 생년월일 검사 (빈칸, 숫자여부, 범위)
+    const { year, month, day } = birth;
+    const y = parseInt(year);
+    const m = parseInt(month);
+    const d = parseInt(day);
+    const currentYear = new Date().getFullYear();
+
+    // 빈칸이 있거나 숫자가 아닌 경우
+    if (!year || !month || !day || isNaN(y) || isNaN(m) || isNaN(d)) {
+      newErrors.birth = "생년월일을 모두 숫자로 입력해주세요";
+      isValid = false;
+    }
+    // 범위가 이상한 경우 (예: 100월, 3000년, 32일 등)
+    else if (y < 1900 || y > currentYear || m < 1 || m > 12 || d < 1 || d > 31) {
+      newErrors.birth = "생년월일 형식이 올바르지 않습니다"; // 👈 피그마 문구
+      isValid = false;
+    }
+
+    // 3. 결과 반영
+    setErrors(newErrors);
+
+    // 4. 전부 통과했으면 모달 열기!
+    if (isValid) {
+      openModal(ModalType.MY_PROFILE_UPDATED);
+    }
   };
 
   // -----------------------------------------------------------------------
@@ -197,14 +222,52 @@ const MyPage = () => {
             {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
           </div>
 
-          {/* 생년월일 */}
+          {/* 생년월일 (3단 분리 + 유효성 검사) */}
           <div>
             <label className="mb-2 block text-sm font-bold text-gray-500">생년월일</label>
-            <input
-              type="text"
-              defaultValue="2000 / 11 / 10"
-              className="w-full rounded-md border border-gray-300 p-3 text-black focus:outline-blue-500"
-            />
+
+            {/* 겉보기엔 하나의 박스지만, 실제론 3개의 입력칸이 들어있는 컨테이너 */}
+            <div
+              className={`flex w-full items-center rounded-md border p-3 focus-within:ring-2 ${
+                errors.birth
+                  ? "border-red-500 focus-within:border-red-500 focus-within:ring-red-500" // 에러: 빨강
+                  : "border-gray-300 focus-within:border-blue-500 focus-within:ring-blue-500" // 정상: 파랑
+              }`}
+            >
+              {/* 1. 년도 (YYYY) */}
+              <input
+                type="text"
+                value={birth.year}
+                onChange={(e) => setBirth({ ...birth, year: e.target.value })} // 기존 값(...birth) 유지하고 년도만 수정
+                className="w-full text-center focus:outline-none"
+                placeholder="YYYY"
+                maxLength={4} // 4글자 제한
+              />
+              <span className="mx-2 text-gray-400">/</span>
+
+              {/* 2. 월 (MM) */}
+              <input
+                type="text"
+                value={birth.month}
+                onChange={(e) => setBirth({ ...birth, month: e.target.value })}
+                className="w-full text-center focus:outline-none"
+                placeholder="MM"
+                maxLength={2}
+              />
+              <span className="mx-2 text-gray-400">/</span>
+
+              {/* 3. 일 (DD) */}
+              <input
+                type="text"
+                value={birth.day}
+                onChange={(e) => setBirth({ ...birth, day: e.target.value })}
+                className="w-full text-center focus:outline-none"
+                placeholder="DD"
+                maxLength={2}
+              />
+            </div>
+            {/* ✨ 에러 메시지 (빨간 글씨) */}
+            {errors.birth && <p className="mt-1 text-xs text-red-500">{errors.birth}</p>}
           </div>
 
           {/* 이메일 */}
