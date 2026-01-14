@@ -16,6 +16,7 @@ import HomeDoctorOpinionModal from "@/components/Modal/components/home/HomeDocto
 import AuthSignUpSuccess from "./components/auth/AuthSignUpSuccess";
 import HomeTemporaryMeasure from "./components/home/HomeTemporaryMeasure";
 import AuthLoginRequiredModal from "./components/auth/AuthRequiredModal";
+import GuideDetailModal from "./components/guide/GuideDetailModal";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -65,6 +66,8 @@ const ModalPage = () => {
         return <HomeDoctorOpinionModal />;
       case ModalType.HOME_TEMPORARY_MEASURE: // 임시 대처 방안 상세
         return <HomeTemporaryMeasure />;
+      case ModalType.HOME_GUIDE_DETAIL: // 범용 가이드 상세
+        return <GuideDetailModal />;
 
       // 마이페이지
       case ModalType.MY_SYMPTOM_CHANGED: // 선택 증상 변경 완료
