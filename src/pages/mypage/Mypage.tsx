@@ -14,6 +14,7 @@ const SYMPTOMS = [
   { id: 6, name: "목", iconName: "icon-neck" },
 ];
 
+const MOCK_CURRENT_PASSWORD = "12345678";
 const MyPage = () => {
   //상태관리
   const [activeTab, setActiveTab] = useState<"symptom" | "info">("symptom");
@@ -23,12 +24,24 @@ const MyPage = () => {
 
   //프로필 관련 State
   const [name, setName] = useState("홍길동");
-  const [gender, setGender] = useState<"male" | "female">("male");
+  const [gender, setGender] = useState<"male" | "female" | null>(null);
   const [birth, setBirth] = useState({ year: "2000", month: "11", day: "10" });
-  const [errors, setErrors] = useState({ name: "", birth: "" });
-
-  // ✨ [추가] 선택된 증상 관리 (초기값으로 1, 2, 3번 증상이 선택됐다고 가정)
+  const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
   const [selectedSymptoms, setSelectedSymptoms] = useState<number[]>([1, 2, 3]);
+
+  // ... (기존 passwordForm은 유지)
+  const [passwordForm, setPasswordForm] = useState({
+    current: "",
+    new: "",
+    confirm: "",
+  });
+
+  // ✨ [수정] 에러를 각 칸별로 따로 관리 (current, new, confirm)
+  const [pwdErrors, setPwdErrors] = useState({
+    current: "",
+    new: "",
+    confirm: "",
+  });
 
   // -----------------------------------------------------------------------
   // [로직] 증상 클릭 시 선택/해제 (토글)
@@ -73,12 +86,17 @@ const MyPage = () => {
 
   // 이름 및 생년월일 유효성 검사 후 저장 로직
   const handleSaveProfile = () => {
-    const newErrors = { name: "", birth: "" }; // 일단 에러 없다고 가정
+    const newErrors = { name: "", birth: "", gender: "" }; // 일단 에러 없다고 가정
     let isValid = true; // 통과 여부 플래그
 
     // 1. 이름 검사
     if (!name.trim()) {
       newErrors.name = "이름을 입력해주세요";
+      isValid = false;
+    }
+    // ✨ [추가] 성별 선택 여부 검사
+    if (!gender) {
+      newErrors.gender = "필수 선택 사항입니다"; // 에러 문구 반영
       isValid = false;
     }
 
@@ -109,6 +127,68 @@ const MyPage = () => {
     }
   };
 
+  // -----------------------------------------------------------------------
+  // [로직] 비밀번호 변경 (피그마 UI + 윤주님 8자 규칙)
+  // -----------------------------------------------------------------------
+  const handleSavePassword = () => {
+    const { current, new: newPwd, confirm } = passwordForm;
+    const newErrors = { current: "", new: "", confirm: "" };
+    let isValid = true;
+
+    // 1. 빈 칸 검사 (필수 입력)
+    if (!current) {
+      newErrors.current = "필수 입력 사항입니다";
+      isValid = false;
+    }
+    if (!newPwd) {
+      newErrors.new = "필수 입력 사항입니다";
+      isValid = false;
+    }
+    if (!confirm) {
+      newErrors.confirm = "필수 입력 사항입니다";
+      isValid = false;
+    }
+    // ✨ [추가] 임시 비밀번호 검증 로직
+    // TODO: [백엔드 연동 시 수정] 지금은 프론트에서 가짜로 검사하지만, 나중엔 API 에러로 처리해야 함
+    // ---------------------------------------------------------
+    // 현재 비밀번호가 "12345678"이 아니면 에러!
+    // 빈 칸이 아닐 때(current가 있을 때)만 검사합니다.
+    if (current && current !== MOCK_CURRENT_PASSWORD) {
+      newErrors.current = "기존 비밀번호를 입력해주세요";
+      isValid = false;
+    }
+    // ---------------------------------------------------------
+
+    // 2. 새 비밀번호 길이 검사 (8자 미만이면 즉시 탈락)
+    // (빈 칸이 아닐 때만 검사)
+    if (newPwd && newPwd.length < 8) {
+      newErrors.new = "새 비밀번호 형식이 올바르지 않습니다";
+      isValid = false;
+    }
+
+    // 3. 일치 검사
+    // (빈 칸이 아니고, 형식도 맞을 때만 검사)
+    if (confirm && newPwd !== confirm) {
+      newErrors.confirm = "입력한 비밀번호가 서로 일치하는지 확인해 주세요";
+      isValid = false;
+    }
+
+    // 에러 상태 업데이트
+    setPwdErrors(newErrors);
+
+    // 🛑 [중요] 프론트엔드 유효성 검사 실패 시 여기서 즉시 중단
+    if (!isValid) return;
+
+    // -----------------------------------------------------------
+    // 🔒 [보안] 현재 비밀번호가 맞는지 확인하는 단계
+    // 원래는 여기서 백엔드 API를 호출해서 확인해야 합니다.
+    // 지금은 API가 없으므로 "서버가 OK 했다"고 가정하고 넘어가지만,
+    // 나중에는 서버에서 에러가 오면 alert("현재 비밀번호가 틀렸습니다")를 띄워야 합니다.
+    // -----------------------------------------------------------
+
+    // 4. 모든 관문 통과! -> 성공 모달 오픈
+    openModal(ModalType.AUTH_PASSWORD_CHANGED);
+  };
   // -----------------------------------------------------------------------
   // [화면 1] 나의 증상 관리
   // -----------------------------------------------------------------------
@@ -178,60 +258,107 @@ const MyPage = () => {
   // -----------------------------------------------------------------------
   // 정보 수정 > 비밀번호 변경
   // -----------------------------------------------------------------------
-  const renderPasswordForm = () => (
-    <div className="mb-20 mt-16 flex w-full max-w-[400px] flex-col">
-      {/* 상단 타이틀 */}
-      <div className="mb-12 text-center md:text-left">
-        <h2 className="mb-2 text-lg font-bold text-black">비밀번호 변경</h2>
-        <p className="text-sm text-gray-500">계정 보안을 위해 현재 비밀번호를 먼저 확인합니다</p>
-      </div>
+  // ② 비밀번호 변경 화면 (피그마 디자인 완벽 반영)
+  const renderPasswordForm = () => {
+    // ✨ [수정 1] 초록불 조건 강화: "일치함" + "8자 이상" + "빈칸 아님" 모두 만족해야 뜸
+    const isMatchSuccess =
+      passwordForm.new && passwordForm.new === passwordForm.confirm && passwordForm.new.length >= 8;
 
-      {/* 입력 폼 */}
-      <div className="flex flex-col gap-6">
-        {/* 현재 비밀번호 */}
-        <div>
-          <label className="mb-2 block text-sm font-bold text-gray-700">
-            현재 비밀번호<span className="text-red-500">*</span>
-          </label>
-          <input
-            type="password"
-            placeholder="현재 비밀번호를 입력해주세요"
-            className="w-full rounded-lg border border-gray-300 p-4 focus:outline-blue-500"
-          />
-        </div>
-        {/* 새 비밀번호 */}
-        <div>
-          <label className="mb-2 block text-sm font-bold text-gray-700">
-            새 비밀번호<span className="text-red-500">*</span>
-          </label>
-          <input
-            type="password"
-            placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
-            className="w-full rounded-lg border border-gray-300 p-4 focus:outline-blue-500"
-          />
-        </div>
-        {/* 새 비밀번호 확인 */}
-        <div>
-          <label className="mb-2 block text-sm font-bold text-gray-700">
-            새 비밀번호 확인<span className="text-red-500">*</span>
-          </label>
-          <input
-            type="password"
-            placeholder="새 비밀번호를 다시 입력하세요"
-            className="w-full rounded-lg border border-gray-300 p-4 focus:outline-blue-500"
-          />
+    // 🛠️ 공통 입력 핸들러 (입력 시 에러 메시지 즉시 삭제 기능 추가)
+    const handleChange = (field: "current" | "new" | "confirm", value: string) => {
+      setPasswordForm((prev) => ({ ...prev, [field]: value }));
+
+      // ✨ [수정 2] 사용자가 타이핑을 시작하면 해당 칸의 빨간 에러를 즉시 지워줌 (UX 개선)
+      if (pwdErrors[field]) {
+        setPwdErrors((prev) => ({ ...prev, [field]: "" }));
+      }
+    };
+
+    return (
+      <div className="mb-20 mt-16 flex w-full max-w-[400px] flex-col">
+        <div className="mb-12 text-center md:text-left">
+          <h2 className="mb-2 text-lg font-bold text-black">비밀번호 변경</h2>
+          <p className="text-sm text-gray-500">계정 보안을 위해 현재 비밀번호를 먼저 확인합니다</p>
         </div>
 
-        {/* 변경 버튼 (일단 알림만 뜨게) */}
-        <button
-          onClick={() => alert("비밀번호 변경 기능은 백엔드 연결 후 작동합니다!")}
-          className="mt-4 w-full rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
-        >
-          비밀번호 변경
-        </button>
+        <div className="flex flex-col gap-6">
+          {/* 1. 현재 비밀번호 */}
+          <div>
+            <label className="mb-2 block text-sm font-bold text-gray-700">
+              현재 비밀번호<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              placeholder="현재 비밀번호를 입력해주세요"
+              value={passwordForm.current}
+              onChange={(e) => handleChange("current", e.target.value)}
+              className={`w-full rounded-lg border p-4 focus:outline-none ${
+                pwdErrors.current
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-300 focus:border-blue-500"
+              }`}
+            />
+            {pwdErrors.current && <p className="mt-2 text-sm text-red-500">{pwdErrors.current}</p>}
+          </div>
+
+          {/* 2. 새 비밀번호 */}
+          <div>
+            <label className="mb-2 block text-sm font-bold text-gray-700">
+              새 비밀번호<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
+              value={passwordForm.new}
+              onChange={(e) => handleChange("new", e.target.value)}
+              className={`w-full rounded-lg border p-4 focus:outline-none ${
+                pwdErrors.new
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-300 focus:border-blue-500"
+              }`}
+            />
+            {pwdErrors.new && <p className="mt-2 text-sm text-red-500">{pwdErrors.new}</p>}
+          </div>
+
+          {/* 3. 새 비밀번호 확인 */}
+          <div>
+            <label className="mb-2 block text-sm font-bold text-gray-700">
+              새 비밀번호 확인<span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              placeholder="새 비밀번호를 다시 입력하세요"
+              value={passwordForm.confirm}
+              onChange={(e) => handleChange("confirm", e.target.value)}
+              className={`w-full rounded-lg border p-4 focus:outline-none ${
+                pwdErrors.confirm
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-300 focus:border-blue-500"
+              }`}
+            />
+
+            {/* 🚨 불일치 에러 (빨간색) */}
+            {pwdErrors.confirm && <p className="mt-2 text-sm text-red-500">{pwdErrors.confirm}</p>}
+
+            {/* ✅ 일치 성공 (초록색) - 조건 만족 시에만 노출 */}
+            {isMatchSuccess && (
+              <div className="mt-2 flex items-center gap-1 text-sm text-green-500">
+                <span>✔</span>
+                <span>입력한 비밀번호가 서로 일치합니다</span>
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={handleSavePassword}
+            className="mt-4 w-full rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
+          >
+            비밀번호 변경
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // -----------------------------------------------------------------------
   // 정보 수정 > 프로필 수정 (이름변경 : renderInfoContent -> renderProfileForm 으로 변경)
@@ -245,17 +372,13 @@ const MyPage = () => {
         <div className="flex w-full flex-col items-center md:w-1/3">
           <h3 className="mb-6 w-full text-left text-lg font-bold text-black">개인정보 수정</h3>
           <div className="relative">
-            <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-blue-500 bg-gray-50">
-              {/* ✨ [수정 후] gender 상태에 따라 아이콘 이름이 변함 */}
+            <div className="flex h-60 w-60 items-center justify-center overflow-hidden rounded-full border-4 border-blue-500 bg-gray-50">
+              {/* ✨ [수정] 성별에 따른 아이콘 분기, 기본은 male */}
               <Icon
-                name={gender === "male" ? "icon-male" : "icon-female"}
+                name={gender === "female" ? "icon-female" : "icon-male"}
                 className="h-full w-full object-cover"
               />
             </div>
-            {/* 카메라 버튼 */}
-            <button className="absolute bottom-2 right-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-gray-300 bg-white shadow-sm hover:bg-gray-50">
-              <span className="text-lg">📷</span>
-            </button>
           </div>
         </div>
 
@@ -349,27 +472,42 @@ const MyPage = () => {
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={() => setGender("male")} // 남성 버튼 클릭 시 상태 변경
-                className={`flex-1 rounded-md border py-3 font-bold transition-colors ${
-                  gender === "male"
-                    ? "border-blue-500 bg-white text-blue-500" // 👈 남자가 선택됐으면 파란색!
-                    : "border-gray-200 bg-gray-50 text-gray-400 hover:bg-gray-100" // 아니면 회색
+                onClick={() => {
+                  setGender(gender === "male" ? null : "male");
+                  setErrors({ ...errors, gender: "" });
+                }} // 클릭 시 에러 삭제
+                // ✨ 에러 발생 시: border-red-500 text-red-500 (빨간 테두리+글씨)
+                // ✨ 선택됨: border-blue-500 bg-white text-blue-500
+                // ✨ 평소: border-gray-200 bg-gray-50 text-gray-400
+                className={`w-32 rounded-md border py-3 font-bold transition-colors ${
+                  errors.gender
+                    ? "border-red-500 bg-white text-red-500"
+                    : gender === "male"
+                      ? "border-blue-500 bg-white text-blue-500"
+                      : "border-gray-200 bg-gray-50 text-gray-400 hover:bg-gray-100"
                 }`}
               >
                 남성
               </button>
               <button
                 type="button"
-                onClick={() => setGender("female")} // 여성 버튼 클릭 시 상태 변경
-                className={`flex-1 rounded-md border py-3 font-bold transition-colors ${
-                  gender === "female"
-                    ? "border-blue-500 bg-white text-blue-500" // 👈 여자가 선택됐으면 파란색!
-                    : "border-gray-200 bg-gray-50 text-gray-400 hover:bg-gray-100" // 아니면 회색
+                onClick={() => {
+                  setGender(gender === "female" ? null : "female");
+                  setErrors({ ...errors, gender: "" });
+                }}
+                className={`w-32 rounded-md border py-3 font-bold transition-colors ${
+                  errors.gender
+                    ? "border-red-500 bg-white text-red-500"
+                    : gender === "female"
+                      ? "border-blue-500 bg-white text-blue-500"
+                      : "border-gray-200 bg-gray-50 text-gray-400 hover:bg-gray-100"
                 }`}
               >
                 여성
               </button>
             </div>
+            {/* ✨ 에러 메시지: 버튼 아래에 표시 */}
+            {errors.gender && <p className="mt-1 text-xs text-red-500">{errors.gender}</p>}
           </div>
 
           {/* 저장 버튼 */}
