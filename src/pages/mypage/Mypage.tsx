@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 // Icon 컴포넌트 불러오기 (경로 확인!)
@@ -24,6 +24,8 @@ const MyPage = () => {
   const { openModal } = useBaseModal();
 
   // ✨ [추가/수정] 프로필 데이터를 진짜 State로 관리! <-- 이제 할거임.
+  const [name, setName] = useState("홍길동");
+  const [gender, setGender] = useState<"male" | "female">("male"); // 기본값 남성
 
   // -----------------------------------------------------------------------
   // [화면 1] 나의 증상 관리
@@ -145,8 +147,11 @@ const MyPage = () => {
           <h3 className="mb-6 w-full text-left text-lg font-bold text-black">개인정보 수정</h3>
           <div className="relative">
             <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-blue-500 bg-gray-50">
-              {/* ✨ [수정] 추출하신 'icon-male'을 프로필 이미지로 사용 */}
-              <Icon name="icon-male" className="h-full w-full object-cover" />
+              {/* ✨ [수정 후] gender 상태에 따라 아이콘 이름이 변함 */}
+              <Icon
+                name={gender === "male" ? "icon-male" : "icon-female"}
+                className="h-full w-full object-cover"
+              />
             </div>
             {/* 카메라 버튼 */}
             <button className="absolute bottom-2 right-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-gray-300 bg-white shadow-sm hover:bg-gray-50">
@@ -162,7 +167,8 @@ const MyPage = () => {
             <label className="mb-2 block text-sm font-bold text-gray-500">이름</label>
             <input
               type="text"
-              defaultValue="홍길동"
+              value={name} // ✨ [수정] state 변수 연결
+              onChange={(e) => setName(e.target.value)} // ✨ [수정] 입력할 때마다 state 변경
               className="w-full rounded-md border border-gray-300 p-3 text-black focus:outline-blue-500"
             />
           </div>
@@ -198,10 +204,26 @@ const MyPage = () => {
           <div>
             <label className="mb-2 block text-sm font-bold text-gray-500">성별</label>
             <div className="flex gap-2">
-              <button className="flex-1 rounded-md border border-blue-500 bg-white py-3 font-bold text-blue-500 transition-colors">
+              <button
+                type="button"
+                onClick={() => setGender("male")} // 남성 버튼 클릭 시 상태 변경
+                className={`flex-1 rounded-md border py-3 font-bold transition-colors ${
+                  gender === "male"
+                    ? "border-blue-500 bg-white text-blue-500" // 👈 남자가 선택됐으면 파란색!
+                    : "border-gray-200 bg-gray-50 text-gray-400 hover:bg-gray-100" // 아니면 회색
+                }`}
+              >
                 남성
               </button>
-              <button className="flex-1 rounded-md border border-gray-200 bg-gray-50 py-3 font-bold text-gray-400 transition-colors hover:bg-gray-100">
+              <button
+                type="button"
+                onClick={() => setGender("female")} // 여성 버튼 클릭 시 상태 변경
+                className={`flex-1 rounded-md border py-3 font-bold transition-colors ${
+                  gender === "female"
+                    ? "border-blue-500 bg-white text-blue-500" // 👈 여자가 선택됐으면 파란색!
+                    : "border-gray-200 bg-gray-50 text-gray-400 hover:bg-gray-100" // 아니면 회색
+                }`}
+              >
                 여성
               </button>
             </div>
