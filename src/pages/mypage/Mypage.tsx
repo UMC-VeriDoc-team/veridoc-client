@@ -1,8 +1,10 @@
 import { useState } from "react";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
-// Icon 컴포넌트 불러오기 (경로 확인!)
 import Icon from "../../components/Icon/Icon";
+
+// [TODO: 백엔드 연동 시 삭제] 테스트용 가짜 비밀번호
+const MOCK_CURRENT_PASSWORD = "12345678";
 
 // [데이터] 증상 리스트
 const SYMPTOMS = [
@@ -14,7 +16,6 @@ const SYMPTOMS = [
   { id: 6, name: "목", iconName: "icon-neck" },
 ];
 
-const MOCK_CURRENT_PASSWORD = "12345678";
 const MyPage = () => {
   //상태관리
   const [activeTab, setActiveTab] = useState<"symptom" | "info">("symptom");
@@ -27,7 +28,7 @@ const MyPage = () => {
   const [gender, setGender] = useState<"male" | "female" | null>(null);
   const [birth, setBirth] = useState({ year: "2000", month: "11", day: "10" });
   const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
-  const [selectedSymptoms, setSelectedSymptoms] = useState<number[]>([1, 2, 3]);
+  const [selectedSymptom, setSelectedSymptom] = useState<number | null>(1);
 
   // ... (기존 passwordForm은 유지)
   const [passwordForm, setPasswordForm] = useState({
@@ -44,25 +45,22 @@ const MyPage = () => {
   });
 
   // -----------------------------------------------------------------------
-  // [로직] 증상 클릭 시 선택/해제 (토글)
-  // -----------------------------------------------------------------------
-  const handleToggleSymptom = (id: number) => {
-    if (!isEditing) return; // 수정 모드가 아니면 클릭 막기
-
-    setSelectedSymptoms(
-      (prev) =>
-        prev.includes(id)
-          ? prev.filter((s) => s !== id) // 이미 있으면 뺌 (선택 해제)
-          : [...prev, id] // 없으면 넣음 (선택)
-    );
-  };
-
-  // -----------------------------------------------------------------------
   // [로직 함수들]
   // -----------------------------------------------------------------------
-  // -----------------------------------------------------------------------
-  // [로직] 증상 저장 버튼 클릭 (모달 분기 처리: 미선택 vs 선택)
-  // -----------------------------------------------------------------------
+
+  // 증상 선택/해제 토글 로직
+  const handleToggleSymptom = (id: number) => {
+    if (!isEditing) return; // 수정 모드 아니면 클릭 금지
+
+    setSelectedSymptom((prev) => {
+      if (prev === id) {
+        return null; // 이미 선택된 걸 누르면 -> 해제 (선택 안 함)
+      }
+      return id; // 다른 걸 누르면 -> 그걸로 변경 (단일 선택)
+    });
+  };
+
+  // 증상 저장 로직
   const handleSaveSymptom = () => {
     // 1. 수정하기 버튼을 눌렀을 때 (View -> Edit)
     if (!isEditing) {
@@ -75,7 +73,7 @@ const MyPage = () => {
     setIsEditing(false);
 
     // 3. 선택된 개수에 따라 다른 모달 띄우기
-    if (selectedSymptoms.length === 0) {
+    if (selectedSymptom === null) {
       // 🚨 0개 선택: "증상을 선택하지 않은 상태로 저장됩니다" 모달
       openModal(ModalType.MY_SYMPTOM_NOT_SELECTED);
     } else {
@@ -127,9 +125,8 @@ const MyPage = () => {
     }
   };
 
-  // -----------------------------------------------------------------------
-  // [로직] 비밀번호 변경 (피그마 UI + 윤주님 8자 규칙)
-  // -----------------------------------------------------------------------
+  // 비밀번호 변경 저장 로직
+
   const handleSavePassword = () => {
     const { current, new: newPwd, confirm } = passwordForm;
     const newErrors = { current: "", new: "", confirm: "" };
@@ -189,6 +186,7 @@ const MyPage = () => {
     // 4. 모든 관문 통과! -> 성공 모달 오픈
     openModal(ModalType.AUTH_PASSWORD_CHANGED);
   };
+
   // -----------------------------------------------------------------------
   // [화면 1] 나의 증상 관리
   // -----------------------------------------------------------------------
@@ -198,16 +196,11 @@ const MyPage = () => {
         <h2 className="mb-2 text-3xl font-bold text-blue-500">
           {isEditing ? "현재 확인 중인 증상을 변경해 보세요" : "현재 확인 중인 증상이에요"}
         </h2>
+        {/* ✨ [수정] 작은 설명: 모드 상관없이 항상 똑같이 2줄 표시 */}
         <p className="mt-4 leading-relaxed text-gray-500">
-          {isEditing ? (
-            <>
-              다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요.
-              <br />
-              필요하다면 증상을 선택하지 않고 넘어갈 수도 있어요.
-            </>
-          ) : (
-            "다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요"
-          )}
+          다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요
+          <br />
+          필요하다면 증상을 선택하지 않고 넘어갈 수도 있어요
         </p>
       </div>
 
@@ -215,7 +208,7 @@ const MyPage = () => {
       <div className="mt-12 grid grid-cols-3 gap-6">
         {SYMPTOMS.map((item) => {
           // 선택 여부 확인
-          const isSelected = selectedSymptoms.includes(item.id);
+          const isSelected = selectedSymptom === item.id;
 
           return (
             <div
