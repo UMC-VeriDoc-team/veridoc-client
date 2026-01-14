@@ -16,11 +16,14 @@ const SYMPTOMS = [
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState<"symptom" | "info">("symptom");
-  //정보 수정탭 안에서 '프로필'을 볼지 '비밀번호'를 볼지 결정하는 상태 <-- 이제 할거임.
+  //정보 수정탭 안에서 '프로필'을 볼지 '비밀번호'를 볼지 결정하는 상태
+  const [infoView, setInfoView] = useState<"profile" | "password">("profile");
 
   const [isEditing, setIsEditing] = useState(false);
 
   const { openModal } = useBaseModal();
+
+  // ✨ [추가/수정] 프로필 데이터를 진짜 State로 관리! <-- 이제 할거임.
 
   // -----------------------------------------------------------------------
   // [화면 1] 나의 증상 관리
@@ -72,9 +75,68 @@ const MyPage = () => {
   );
 
   // -----------------------------------------------------------------------
-  // [화면 2] 정보 수정 컨텐츠
+  // [화면 2-B] 정보 수정 > 비밀번호 변경 (새로 추가!)
   // -----------------------------------------------------------------------
-  const renderInfoContent = () => (
+  const renderPasswordForm = () => (
+    <div className="mb-20 mt-16 flex w-full max-w-[400px] flex-col">
+      {/* 상단 타이틀 */}
+      <div className="mb-12 text-center md:text-left">
+        <h2 className="mb-2 text-lg font-bold text-black">비밀번호 변경</h2>
+        <p className="text-sm text-gray-500">계정 보안을 위해 현재 비밀번호를 먼저 확인합니다</p>
+      </div>
+
+      {/* 입력 폼 */}
+      <div className="flex flex-col gap-6">
+        {/* 현재 비밀번호 */}
+        <div>
+          <label className="mb-2 block text-sm font-bold text-gray-700">
+            현재 비밀번호<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="password"
+            placeholder="현재 비밀번호를 입력해주세요"
+            className="w-full rounded-lg border border-gray-300 p-4 focus:outline-blue-500"
+          />
+        </div>
+        {/* 새 비밀번호 */}
+        <div>
+          <label className="mb-2 block text-sm font-bold text-gray-700">
+            새 비밀번호<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="password"
+            placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
+            className="w-full rounded-lg border border-gray-300 p-4 focus:outline-blue-500"
+          />
+        </div>
+        {/* 새 비밀번호 확인 */}
+        <div>
+          <label className="mb-2 block text-sm font-bold text-gray-700">
+            새 비밀번호 확인<span className="text-red-500">*</span>
+          </label>
+          <input
+            type="password"
+            placeholder="새 비밀번호를 다시 입력하세요"
+            className="w-full rounded-lg border border-gray-300 p-4 focus:outline-blue-500"
+          />
+        </div>
+
+        {/* 변경 버튼 (일단 알림만 뜨게) */}
+        <button
+          onClick={() => alert("비밀번호 변경 기능은 백엔드 연결 후 작동합니다!")}
+          className="mt-4 w-full rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
+        >
+          비밀번호 변경
+        </button>
+      </div>
+    </div>
+  );
+
+  // -----------------------------------------------------------------------
+  // [화면 2] 정보 수정 > 프로필 수정 (이름변경 : renderInfoContent -> renderProfileForm 으로 변경)
+  // -----------------------------------------------------------------------
+  const renderProfileForm = () => (
+    //renderProfileForm 으로 이름 변경
     <div className="mb-20 mt-12 flex w-full max-w-3xl flex-col">
       {/* === 상단: 프로필 + 입력 폼 영역 === */}
       <div className="flex flex-col gap-12 md:flex-row">
@@ -166,6 +228,7 @@ const MyPage = () => {
           </p>
           <button
             //비밀번호 변경 모달
+            onClick={() => setInfoView("password")}
             className="group flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50"
           >
             <span className="font-bold text-black">비밀번호 변경</span>
@@ -225,13 +288,20 @@ const MyPage = () => {
         </button>
         <button
           className={`flex-1 py-4 text-center font-bold transition-colors ${activeTab === "info" ? "border-b-2 border-blue-500 bg-white text-blue-500" : "bg-gray-50 text-gray-400"}`}
-          onClick={() => setActiveTab("info")}
+          onClick={() => {
+            setActiveTab("info");
+            setInfoView("profile"); //정보수정 탭 누르면 프로필 수정화면으로 초기화
+          }}
         >
           정보 수정
         </button>
       </div>
 
-      {activeTab === "symptom" ? renderSymptomContent() : renderInfoContent()}
+      {activeTab === "symptom"
+        ? renderSymptomContent()
+        : infoView === "profile"
+          ? renderProfileForm()
+          : renderPasswordForm()}
     </div>
   );
 };
