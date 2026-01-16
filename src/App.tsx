@@ -10,6 +10,7 @@ import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
 import SignUpPage from "./pages/signup/SignUpPage";
 import SignUpSymptomPage from "./pages/signup/SignUpSymptomPage";
+import GuidePage from "./pages/guide/GuidePage";
 
 const App = () => {
   return (
@@ -37,6 +38,9 @@ const App = () => {
           {/* <Route path="/home" element={<HomePage />} /> */}
           {/* <Route path="/symptom" element={<SymptomPage />} /> */}
           {/* <Route path="/my" element={<MyPage />} /> */}
+
+          {/* 범용가이드 */}
+          <Route path="/guides" element={<GuidePage />} />
 
           {/* 모달 테스트 페이지 */}
           <Route path="/modal-guide" element={<ModalGuidePage />} />
