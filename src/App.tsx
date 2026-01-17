@@ -10,6 +10,7 @@ import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
 import SignUpPage from "./pages/signup/SignUpPage";
 import SignUpSymptomPage from "./pages/signup/SignUpSymptomPage";
+import SymptomPage from "./pages/symptom/SymptomPage";
 
 const App = () => {
   return (
@@ -35,7 +36,7 @@ const App = () => {
         {/* 기본 레이아웃 (헤더+푸터) */}
         <Route element={<DefaultLayout />}>
           {/* <Route path="/home" element={<HomePage />} /> */}
-          {/* <Route path="/symptom" element={<SymptomPage />} /> */}
+          <Route path="/symptom" element={<SymptomPage />} />
           {/* <Route path="/my" element={<MyPage />} /> */}
 
           {/* 모달 테스트 페이지 */}
