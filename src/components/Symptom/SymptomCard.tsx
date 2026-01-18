@@ -8,10 +8,6 @@ interface SymptomCardProps {
   onClick?: () => void;
 }
 
-const ICON_SCALE: Record<string, string> = {
-  headache: "scale-[1.11] translate-y-[6px]",
-};
-
 const SymptomCard = ({
   label,
   iconName,
@@ -31,8 +27,6 @@ const SymptomCard = ({
       ? "bg-[#FAE16480] backdrop-blur-sm"
       : "";
 
-  const iconScaleClass = ICON_SCALE[iconName] ?? "";
-
   return (
     <button
       type="button"
@@ -47,10 +41,7 @@ const SymptomCard = ({
       ].join(" ")}
     >
       <div className="h-[127px] w-[137px]">
-        <Icon
-          name={iconName}
-          className={["h-full w-full object-cover", iconScaleClass].join(" ")}
-        />
+        <Icon name={iconName} className="h-full w-full object-cover" />
       </div>
 
       <div className="relative h-[36px] w-full">

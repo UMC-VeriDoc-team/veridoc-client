@@ -113,7 +113,7 @@ const ModalGuidePage = () => {
     openModal(type);
   };
 
-  // 범용 가이드 상세 모달 오픈 (전용 store에 타입 저장 후 모달 열기)
+  // 범용 가이드 상세 모달 오픈
   const onClickOpenGuideDetail = (guideType: GuideDetailType) => {
     setGuideType(guideType);
     openModal(ModalType.HOME_GUIDE_DETAIL);
