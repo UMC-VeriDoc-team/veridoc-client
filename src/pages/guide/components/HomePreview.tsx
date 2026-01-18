@@ -108,6 +108,7 @@ const HomePreview = () => {
         <article className="grid grid-cols-[280px_280px_280px] gap-x-20 gap-y-[50px]">
           {SYMPTOMS.map((symptom) => (
             <SymptomsItem
+              key={symptom.key}
               iconName={symptom.iconName}
               symptomsName={symptom.label}
               description={symptom.description}
