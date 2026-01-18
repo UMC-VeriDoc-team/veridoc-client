@@ -1,7 +1,11 @@
 import Icon from "@/components/Icon/Icon";
 import { useNavigate } from "react-router-dom";
 
-const RecommendEntry = () => {
+interface RecommendEntryProps {
+  showTitle?: boolean;
+}
+
+const RecommendEntry = ({ showTitle = true }: RecommendEntryProps) => {
   const navigate = useNavigate();
 
   // 마이페이지로 이동
@@ -12,22 +16,24 @@ const RecommendEntry = () => {
   return (
     <div className="w-full bg-white">
       {/* 상단 CTA */}
-      <section className="mx-auto flex max-w-[960px] flex-col items-center px-6 pt-20 text-center">
-        <h1 className="text-2xl font-extrabold text-gray-950 sm:text-3xl">
-          나에게 해당되는 정보를 더 알고 싶다면?
-        </h1>
-        <p className="mt-3 text-sm font-bold text-gray-950 sm:text-xl">
-          Veridoc이 믿을 수 있는 건강 콘텐츠를 추천드려요!
-        </p>
+      {showTitle && (
+        <section className="mx-auto flex max-w-[960px] flex-col items-center px-6 pt-20 text-center">
+          <h1 className="text-2xl font-extrabold text-gray-950 sm:text-3xl">
+            나에게 해당되는 정보를 더 알고 싶다면?
+          </h1>
+          <p className="mt-3 text-sm font-bold text-gray-950 sm:text-xl">
+            Veridoc이 믿을 수 있는 건강 콘텐츠를 추천드려요!
+          </p>
 
-        <button
-          type="button"
-          onClick={handleGoSymptom}
-          className="mt-8 rounded-[4px] bg-brand-primary px-8 py-3 text-sm font-bold text-white hover:opacity-90 sm:text-xl"
-        >
-          증상 선택하러 가기
-        </button>
-      </section>
+          <button
+            type="button"
+            onClick={handleGoSymptom}
+            className="mt-8 rounded-[4px] bg-brand-primary px-8 py-3 text-sm font-bold text-white hover:opacity-90 sm:text-xl"
+          >
+            증상 선택하러 가기
+          </button>
+        </section>
+      )}
 
       {/* 하단 */}
       <section className="relative mt-16 w-full overflow-hidden">
