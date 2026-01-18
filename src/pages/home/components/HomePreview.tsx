@@ -18,39 +18,50 @@ const HomePreview = () => {
     openModal(ModalType.HOME_GUIDE_DETAIL);
   };
 
-  // 임시 이미지 경로
+  // 이미지 경로
   const images: { src: string; alt: string }[] = [
     {
-      src: "/src/assets/images/home/hospital/doctor-1.png",
+      src: "/src/assets/images/home/previews/about-us.svg",
+      alt: "진료하는 사진",
+    },
+    {
+      src: "/src/assets/images/home/previews/doctor-1.svg",
       alt: "의료진 사진 1",
     },
     {
-      src: "/src/assets/images/home/hospital/doctor-2.png",
+      src: "/src/assets/images/home/previews/doctor-2.svg",
       alt: "의료진 사진 2",
     },
     {
-      src: "/src/assets/images/home/hospital/doctor-3.png",
+      src: "/src/assets/images/home/previews/doctor-3.svg",
       alt: "의료진 사진 3",
     },
     {
-      src: "/src/assets/images/home/hospital/doctor-4.png",
+      src: "/src/assets/images/home/previews/doctor-4.svg",
       alt: "의료진 사진 4",
     },
   ];
 
-  const img1 = images[0];
-  const img2 = images[1];
-  const img3 = images[2];
-  const img4 = images[3];
+  const aboutUs = images[0];
+  const img1 = images[1];
+  const img2 = images[2];
+  const img3 = images[3];
+  const img4 = images[4];
 
   return (
     <>
       <GuideHeader />
       {/* About US */}
       <section className="flex items-center justify-center gap-x-[130px] py-28">
-        {/* 임시 */}
         {/* 좌측: 사진 */}
-        <div className="h-[442px] w-[574px] rounded-[20px] bg-gray-100"></div>
+        <div className="h-[442px] w-[574px] overflow-hidden rounded-[20px] transition-all duration-300 ease-out">
+          <img
+            src={aboutUs.src}
+            alt={aboutUs.alt}
+            className="w-full bg-gray-100 object-cover transition-transform duration-300 ease-out"
+            loading="lazy"
+          />
+        </div>
         {/* 우측: 콘텐츠 + 버튼 */}
         <div className="flex flex-col items-start gap-y-[26px]">
           <div className="flex flex-col gap-y-[5px]">
