@@ -10,7 +10,8 @@ import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
 import SignUpPage from "./pages/signup/SignUpPage";
 import SignUpSymptomPage from "./pages/signup/SignUpSymptomPage";
-import GuidePage from "./pages/guide/GuidePage";
+import HomeSymptomOnboarding from "./pages/guide/components/HomeSymptomOnboarding";
+import HomePreview from "./pages/guide/components/HomePreview";
 
 const App = () => {
   return (
@@ -39,8 +40,11 @@ const App = () => {
           {/* <Route path="/symptom" element={<SymptomPage />} /> */}
           {/* <Route path="/my" element={<MyPage />} /> */}
 
-          {/* 범용가이드 */}
-          <Route path="/guides" element={<GuidePage />} />
+          {/* 추후 메인 홈과 합쳐질 예정 */}
+          {/* 임시: 범용가이드 */}
+          <Route path="/guides" element={<HomeSymptomOnboarding />} />
+          {/* 임시: 프리뷰 */}
+          <Route path="/preview" element={<HomePreview />} />
 
           {/* 모달 테스트 페이지 */}
           <Route path="/modal-guide" element={<ModalGuidePage />} />
