@@ -49,7 +49,7 @@ const RecommendEntry = ({ showTitle = true }: RecommendEntryProps) => {
         {/* 비주얼 컨테이너 */}
         <div className="relative mx-auto flex max-w-[960px] justify-center px-6 pb-16 pt-10">
           {/* 노트북 메인 */}
-          <Icon name="laptop" className="w-full max-w-[860px] sm:max-w-[920px]" />
+          <Icon name="laptop" className="w-full max-w-[860px] pb-20 sm:max-w-[920px]" />
 
           {/* 왼쪽 로고(파랑) */}
           <Icon
