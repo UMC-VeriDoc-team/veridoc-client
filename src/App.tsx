@@ -8,10 +8,10 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import OnboardingPage from "@/pages/onboarding/OnboardingPage";
 import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
-import SignUpPage from "./pages/signup/SignUpPage";
-import SignUpSymptomPage from "./pages/signup/SignUpSymptomPage";
-import HomeSymptomOnboarding from "./pages/guide/components/HomeSymptomOnboarding";
-import HomePreview from "./pages/guide/components/HomePreview";
+import SignUpPage from "@/pages/signup/SignUpPage";
+import SignUpSymptomPage from "@/pages/signup/SignUpSymptomPage";
+import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding";
+import HomePreview from "@/pages/home/components/HomePreview";
 
 const App = () => {
   return (
