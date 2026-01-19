@@ -8,10 +8,6 @@ interface StepDescriptionProps {
 }
 
 const BOX_W = 468;
-const BOX_H = 113;
-
-const BORDER = 3;
-const RADIUS = 12;
 
 const TAIL_W = 18;
 const TAIL_H = 8;
@@ -32,19 +28,14 @@ const StepDescription = ({
 
   return (
     <div
-      className="absolute z-50 bg-white"
-      style={{
-        top,
-        left,
-        width: BOX_W,
-        height: BOX_H,
-        borderRadius: RADIUS,
-        borderWidth: BORDER,
-        borderStyle: "solid",
-        borderColor: "#2B7FFF",
-        padding: "24px 32px",
-        boxSizing: "border-box",
-      }}
+      className={[
+        "absolute z-50 box-border bg-white",
+        "border-[3px] border-solid border-brand-primary",
+        "rounded-[12px]",
+        "px-8 py-6",
+        "h-[113px] w-[468px]",
+      ].join(" ")}
+      style={{ top, left }}
     >
       <div
         className="absolute mt-[-1px]"
@@ -55,45 +46,16 @@ const StepDescription = ({
           height: 0,
           borderLeft: `${TAIL_W / 2}px solid transparent`,
           borderRight: `${TAIL_W / 2}px solid transparent`,
-          borderBottom: `${TAIL_H}px solid #2B7FFF`,
+          borderBottom: `${TAIL_H}px solid brand-primary`,
         }}
       />
 
-      <div
-        className="flex flex-col"
-        style={{
-          width: "100%",
-          maxWidth: 420,
-          height: 64,
-          gap: 8,
-        }}
-      >
-        <div
-          style={{
-            height: 21,
-            fontFamily: "Roboto",
-            fontWeight: 700,
-            fontSize: 18,
-            lineHeight: "100%",
-            letterSpacing: "0",
-            color: "#2B7FFF",
-          }}
-        >
+      <div className="flex h-16 w-full max-w-[420px] flex-col gap-2">
+        <div className="h-[21px] text-lg font-bold leading-none tracking-normal text-brand-primary">
           {title}
         </div>
 
-        <p
-          className="whitespace-pre-line"
-          style={{
-            height: 40,
-            fontFamily: "Pretendard",
-            fontWeight: 500,
-            fontSize: 13,
-            lineHeight: "20px",
-            letterSpacing: "-0.025em",
-            color: "#2B7FFF",
-          }}
-        >
+        <p className="h-10 whitespace-pre-line text-[13px] font-medium leading-5 tracking-[-0.025em] text-brand-primary">
           {description}
         </p>
       </div>

@@ -121,7 +121,7 @@ const StepCard = ({
               </div>
 
               {subtitle && (
-                <div className="line-clamp-2 text-[14px] font-medium leading-[18px] tracking-[-0.025em] text-white/90">
+                <div className="line-clamp-2 text-[14px] font-medium leading-[18px] tracking-[-0.025em] text-white">
                   {subtitle}
                 </div>
               )}
@@ -143,6 +143,8 @@ const StepCard = ({
               ].join(" ")}
               style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
             />
+
+            {dimmed && <div className="absolute inset-0 bg-black/30" />}
 
             {/* 완료 후(completed=true)일 때만 전체 그라데이션 */}
             {completed && (
@@ -173,7 +175,7 @@ const StepCard = ({
                 "flex h-10 w-10 items-center justify-center rounded-full border-2 text-[16px] font-extrabold",
                 isDone
                   ? "border-brand-primary bg-brand-primary text-white"
-                  : "border-gray-300 bg-white text-gray-500",
+                  : "border-gray-300 bg-white text-gray-200",
               ].join(" ")}
             >
               {isDone ? <Icon name="check-white" className="h-5 w-5" /> : step}

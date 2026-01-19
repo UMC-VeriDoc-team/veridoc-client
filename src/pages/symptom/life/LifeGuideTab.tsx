@@ -36,7 +36,7 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
           {/* 채널명 */}
           <div className="flex items-center gap-3">
             <Icon name="doctor" className="h-10 w-10 rounded-full" />
-            <span className="text-[14px] font-medium leading-[16px] tracking-[-0.025em] text-brand-primary">
+            <span className="text-sm font-medium leading-[16px] tracking-[-0.025em] text-brand-primary">
               새움병원
             </span>
           </div>
@@ -57,10 +57,10 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
             </div>
 
             <div className="flex flex-col justify-center">
-              <p className="text-[18px] font-semibold leading-[140%] tracking-[-0.025em] text-brand-primary">
+              <p className="text-lg font-semibold leading-[140%] tracking-[-0.025em] text-brand-primary">
                 출처 대한민국의 면허를 소지한 보건 전문가의 채널
               </p>
-              <p className="text-[14px] font-medium leading-[140%] tracking-[-0.025em] text-brand-primary">
+              <p className="text-sm font-medium leading-[140%] tracking-[-0.025em] text-brand-primary">
                 전문가들이 보건 정보 출처를 어떻게 정의하는지 알아보세요
               </p>
             </div>
@@ -68,11 +68,11 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
         </div>
 
         <div className="mt-8 w-full max-w-[777px]">
-          <p className="text-[18px] font-semibold leading-[21px] tracking-[-0.025em] text-gray-950">
+          <p className="text-lg font-semibold leading-[21px] tracking-[-0.025em] text-gray-950">
             About Course
           </p>
 
-          <div className="mt-5 text-[16px] font-medium leading-[160%] text-gray-600">
+          <div className="mt-5 text-base font-medium leading-[160%] text-gray-600">
             <p>
               이 스트레칭은 근육의 길이와 탄성을 회복시키고, 관절 주변의 움직임을 부드럽게 만들어
               목과 어깨에 걸리는 부담을 줄이는 데 도움이 될 수 있습니다. 특히 오랜 시간 고정된

@@ -35,7 +35,7 @@ const SelectedStepOverlay = ({
       <div
         className={[
           "absolute left-0 overflow-hidden",
-          "border-[4px] border-[#2B7FFF]",
+          "border-[4px] border-brand-primary",
           radiusClass,
         ].join(" ")}
         style={{ top: PHOTO_TOP, width: CARD_W, height: PHOTO_H }}
@@ -62,7 +62,7 @@ const SelectedStepOverlay = ({
           "flex items-center gap-[10px]",
           "bg-brand-primary text-white",
           "px-[24px] py-[16px]",
-          "border-[4px] border-[#2B7FFF]",
+          "border-[4px] border-brand-primary",
           radiusClass,
           "shadow-[0_2px_16px_rgba(0,0,0,0.25)]",
         ].join(" ")}
