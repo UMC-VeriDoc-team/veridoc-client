@@ -14,7 +14,7 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
       />
 
       {/* 콘텐츠 카드 */}
-      <div className="mt-12 rounded bg-white">
+      <div className="mt-12 flex flex-col items-center rounded bg-white">
         {/* 유튜브 영상 */}
         <div className="mt-3 h-[448px] w-full max-w-[777px] overflow-hidden rounded-[30px]">
           <iframe
@@ -28,11 +28,11 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
         </div>
 
         {/* 영상 제목 */}
-        <div className="mt-[30px] text-[28px] font-bold leading-[100%] tracking-[-0.025em] text-gray-950">
+        <div className="mt-[30px] w-full max-w-[777px] text-left text-[28px] font-bold leading-[100%] tracking-[-0.025em] text-gray-950">
           어깨가 뻐근할 때 따라 해볼 수 있는 스트레칭 영상
         </div>
 
-        <div className="mt-[30px] flex items-center justify-between">
+        <div className="mt-[30px] flex w-full max-w-[777px] items-center justify-between">
           {/* 채널명 */}
           <div className="flex items-center gap-3">
             <Icon name="doctor" className="h-10 w-10 rounded-full" />
@@ -48,7 +48,7 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
           </div>
         </div>
 
-        <div className="mb-[30px] mt-[13px] h-[1px] w-full max-w-[777px] bg-[#1B1B1B]/[0.04]" />
+        <div className="mb-[10px] mt-[15px] h-[1px] w-full max-w-[777px] bg-[#1B1B1B]/[0.04]" />
 
         <div className="mt-[30px] h-[84px] w-full max-w-[777px] rounded-[6px] border border-brand-primary bg-white px-6">
           <div className="flex h-full items-center gap-4">
