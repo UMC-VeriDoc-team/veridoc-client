@@ -1,7 +1,7 @@
 ---
 name: Fix
 about: 오류 해결 과정 기록
-title: "Fix: "
+title: "fix: "
 labels: 🐞 BugFix
 assignees: ""
 ---
