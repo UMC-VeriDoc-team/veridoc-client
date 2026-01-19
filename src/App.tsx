@@ -8,6 +8,7 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import OnboardingPage from "@/pages/onboarding/OnboardingPage";
 import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
+import SymptomPage from "@/pages/symptom/SymptomPage";
 import SignUpPage from "@/pages/signup/SignUpPage";
 import SignUpSymptomPage from "@/pages/signup/SignUpSymptomPage";
 import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding";
@@ -37,7 +38,9 @@ const App = () => {
         {/* 기본 레이아웃 (헤더+푸터) */}
         <Route element={<DefaultLayout />}>
           {/* <Route path="/home" element={<HomePage />} /> */}
-          {/* <Route path="/symptom" element={<SymptomPage />} /> */}
+          
+          {/* 증상 */}
+          <Route path="/symptom" element={<SymptomPage />} />
           {/* <Route path="/my" element={<MyPage />} /> */}
 
           {/* 추후 메인 홈과 합쳐질 예정 */}
