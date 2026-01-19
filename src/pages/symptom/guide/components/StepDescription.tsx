@@ -46,7 +46,7 @@ const StepDescription = ({
           height: 0,
           borderLeft: `${TAIL_W / 2}px solid transparent`,
           borderRight: `${TAIL_W / 2}px solid transparent`,
-          borderBottom: `${TAIL_H}px solid brand-primary`,
+          borderBottom: `${TAIL_H}px solid #2B7FFF`,
         }}
       />
 
