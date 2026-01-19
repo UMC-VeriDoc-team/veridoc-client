@@ -61,7 +61,11 @@ const StepCardList = ({ steps, currentIndex, completed = false }: StepCardListPr
                   state={state}
                   selected={isCurrent}
                   completed={completed}
-                  className={isCurrent ? "absolute left-0 top-[-14px] z-50" : ""}
+                  className={
+                    isCurrent
+                      ? "absolute left-0 top-[-14px] z-40 cursor-pointer shadow-[0_2px_15px_rgba(0,0,0,0.4)]"
+                      : "cursor-default"
+                  }
                 />
               </div>
             );

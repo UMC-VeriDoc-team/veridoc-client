@@ -25,7 +25,7 @@ const PHOTO_VISIBLE_H = 393;
 const BASE_PHOTO_TOP = BASE_HEADER_H - OVERLAP;
 const BASE_BOTTOM_GAP = BASE_H - (BASE_PHOTO_TOP + PHOTO_VISIBLE_H);
 
-const SELECT_EXTRA = 28;
+const SELECT_EXTRA = 22;
 const SELECT_H = BASE_H + SELECT_EXTRA;
 const SELECT_HEADER_H = 100;
 
@@ -56,7 +56,9 @@ const StepCard = ({
     <button
       type="button"
       onClick={onClick}
-      className={["relative block overflow-visible text-left", className].filter(Boolean).join(" ")}
+      className={["relative block overflow-visible rounded-[6px] text-left", className]
+        .filter(Boolean)
+        .join(" ")}
       style={{ width: W, height: cardH }}
     >
       {selected ? (
@@ -86,7 +88,6 @@ const StepCard = ({
                     width: 219,
                     height: 73,
                     fontSize: 18,
-                    fontFamily: "Pretendard",
                     fontWeight: 600,
                     lineHeight: "120%",
                     letterSpacing: "-0.025em",
@@ -106,7 +107,6 @@ const StepCard = ({
               "border-[4px] border-brand-primary",
               "bg-brand-primary text-white",
               "px-[10px] py-[16px]",
-              "shadow-[0_2px_16px_rgba(0,0,0,0.25)]",
               "rounded-[6px]",
             ].join(" ")}
             style={{ width: W, height: SELECT_HEADER_H }}
