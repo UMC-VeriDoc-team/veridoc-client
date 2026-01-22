@@ -106,13 +106,13 @@ const EmailDomainInput = ({
         value={emailLocal}
         onChange={(e) => handleChangeLocal(e.target.value)}
         placeholder={placeholderLocal}
-        className="font-noraml h-full flex-1 rounded-l px-3 text-sm text-gray-950 outline-none placeholder:text-gray-200"
+        className="font-noraml h-full rounded-l pl-3 text-sm text-gray-950 outline-none placeholder:text-gray-200 md:flex-1 md:px-3"
       />
 
       {/* domain */}
-      <div ref={boxRef} className="relative h-full w-[160px]">
+      <div ref={boxRef} className="relative h-full w-[140px] md:w-[160px]">
         <div className="flex h-full items-center">
-          <span className="font-noraml pl-3 pr-1 text-sm text-gray-950">@</span>
+          <span className="font-noraml pl-1 pr-2 text-sm text-gray-950 md:pl-3 md:pr-2">@</span>
 
           {isCustom ? (
             <input
@@ -136,7 +136,7 @@ const EmailDomainInput = ({
             type="button"
             onClick={() => setIsOpen((p) => !p)}
             aria-label="이메일 주소 선택"
-            className="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center"
+            className="absolute right-0 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center md:right-2"
           >
             <Icon name={isOpen ? "chevron-up" : "chevron-down"} className="h-[7px] w-[13px]" />
           </button>
@@ -144,7 +144,7 @@ const EmailDomainInput = ({
 
         {/* dropdown */}
         {isOpen && (
-          <div className="absolute left-0 top-[50px] z-10 w-[260px] rounded-t-[8px] border border-gray-200 bg-white">
+          <div className="absolute left-0 top-[50px] z-10 w-[150px] rounded-[6px] border border-gray-200 bg-white md:w-full">
             {/* header */}
             <div className="flex h-12 items-center justify-between px-4 text-[14px] font-medium leading-[18px] tracking-[-0.025em] text-gray-950">
               이메일 주소 선택

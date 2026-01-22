@@ -20,7 +20,9 @@ const Header = ({ className }: HeaderProps) => {
   const navigate = useNavigate();
 
   return (
-    <header className={`w-full border-b border-gray-100 bg-white px-12 py-4 ${className}`}>
+    <header
+      className={`hidden w-full border-b border-gray-100 bg-white px-12 py-4 md:block ${className}`}
+    >
       <nav className="flex items-center justify-between">
         {/* Logo */}
         <img

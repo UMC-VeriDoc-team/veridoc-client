@@ -5,7 +5,7 @@ interface BottomLinksProps {
 
 const BottomLinks = ({ onClickFindPassword, onClickSignup }: BottomLinksProps) => {
   return (
-    <div className="flex items-center justify-center text-[13px] leading-[1.4] tracking-[-0.025em] text-gray-200">
+    <div className="flex items-center justify-center text-[12px] leading-[1.4] tracking-[-0.025em] text-gray-200 md:text-[14px]">
       <span>비밀번호를 잊으셨나요?</span>
       <button
         type="button"
