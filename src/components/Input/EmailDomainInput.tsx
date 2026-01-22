@@ -106,20 +106,20 @@ const EmailDomainInput = ({
         value={emailLocal}
         onChange={(e) => handleChangeLocal(e.target.value)}
         placeholder={placeholderLocal}
-        className="h-full flex-1 rounded-l px-3 text-[14px] font-medium text-gray-950 outline-none placeholder:text-gray-200"
+        className="font-noraml h-full flex-1 rounded-l px-3 text-sm text-gray-950 outline-none placeholder:text-gray-200"
       />
 
       {/* domain */}
       <div ref={boxRef} className="relative h-full w-[160px]">
         <div className="flex h-full items-center">
-          <span className="pl-3 pr-1 text-[14px] font-medium text-gray-950">@</span>
+          <span className="font-noraml pl-3 pr-1 text-sm text-gray-950">@</span>
 
           {isCustom ? (
             <input
               value={emailDomain}
               onChange={(e) => handleChangeDomain(e.target.value)}
               placeholder={placeholderDomain}
-              className="h-full w-full rounded-r pr-10 text-[14px] font-medium text-gray-950 outline-none placeholder:text-gray-200"
+              className="font-noraml h-full w-full rounded-r pr-10 text-sm text-gray-950 outline-none placeholder:text-gray-200"
             />
           ) : (
             <button
