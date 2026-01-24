@@ -37,12 +37,14 @@ const SymptomPage = () => {
   };
 
   // blocked 처리: guide 탭에서 막을 때
-  const [blockedMessage, setBlockedMessage] = useState<string | null>(null);
+  // 체크사항: 사용되지 않은 변수나 함수는 CI 검사에서 실패를 유도합니다. 따라서 임시 방편으로 검증 통과되도록 해두었으니 이후 개발 시에 체크바랍니다:)
+  // const [blockedMessage, setBlockedMessage] = useState<string | null>(null);
+  const [blockedMessage] = useState<string | null>(null);
 
-  const onBlocked = (message: string) => {
-    setBlockedMessage(message);
-    window.alert(message); // TODO: 모달로 교체
-  };
+  // const onBlocked = (message: string) => {
+  //   setBlockedMessage(message);
+  //   window.alert(message); // TODO: 모달로 교체
+  // };
 
   const onClickSelectSymptom = () => {
     setSearchParams((prev) => {
