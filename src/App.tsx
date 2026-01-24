@@ -15,8 +15,7 @@ import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding
 import HomePreview from "@/pages/home/components/HomePreview";
 
 const App = () => {
-  const x: number = "1";
-
+  
   return (
     <BrowserRouter>
       <ModalPage />
