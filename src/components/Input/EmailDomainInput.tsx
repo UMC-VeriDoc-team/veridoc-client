@@ -36,6 +36,7 @@ const EmailDomainInput = ({
 
   // 부모 value가 바뀌면 내부도 동기화
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (parsed.local !== emailLocal) setEmailLocal(parsed.local);
     if (parsed.domain !== emailDomain) setEmailDomain(parsed.domain);
 
