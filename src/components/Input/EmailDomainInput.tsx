@@ -94,38 +94,36 @@ const EmailDomainInput = ({
   return (
     <div
       className={[
-        "relative flex h-12 w-full items-center rounded border bg-white",
+        "flex h-12 w-full items-center rounded border bg-white",
         hasError ? "border-error" : "border-gray-200",
       ].join(" ")}
       onBlur={onBlur}
     >
-      <div className="absolute bottom-0 right-[160px] top-0 w-px bg-gray-200" />
-
       {/* local */}
       <input
         value={emailLocal}
         onChange={(e) => handleChangeLocal(e.target.value)}
         placeholder={placeholderLocal}
-        className="font-noraml h-full rounded-l pl-3 text-sm text-gray-950 outline-none placeholder:text-gray-200 md:flex-1 md:px-3"
+        className="h-full w-[57%] rounded-l pl-3 text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200 md:px-3"
       />
 
       {/* domain */}
-      <div ref={boxRef} className="relative h-full w-[140px] md:w-[160px]">
+      <div ref={boxRef} className={`relative h-full w-[48%] border-l ${hasError ? "border-error" : "border-gray-200"}`}>
         <div className="flex h-full items-center">
-          <span className="font-noraml pl-1 pr-2 text-sm text-gray-950 md:pl-3 md:pr-2">@</span>
+          <span className="text-sm font-normal text-gray-950 pl-3 pr-2">@</span>
 
           {isCustom ? (
             <input
               value={emailDomain}
               onChange={(e) => handleChangeDomain(e.target.value)}
               placeholder={placeholderDomain}
-              className="font-noraml h-full w-full rounded-r pr-10 text-sm text-gray-950 outline-none placeholder:text-gray-200"
+              className="h-full w-full rounded-r pr-8 text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200"
             />
           ) : (
             <button
               type="button"
               onClick={() => setIsOpen((p) => !p)}
-              className="flex h-full w-full items-center pr-10 text-[14px] font-medium text-gray-950"
+              className="flex h-full w-full items-center pr-8 text-[14px] font-medium text-gray-950"
             >
               {domainOption}
             </button>
@@ -136,7 +134,7 @@ const EmailDomainInput = ({
             type="button"
             onClick={() => setIsOpen((p) => !p)}
             aria-label="이메일 주소 선택"
-            className="absolute right-0 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center md:right-2"
+            className="absolute top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center right-2"
           >
             <Icon name={isOpen ? "chevron-up" : "chevron-down"} className="h-[7px] w-[13px]" />
           </button>
