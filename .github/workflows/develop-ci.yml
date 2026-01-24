@@ -1,0 +1,54 @@
+name: CI - Lint, Type Check, Build
+
+on:
+  pull_request:
+    branches:
+      - develop # develop 브랜치로 PR이 열리거나 업데이트될 때 실행
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 레포지토리 코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Node.js 환경 설정
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # npm 캐시 설정 (CI 속도 개선)
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # 의존성 설치
+      - name: Install dependencies
+        run: npm ci
+        # 고정된 의존성(lock 파일 기반) 설치
+
+      # Prettier 포맷 체크 (검사만)
+      - name: Check code formatting (Prettier)
+        run: npx prettier -c .
+        # 로컬에서는 Husky가 자동 수정
+
+      # ESLint 검사
+      - name: Run ESLint
+        run: npm run lint
+        # React Hook 규칙, 기본 코드 품질 검사
+        # Prettier와 충돌 없음 (Flat Config 기준)
+
+      # TypeScript 타입 체크 (빌드 없이 타입 오류만 검사)
+      - name: Type check
+        run: npx tsc --noEmit
+
+      # 프로젝트 빌드
+      - name: Build project
+        run: npm run build
