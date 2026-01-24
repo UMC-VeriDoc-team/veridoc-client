@@ -38,7 +38,7 @@ const App = () => {
         {/* 기본 레이아웃 (헤더+푸터) */}
         <Route element={<DefaultLayout />}>
           {/* <Route path="/home" element={<HomePage />} /> */}
-          
+
           {/* 증상 */}
           <Route path="/symptom" element={<SymptomPage />} />
           {/* <Route path="/my" element={<MyPage />} /> */}

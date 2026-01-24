@@ -108,9 +108,12 @@ const EmailDomainInput = ({
       />
 
       {/* domain */}
-      <div ref={boxRef} className={`relative h-full w-[48%] border-l ${hasError ? "border-error" : "border-gray-200"}`}>
+      <div
+        ref={boxRef}
+        className={`relative h-full w-[48%] border-l ${hasError ? "border-error" : "border-gray-200"}`}
+      >
         <div className="flex h-full items-center">
-          <span className="text-sm font-normal text-gray-950 pl-3 pr-2">@</span>
+          <span className="pl-3 pr-2 text-sm font-normal text-gray-950">@</span>
 
           {isCustom ? (
             <input
@@ -134,7 +137,7 @@ const EmailDomainInput = ({
             type="button"
             onClick={() => setIsOpen((p) => !p)}
             aria-label="이메일 주소 선택"
-            className="absolute top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center right-2"
+            className="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center"
           >
             <Icon name={isOpen ? "chevron-up" : "chevron-down"} className="h-[7px] w-[13px]" />
           </button>

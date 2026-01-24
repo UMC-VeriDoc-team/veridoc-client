@@ -9,7 +9,7 @@ const LoginPage = () => {
   return (
     <div className="flex flex-col bg-white pt-9">
       <AuthHeader backTo="/" />
-      <div className="flex justify-center pt-[0px] px-6">
+      <div className="flex justify-center px-6 pt-[0px]">
         <div className="flex w-full max-w-[354px] flex-col items-center md:max-w-[404px]">
           <div className="h-[40px]" />
           <div className="flex w-full flex-col items-center gap-[10px]">
