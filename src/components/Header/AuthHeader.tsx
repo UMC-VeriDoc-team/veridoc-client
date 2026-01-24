@@ -17,13 +17,13 @@ const AuthHeader = ({ backTo }: AuthHeaderProps) => {
         aria-label="돌아가기"
         className="absolute left-4 flex h-[45px] w-[37px] items-center justify-center p-[10px] md:left-12"
       >
-        <Icon name="arrow-back" className="h-full w-full" />
+        <Icon name="arrow-back" className="h-[21px] w-[14px] md:h-full md:w-full" />
       </button>
 
       <img
         src={logo}
         alt="VeriDoc 로고"
-        className="h-[85px] w-auto object-contain"
+        className="hidden h-[85px] w-auto object-contain md:block"
         draggable={false}
       />
     </div>
