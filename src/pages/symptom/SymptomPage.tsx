@@ -1,11 +1,10 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import logo from "@/assets/images/logo.svg";
-
-import { SymptomTabs } from "./components/SymptomTabs";
-import { SymptomEmptyState } from "./components/SymptomEmptyState";
-import { LifeGuideTab } from "./life/LifeGuideTab";
-import SymptomGuideTab from "./guide/SymptomGuideTab";
+import { SymptomTabs } from "@/pages/symptom/components/SymptomTabs";
+import { SymptomEmptyState } from "@/pages/symptom/components/SymptomEmptyState";
+import { LifeGuideTab } from "@/pages/symptom/tabs/life-guide/LifeGuideTab";
+import SymptomGuideTab from "@/pages/symptom/tabs/symptom-guide/SymptomGuideTab";
 
 type TabKey = "life" | "guide";
 

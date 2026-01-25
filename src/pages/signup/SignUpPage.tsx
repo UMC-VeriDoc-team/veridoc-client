@@ -1,5 +1,5 @@
 import AuthHeader from "@/components/Header/AuthHeader";
-import SignUpForm from "./components/SignUpForm";
+import SignUpForm from "@/pages/signup/components/SignUpForm";
 
 const SignUpPage = () => {
   return (

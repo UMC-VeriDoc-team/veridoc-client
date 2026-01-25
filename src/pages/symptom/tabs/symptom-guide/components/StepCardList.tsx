@@ -1,6 +1,5 @@
 import StepCard from "./StepCard";
-import type { SymptomGuideStep } from "../SymptomGuideTab";
-
+import type { SymptomGuideStep } from "@/pages/symptom/tabs/symptom-guide/SymptomGuideTab";
 import img1 from "@/assets/images/test/symptom_test1.png";
 import img2 from "@/assets/images/test/symptom_test2.jpg";
 import img3 from "@/assets/images/test/symptom_test3.jpg";

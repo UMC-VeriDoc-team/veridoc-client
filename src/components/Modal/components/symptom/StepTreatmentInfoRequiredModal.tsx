@@ -1,9 +1,16 @@
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
+import { useNavigate } from "react-router-dom";
 
 // 대처 방법 / 병원 정보 미확인 모달 (3 → 4단계)
 const StepTreatmentInfoRequiredModal = () => {
+  const navigate = useNavigate();
   const { closeModal } = useBaseModal();
+
+  // 홈으로 이동
+  const handleGoHome = () => {
+    navigate("/home");
+  };
 
   return (
     <div className="flex w-[92vw] max-w-[420px] flex-col items-center justify-center gap-6 rounded-xl bg-white px-5 py-7 sm:min-w-[380px] sm:gap-8 sm:px-7 sm:py-8">
@@ -26,13 +33,23 @@ const StepTreatmentInfoRequiredModal = () => {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={closeModal}
-          className="inline-flex h-12 w-full items-center justify-center rounded-[4px] bg-brand-primary text-center text-base font-semibold leading-none text-white transition-colors hover:opacity-90 sm:text-lg"
-        >
-          확인
-        </button>
+        {/* Buttons */}
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={closeModal}
+            className="inline-flex h-12 w-full items-center justify-center rounded-[4px] bg-gray-50 text-center text-base font-semibold leading-none text-gray-600 transition-colors hover:bg-gray-100 sm:text-lg"
+          >
+            나중에 할게요
+          </button>
+          <button
+            type="button"
+            onClick={handleGoHome}
+            className="inline-flex h-12 w-full items-center justify-center rounded-[4px] bg-brand-primary text-center text-base font-semibold leading-none text-white transition-colors hover:opacity-90 sm:text-lg"
+          >
+            대처·병원 확인하기
+          </button>
+        </div>
       </div>
     </div>
   );

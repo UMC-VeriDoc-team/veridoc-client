@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
-import SectionTitle from "../components/common/SectionTitle";
-import StepCardList from "./components/StepCardList";
+import SectionTitle from "@/pages/symptom/components/common/SectionTitle";
+import StepCardList from "@/pages/symptom/tabs/symptom-guide/components/StepCardList";
 import Button from "@/components/Button/Button";
-import StepDescription from "./components/StepDescription";
+import StepDescription from "@/pages/symptom/tabs/symptom-guide/components/StepDescription";
+import useBaseModal from "@/stores/modal/useBaseModal";
+import { ModalType } from "@/components/Modal/types/modal";
 
 export interface SymptomGuideStep {
   step: number;
@@ -18,6 +20,8 @@ interface SymptomGuideTabProps {
 }
 
 const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
+  const { openModal } = useBaseModal();
+
   const steps: SymptomGuideStep[] = useMemo(
     () => [
       {
@@ -87,6 +91,19 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
     // step4에서 누르면 완료 상태로 전환
     if (currentIndex === steps.length - 1) {
       setCompleted(true);
+      return;
+    }
+
+    // 2단계 -> 3단계로 넘어갈 때: 전문의 소견 확인 모달
+    // 임시: 모달을 한 번 이상 조회하면 트리거 미발생 하도록 수정 예정
+    if (currentIndex === 1) {
+      openModal(ModalType.STEP_DOCTOR_OPINION_REQUIRED);
+      return;
+    }
+
+    // 3단계 -> 4단계로 넘어갈 때: 대처방안/병원 정보 확인 모달
+    if (currentIndex === 2) {
+      openModal(ModalType.STEP_TREATMENT_INFO_REQUIRED);
       return;
     }
 

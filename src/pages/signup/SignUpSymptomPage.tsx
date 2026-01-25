@@ -1,5 +1,5 @@
 import Icon from "@/components/Icon/Icon";
-import SignUpSymptomForm from "./components/SignUpSymptomForm";
+import SignUpSymptomForm from "@/pages/signup/components/SignUpForm";
 import { useLocation, useNavigate } from "react-router-dom";
 
 type LocationState = {
