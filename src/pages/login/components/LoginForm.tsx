@@ -1,6 +1,7 @@
 import Button from "@/components/Button/Button";
 import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import Input from "@/components/Input/Input";
+import { ModalType } from "@/components/Modal/types/modal";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useMemo, useState } from "react";
@@ -37,7 +38,7 @@ const LoginForm = () => {
     // TODO(feature/login): 로그인 API 연동 후 처리
 
     // 로그인 실패 모달
-    openModal("AUTH_LOGIN_FAILED");
+    openModal(ModalType.AUTH_LOGIN_FAILED);
   };
 
   return (
