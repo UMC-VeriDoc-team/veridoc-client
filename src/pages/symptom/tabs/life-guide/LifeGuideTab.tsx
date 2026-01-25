@@ -1,5 +1,5 @@
 import Icon from "@/components/Icon/Icon";
-import SectionTitle from "../components/common/SectionTitle";
+import SectionTitle from "@/pages/symptom/components/common/SectionTitle";
 
 interface LifeGuideTabProps {
   symptomName: string;

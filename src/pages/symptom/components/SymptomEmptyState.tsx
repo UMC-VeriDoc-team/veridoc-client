@@ -1,6 +1,6 @@
 import Button from "@/components/Button/Button";
 import symptomNotSelectedImg from "@/assets/images/symptom-none.svg";
-import SectionTitle from "./common/SectionTitle";
+import SectionTitle from "@/pages/symptom/components/common/SectionTitle";
 
 interface SymptomEmptyStateProps {
   onClickSelectSymptom: () => void;
