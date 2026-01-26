@@ -33,24 +33,25 @@ const SymptomCard = ({
       onClick={onClick}
       className={[
         "flex flex-col overflow-hidden",
-        "h-[163px] w-[137px]",
+        "h-[124px] w-[104px]",
+        "md:h-[163px] md:w-[137px]",
         "bg-white",
         "shadow-[1px_2px_6px_0px_rgba(0,0,0,0.25)]",
         "focus:outline-none",
         borderClass,
       ].join(" ")}
     >
-      <div className="h-[127px] w-[137px]">
+      <div className="h-[92px] w-[104px] md:h-[127px] md:w-[137px]">
         <Icon name={iconName} className="h-full w-full object-cover" />
       </div>
 
-      <div className="relative h-[36px] w-full">
+      <div className="relative h-[32px] w-full md:h-[36px]">
         {(selected || multiAttempted) && (
           <div className={`absolute inset-0 ${labelOverlayClass}`} />
         )}
 
         <div className="relative flex h-full w-full items-center justify-center">
-          <span className="text-[18px] font-semibold leading-[1] tracking-[-0.025em] text-gray-950">
+          <span className="text-[14px] font-semibold leading-[1] tracking-[-0.025em] text-gray-950 md:text-[18px]">
             {label}
           </span>
         </div>

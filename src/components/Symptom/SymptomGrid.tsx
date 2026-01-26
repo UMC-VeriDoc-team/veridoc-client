@@ -9,7 +9,12 @@ interface SymptomGridProps {
 
 const SymptomGrid = ({ selectedKey, multiAttemptedKey, onSelect }: SymptomGridProps) => {
   return (
-    <div className="mx-auto grid w-fit grid-cols-3 gap-x-[33px] gap-y-[39px]">
+    <div
+      className={[
+        "mx-auto grid w-full grid-cols-3 justify-items-center gap-x-[30px] gap-y-[30px]",
+        "md:w-fit md:gap-x-[33px] md:gap-y-[39px]",
+      ].join(" ")}
+    >
       {SYMPTOMS.map((symptom) => (
         <SymptomCard
           key={symptom.key}
