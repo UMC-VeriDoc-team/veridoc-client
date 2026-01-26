@@ -185,7 +185,7 @@ const MyPage = () => {
   const renderSymptomContent = () => (
     <>
       <div className="mt-16 text-center">
-        <h2 className="mb-2 text-3xl font-bold text-blue-500">
+        <h2 className="mb-2 text-3xl font-bold text-brand-primary">
           {isEditing ? "현재 확인 중인 증상을 변경해 보세요" : "현재 확인 중인 증상이에요"}
         </h2>
         {/* ✨ [수정] 작은 설명: 모드 상관없이 항상 똑같이 2줄 표시 */}
@@ -209,7 +209,7 @@ const MyPage = () => {
               onClick={() => handleToggleSymptom(id)} // 클릭 이벤트
               className={`flex h-[180px] w-[180px] cursor-pointer flex-col overflow-hidden rounded-2xl border transition-all hover:shadow-md ${
                 isSelected
-                  ? "border-blue-500 shadow-md ring-2 ring-blue-500" // 선택됨: 파란색
+                  ? "border-brand-primary shadow-md ring-2 ring-brand-primary" // 선택됨: 파란색
                   : "border-gray-100" // 해제됨: 회색
               } ${!isEditing ? "cursor-default opacity-80" : ""}`} // 수정 모드 아닐 땐 흐리게
             >
@@ -218,10 +218,10 @@ const MyPage = () => {
                 <Icon name={item.iconName} className="h-full w-full object-cover" />
               </div>
               <div
-                className={`flex h-[25%] w-full items-center justify-center border-t bg-white ${isSelected ? "border-blue-100" : "border-gray-50"}`}
+                className={`flex h-[25%] w-full items-center justify-center border-t bg-white ${isSelected ? "border-brand-primarySoft" : "border-gray-50"}`}
               >
                 <span
-                  className={`text-lg font-bold ${isSelected ? "text-blue-600" : "text-gray-700"}`}
+                  className={`text-lg font-bold ${isSelected ? "text-brand-primary" : "text-gray-900"}`}
                 >
                   {/* name 대신 label 사용 */}
                   {item.label}
@@ -235,7 +235,7 @@ const MyPage = () => {
       <div className="mb-20 mt-16">
         <button
           onClick={() => handleSaveSymptom()}
-          className="w-[400px] rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
+          className="w-[400px] rounded-lg bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
         >
           {isEditing ? "저장하기" : "수정하기"}
         </button>
@@ -265,15 +265,15 @@ const MyPage = () => {
     return (
       <div className="mb-20 mt-16 flex w-full max-w-[400px] flex-col">
         <div className="mb-12 text-center md:text-left">
-          <h2 className="mb-2 text-lg font-bold text-black">비밀번호 변경</h2>
-          <p className="text-sm text-gray-500">계정 보안을 위해 현재 비밀번호를 먼저 확인합니다</p>
+          <h2 className="mb-2 text-lg font-bold text-gray-950">비밀번호 변경</h2>
+          <p className="text-sm text-gray-600">계정 보안을 위해 현재 비밀번호를 먼저 확인합니다</p>
         </div>
 
         <div className="flex flex-col gap-6">
           {/* 1. 현재 비밀번호 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-700">
-              현재 비밀번호<span className="text-red-500">*</span>
+            <label className="mb-2 block text-sm font-bold text-gray-900">
+              현재 비밀번호<span className="text-error">*</span>
             </label>
             <input
               type="password"
@@ -282,17 +282,17 @@ const MyPage = () => {
               onChange={(e) => handleChange("current", e.target.value)}
               className={`w-full rounded-lg border p-4 focus:outline-none ${
                 pwdErrors.current
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300 focus:border-blue-500"
+                  ? "border-error focus:border-error"
+                  : "border-gray-200 focus:border-brand-primary"
               }`}
             />
-            {pwdErrors.current && <p className="mt-2 text-sm text-red-500">{pwdErrors.current}</p>}
+            {pwdErrors.current && <p className="mt-2 text-sm text-error">{pwdErrors.current}</p>}
           </div>
 
           {/* 2. 새 비밀번호 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-700">
-              새 비밀번호<span className="text-red-500">*</span>
+            <label className="mb-2 block text-sm font-bold text-gray-900">
+              새 비밀번호<span className="text-error">*</span>
             </label>
             <input
               type="password"
@@ -301,17 +301,17 @@ const MyPage = () => {
               onChange={(e) => handleChange("new", e.target.value)}
               className={`w-full rounded-lg border p-4 focus:outline-none ${
                 pwdErrors.new
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300 focus:border-blue-500"
+                  ? "border-error focus:border-error"
+                  : "border-gray-200 focus:border-brand-primary"
               }`}
             />
-            {pwdErrors.new && <p className="mt-2 text-sm text-red-500">{pwdErrors.new}</p>}
+            {pwdErrors.new && <p className="mt-2 text-sm text-error">{pwdErrors.new}</p>}
           </div>
 
           {/* 3. 새 비밀번호 확인 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-700">
-              새 비밀번호 확인<span className="text-red-500">*</span>
+            <label className="mb-2 block text-sm font-bold text-gray-900">
+              새 비밀번호 확인<span className="text-error">*</span>
             </label>
             <input
               type="password"
@@ -320,13 +320,13 @@ const MyPage = () => {
               onChange={(e) => handleChange("confirm", e.target.value)}
               className={`w-full rounded-lg border p-4 focus:outline-none ${
                 pwdErrors.confirm
-                  ? "border-red-500 focus:border-red-500"
-                  : "border-gray-300 focus:border-blue-500"
+                  ? "border-error focus:border-error"
+                  : "border-gray-200 focus:border-brand-primary"
               }`}
             />
 
             {/* 🚨 불일치 에러 (빨간색) */}
-            {pwdErrors.confirm && <p className="mt-2 text-sm text-red-500">{pwdErrors.confirm}</p>}
+            {pwdErrors.confirm && <p className="mt-2 text-sm text-error">{pwdErrors.confirm}</p>}
 
             {/* ✅ 일치 성공 (초록색) - 조건 만족 시에만 노출 */}
             {isMatchSuccess && (
@@ -339,7 +339,7 @@ const MyPage = () => {
 
           <button
             onClick={handleSavePassword}
-            className="mt-4 w-full rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
+            className="mt-4 w-full rounded-lg bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
           >
             비밀번호 변경
           </button>
@@ -358,9 +358,9 @@ const MyPage = () => {
       <div className="flex flex-col gap-12 md:flex-row">
         {/* 1. 왼쪽: 프로필 사진 */}
         <div className="flex w-full flex-col items-center md:w-1/3">
-          <h3 className="mb-6 w-full text-left text-lg font-bold text-black">개인정보 수정</h3>
+          <h3 className="mb-6 w-full text-left text-lg font-bold text-gray-950">개인정보 수정</h3>
           <div className="relative">
-            <div className="flex h-60 w-60 items-center justify-center overflow-hidden rounded-full border-4 border-blue-500 bg-gray-50">
+            <div className="flex h-60 w-60 items-center justify-center overflow-hidden rounded-full border-4 border-brand-primary bg-gray-50">
               {/* ✨ [수정] 성별에 따른 아이콘 분기, 기본은 male */}
               <Icon
                 name={gender === "female" ? "icon-female" : "icon-male"}
@@ -374,32 +374,32 @@ const MyPage = () => {
         <div className="mt-4 flex w-full flex-col space-y-6 md:mt-16 md:w-2/3">
           {/* 이름 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-500">이름</label>
+            <label className="mb-2 block text-sm font-bold text-gray-600">이름</label>
             <input
               type="text"
               value={name} // ✨ [수정] state 변수 연결
               onChange={(e) => setName(e.target.value)} // ✨ [수정] 입력할 때마다 state 변경
               //에러가 있으면 (errors.name) 빨간 테두리 추가, 없으면 회색/파란색
-              className={`w-full rounded-md border p-3 text-black focus:outline-none ${
+              className={`w-full rounded-md border p-3 text-gray-900 focus:outline-none ${
                 errors.name
-                  ? "border-red-500 focus:border-red-500" // 에러일 때 스타일
-                  : "border-gray-300 focus:border-blue-500" // 정상일 때 스타일
+                  ? "border-error focus:border-error" // 에러일 때 스타일
+                  : "border-gray-200 focus:border-brand-primary" // 정상일 때 스타일
               }`}
             />
             {/* ✨ 에러 메시지가 있을 때만 빨간 글씨 보여주기 */}
-            {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+            {errors.name && <p className="mt-1 text-xs text-error">{errors.name}</p>}
           </div>
 
           {/* 생년월일 (3단 분리 + 유효성 검사) */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-500">생년월일</label>
+            <label className="mb-2 block text-sm font-bold text-gray-600">생년월일</label>
 
             {/* 겉보기엔 하나의 박스지만, 실제론 3개의 입력칸이 들어있는 컨테이너 */}
             <div
               className={`flex w-full items-center rounded-md border p-3 focus-within:ring-2 ${
                 errors.birth
-                  ? "border-red-500 focus-within:border-red-500 focus-within:ring-red-500" // 에러: 빨강
-                  : "border-gray-300 focus-within:border-blue-500 focus-within:ring-blue-500" // 정상: 파랑
+                  ? "border-error focus-within:border-error focus-within:ring-error" // 에러: 빨강
+                  : "border-gray-200 focus-within:border-brand-primary focus-within:ring-brand-primary" // 정상: 파랑
               }`}
             >
               {/* 1. 년도 (YYYY) */}
@@ -411,7 +411,7 @@ const MyPage = () => {
                 placeholder="YYYY"
                 maxLength={4} // 4글자 제한
               />
-              <span className="mx-2 text-gray-400">/</span>
+              <span className="mx-2 text-gray-600">/</span>
 
               {/* 2. 월 (MM) */}
               <input
@@ -422,7 +422,7 @@ const MyPage = () => {
                 placeholder="MM"
                 maxLength={2}
               />
-              <span className="mx-2 text-gray-400">/</span>
+              <span className="mx-2 text-gray-600">/</span>
 
               {/* 3. 일 (DD) */}
               <input
@@ -435,28 +435,28 @@ const MyPage = () => {
               />
             </div>
             {/* ✨ 에러 메시지 (빨간 글씨) */}
-            {errors.birth && <p className="mt-1 text-xs text-red-500">{errors.birth}</p>}
+            {errors.birth && <p className="mt-1 text-xs text-error">{errors.birth}</p>}
           </div>
 
           {/* 이메일 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-500">이메일</label>
+            <label className="mb-2 block text-sm font-bold text-gray-600">이메일</label>
             <div className="relative">
               <input
                 type="email"
                 defaultValue="honggil2000@naver.com"
                 disabled
-                className="w-full cursor-not-allowed rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-500"
+                className="w-full cursor-not-allowed rounded-md border border-gray-200 bg-gray-50 p-3 text-gray-600"
               />
               <div className="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 transform items-center justify-center">
-                <Icon name="icon-lock" className="h-full w-full text-gray-400" />
+                <Icon name="icon-lock" className="h-full w-full text-gray-600" />
               </div>
             </div>
           </div>
 
           {/* 성별 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-500">성별</label>
+            <label className="mb-2 block text-sm font-bold text-gray-600">성별</label>
             <div className="flex gap-2">
               <button
                 type="button"
@@ -464,15 +464,15 @@ const MyPage = () => {
                   setGender(gender === "male" ? null : "male");
                   setErrors({ ...errors, gender: "" });
                 }} // 클릭 시 에러 삭제
-                // ✨ 에러 발생 시: border-red-500 text-red-500 (빨간 테두리+글씨)
-                // ✨ 선택됨: border-blue-500 bg-white text-blue-500
-                // ✨ 평소: border-gray-200 bg-gray-50 text-gray-400
+                // ✨ 에러 발생 시: border-error text-error (빨간 테두리+글씨)
+                // ✨ 선택됨: border-brand-primary bg-white text-brand-primary
+                // ✨ 평소: border-gray-200 bg-gray-50 text-gray-600
                 className={`w-32 rounded-md border py-3 font-bold transition-colors ${
                   errors.gender
-                    ? "border-red-500 bg-white text-red-500"
+                    ? "border-error bg-white text-error"
                     : gender === "male"
-                      ? "border-blue-500 bg-white text-blue-500"
-                      : "border-gray-200 bg-gray-50 text-gray-400 hover:bg-gray-100"
+                      ? "border-brand-primary bg-white text-brand-primary"
+                      : "border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100"
                 }`}
               >
                 남성
@@ -485,24 +485,24 @@ const MyPage = () => {
                 }}
                 className={`w-32 rounded-md border py-3 font-bold transition-colors ${
                   errors.gender
-                    ? "border-red-500 bg-white text-red-500"
+                    ? "border-error bg-white text-error"
                     : gender === "female"
-                      ? "border-blue-500 bg-white text-blue-500"
-                      : "border-gray-200 bg-gray-50 text-gray-400 hover:bg-gray-100"
+                      ? "border-brand-primary bg-white text-brand-primary"
+                      : "border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100"
                 }`}
               >
                 여성
               </button>
             </div>
             {/* ✨ 에러 메시지: 버튼 아래에 표시 */}
-            {errors.gender && <p className="mt-1 text-xs text-red-500">{errors.gender}</p>}
+            {errors.gender && <p className="mt-1 text-xs text-error">{errors.gender}</p>}
           </div>
 
           {/* 저장 버튼 */}
           <button
             //수정완료 모달 연결 + 유효성 검사 함수 연결
             onClick={handleSaveProfile}
-            className="mt-4 w-full rounded-lg bg-blue-500 py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
+            className="mt-4 w-full rounded-lg bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
           >
             개인정보 저장
           </button>
@@ -513,31 +513,31 @@ const MyPage = () => {
       <div className="mt-16 space-y-12">
         {/* 보안설정 */}
         <section>
-          <h3 className="mb-1 text-lg font-bold text-black">보안설정</h3>
-          <p className="mb-4 text-sm text-gray-500">
+          <h3 className="mb-1 text-lg font-bold text-gray-950">보안설정</h3>
+          <p className="mb-4 text-sm text-gray-600">
             계정 보안을 위해 주기적인 비밀번호 변경을 권장해요.
           </p>
           <button
             //비밀번호 변경 모달
             onClick={() => setInfoView("password")}
-            className="group flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50"
+            className="group flex w-full items-center justify-between rounded-lg border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
-            <span className="font-bold text-black">비밀번호 변경</span>
+            <span className="font-bold text-gray-950">비밀번호 변경</span>
             <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
               {/* ✨ [수정] 화살표 아이콘 적용 */}
-              <Icon name="icon-arrow" className="h-full w-full text-gray-400" />
+              <Icon name="icon-arrow" className="h-full w-full text-gray-600" />
             </div>
           </button>
         </section>
 
         {/* 회원탈퇴 */}
         <section>
-          <h3 className="mb-1 text-lg font-bold text-black">회원탈퇴</h3>
-          <p className="mb-4 text-sm text-gray-500">
+          <h3 className="mb-1 text-lg font-bold text-gray-950">회원탈퇴</h3>
+          <p className="mb-4 text-sm text-gray-600">
             회원탈퇴를 신청하기 전에 아래 사항을 꼭 확인해 주세요.
           </p>
 
-          <div className="mb-4 rounded-lg bg-gray-50 p-6 text-sm leading-relaxed text-gray-700">
+          <div className="mb-4 rounded-lg bg-gray-50 p-6 text-sm leading-relaxed text-gray-900">
             1. 회원 탈퇴 시 회원님의 개인정보는 관련 법령에 따라 일정 기간 보관 후 삭제됩니다.
             <br />
             2. 탈퇴 후에는 아이디 및 보유 혜택이 모두 소멸되며, 복구가 불가능합니다.
@@ -546,12 +546,12 @@ const MyPage = () => {
           <button
             //회원탈퇴 모달
             onClick={() => openModal(ModalType.MY_WITHDRAW_NOTICE)}
-            className="group flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white p-4 transition-colors hover:bg-gray-50"
+            className="group flex w-full items-center justify-between rounded-lg border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
-            <span className="font-bold text-black">회원탈퇴</span>
+            <span className="font-bold text-gray-950">회원탈퇴</span>
             <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
               {/* ✨ [수정] 화살표 아이콘 적용 */}
-              <Icon name="icon-arrow" className="h-full w-full text-gray-400" />
+              <Icon name="icon-arrow" className="h-full w-full text-gray-600" />
             </div>
           </button>
         </section>
@@ -576,8 +576,8 @@ const MyPage = () => {
         <button
           className={`h-full flex-1 rounded-lg text-lg font-bold transition-all duration-200 ${
             activeTab === "symptom"
-              ? "bg-white text-blue-500 shadow-sm" // 선택됨: 흰배경 + 파란글씨 + 그림자
-              : "text-gray-400 hover:text-gray-500" // 선택안됨: 회색글씨
+              ? "bg-white text-gray-950 shadow-sm" // 선택됨: 흰배경 + 파란글씨 + 그림자
+              : "text-gray-600 hover:text-gray-900" // 선택안됨: 회색글씨
           }`}
           onClick={() => setActiveTab("symptom")}
         >
@@ -588,8 +588,8 @@ const MyPage = () => {
         <button
           className={`h-full flex-1 rounded-lg text-lg font-bold transition-all duration-200 ${
             activeTab === "info"
-              ? "bg-white text-blue-500 shadow-sm" // 선택됨
-              : "text-gray-400 hover:text-gray-500" // 선택안됨
+              ? "bg-white text-gray-950 shadow-sm" // 선택됨
+              : "text-gray-600 hover:text-gray-900" // 선택안됨
           }`}
           onClick={() => {
             setActiveTab("info");
