@@ -1,17 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import Icon from "../../components/Icon/Icon";
 import logoData from "@/assets/images/logo.svg";
 import SymptomGrid from "@/components/Symptom/SymptomGrid";
 
-// [TODO: 백엔드 연동 시 삭제] 테스트용 가짜 비밀번호
-const MOCK_CURRENT_PASSWORD = "12345678";
-
 const MyPage = () => {
+  const navigate = useNavigate();
   //상태관리
   const [activeTab, setActiveTab] = useState<"symptom" | "info">("symptom");
-  const [infoView, setInfoView] = useState<"profile" | "password">("profile"); //정보 수정탭 안에서 '프로필'을 볼지 '비밀번호'를 볼지 결정하는 상태
   const [isEditing, setIsEditing] = useState(false);
   const { openModal } = useBaseModal();
 
@@ -21,20 +19,6 @@ const MyPage = () => {
   const [birth, setBirth] = useState({ year: "2000", month: "11", day: "10" });
   const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
   const [selectedKey, setSelectedKey] = useState<string | null>("knee");
-
-  // ... (기존 passwordForm은 유지)
-  const [passwordForm, setPasswordForm] = useState({
-    current: "",
-    new: "",
-    confirm: "",
-  });
-
-  // ✨ [수정] 에러를 각 칸별로 따로 관리 (current, new, confirm)
-  const [pwdErrors, setPwdErrors] = useState({
-    current: "",
-    new: "",
-    confirm: "",
-  });
 
   // -----------------------------------------------------------------------
   // [로직 함수들]
@@ -97,7 +81,7 @@ const MyPage = () => {
     }
     // 범위가 이상한 경우 (예: 100월, 3000년, 32일 등)
     else if (y < 1900 || y > currentYear || m < 1 || m > 12 || d < 1 || d > 31) {
-      newErrors.birth = "생년월일 형식이 올바르지 않습니다"; // 👈 피그마 문구
+      newErrors.birth = "생년월일 형식이 올바르지 않습니다";
       isValid = false;
     }
 
@@ -108,68 +92,6 @@ const MyPage = () => {
     if (isValid) {
       openModal(ModalType.MY_PROFILE_UPDATED);
     }
-  };
-
-  // 비밀번호 변경 저장 로직
-
-  const handleSavePassword = () => {
-    const { current, new: newPwd, confirm } = passwordForm;
-    const newErrors = { current: "", new: "", confirm: "" };
-    let isValid = true;
-
-    // 1. 빈 칸 검사 (필수 입력)
-    if (!current) {
-      newErrors.current = "필수 입력 사항입니다";
-      isValid = false;
-    }
-    if (!newPwd) {
-      newErrors.new = "필수 입력 사항입니다";
-      isValid = false;
-    }
-    if (!confirm) {
-      newErrors.confirm = "필수 입력 사항입니다";
-      isValid = false;
-    }
-    // ✨ [추가] 임시 비밀번호 검증 로직
-    // TODO: [백엔드 연동 시 수정] 지금은 프론트에서 가짜로 검사하지만, 나중엔 API 에러로 처리해야 함
-    // ---------------------------------------------------------
-    // 현재 비밀번호가 "12345678"이 아니면 에러!
-    // 빈 칸이 아닐 때(current가 있을 때)만 검사합니다.
-    if (current && current !== MOCK_CURRENT_PASSWORD) {
-      newErrors.current = "기존 비밀번호를 입력해주세요";
-      isValid = false;
-    }
-    // ---------------------------------------------------------
-
-    // 2. 새 비밀번호 길이 검사 (8자 미만이면 즉시 탈락)
-    // (빈 칸이 아닐 때만 검사)
-    if (newPwd && newPwd.length < 8) {
-      newErrors.new = "새 비밀번호 형식이 올바르지 않습니다";
-      isValid = false;
-    }
-
-    // 3. 일치 검사
-    // (빈 칸이 아니고, 형식도 맞을 때만 검사)
-    if (confirm && newPwd !== confirm) {
-      newErrors.confirm = "입력한 비밀번호가 서로 일치하는지 확인해 주세요";
-      isValid = false;
-    }
-
-    // 에러 상태 업데이트
-    setPwdErrors(newErrors);
-
-    // 🛑 [중요] 프론트엔드 유효성 검사 실패 시 여기서 즉시 중단
-    if (!isValid) return;
-
-    // -----------------------------------------------------------
-    // 🔒 [보안] 현재 비밀번호가 맞는지 확인하는 단계
-    // 원래는 여기서 백엔드 API를 호출해서 확인해야 합니다.
-    // 지금은 API가 없으므로 "서버가 OK 했다"고 가정하고 넘어가지만,
-    // 나중에는 서버에서 에러가 오면 alert("현재 비밀번호가 틀렸습니다")를 띄워야 합니다.
-    // -----------------------------------------------------------
-
-    // 4. 모든 관문 통과! -> 성공 모달 오픈
-    openModal(ModalType.AUTH_PASSWORD_CHANGED);
   };
 
   // -----------------------------------------------------------------------
@@ -211,111 +133,6 @@ const MyPage = () => {
       </div>
     </>
   );
-
-  // -----------------------------------------------------------------------
-  // 정보 수정 > 비밀번호 변경
-  // -----------------------------------------------------------------------
-  // ② 비밀번호 변경 화면 (피그마 디자인 완벽 반영)
-  const renderPasswordForm = () => {
-    // ✨ [수정 1] 초록불 조건 강화: "일치함" + "8자 이상" + "빈칸 아님" 모두 만족해야 뜸
-    const isMatchSuccess =
-      passwordForm.new && passwordForm.new === passwordForm.confirm && passwordForm.new.length >= 8;
-
-    // 🛠️ 공통 입력 핸들러 (입력 시 에러 메시지 즉시 삭제 기능 추가)
-    const handleChange = (field: "current" | "new" | "confirm", value: string) => {
-      setPasswordForm((prev) => ({ ...prev, [field]: value }));
-
-      // ✨ [수정 2] 사용자가 타이핑을 시작하면 해당 칸의 빨간 에러를 즉시 지워줌 (UX 개선)
-      if (pwdErrors[field]) {
-        setPwdErrors((prev) => ({ ...prev, [field]: "" }));
-      }
-    };
-
-    return (
-      <div className="mb-20 mt-16 flex w-full max-w-[400px] flex-col">
-        <div className="mb-12 text-center md:text-left">
-          <h2 className="mb-2 text-lg font-bold text-gray-950">비밀번호 변경</h2>
-          <p className="text-sm text-gray-600">계정 보안을 위해 현재 비밀번호를 먼저 확인합니다</p>
-        </div>
-
-        <div className="flex flex-col gap-6">
-          {/* 1. 현재 비밀번호 */}
-          <div>
-            <label className="mb-2 block text-sm font-bold text-gray-900">
-              현재 비밀번호<span className="text-error">*</span>
-            </label>
-            <input
-              type="password"
-              placeholder="현재 비밀번호를 입력해주세요"
-              value={passwordForm.current}
-              onChange={(e) => handleChange("current", e.target.value)}
-              className={`w-full rounded border p-4 focus:outline-none ${
-                pwdErrors.current
-                  ? "border-error focus:border-error"
-                  : "border-gray-200 focus:border-brand-primary"
-              }`}
-            />
-            {pwdErrors.current && <p className="mt-2 text-sm text-error">{pwdErrors.current}</p>}
-          </div>
-
-          {/* 2. 새 비밀번호 */}
-          <div>
-            <label className="mb-2 block text-sm font-bold text-gray-900">
-              새 비밀번호<span className="text-error">*</span>
-            </label>
-            <input
-              type="password"
-              placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
-              value={passwordForm.new}
-              onChange={(e) => handleChange("new", e.target.value)}
-              className={`w-full rounded border p-4 focus:outline-none ${
-                pwdErrors.new
-                  ? "border-error focus:border-error"
-                  : "border-gray-200 focus:border-brand-primary"
-              }`}
-            />
-            {pwdErrors.new && <p className="mt-2 text-sm text-error">{pwdErrors.new}</p>}
-          </div>
-
-          {/* 3. 새 비밀번호 확인 */}
-          <div>
-            <label className="mb-2 block text-sm font-bold text-gray-900">
-              새 비밀번호 확인<span className="text-error">*</span>
-            </label>
-            <input
-              type="password"
-              placeholder="새 비밀번호를 다시 입력하세요"
-              value={passwordForm.confirm}
-              onChange={(e) => handleChange("confirm", e.target.value)}
-              className={`w-full rounded border p-4 focus:outline-none ${
-                pwdErrors.confirm
-                  ? "border-error focus:border-error"
-                  : "border-gray-200 focus:border-brand-primary"
-              }`}
-            />
-
-            {/* 🚨 불일치 에러 (빨간색) */}
-            {pwdErrors.confirm && <p className="mt-2 text-sm text-error">{pwdErrors.confirm}</p>}
-
-            {/* ✅ 일치 성공 (초록색) - 조건 만족 시에만 노출 */}
-            {isMatchSuccess && (
-              <div className="mt-2 flex items-center gap-1 text-sm text-green-500">
-                <span>✔</span>
-                <span>입력한 비밀번호가 서로 일치합니다</span>
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={handleSavePassword}
-            className="mt-4 w-full rounded bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
-          >
-            비밀번호 변경
-          </button>
-        </div>
-      </div>
-    );
-  };
 
   // -----------------------------------------------------------------------
   // 정보 수정 > 프로필 수정 (이름변경 : renderInfoContent -> renderProfileForm 으로 변경)
@@ -487,8 +304,8 @@ const MyPage = () => {
             계정 보안을 위해 주기적인 비밀번호 변경을 권장해요.
           </p>
           <button
-            //비밀번호 변경 모달
-            onClick={() => setInfoView("password")}
+            //setInfoView 대신에 navigate 사용
+            onClick={() => navigate("/my/password")}
             className="group flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
             <span className="font-bold text-gray-950">비밀번호 변경</span>
@@ -562,18 +379,13 @@ const MyPage = () => {
           }`}
           onClick={() => {
             setActiveTab("info");
-            setInfoView("profile");
           }}
         >
           정보 수정
         </button>
       </div>
 
-      {activeTab === "symptom"
-        ? renderSymptomContent()
-        : infoView === "profile"
-          ? renderProfileForm()
-          : renderPasswordForm()}
+      {activeTab === "symptom" ? renderSymptomContent() : renderProfileForm()}
     </div>
   );
 };

@@ -10,6 +10,7 @@ import OnboardingPage from "@/pages/onboarding/OnboardingPage";
 import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
 import SymptomPage from "@/pages/symptom/SymptomPage";
+import MyPasswordPage from "./pages/mypage/MyPasswordPage";
 import SignUpPage from "@/pages/signup/SignUpPage";
 import SignUpSymptomPage from "@/pages/signup/SignUpSymptomPage";
 import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding";
@@ -57,6 +58,7 @@ const App = () => {
             
             {/* 마이페이지 */}
             <Route path="/my" element={<MyPage />} />
+            <Route path="/my/password" element={<MyPasswordPage />} /> 
 
             {/* 추후 메인 홈과 합쳐질 예정 */}
             {/* 임시: 범용가이드 */}
