@@ -101,20 +101,20 @@ const MyPage = () => {
   const renderSymptomContent = () => (
     <>
       <div className="mt-16 text-center">
-        <h2 className="mb-2 text-3xl font-bold text-brand-primary">
+        {/* ✨ [수정] 36px(text-4xl), ExtraBold(font-extrabold), 자간 -2.5%(tracking-tight) */}
+        <h2 className="mb-2 text-4xl font-extrabold tracking-tight text-brand-primary">
           {isEditing ? "현재 확인 중인 증상을 변경해 보세요" : "현재 확인 중인 증상이에요"}
         </h2>
-        {/* ✨ [수정] 작은 설명: 모드 상관없이 항상 똑같이 2줄 표시 */}
-        <p className="mt-4 leading-relaxed text-gray-950">
+        {/* ✨ [수정] 18px(text-lg), SemiBold(font-semibold), 자간 -2.5%(tracking-tight) */}
+        <p className="mt-4 text-lg font-semibold leading-[1.4] tracking-tight text-gray-950">
           다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요
           <br />
           필요하다면 증상을 선택하지 않고 넘어갈 수도 있어요
         </p>
       </div>
 
-      {/* ✨ [대체] 복잡한 map 코드 삭제 -> 공용 컴포넌트 사용 */}
       <div
-        className={`mt-12 flex justify-center ${!isEditing ? "pointer-events-none opacity-80" : ""}`}
+        className={`mt-20 flex justify-center ${!isEditing ? "pointer-events-none opacity-80" : ""}`}
       >
         {/* pointer-events-none: 수정 모드 아닐 때 클릭 방지 */}
         <SymptomGrid
@@ -127,7 +127,7 @@ const MyPage = () => {
       <div className="mb-20 mt-16">
         <button
           onClick={() => handleSaveSymptom()}
-          className="w-[400px] rounded bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
+          className="h-[48px] w-[403px] rounded bg-brand-primary text-[18px] font-semibold text-white transition-colors hover:bg-brand-primary"
         >
           {isEditing ? "저장하기" : "수정하기"}
         </button>
@@ -358,10 +358,10 @@ const MyPage = () => {
       </div>
 
       {/* 탭 메뉴 (피그마 규격 777x69 반영) */}
-      <div className="mb-8 flex h-[69px] w-full max-w-[777px] items-center rounded-[10px] bg-gray-50 p-1.5">
+      <div className="mb-8 flex h-[69px] w-[777px] items-center justify-center gap-[13px] rounded-[10px] bg-gray-50">
         {/* 1. 나의 증상 관리 탭 */}
         <button
-          className={`h-full flex-1 rounded-[10px] text-lg font-bold transition-all duration-200 ${
+          className={`flex h-[50px] w-[371px] shrink-0 items-center justify-center rounded-[10px] text-[20px] font-bold leading-[1.4] tracking-[-0.025em] transition-all duration-200 ${
             activeTab === "symptom"
               ? "bg-white text-gray-950 shadow-sm" // 선택됨: 흰배경 + 진한글씨
               : "text-gray-600 hover:text-gray-900" // 선택안됨: 회색글씨
@@ -373,7 +373,7 @@ const MyPage = () => {
 
         {/* 2. 정보 수정 탭 */}
         <button
-          className={`h-full flex-1 rounded-[10px] text-lg font-bold transition-all duration-200 ${
+          className={`flex h-[50px] w-[371px] shrink-0 items-center justify-center rounded-[10px] text-[20px] font-bold leading-[1.4] tracking-[-0.025em] transition-all duration-200 ${
             activeTab === "info"
               ? "bg-white text-gray-950 shadow-sm" // 선택됨
               : "text-gray-600 hover:text-gray-900" // 선택안됨
