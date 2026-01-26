@@ -140,15 +140,19 @@ const MyPage = () => {
   // -----------------------------------------------------------------------
   const renderProfileForm = () => (
     //renderProfileForm 으로 이름 변경
-    <div className="mb-20 mt-12 flex w-full max-w-3xl flex-col">
+    <div className="mb-20 mt-12 flex w-[777px] flex-col">
       {/* === 상단: 프로필 + 입력 폼 영역 === */}
-      <div className="flex flex-col gap-12 md:flex-row">
-        {/* 1. 왼쪽: 프로필 사진 */}
-        <div className="flex w-full flex-col items-center md:w-1/3">
-          <h3 className="mb-6 w-full text-left text-lg font-bold text-gray-950">개인정보 수정</h3>
+      {/* 타이틀 */}
+      <h3 className="mb-6 w-full text-left text-[20px] font-bold text-gray-950">개인정보 수정</h3>
+
+      {/* === 상단: 프로필 + 입력 폼 영역 === */}
+      {/* ✨ [수정] 좌우 배치: justify-between, 상단 정렬: items-start (이름 라벨과 프로필 상단 라인 맞춤) */}
+      <div className="flex w-full flex-row items-start justify-between">
+        {/* 1. 왼쪽: 프로필 사진 (275x275 고정) */}
+        <div className="flex flex-col items-center">
           <div className="relative">
-            <div className="flex h-60 w-60 items-center justify-center overflow-hidden rounded-full border-4 border-brand-primary bg-gray-50">
-              {/* ✨ [수정] 성별에 따른 아이콘 분기, 기본은 male */}
+            {/* ✨ [수정] 크기 275px 고정, 테두리 두께 등 디테일 조정 */}
+            <div className="flex h-[275px] w-[275px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50">
               <Icon
                 name={gender === "female" ? "icon-female" : "icon-male"}
                 className="h-full w-full object-cover"
@@ -158,10 +162,12 @@ const MyPage = () => {
         </div>
 
         {/* 2. 오른쪽: 입력 폼 */}
-        <div className="mt-4 flex w-full flex-col space-y-6 md:mt-16 md:w-2/3">
+        <div className="flex w-[405px] flex-col space-y-4">
           {/* 이름 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-600">이름</label>
+            <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
+              이름
+            </label>
             <input
               type="text"
               value={name} // ✨ [수정] state 변수 연결
@@ -179,7 +185,9 @@ const MyPage = () => {
 
           {/* 생년월일 (3단 분리 + 유효성 검사) */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-600">생년월일</label>
+            <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
+              생년월일
+            </label>
 
             {/* 겉보기엔 하나의 박스지만, 실제론 3개의 입력칸이 들어있는 컨테이너 */}
             <div
@@ -194,7 +202,7 @@ const MyPage = () => {
                 type="text"
                 value={birth.year}
                 onChange={(e) => setBirth({ ...birth, year: e.target.value })} // 기존 값(...birth) 유지하고 년도만 수정
-                className="w-full text-center focus:outline-none"
+                className="w-full bg-transparent text-center focus:outline-none"
                 placeholder="YYYY"
                 maxLength={4} // 4글자 제한
               />
@@ -205,7 +213,7 @@ const MyPage = () => {
                 type="text"
                 value={birth.month}
                 onChange={(e) => setBirth({ ...birth, month: e.target.value })}
-                className="w-full text-center focus:outline-none"
+                className="w-full bg-transparent text-center focus:outline-none"
                 placeholder="MM"
                 maxLength={2}
               />
@@ -216,7 +224,7 @@ const MyPage = () => {
                 type="text"
                 value={birth.day}
                 onChange={(e) => setBirth({ ...birth, day: e.target.value })}
-                className="w-full text-center focus:outline-none"
+                className="w-full bg-transparent text-center focus:outline-none"
                 placeholder="DD"
                 maxLength={2}
               />
@@ -227,61 +235,66 @@ const MyPage = () => {
 
           {/* 이메일 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-600">이메일</label>
+            <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
+              이메일
+            </label>
             <div className="relative">
               <input
                 type="email"
                 defaultValue="honggil2000@naver.com"
                 disabled
-                className="w-full cursor-not-allowed rounded border border-gray-200 bg-gray-50 p-3 text-gray-600"
+                className="w-full cursor-not-allowed rounded border border-gray-200 bg-gray-50 p-3 text-gray-950"
               />
               <div className="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 transform items-center justify-center">
-                <Icon name="icon-lock" className="h-full w-full text-gray-600" />
+                <Icon name="icon-lock" className="h-full w-full text-gray-200" />
               </div>
             </div>
           </div>
 
           {/* 성별 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-600">성별</label>
-            <div className="flex gap-2">
+            <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
+              성별
+            </label>
+            <div className="flex gap-[10px]">
+              {/* 남성 버튼 */}
               <button
                 type="button"
                 onClick={() => {
                   setGender(gender === "male" ? null : "male");
                   setErrors({ ...errors, gender: "" });
-                }} // 클릭 시 에러 삭제
-                // ✨ 에러 발생 시: border-error text-error (빨간 테두리+글씨)
-                // ✨ 선택됨: border-brand-primary bg-white text-brand-primary
-                // ✨ 평소: border-gray-200 bg-gray-50 text-gray-600
-                className={`w-32 rounded border py-3 font-bold transition-colors ${
+                }}
+                // ✨ [최종 수정] 에러 시: 테두리만 border-error, 배경과 글씨는 원래대로 회색 유지
+                className={`flex h-[36px] w-[73px] items-center justify-center rounded border text-[14px] font-medium transition-colors ${
                   errors.gender
-                    ? "border-error bg-white text-error"
+                    ? "border-error bg-gray-50 text-gray-600" // <-- 여기 수정됨
                     : gender === "male"
                       ? "border-brand-primary bg-white text-brand-primary"
-                      : "border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100"
+                      : "border-transparent bg-gray-50 text-gray-600 hover:bg-gray-100"
                 }`}
               >
                 남성
               </button>
+
+              {/* 여성 버튼 */}
               <button
                 type="button"
                 onClick={() => {
                   setGender(gender === "female" ? null : "female");
                   setErrors({ ...errors, gender: "" });
                 }}
-                className={`w-32 rounded border py-3 font-bold transition-colors ${
+                // ✨ [최종 수정] 여성 버튼 동일 적용
+                className={`flex h-[36px] w-[73px] items-center justify-center rounded border text-[14px] font-medium transition-colors ${
                   errors.gender
-                    ? "border-error bg-white text-error"
+                    ? "border-error bg-gray-50 text-gray-600" // <-- 여기 수정됨
                     : gender === "female"
                       ? "border-brand-primary bg-white text-brand-primary"
-                      : "border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100"
+                      : "border-transparent bg-gray-50 text-gray-600 hover:bg-gray-100"
                 }`}
               >
                 여성
               </button>
             </div>
-            {/* ✨ 에러 메시지: 버튼 아래에 표시 */}
             {errors.gender && <p className="mt-1 text-xs text-error">{errors.gender}</p>}
           </div>
 
@@ -300,8 +313,8 @@ const MyPage = () => {
       <div className="mt-16 space-y-12">
         {/* 보안설정 */}
         <section>
-          <h3 className="mb-1 text-lg font-bold text-gray-950">보안설정</h3>
-          <p className="mb-4 text-sm text-gray-600">
+          <h3 className="mb-2 text-[20px] font-bold text-gray-950">보안설정</h3>
+          <p className="mb-4 text-[18px] font-medium text-gray-600">
             계정 보안을 위해 주기적인 비밀번호 변경을 권장해요.
           </p>
           <button
@@ -309,7 +322,7 @@ const MyPage = () => {
             onClick={() => navigate("/my/password")}
             className="group flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
-            <span className="font-bold text-gray-950">비밀번호 변경</span>
+            <span className="text-[18px] font-semibold text-gray-950">비밀번호 변경</span>
             <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
               {/* ✨ [수정] 화살표 아이콘 적용 */}
               <Icon name="icon-arrow" className="h-full w-full text-gray-600" />
@@ -319,12 +332,12 @@ const MyPage = () => {
 
         {/* 회원탈퇴 */}
         <section>
-          <h3 className="mb-1 text-lg font-bold text-gray-950">회원탈퇴</h3>
-          <p className="mb-4 text-sm text-gray-600">
+          <h3 className="mb-2 text-[20px] font-bold text-gray-950">회원탈퇴</h3>
+          <p className="mb-4 text-[18px] font-medium text-gray-600">
             회원탈퇴를 신청하기 전에 아래 사항을 꼭 확인해 주세요.
           </p>
 
-          <div className="mb-4 rounded bg-gray-50 p-6 text-sm leading-relaxed text-gray-900">
+          <div className="mb-4 rounded bg-gray-50 p-6 text-[18px] font-medium leading-[1.6] text-gray-950">
             1. 회원 탈퇴 시 회원님의 개인정보는 관련 법령에 따라 일정 기간 보관 후 삭제됩니다.
             <br />
             2. 탈퇴 후에는 아이디 및 보유 혜택이 모두 소멸되며, 복구가 불가능합니다.
@@ -335,7 +348,7 @@ const MyPage = () => {
             onClick={() => openModal(ModalType.MY_WITHDRAW_NOTICE)}
             className="group flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
-            <span className="font-bold text-gray-950">회원탈퇴</span>
+            <span className="text-[18px] font-semibold text-gray-950">회원탈퇴</span>
             <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
               {/* ✨ [수정] 화살표 아이콘 적용 */}
               <Icon name="icon-arrow" className="h-full w-full text-gray-600" />
