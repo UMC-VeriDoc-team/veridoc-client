@@ -2,8 +2,8 @@ import { useState } from "react";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import Icon from "../../components/Icon/Icon";
-import { SYMPTOMS } from "@/constants/symptoms";
 import logoData from "@/assets/images/logo.svg";
+import SymptomGrid from "@/components/Symptom/SymptomGrid";
 
 // [TODO: 백엔드 연동 시 삭제] 테스트용 가짜 비밀번호
 const MOCK_CURRENT_PASSWORD = "12345678";
@@ -20,7 +20,7 @@ const MyPage = () => {
   const [gender, setGender] = useState<"male" | "female" | null>(null);
   const [birth, setBirth] = useState({ year: "2000", month: "11", day: "10" });
   const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
-  const [selectedSymptom, setSelectedSymptom] = useState<number | null>(1);
+  const [selectedKey, setSelectedKey] = useState<string | null>("knee");
 
   // ... (기존 passwordForm은 유지)
   const [passwordForm, setPasswordForm] = useState({
@@ -40,15 +40,13 @@ const MyPage = () => {
   // [로직 함수들]
   // -----------------------------------------------------------------------
 
-  // 증상 선택/해제 토글 로직
-  const handleToggleSymptom = (id: number) => {
-    if (!isEditing) return; // 수정 모드 아니면 클릭 금지
+  // 증상 선택 , 문자열 key -> 숫자 id 로 변환
+  const handleSelectSymptom = (key: string) => {
+    if (!isEditing) return; // 수정 모드 아니면 작동 안 함
 
-    setSelectedSymptom((prev) => {
-      if (prev === id) {
-        return null; // 이미 선택된 걸 누르면 -> 해제 (선택 안 함)
-      }
-      return id; // 다른 걸 누르면 -> 그걸로 변경 (단일 선택)
+    setSelectedKey((prev) => {
+      if (prev === key) return null; // 이미 선택된 거 누르면 해제
+      return key; // 새로운 거 선택
     });
   };
 
@@ -59,17 +57,12 @@ const MyPage = () => {
       setIsEditing(true);
       return;
     }
-
-    // 2. 저장하기 버튼을 눌렀을 때 (Edit -> View)
-    // 일단 저장(편집 종료)은 무조건 시킵니다. (디자인 흐름 반영)
     setIsEditing(false);
 
-    // 3. 선택된 개수에 따라 다른 모달 띄우기
-    if (selectedSymptom === null) {
-      // 🚨 0개 선택: "증상을 선택하지 않은 상태로 저장됩니다" 모달
+    // [수정] null 체크 대상 변경 (selectedSymptom -> selectedKey)
+    if (selectedKey === null) {
       openModal(ModalType.MY_SYMPTOM_NOT_SELECTED);
     } else {
-      // ✅ 1개 이상 선택: "선택한 증상이 변경되었어요" 모달
       openModal(ModalType.MY_SYMPTOM_CHANGED);
     }
   };
@@ -196,40 +189,16 @@ const MyPage = () => {
         </p>
       </div>
 
-      {/* 증상 그리드 수정된 map 로직*/}
-      <div className="mt-12 grid grid-cols-3 gap-6">
-        {SYMPTOMS.map((item, index) => {
-          // 선택 여부 확인
-          const id = index + 1;
-          const isSelected = selectedSymptom === id;
-
-          return (
-            <div
-              key={item.key}
-              onClick={() => handleToggleSymptom(id)} // 클릭 이벤트
-              className={`flex h-[180px] w-[180px] cursor-pointer flex-col overflow-hidden rounded-2xl border transition-all hover:shadow-md ${
-                isSelected
-                  ? "border-brand-primary shadow-md ring-2 ring-brand-primary" // 선택됨: 파란색
-                  : "border-gray-100" // 해제됨: 회색
-              } ${!isEditing ? "cursor-default opacity-80" : ""}`} // 수정 모드 아닐 땐 흐리게
-            >
-              <div className="h-[75%] w-full bg-gray-50">
-                {/* 데이터엔 "knee"만 있으므로 앞에 "icon-"을 붙여줌 */}
-                <Icon name={item.iconName} className="h-full w-full object-cover" />
-              </div>
-              <div
-                className={`flex h-[25%] w-full items-center justify-center border-t bg-white ${isSelected ? "border-brand-primarySoft" : "border-gray-50"}`}
-              >
-                <span
-                  className={`text-lg font-bold ${isSelected ? "text-brand-primary" : "text-gray-900"}`}
-                >
-                  {/* name 대신 label 사용 */}
-                  {item.label}
-                </span>
-              </div>
-            </div>
-          );
-        })}
+      {/* ✨ [대체] 복잡한 map 코드 삭제 -> 공용 컴포넌트 사용 */}
+      <div
+        className={`mt-12 flex justify-center ${!isEditing ? "pointer-events-none opacity-80" : ""}`}
+      >
+        {/* pointer-events-none: 수정 모드 아닐 때 클릭 방지 */}
+        <SymptomGrid
+          selectedKey={selectedKey}
+          multiAttemptedKey={null} // 마이페이지에선 사용 안 함
+          onSelect={handleSelectSymptom}
+        />
       </div>
 
       <div className="mb-20 mt-16">
@@ -576,7 +545,7 @@ const MyPage = () => {
         <button
           className={`h-full flex-1 rounded-lg text-lg font-bold transition-all duration-200 ${
             activeTab === "symptom"
-              ? "bg-white text-gray-950 shadow-sm" // 선택됨: 흰배경 + 파란글씨 + 그림자
+              ? "bg-white text-gray-950 shadow-sm" // 선택됨: 흰배경 + 진한글씨
               : "text-gray-600 hover:text-gray-900" // 선택안됨: 회색글씨
           }`}
           onClick={() => setActiveTab("symptom")}
