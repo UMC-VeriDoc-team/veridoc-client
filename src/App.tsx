@@ -9,6 +9,7 @@ import OnboardingPage from "@/pages/onboarding/OnboardingPage";
 import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
 import MyPage from "./pages/mypage/Mypage";
+import MyPasswordPage from "./pages/mypage/MyPasswordPage";
 import SignUpPage from "./pages/signup/SignUpPage";
 import SignUpSymptomPage from "./pages/signup/SignUpSymptomPage";
 
@@ -39,6 +40,7 @@ const App = () => {
           {/* <Route path="/symptom" element={<SymptomPage />} /> */}
 
           <Route path="/my" element={<MyPage />} />
+          <Route path="/my/password" element={<MyPasswordPage />} />
 
           {/* 모달 테스트 페이지 */}
           <Route path="/modal-guide" element={<ModalGuidePage />} />
