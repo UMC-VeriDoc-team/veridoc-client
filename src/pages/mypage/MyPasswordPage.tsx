@@ -88,7 +88,7 @@ const MyPasswordPage = () => {
   return (
     <div className="flex min-h-screen flex-col bg-white pt-9">
       {/* ✨ 팀장님 요청: 뒤로가기 누르면 마이페이지(/my)로 이동 */}
-      <AuthHeader backTo="/my" />
+      <AuthHeader backTo="/my?tab=info" />
 
       <div className="flex justify-center pt-[40px]">
         <div className="flex w-full max-w-[400px] flex-col">

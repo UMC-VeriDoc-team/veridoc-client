@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import Icon from "../../components/Icon/Icon";
@@ -8,8 +8,9 @@ import SymptomGrid from "@/components/Symptom/SymptomGrid";
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   //상태관리
-  const [activeTab, setActiveTab] = useState<"symptom" | "info">("symptom");
+  const activeTab = searchParams.get("tab") === "info" ? "info" : "symptom";
   const [isEditing, setIsEditing] = useState(false);
   const { openModal } = useBaseModal();
 
@@ -365,7 +366,7 @@ const MyPage = () => {
               ? "bg-white text-gray-950 shadow-sm" // 선택됨: 흰배경 + 진한글씨
               : "text-gray-600 hover:text-gray-900" // 선택안됨: 회색글씨
           }`}
-          onClick={() => setActiveTab("symptom")}
+          onClick={() => setSearchParams({ tab: "symptom" })}
         >
           나의 증상 관리
         </button>
@@ -377,9 +378,7 @@ const MyPage = () => {
               ? "bg-white text-gray-950 shadow-sm" // 선택됨
               : "text-gray-600 hover:text-gray-900" // 선택안됨
           }`}
-          onClick={() => {
-            setActiveTab("info");
-          }}
+          onClick={() => setSearchParams({ tab: "info" })}
         >
           정보 수정
         </button>
