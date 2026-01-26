@@ -8,8 +8,6 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import OnboardingPage from "@/pages/onboarding/OnboardingPage";
 import ModalPage from "@/components/Modal/ModalPage";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
-
-// ✅ 충돌 해결: 두 사람의 코드를 모두 가져옵니다.
 import MyPage from "./pages/mypage/Mypage";
 import SignUpPage from "./pages/signup/SignUpPage";
 import SignUpSymptomPage from "./pages/signup/SignUpSymptomPage";
@@ -40,7 +38,6 @@ const App = () => {
           {/* <Route path="/home" element={<HomePage />} /> */}
           {/* <Route path="/symptom" element={<SymptomPage />} /> */}
 
-          {/* ✅ MyPage는 헤더/푸터가 필요하므로 여기(DefaultLayout) 안에 넣는 게 정석입니다! */}
           <Route path="/my" element={<MyPage />} />
 
           {/* 모달 테스트 페이지 */}

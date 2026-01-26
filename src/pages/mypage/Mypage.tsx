@@ -189,7 +189,7 @@ const MyPage = () => {
           {isEditing ? "현재 확인 중인 증상을 변경해 보세요" : "현재 확인 중인 증상이에요"}
         </h2>
         {/* ✨ [수정] 작은 설명: 모드 상관없이 항상 똑같이 2줄 표시 */}
-        <p className="mt-4 leading-relaxed text-gray-500">
+        <p className="mt-4 leading-relaxed text-gray-950">
           다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요
           <br />
           필요하다면 증상을 선택하지 않고 넘어갈 수도 있어요
@@ -564,25 +564,36 @@ const MyPage = () => {
       {/* 🚀 상단 로고 영역 */}
       <div className="mb-8 mt-10 flex items-center justify-center">
         {/* ✨ [수정] VeriDoc 로고 아이콘 적용 (크기는 h-10 w-auto 등으로 조절 가능) */}
-        <div className="h-12">
-          {/* Icon 컴포넌트 -> img 태그로 변경 */}
+        {/* ✨ [수정] 피그마 규격(H: 85) 반영 */}
+        <div className="h-[85px]">
           <img src={logoData} alt="VeriDoc Logo" className="h-full w-auto" />
         </div>
       </div>
 
-      {/* 탭 메뉴 */}
-      <div className="flex w-full max-w-4xl overflow-hidden rounded-lg border border-gray-200">
+      {/* 탭 메뉴 (피그마 규격 777x69 반영) */}
+      <div className="mb-8 flex h-[69px] w-full max-w-[777px] items-center rounded-xl bg-gray-50 p-1.5">
+        {/* 1. 나의 증상 관리 탭 */}
         <button
-          className={`flex-1 py-4 text-center font-bold transition-colors ${activeTab === "symptom" ? "border-b-2 border-blue-500 bg-white text-blue-500" : "bg-gray-50 text-gray-400"}`}
+          className={`h-full flex-1 rounded-lg text-lg font-bold transition-all duration-200 ${
+            activeTab === "symptom"
+              ? "bg-white text-blue-500 shadow-sm" // 선택됨: 흰배경 + 파란글씨 + 그림자
+              : "text-gray-400 hover:text-gray-500" // 선택안됨: 회색글씨
+          }`}
           onClick={() => setActiveTab("symptom")}
         >
           나의 증상 관리
         </button>
+
+        {/* 2. 정보 수정 탭 */}
         <button
-          className={`flex-1 py-4 text-center font-bold transition-colors ${activeTab === "info" ? "border-b-2 border-blue-500 bg-white text-blue-500" : "bg-gray-50 text-gray-400"}`}
+          className={`h-full flex-1 rounded-lg text-lg font-bold transition-all duration-200 ${
+            activeTab === "info"
+              ? "bg-white text-blue-500 shadow-sm" // 선택됨
+              : "text-gray-400 hover:text-gray-500" // 선택안됨
+          }`}
           onClick={() => {
             setActiveTab("info");
-            setInfoView("profile"); //정보수정 탭 누르면 프로필 수정화면으로 초기화
+            setInfoView("profile");
           }}
         >
           정보 수정
