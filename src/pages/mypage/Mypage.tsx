@@ -2,19 +2,11 @@ import { useState } from "react";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import Icon from "../../components/Icon/Icon";
+import { SYMPTOMS } from "@/constants/symptoms";
+import logoData from "@/assets/images/logo.svg";
 
 // [TODO: 백엔드 연동 시 삭제] 테스트용 가짜 비밀번호
 const MOCK_CURRENT_PASSWORD = "12345678";
-
-// [데이터] 증상 리스트
-const SYMPTOMS = [
-  { id: 1, name: "무릎", iconName: "icon-knee" },
-  { id: 2, name: "허리", iconName: "icon-waist" },
-  { id: 3, name: "어깨", iconName: "icon-shoulder" },
-  { id: 4, name: "두통", iconName: "icon-head" },
-  { id: 5, name: "복통", iconName: "icon-stomach" },
-  { id: 6, name: "목", iconName: "icon-neck" },
-];
 
 const MyPage = () => {
   //상태관리
@@ -206,14 +198,15 @@ const MyPage = () => {
 
       {/* 증상 그리드 수정된 map 로직*/}
       <div className="mt-12 grid grid-cols-3 gap-6">
-        {SYMPTOMS.map((item) => {
+        {SYMPTOMS.map((item, index) => {
           // 선택 여부 확인
-          const isSelected = selectedSymptom === item.id;
+          const id = index + 1;
+          const isSelected = selectedSymptom === id;
 
           return (
             <div
-              key={item.id}
-              onClick={() => handleToggleSymptom(item.id)} // 클릭 이벤트
+              key={item.key}
+              onClick={() => handleToggleSymptom(id)} // 클릭 이벤트
               className={`flex h-[180px] w-[180px] cursor-pointer flex-col overflow-hidden rounded-2xl border transition-all hover:shadow-md ${
                 isSelected
                   ? "border-blue-500 shadow-md ring-2 ring-blue-500" // 선택됨: 파란색
@@ -221,6 +214,7 @@ const MyPage = () => {
               } ${!isEditing ? "cursor-default opacity-80" : ""}`} // 수정 모드 아닐 땐 흐리게
             >
               <div className="h-[75%] w-full bg-gray-50">
+                {/* 데이터엔 "knee"만 있으므로 앞에 "icon-"을 붙여줌 */}
                 <Icon name={item.iconName} className="h-full w-full object-cover" />
               </div>
               <div
@@ -229,7 +223,8 @@ const MyPage = () => {
                 <span
                   className={`text-lg font-bold ${isSelected ? "text-blue-600" : "text-gray-700"}`}
                 >
-                  {item.name}
+                  {/* name 대신 label 사용 */}
+                  {item.label}
                 </span>
               </div>
             </div>
@@ -570,7 +565,8 @@ const MyPage = () => {
       <div className="mb-8 mt-10 flex items-center justify-center">
         {/* ✨ [수정] VeriDoc 로고 아이콘 적용 (크기는 h-10 w-auto 등으로 조절 가능) */}
         <div className="h-12">
-          <Icon name="icon-logo" className="h-full w-auto" />
+          {/* Icon 컴포넌트 -> img 태그로 변경 */}
+          <img src={logoData} alt="VeriDoc Logo" className="h-full w-auto" />
         </div>
       </div>
 
