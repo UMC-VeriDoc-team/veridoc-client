@@ -204,7 +204,7 @@ const MyPage = () => {
       <div className="mb-20 mt-16">
         <button
           onClick={() => handleSaveSymptom()}
-          className="w-[400px] rounded-lg bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
+          className="w-[400px] rounded bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
         >
           {isEditing ? "저장하기" : "수정하기"}
         </button>
@@ -249,7 +249,7 @@ const MyPage = () => {
               placeholder="현재 비밀번호를 입력해주세요"
               value={passwordForm.current}
               onChange={(e) => handleChange("current", e.target.value)}
-              className={`w-full rounded-lg border p-4 focus:outline-none ${
+              className={`w-full rounded border p-4 focus:outline-none ${
                 pwdErrors.current
                   ? "border-error focus:border-error"
                   : "border-gray-200 focus:border-brand-primary"
@@ -268,7 +268,7 @@ const MyPage = () => {
               placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
               value={passwordForm.new}
               onChange={(e) => handleChange("new", e.target.value)}
-              className={`w-full rounded-lg border p-4 focus:outline-none ${
+              className={`w-full rounded border p-4 focus:outline-none ${
                 pwdErrors.new
                   ? "border-error focus:border-error"
                   : "border-gray-200 focus:border-brand-primary"
@@ -287,7 +287,7 @@ const MyPage = () => {
               placeholder="새 비밀번호를 다시 입력하세요"
               value={passwordForm.confirm}
               onChange={(e) => handleChange("confirm", e.target.value)}
-              className={`w-full rounded-lg border p-4 focus:outline-none ${
+              className={`w-full rounded border p-4 focus:outline-none ${
                 pwdErrors.confirm
                   ? "border-error focus:border-error"
                   : "border-gray-200 focus:border-brand-primary"
@@ -308,7 +308,7 @@ const MyPage = () => {
 
           <button
             onClick={handleSavePassword}
-            className="mt-4 w-full rounded-lg bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
+            className="mt-4 w-full rounded bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
           >
             비밀번호 변경
           </button>
@@ -349,7 +349,7 @@ const MyPage = () => {
               value={name} // ✨ [수정] state 변수 연결
               onChange={(e) => setName(e.target.value)} // ✨ [수정] 입력할 때마다 state 변경
               //에러가 있으면 (errors.name) 빨간 테두리 추가, 없으면 회색/파란색
-              className={`w-full rounded-md border p-3 text-gray-900 focus:outline-none ${
+              className={`w-full rounded border p-3 text-gray-900 focus:outline-none ${
                 errors.name
                   ? "border-error focus:border-error" // 에러일 때 스타일
                   : "border-gray-200 focus:border-brand-primary" // 정상일 때 스타일
@@ -365,7 +365,7 @@ const MyPage = () => {
 
             {/* 겉보기엔 하나의 박스지만, 실제론 3개의 입력칸이 들어있는 컨테이너 */}
             <div
-              className={`flex w-full items-center rounded-md border p-3 focus-within:ring-2 ${
+              className={`flex w-full items-center rounded border p-3 focus-within:ring-2 ${
                 errors.birth
                   ? "border-error focus-within:border-error focus-within:ring-error" // 에러: 빨강
                   : "border-gray-200 focus-within:border-brand-primary focus-within:ring-brand-primary" // 정상: 파랑
@@ -415,7 +415,7 @@ const MyPage = () => {
                 type="email"
                 defaultValue="honggil2000@naver.com"
                 disabled
-                className="w-full cursor-not-allowed rounded-md border border-gray-200 bg-gray-50 p-3 text-gray-600"
+                className="w-full cursor-not-allowed rounded border border-gray-200 bg-gray-50 p-3 text-gray-600"
               />
               <div className="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 transform items-center justify-center">
                 <Icon name="icon-lock" className="h-full w-full text-gray-600" />
@@ -436,7 +436,7 @@ const MyPage = () => {
                 // ✨ 에러 발생 시: border-error text-error (빨간 테두리+글씨)
                 // ✨ 선택됨: border-brand-primary bg-white text-brand-primary
                 // ✨ 평소: border-gray-200 bg-gray-50 text-gray-600
-                className={`w-32 rounded-md border py-3 font-bold transition-colors ${
+                className={`w-32 rounded border py-3 font-bold transition-colors ${
                   errors.gender
                     ? "border-error bg-white text-error"
                     : gender === "male"
@@ -452,7 +452,7 @@ const MyPage = () => {
                   setGender(gender === "female" ? null : "female");
                   setErrors({ ...errors, gender: "" });
                 }}
-                className={`w-32 rounded-md border py-3 font-bold transition-colors ${
+                className={`w-32 rounded border py-3 font-bold transition-colors ${
                   errors.gender
                     ? "border-error bg-white text-error"
                     : gender === "female"
@@ -471,7 +471,7 @@ const MyPage = () => {
           <button
             //수정완료 모달 연결 + 유효성 검사 함수 연결
             onClick={handleSaveProfile}
-            className="mt-4 w-full rounded-lg bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
+            className="mt-4 w-full rounded bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
           >
             개인정보 저장
           </button>
@@ -489,7 +489,7 @@ const MyPage = () => {
           <button
             //비밀번호 변경 모달
             onClick={() => setInfoView("password")}
-            className="group flex w-full items-center justify-between rounded-lg border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
+            className="group flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
             <span className="font-bold text-gray-950">비밀번호 변경</span>
             <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
@@ -506,7 +506,7 @@ const MyPage = () => {
             회원탈퇴를 신청하기 전에 아래 사항을 꼭 확인해 주세요.
           </p>
 
-          <div className="mb-4 rounded-lg bg-gray-50 p-6 text-sm leading-relaxed text-gray-900">
+          <div className="mb-4 rounded bg-gray-50 p-6 text-sm leading-relaxed text-gray-900">
             1. 회원 탈퇴 시 회원님의 개인정보는 관련 법령에 따라 일정 기간 보관 후 삭제됩니다.
             <br />
             2. 탈퇴 후에는 아이디 및 보유 혜택이 모두 소멸되며, 복구가 불가능합니다.
@@ -515,7 +515,7 @@ const MyPage = () => {
           <button
             //회원탈퇴 모달
             onClick={() => openModal(ModalType.MY_WITHDRAW_NOTICE)}
-            className="group flex w-full items-center justify-between rounded-lg border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
+            className="group flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
             <span className="font-bold text-gray-950">회원탈퇴</span>
             <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
@@ -540,10 +540,10 @@ const MyPage = () => {
       </div>
 
       {/* 탭 메뉴 (피그마 규격 777x69 반영) */}
-      <div className="mb-8 flex h-[69px] w-full max-w-[777px] items-center rounded-xl bg-gray-50 p-1.5">
+      <div className="mb-8 flex h-[69px] w-full max-w-[777px] items-center rounded-[10px] bg-gray-50 p-1.5">
         {/* 1. 나의 증상 관리 탭 */}
         <button
-          className={`h-full flex-1 rounded-lg text-lg font-bold transition-all duration-200 ${
+          className={`h-full flex-1 rounded-[10px] text-lg font-bold transition-all duration-200 ${
             activeTab === "symptom"
               ? "bg-white text-gray-950 shadow-sm" // 선택됨: 흰배경 + 진한글씨
               : "text-gray-600 hover:text-gray-900" // 선택안됨: 회색글씨
@@ -555,7 +555,7 @@ const MyPage = () => {
 
         {/* 2. 정보 수정 탭 */}
         <button
-          className={`h-full flex-1 rounded-lg text-lg font-bold transition-all duration-200 ${
+          className={`h-full flex-1 rounded-[10px] text-lg font-bold transition-all duration-200 ${
             activeTab === "info"
               ? "bg-white text-gray-950 shadow-sm" // 선택됨
               : "text-gray-600 hover:text-gray-900" // 선택안됨
