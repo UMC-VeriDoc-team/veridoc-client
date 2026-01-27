@@ -56,48 +56,45 @@ const SymptomPage = () => {
 
   return (
     <>
-      {/* 증상 페이지 전용 로고 영역 */}
-      <div className="flex w-full items-center justify-center bg-white pt-[68px]">
+      {/* 모바일 */}
+      <div className="flex h-[56px] items-center justify-center bg-white pt-10 md:hidden">
+        <h1 className="text-[18px] font-semibold tracking-[-0.025em] text-gray-950">증상</h1>
+      </div>
+
+      {/* 데스크탑 */}
+      <div className="hidden w-full items-center justify-center bg-white pt-[68px] md:flex">
         <img src={logo} alt="VeriDoc 로고" className="h-[85px] w-[285px]" draggable={false} />
       </div>
 
-      {tab === "guide" ? (
-        <div className="w-full py-10 pt-[29px]">
-          <div className="flex justify-center">
-            <SymptomTabs value={tab} onChange={setTab} />
-          </div>
-
-          <div className="mt-[68px] flex justify-center">
-            <div className="w-full max-w-[1020px]">
-              {!symptomId ? (
-                <SymptomEmptyState onClickSelectSymptom={onClickSelectSymptom} />
-              ) : (
-                <SymptomGuideTab symptomName={symptomName} />
-              )}
-            </div>
-          </div>
-
-          {blockedMessage && <div className="sr-only">{blockedMessage}</div>}
+      {/* 공통 wrapper: life/guide 모두 여기 안에서 렌더 */}
+      <div className="w-full bg-white pb-10 pt-10 md:pt-[29px]">
+        {/* 탭 */}
+        <div className="flex justify-center">
+          <SymptomTabs value={tab} onChange={setTab} />
         </div>
-      ) : (
-        <div className="mx-auto w-full max-w-[960px] px-4 py-10 pt-[29px]">
-          <div className="flex justify-center">
-            <SymptomTabs value={tab} onChange={setTab} />
-          </div>
 
-          <div className="mt-[68px] flex justify-center">
-            <div className="w-full max-w-[760px]">
-              {!symptomId ? (
-                <SymptomEmptyState onClickSelectSymptom={onClickSelectSymptom} />
-              ) : (
-                <LifeGuideTab symptomName={symptomName} />
-              )}
-            </div>
+        {/* 콘텐츠 */}
+        <div className="mt-6 flex justify-center md:mt-[68px]">
+          <div
+            className={[
+              // 모바일
+              "mx-auto w-[354px]",
+              // 데스크탑
+              "md:mx-0 md:w-full md:max-w-[1020px] md:px-0",
+            ].join(" ")}
+          >
+            {!symptomId ? (
+              <SymptomEmptyState onClickSelectSymptom={onClickSelectSymptom} />
+            ) : tab === "guide" ? (
+              <SymptomGuideTab symptomName={symptomName} />
+            ) : (
+              <LifeGuideTab symptomName={symptomName} />
+            )}
           </div>
-
-          {blockedMessage && <div className="sr-only">{blockedMessage}</div>}
         </div>
-      )}
+
+        {blockedMessage && <div className="sr-only">{blockedMessage}</div>}
+      </div>
     </>
   );
 };
