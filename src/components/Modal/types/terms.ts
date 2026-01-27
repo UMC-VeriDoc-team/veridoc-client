@@ -14,5 +14,23 @@ export interface TermsItem {
   key: TermsKey;
   label: string;
   required: boolean;
-  content: string;
+  content: TermsContent[];
+}
+
+export type TermsBodyItem =
+  | { type: "text"; value: string[] }
+  | {
+      type: "table";
+      headers: string[];
+      rows: string[][];
+    };
+
+export interface TermsSection {
+  title: string;
+  body: TermsBodyItem[];
+}
+
+export interface TermsContent {
+  title: string;
+  sections: TermsSection[];
 }
