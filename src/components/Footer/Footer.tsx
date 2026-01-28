@@ -30,7 +30,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="flex w-full justify-center border-t border-layout-footerBorder bg-layout-footerBg px-20 py-14 xl:px-28">
+    <footer className="hidden w-full justify-center border-t border-layout-footerBorder bg-layout-footerBg px-20 py-14 md:flex xl:px-28">
       <div className="flex w-fit flex-col gap-12">
         {/* 상단 1행: 브랜드 / 설명 / 링크 */}
         <div className="grid grid-cols-12 gap-8">
