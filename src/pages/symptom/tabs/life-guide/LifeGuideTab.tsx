@@ -74,7 +74,7 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
 
         <div className="mb:mb-[10px] mt-[15px] h-[1px] w-full max-w-[777px] bg-[#1B1B1B]/[0.04]" />
 
-        <div className="mt-[30px] h-[84px] w-full max-w-[777px] rounded-[6px] border border-brand-primary bg-white px-4 md:px-6">
+        <div className="mt-[30px] h-[84px] w-full max-w-[777px] rounded-[6px] border border-brand-primary bg-white px-2 md:px-6">
           <div className="flex h-full items-center gap-3 md:gap-4">
             <div className="flex h-[30px] w-[30px] items-center justify-center">
               <Icon name="channel-home" className="h-[20px] w-[20px] md:h-[24px] md:w-[24px]" />
