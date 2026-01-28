@@ -9,21 +9,17 @@ import SymptomGrid from "@/components/Symptom/SymptomGrid";
 const MyPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  //상태관리
+
   const activeTab = searchParams.get("tab") === "info" ? "info" : "symptom";
   const [isEditing, setIsEditing] = useState(false);
   const { openModal } = useBaseModal();
 
-  //프로필 관련 State
+  // 프로필 관련 State
   const [name, setName] = useState("홍길동");
-  const [gender, setGender] = useState<"male" | "female" | null>(null);
+  const [gender, setGender] = useState<"male" | "female">("male");
   const [birth, setBirth] = useState({ year: "2000", month: "11", day: "10" });
   const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
   const [selectedKey, setSelectedKey] = useState<string | null>("knee");
-
-  // -----------------------------------------------------------------------
-  // [로직 함수들]
-  // -----------------------------------------------------------------------
 
   // 증상 선택 , 문자열 key -> 숫자 id 로 변환
   const handleSelectSymptom = (key: string) => {
@@ -101,11 +97,9 @@ const MyPage = () => {
   const renderSymptomContent = () => (
     <>
       <div className="mt-16 text-center">
-        {/* ✨ [수정] 36px(text-4xl), ExtraBold(font-extrabold), 자간 -2.5%(tracking-tight) */}
         <h2 className="mb-2 text-4xl font-extrabold tracking-tight text-brand-primary">
           {isEditing ? "현재 확인 중인 증상을 변경해 보세요" : "현재 확인 중인 증상이에요"}
         </h2>
-        {/* ✨ [수정] 18px(text-lg), SemiBold(font-semibold), 자간 -2.5%(tracking-tight) */}
         <p className="mt-4 text-lg font-semibold leading-[1.4] tracking-tight text-gray-950">
           다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요
           <br />
@@ -116,10 +110,9 @@ const MyPage = () => {
       <div
         className={`mt-20 flex justify-center ${!isEditing ? "pointer-events-none opacity-80" : ""}`}
       >
-        {/* pointer-events-none: 수정 모드 아닐 때 클릭 방지 */}
         <SymptomGrid
           selectedKey={selectedKey}
-          multiAttemptedKey={null} // 마이페이지에선 사용 안 함
+          multiAttemptedKey={null}
           onSelect={handleSelectSymptom}
         />
       </div>
@@ -154,7 +147,7 @@ const MyPage = () => {
             {/* ✨ [수정] 크기 275px 고정, 테두리 두께 등 디테일 조정 */}
             <div className="flex h-[275px] w-[275px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50">
               <Icon
-                name={gender === "female" ? "icon-female" : "icon-male"}
+                name={gender === "female" ? "female" : "male"}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -246,7 +239,7 @@ const MyPage = () => {
                 className="w-full cursor-not-allowed rounded border border-gray-200 bg-gray-50 p-3 text-gray-950"
               />
               <div className="absolute right-3 top-1/2 flex h-5 w-5 -translate-y-1/2 transform items-center justify-center">
-                <Icon name="icon-lock" className="h-full w-full text-gray-200" />
+                <Icon name="lock" className="h-full w-full text-gray-200" />
               </div>
             </div>
           </div>
@@ -261,13 +254,12 @@ const MyPage = () => {
               <button
                 type="button"
                 onClick={() => {
-                  setGender(gender === "male" ? null : "male");
+                  setGender("male");
                   setErrors({ ...errors, gender: "" });
                 }}
-                // ✨ [최종 수정] 에러 시: 테두리만 border-error, 배경과 글씨는 원래대로 회색 유지
                 className={`flex h-[36px] w-[73px] items-center justify-center rounded border text-[14px] font-medium transition-colors ${
                   errors.gender
-                    ? "border-error bg-gray-50 text-gray-600" // <-- 여기 수정됨
+                    ? "border-error bg-gray-50 text-gray-600"
                     : gender === "male"
                       ? "border-brand-primary bg-white text-brand-primary"
                       : "border-transparent bg-gray-50 text-gray-600 hover:bg-gray-100"
@@ -280,13 +272,12 @@ const MyPage = () => {
               <button
                 type="button"
                 onClick={() => {
-                  setGender(gender === "female" ? null : "female");
+                  setGender("female");
                   setErrors({ ...errors, gender: "" });
                 }}
-                // ✨ [최종 수정] 여성 버튼 동일 적용
                 className={`flex h-[36px] w-[73px] items-center justify-center rounded border text-[14px] font-medium transition-colors ${
                   errors.gender
-                    ? "border-error bg-gray-50 text-gray-600" // <-- 여기 수정됨
+                    ? "border-error bg-gray-50 text-gray-600"
                     : gender === "female"
                       ? "border-brand-primary bg-white text-brand-primary"
                       : "border-transparent bg-gray-50 text-gray-600 hover:bg-gray-100"
@@ -325,7 +316,7 @@ const MyPage = () => {
             <span className="text-[18px] font-semibold text-gray-950">비밀번호 변경</span>
             <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
               {/* ✨ [수정] 화살표 아이콘 적용 */}
-              <Icon name="icon-arrow" className="h-full w-full text-gray-600" />
+              <Icon name="arrow-gray" className="h-full w-full text-gray-600" />
             </div>
           </button>
         </section>
@@ -344,14 +335,13 @@ const MyPage = () => {
           </div>
 
           <button
-            //회원탈퇴 모달
+            // 회원탈퇴 모달
             onClick={() => openModal(ModalType.MY_WITHDRAW_NOTICE)}
             className="group flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
             <span className="text-[18px] font-semibold text-gray-950">회원탈퇴</span>
             <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
-              {/* ✨ [수정] 화살표 아이콘 적용 */}
-              <Icon name="icon-arrow" className="h-full w-full text-gray-600" />
+              <Icon name="arrow-gray" className="h-full w-full text-gray-600" />
             </div>
           </button>
         </section>
