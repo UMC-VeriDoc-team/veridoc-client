@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import SectionTitle from "@/pages/symptom/components/common/SectionTitle";
 import StepCardList from "@/pages/symptom/tabs/symptom-guide/components/StepCardList";
 import StepDescription from "@/pages/symptom/tabs/symptom-guide/components/StepDescription";
 import Button from "@/components/Button/Button";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
+import useIsMobile from "@/hooks/useIsMobile";
 
 export interface SymptomGuideStep {
   step: number;
@@ -33,6 +34,7 @@ const COMPLETED_CENTER_INDEX = 1;
 
 const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
   const { openModal } = useBaseModal(); // 모달 다시 쓸 거면 유지, 아니면 지워도 됨
+  const isMobile = useIsMobile();
 
   const steps: SymptomGuideStep[] = useMemo(
     () => [
@@ -74,17 +76,6 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completed, setCompleted] = useState(false);
-
-  // 모바일 여부
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    const sync = () => setIsMobile(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
 
   // 현재 step은 "버튼 흐름" 기준
   const currentStep = steps[currentIndex];
