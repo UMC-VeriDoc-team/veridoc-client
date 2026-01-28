@@ -28,7 +28,7 @@ const BUBBLE_H = 113;
 // StepCardList 고정 높이
 const LIST_FIXED_H = 483 + 14;
 
-// ✅ completed일 때 가운데로 보여줄 카드 index (요구사항: 2단계)
+// completed일 때 가운데로 보여줄 카드(step2) index
 const COMPLETED_CENTER_INDEX = 1;
 
 const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
@@ -149,7 +149,7 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
     bubbleLeft = isLeftGroup ? cardLeftX : cardRightX - BUBBLE_W;
   }
 
-  // 모바일이면: 말풍선은 왼쪽 꼬리 + left=0
+  // 모바일: 말풍선은 왼쪽 꼬리 + left=0
   const finalBubbleLeft = isMobile ? 0 : bubbleLeft;
   const finalBubbleSide: "left" | "right" | "center" = isMobile ? "left" : bubbleSide;
 
