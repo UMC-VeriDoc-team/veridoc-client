@@ -67,7 +67,7 @@ const SymptomPage = () => {
       </div>
 
       {/* 공통 wrapper: life/guide 모두 여기 안에서 렌더 */}
-      <div className="w-full bg-white pb-10 pt-10 md:pt-[29px]">
+      <div className="w-full bg-white px-[30px] py-10 md:pt-[29px]">
         {/* 탭 */}
         <div className="flex justify-center">
           <SymptomTabs value={tab} onChange={setTab} />
