@@ -3,8 +3,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import Icon from "../../components/Icon/Icon";
-import logoData from "@/assets/images/logo.svg";
+import Logo from "@/assets/images/logo.svg";
 import SymptomGrid from "@/components/Symptom/SymptomGrid";
+import Button from "@/components/Button/Button";
+import GenderSelect, { type Gender } from "@/components/Select/GenderSelect";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -16,10 +18,11 @@ const MyPage = () => {
 
   // 프로필 관련 State
   const [name, setName] = useState("홍길동");
-  const [gender, setGender] = useState<"male" | "female">("male");
+  const [gender, setGender] = useState<Gender>("MALE");
   const [birth, setBirth] = useState({ year: "2000", month: "11", day: "10" });
   const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
   const [selectedKey, setSelectedKey] = useState<string | null>("knee");
+  const [isProfileEditing, setIsProfileEditing] = useState(false);
 
   // 증상 선택 , 문자열 key -> 숫자 id 로 변환
   const handleSelectSymptom = (key: string) => {
@@ -50,45 +53,44 @@ const MyPage = () => {
 
   // 이름 및 생년월일 유효성 검사 후 저장 로직
   const handleSaveProfile = () => {
-    const newErrors = { name: "", birth: "", gender: "" }; // 일단 에러 없다고 가정
-    let isValid = true; // 통과 여부 플래그
+    if (!isProfileEditing) {
+      setIsProfileEditing(true);
+      return;
+    }
 
-    // 1. 이름 검사
+    const newErrors = { name: "", birth: "", gender: "" };
+    let isValid = true;
+
     if (!name.trim()) {
       newErrors.name = "이름을 입력해주세요";
       isValid = false;
     }
-    // ✨ [추가] 성별 선택 여부 검사
+
     if (!gender) {
-      newErrors.gender = "필수 선택 사항입니다"; // 에러 문구 반영
+      newErrors.gender = "필수 선택 사항입니다";
       isValid = false;
     }
 
-    // 2. 생년월일 검사 (빈칸, 숫자여부, 범위)
     const { year, month, day } = birth;
-    const y = parseInt(year);
-    const m = parseInt(month);
-    const d = parseInt(day);
+    const y = parseInt(year, 10);
+    const m = parseInt(month, 10);
+    const d = parseInt(day, 10);
     const currentYear = new Date().getFullYear();
 
-    // 빈칸이 있거나 숫자가 아닌 경우
-    if (!year || !month || !day || isNaN(y) || isNaN(m) || isNaN(d)) {
+    if (!year || !month || !day || Number.isNaN(y) || Number.isNaN(m) || Number.isNaN(d)) {
       newErrors.birth = "생년월일을 모두 숫자로 입력해주세요";
       isValid = false;
-    }
-    // 범위가 이상한 경우 (예: 100월, 3000년, 32일 등)
-    else if (y < 1900 || y > currentYear || m < 1 || m > 12 || d < 1 || d > 31) {
+    } else if (y < 1900 || y > currentYear || m < 1 || m > 12 || d < 1 || d > 31) {
       newErrors.birth = "생년월일 형식이 올바르지 않습니다";
       isValid = false;
     }
 
-    // 3. 결과 반영
     setErrors(newErrors);
 
-    // 4. 전부 통과했으면 모달 열기!
-    if (isValid) {
-      openModal(ModalType.MY_PROFILE_UPDATED);
-    }
+    if (!isValid) return;
+
+    openModal(ModalType.MY_PROFILE_UPDATED);
+    setIsProfileEditing(false);
   };
 
   // -----------------------------------------------------------------------
@@ -117,37 +119,26 @@ const MyPage = () => {
         />
       </div>
 
-      <div className="mb-20 mt-16">
-        <button
-          onClick={() => handleSaveSymptom()}
-          className="h-[48px] w-[403px] rounded bg-brand-primary text-[18px] font-semibold text-white transition-colors hover:bg-brand-primary"
-        >
-          {isEditing ? "저장하기" : "수정하기"}
-        </button>
+      <div className="mb-20 mt-16 w-[400px]">
+        <Button onClick={handleSaveSymptom}>{isEditing ? "저장하기" : "수정하기"}</Button>
       </div>
     </>
   );
 
-  // -----------------------------------------------------------------------
-  // 정보 수정 > 프로필 수정 (이름변경 : renderInfoContent -> renderProfileForm 으로 변경)
-  // -----------------------------------------------------------------------
   const renderProfileForm = () => (
-    //renderProfileForm 으로 이름 변경
     <div className="mb-20 mt-12 flex w-[777px] flex-col">
       {/* === 상단: 프로필 + 입력 폼 영역 === */}
       {/* 타이틀 */}
       <h3 className="mb-6 w-full text-left text-[20px] font-bold text-gray-950">개인정보 수정</h3>
 
       {/* === 상단: 프로필 + 입력 폼 영역 === */}
-      {/* ✨ [수정] 좌우 배치: justify-between, 상단 정렬: items-start (이름 라벨과 프로필 상단 라인 맞춤) */}
       <div className="flex w-full flex-row items-start justify-between">
-        {/* 1. 왼쪽: 프로필 사진 (275x275 고정) */}
+        {/* 1. 왼쪽: 프로필 사진 */}
         <div className="flex flex-col items-center">
           <div className="relative">
-            {/* ✨ [수정] 크기 275px 고정, 테두리 두께 등 디테일 조정 */}
             <div className="flex h-[275px] w-[275px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50">
               <Icon
-                name={gender === "female" ? "female" : "male"}
+                name={gender === "FEMALE" ? "FEMALE" : "MALE"}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -163,16 +154,17 @@ const MyPage = () => {
             </label>
             <input
               type="text"
-              value={name} // ✨ [수정] state 변수 연결
-              onChange={(e) => setName(e.target.value)} // ✨ [수정] 입력할 때마다 state 변경
-              //에러가 있으면 (errors.name) 빨간 테두리 추가, 없으면 회색/파란색
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={!isProfileEditing}
               className={`w-full rounded border p-3 text-gray-900 focus:outline-none ${
+                !isProfileEditing ? "cursor-not-allowed bg-gray-50" : "bg-white"
+              } ${
                 errors.name
-                  ? "border-error focus:border-error" // 에러일 때 스타일
-                  : "border-gray-200 focus:border-brand-primary" // 정상일 때 스타일
+                  ? "border-error focus:border-error"
+                  : "border-gray-200 focus:border-brand-primary"
               }`}
             />
-            {/* ✨ 에러 메시지가 있을 때만 빨간 글씨 보여주기 */}
             {errors.name && <p className="mt-1 text-xs text-error">{errors.name}</p>}
           </div>
 
@@ -184,20 +176,23 @@ const MyPage = () => {
 
             {/* 겉보기엔 하나의 박스지만, 실제론 3개의 입력칸이 들어있는 컨테이너 */}
             <div
-              className={`flex w-full items-center rounded border p-3 focus-within:ring-2 ${
+              className={`flex w-full items-center rounded border p-3 ${
                 errors.birth
-                  ? "border-error focus-within:border-error focus-within:ring-error" // 에러: 빨강
-                  : "border-gray-200 focus-within:border-brand-primary focus-within:ring-brand-primary" // 정상: 파랑
+                  ? "border-error focus-within:border-error" // 에러: 빨강
+                  : "border-gray-200 focus-within:border-brand-primary" // 정상: 파랑
               }`}
             >
               {/* 1. 년도 (YYYY) */}
               <input
                 type="text"
                 value={birth.year}
-                onChange={(e) => setBirth({ ...birth, year: e.target.value })} // 기존 값(...birth) 유지하고 년도만 수정
-                className="w-full bg-transparent text-center focus:outline-none"
+                onChange={(e) => setBirth({ ...birth, year: e.target.value })}
+                disabled={!isProfileEditing}
+                className={`w-full bg-transparent text-center focus:outline-none ${
+                  !isProfileEditing ? "cursor-not-allowed text-gray-400" : ""
+                }`}
                 placeholder="YYYY"
-                maxLength={4} // 4글자 제한
+                maxLength={4}
               />
               <span className="mx-2 text-gray-600">/</span>
 
@@ -206,7 +201,9 @@ const MyPage = () => {
                 type="text"
                 value={birth.month}
                 onChange={(e) => setBirth({ ...birth, month: e.target.value })}
-                className="w-full bg-transparent text-center focus:outline-none"
+                className={`w-full bg-transparent text-center focus:outline-none ${
+                  !isProfileEditing ? "cursor-not-allowed text-gray-400" : ""
+                }`}
                 placeholder="MM"
                 maxLength={2}
               />
@@ -217,12 +214,13 @@ const MyPage = () => {
                 type="text"
                 value={birth.day}
                 onChange={(e) => setBirth({ ...birth, day: e.target.value })}
-                className="w-full bg-transparent text-center focus:outline-none"
+                className={`w-full bg-transparent text-center focus:outline-none ${
+                  !isProfileEditing ? "cursor-not-allowed text-gray-400" : ""
+                }`}
                 placeholder="DD"
                 maxLength={2}
               />
             </div>
-            {/* ✨ 에러 메시지 (빨간 글씨) */}
             {errors.birth && <p className="mt-1 text-xs text-error">{errors.birth}</p>}
           </div>
 
@@ -249,54 +247,13 @@ const MyPage = () => {
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               성별
             </label>
-            <div className="flex gap-[10px]">
-              {/* 남성 버튼 */}
-              <button
-                type="button"
-                onClick={() => {
-                  setGender("male");
-                  setErrors({ ...errors, gender: "" });
-                }}
-                className={`flex h-[36px] w-[73px] items-center justify-center rounded border text-[14px] font-medium transition-colors ${
-                  errors.gender
-                    ? "border-error bg-gray-50 text-gray-600"
-                    : gender === "male"
-                      ? "border-brand-primary bg-white text-brand-primary"
-                      : "border-transparent bg-gray-50 text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                남성
-              </button>
-
-              {/* 여성 버튼 */}
-              <button
-                type="button"
-                onClick={() => {
-                  setGender("female");
-                  setErrors({ ...errors, gender: "" });
-                }}
-                className={`flex h-[36px] w-[73px] items-center justify-center rounded border text-[14px] font-medium transition-colors ${
-                  errors.gender
-                    ? "border-error bg-gray-50 text-gray-600"
-                    : gender === "female"
-                      ? "border-brand-primary bg-white text-brand-primary"
-                      : "border-transparent bg-gray-50 text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                여성
-              </button>
-            </div>
-            {errors.gender && <p className="mt-1 text-xs text-error">{errors.gender}</p>}
+            <GenderSelect value={gender} onChange={setGender} />,
           </div>
 
           {/* 저장 버튼 */}
-          <button
-            //수정완료 모달 연결 + 유효성 검사 함수 연결
-            onClick={handleSaveProfile}
-            className="mt-4 w-full rounded bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-brand-primary"
-          >
-            개인정보 저장
-          </button>
+          <Button onClick={handleSaveProfile}>
+            {isProfileEditing ? "개인정보 저장" : "개인정보 수정"}
+          </Button>
         </div>
       </div>
 
@@ -305,17 +262,16 @@ const MyPage = () => {
         {/* 보안설정 */}
         <section>
           <h3 className="mb-2 text-[20px] font-bold text-gray-950">보안설정</h3>
-          <p className="mb-4 text-[18px] font-medium text-gray-600">
+          <p className="mb-4 text-[18px] font-medium text-gray-950">
             계정 보안을 위해 주기적인 비밀번호 변경을 권장해요.
           </p>
           <button
-            //setInfoView 대신에 navigate 사용
+            // setInfoView 대신에 navigate 사용
             onClick={() => navigate("/my/password")}
-            className="group flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
+            className="flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
             <span className="text-[18px] font-semibold text-gray-950">비밀번호 변경</span>
-            <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
-              {/* ✨ [수정] 화살표 아이콘 적용 */}
+            <div className="flex h-5 w-5 items-center justify-center transition-transform">
               <Icon name="arrow-gray" className="h-full w-full text-gray-600" />
             </div>
           </button>
@@ -324,11 +280,11 @@ const MyPage = () => {
         {/* 회원탈퇴 */}
         <section>
           <h3 className="mb-2 text-[20px] font-bold text-gray-950">회원탈퇴</h3>
-          <p className="mb-4 text-[18px] font-medium text-gray-600">
+          <p className="mb-4 text-[18px] font-medium text-gray-950">
             회원탈퇴를 신청하기 전에 아래 사항을 꼭 확인해 주세요.
           </p>
 
-          <div className="mb-4 rounded bg-gray-50 p-6 text-[18px] font-medium leading-[1.6] text-gray-950">
+          <div className="mb-4 rounded bg-gray-50 px-6 py-9 text-[18px] font-medium leading-[1.6] text-gray-950">
             1. 회원 탈퇴 시 회원님의 개인정보는 관련 법령에 따라 일정 기간 보관 후 삭제됩니다.
             <br />
             2. 탈퇴 후에는 아이디 및 보유 혜택이 모두 소멸되며, 복구가 불가능합니다.
@@ -337,10 +293,10 @@ const MyPage = () => {
           <button
             // 회원탈퇴 모달
             onClick={() => openModal(ModalType.MY_WITHDRAW_NOTICE)}
-            className="group flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
+            className="flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
             <span className="text-[18px] font-semibold text-gray-950">회원탈퇴</span>
-            <div className="flex h-5 w-5 items-center justify-center transition-transform group-hover:translate-x-1">
+            <div className="flex h-5 w-5 items-center justify-center transition-transform">
               <Icon name="arrow-gray" className="h-full w-full text-gray-600" />
             </div>
           </button>
@@ -351,12 +307,10 @@ const MyPage = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-white">
-      {/* 🚀 상단 로고 영역 */}
+      {/* 상단 로고 영역 */}
       <div className="mb-8 mt-10 flex items-center justify-center">
-        {/* ✨ [수정] VeriDoc 로고 아이콘 적용 (크기는 h-10 w-auto 등으로 조절 가능) */}
-        {/* ✨ [수정] 피그마 규격(H: 85) 반영 */}
         <div className="h-[85px]">
-          <img src={logoData} alt="VeriDoc Logo" className="h-full w-auto" />
+          <img src={Logo} alt="VeriDoc Logo" className="h-full w-auto" />
         </div>
       </div>
 
@@ -364,10 +318,10 @@ const MyPage = () => {
       <div className="mb-8 flex h-[69px] w-[777px] items-center justify-center gap-[13px] rounded-[10px] bg-gray-50">
         {/* 1. 나의 증상 관리 탭 */}
         <button
-          className={`flex h-[50px] w-[371px] shrink-0 items-center justify-center rounded-[10px] text-[20px] font-bold leading-[1.4] tracking-[-0.025em] transition-all duration-200 ${
+          className={`flex h-[50px] w-[371px] shrink-0 items-center justify-center rounded-[10px] text-[20px] font-bold leading-[1.4] tracking-[-0.025em] text-gray-950 transition-all duration-200 ${
             activeTab === "symptom"
-              ? "bg-white text-gray-950 shadow-sm" // 선택됨: 흰배경 + 진한글씨
-              : "text-gray-600 hover:text-gray-900" // 선택안됨: 회색글씨
+              ? "bg-white" // 선택됨: 흰배경 + 진한글씨
+              : "text-gray-600" // 선택안됨: 회색글씨
           }`}
           onClick={() => setSearchParams({ tab: "symptom" })}
         >
@@ -376,10 +330,10 @@ const MyPage = () => {
 
         {/* 2. 정보 수정 탭 */}
         <button
-          className={`flex h-[50px] w-[371px] shrink-0 items-center justify-center rounded-[10px] text-[20px] font-bold leading-[1.4] tracking-[-0.025em] transition-all duration-200 ${
+          className={`flex h-[50px] w-[371px] shrink-0 items-center justify-center rounded-[10px] text-[20px] font-bold leading-[1.4] tracking-[-0.025em] text-gray-950 transition-all duration-200 ${
             activeTab === "info"
-              ? "bg-white text-gray-950 shadow-sm" // 선택됨
-              : "text-gray-600 hover:text-gray-900" // 선택안됨
+              ? "bg-white" // 선택됨
+              : "text-gray-600" // 선택안됨
           }`}
           onClick={() => setSearchParams({ tab: "info" })}
         >
