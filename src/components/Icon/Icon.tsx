@@ -5,7 +5,7 @@ interface IconProps {
 
 // 공통 Icon 컴포넌트
 const Icon = ({ name, className }: IconProps) => {
-  return <img src={`/src/assets/icons/${name}.svg`} alt={name} className={className} />;
+  return <img src={`/icons/${name}.svg`} alt={name} className={className} />;
 };
 
 export default Icon;

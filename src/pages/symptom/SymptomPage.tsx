@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import logo from "@/assets/images/logo.svg";
+import logo from "/images/logo.svg";
 import { SymptomTabs } from "@/pages/symptom/components/SymptomTabs";
 import { SymptomEmptyState } from "@/pages/symptom/components/SymptomEmptyState";
 import { LifeGuideTab } from "@/pages/symptom/tabs/life-guide/LifeGuideTab";
