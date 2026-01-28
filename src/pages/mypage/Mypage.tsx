@@ -157,8 +157,8 @@ const MyPage = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={!isProfileEditing}
-              className={`w-full rounded border p-3 text-gray-900 focus:outline-none ${
-                !isProfileEditing ? "cursor-not-allowed bg-gray-50" : "bg-white"
+              className={`w-full rounded border bg-white p-3 focus:outline-none ${
+                !isProfileEditing ? "cursor-not-allowed text-gray-400" : "text-gray-950"
               } ${
                 errors.name
                   ? "border-error focus:border-error"
@@ -189,7 +189,7 @@ const MyPage = () => {
                 onChange={(e) => setBirth({ ...birth, year: e.target.value })}
                 disabled={!isProfileEditing}
                 className={`w-full bg-transparent text-center focus:outline-none ${
-                  !isProfileEditing ? "cursor-not-allowed text-gray-400" : ""
+                  !isProfileEditing && "cursor-not-allowed text-gray-400"
                 }`}
                 placeholder="YYYY"
                 maxLength={4}
@@ -202,7 +202,7 @@ const MyPage = () => {
                 value={birth.month}
                 onChange={(e) => setBirth({ ...birth, month: e.target.value })}
                 className={`w-full bg-transparent text-center focus:outline-none ${
-                  !isProfileEditing ? "cursor-not-allowed text-gray-400" : ""
+                  !isProfileEditing && "cursor-not-allowed text-gray-400"
                 }`}
                 placeholder="MM"
                 maxLength={2}
@@ -215,7 +215,7 @@ const MyPage = () => {
                 value={birth.day}
                 onChange={(e) => setBirth({ ...birth, day: e.target.value })}
                 className={`w-full bg-transparent text-center focus:outline-none ${
-                  !isProfileEditing ? "cursor-not-allowed text-gray-400" : ""
+                  !isProfileEditing && "cursor-not-allowed text-gray-400"
                 }`}
                 placeholder="DD"
                 maxLength={2}
