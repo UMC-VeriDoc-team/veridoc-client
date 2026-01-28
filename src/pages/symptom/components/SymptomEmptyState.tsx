@@ -46,13 +46,13 @@ export const SymptomEmptyState = ({ onClickSelectSymptom }: SymptomEmptyStatePro
         draggable={false}
         className={[
           // 모바일
-          "mt-8 h-[342px] w-[380px] object-contain",
+          "mt-8 min-h-[342px] object-contain",
           // 데스크탑
           "md:mt-[54px] md:h-auto md:w-full md:max-w-[603px]",
         ].join(" ")}
       />
 
-      <div className="mt-10 w-[354px] md:mt-16 md:w-[404px]">
+      <div className="mt-10 w-full md:mt-16 md:w-[404px]">
         <Button type="button" onClick={onClickSelectSymptom}>
           증상 선택하기
         </Button>
