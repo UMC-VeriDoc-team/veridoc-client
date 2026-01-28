@@ -83,7 +83,7 @@ const SignUpSymptomForm = () => {
   return (
     <>
       {errorConfig && (
-        <div className="fixed left-1/2 top-[287px] z-50 -translate-x-1/2">
+        <div className="fixed left-1/2 top-[330px] z-50 -translate-x-1/2 md:top-[287px]">
           <div
             className={[
               errorConfig.widthClass,
@@ -116,12 +116,12 @@ const SignUpSymptomForm = () => {
         onSelect={handleSelect}
       />
 
-      <div className="mt-[109px] flex w-full justify-center">
+      <div className="mt-[60px] flex w-full justify-center md:mt-[109px]">
         <Button
           type="button"
           onClick={handleSubmit}
           fullWidth={false}
-          className="h-12 w-[403px] rounded"
+          className="h-12 w-[380px] rounded md:w-[403px]"
         >
           계속하기
         </Button>

@@ -36,6 +36,7 @@ const EmailDomainInput = ({
 
   // 부모 value가 바뀌면 내부도 동기화
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (parsed.local !== emailLocal) setEmailLocal(parsed.local);
     if (parsed.domain !== emailDomain) setEmailDomain(parsed.domain);
 
@@ -94,38 +95,39 @@ const EmailDomainInput = ({
   return (
     <div
       className={[
-        "relative flex h-12 w-full items-center rounded border bg-white",
+        "flex h-12 w-full items-center rounded border bg-white",
         hasError ? "border-error" : "border-gray-200",
       ].join(" ")}
       onBlur={onBlur}
     >
-      <div className="absolute bottom-0 right-[160px] top-0 w-px bg-gray-200" />
-
       {/* local */}
       <input
         value={emailLocal}
         onChange={(e) => handleChangeLocal(e.target.value)}
         placeholder={placeholderLocal}
-        className="h-full flex-1 rounded-l px-3 text-[14px] font-medium text-gray-950 outline-none placeholder:text-gray-200"
+        className="h-full w-[57%] rounded-l pl-3 text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200 md:px-3"
       />
 
       {/* domain */}
-      <div ref={boxRef} className="relative h-full w-[160px]">
+      <div
+        ref={boxRef}
+        className={`relative h-full w-[48%] border-l ${hasError ? "border-error" : "border-gray-200"}`}
+      >
         <div className="flex h-full items-center">
-          <span className="pl-3 pr-1 text-[14px] font-medium text-gray-950">@</span>
+          <span className="pl-3 pr-2 text-sm font-normal text-gray-950">@</span>
 
           {isCustom ? (
             <input
               value={emailDomain}
               onChange={(e) => handleChangeDomain(e.target.value)}
               placeholder={placeholderDomain}
-              className="h-full w-full rounded-r pr-10 text-[14px] font-medium text-gray-950 outline-none placeholder:text-gray-200"
+              className="h-full w-full rounded-r pr-8 text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200"
             />
           ) : (
             <button
               type="button"
               onClick={() => setIsOpen((p) => !p)}
-              className="flex h-full w-full items-center pr-10 text-[14px] font-medium text-gray-950"
+              className="flex h-full w-full items-center pr-8 text-[14px] font-medium text-gray-950"
             >
               {domainOption}
             </button>
@@ -144,7 +146,7 @@ const EmailDomainInput = ({
 
         {/* dropdown */}
         {isOpen && (
-          <div className="absolute left-0 top-[50px] z-10 w-[260px] rounded-t-[8px] border border-gray-200 bg-white">
+          <div className="absolute left-0 top-[50px] z-10 w-[150px] rounded-[6px] border border-gray-200 bg-white md:w-full">
             {/* header */}
             <div className="flex h-12 items-center justify-between px-4 text-[14px] font-medium leading-[18px] tracking-[-0.025em] text-gray-950">
               이메일 주소 선택

@@ -3,7 +3,7 @@ import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { TermsKey, type CheckableTermsKey, type TermsItem } from "@/components/Modal/types/terms";
 import useTermsAgreementStore from "@/stores/modal/useTermsAgreementStore";
-import { TERMS_ITEMS } from "@/components/Modal/constants/termsItems";
+import { TERMS_ITEMS } from "@/components/Modal/constants/terms/termsItems";
 
 // 서비스 약관 동의 모달
 const HomeTermsAgreementModal = () => {

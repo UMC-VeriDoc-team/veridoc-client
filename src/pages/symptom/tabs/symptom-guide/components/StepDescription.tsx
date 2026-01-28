@@ -1,14 +1,13 @@
 interface StepDescriptionProps {
   step: number;
   description: string;
-  top: number; // 말풍선 y좌표 (부모 기준)
-  left: number; // 말풍선 x좌표 (부모 기준)
-  side: "left" | "right" | "center"; // step1~2: left, step3~4: right
+  top: number;
+  left: number;
+  side: "left" | "right" | "center";
   headerText?: string;
 }
 
 const BOX_W = 468;
-
 const TAIL_W = 18;
 const TAIL_H = 8;
 
@@ -20,25 +19,35 @@ const StepDescription = ({
   side,
   headerText,
 }: StepDescriptionProps) => {
-  // 꼬리 x (박스 기준)
-  const tailLeft =
-    side === "center" ? (BOX_W - TAIL_W) / 2 : side === "left" ? 18 : BOX_W - 18 - TAIL_W;
-
   const title = headerText ?? `Step ${step}`;
+
+  // 꼬리 위치
+  // - 모바일: 항상 왼쪽(18px)
+  // - md 이상: side 기준
+  const tailLeft =
+    typeof window !== "undefined" && window.innerWidth < 768
+      ? 18
+      : side === "center"
+        ? (BOX_W - TAIL_W) / 2
+        : side === "left"
+          ? 18
+          : BOX_W - 18 - TAIL_W;
 
   return (
     <div
       className={[
         "absolute z-50 box-border bg-white",
-        "border-[3px] border-solid border-brand-primary",
-        "rounded-[12px]",
-        "px-8 py-6",
-        "h-[113px] w-[468px]",
+        "rounded-[12px] border-[3px] border-brand-primary",
+        "px-4 py-5",
+        // 모바일
+        "w-[354px] max-w-full",
+        // 데스크탑
+        "md:h-[113px] md:w-[468px] md:px-8 md:py-4",
       ].join(" ")}
       style={{ top, left }}
     >
       <div
-        className="absolute mt-[-1px]"
+        className="absolute"
         style={{
           left: tailLeft,
           top: -TAIL_H,
@@ -50,12 +59,12 @@ const StepDescription = ({
         }}
       />
 
-      <div className="flex h-16 w-full max-w-[420px] flex-col gap-2">
-        <div className="h-[21px] text-lg font-bold leading-none tracking-normal text-brand-primary">
+      <div className="flex w-full flex-col gap-2">
+        <div className="text-[16px] font-bold leading-none text-brand-primary md:text-lg">
           {title}
         </div>
 
-        <p className="h-10 whitespace-pre-line text-[13px] font-medium leading-5 tracking-[-0.025em] text-brand-primary">
+        <p className="whitespace-pre-line text-[13px] font-medium leading-5 tracking-[-0.025em] text-brand-primary">
           {description}
         </p>
       </div>

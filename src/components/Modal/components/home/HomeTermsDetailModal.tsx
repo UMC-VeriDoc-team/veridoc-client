@@ -3,14 +3,13 @@ import { ModalType } from "@/components/Modal/types/modal";
 import { TermsKey } from "@/components/Modal/types/terms";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import useTermsAgreementStore from "@/stores/modal/useTermsAgreementStore";
-import { TERMS_ITEMS } from "../../constants/termsItems";
+import { TERMS_ITEMS } from "../../constants/terms/termsItems";
 
 // 약관 상세 모달
 const HomeTermsDetailModal = () => {
   const { modalPayload, openModal } = useBaseModal();
   const { setChecked, setAll } = useTermsAgreementStore();
 
-  // 임시 약관 데이터
   const termsItems = TERMS_ITEMS;
 
   const activeKey = modalPayload?.activeKey ?? TermsKey.SERVICE;
@@ -34,7 +33,7 @@ const HomeTermsDetailModal = () => {
   };
 
   return (
-    <div className="flex h-[600px] w-[92vw] max-w-[420px] flex-col justify-between overflow-hidden rounded-xl bg-white px-6 py-10 sm:min-w-[380px] sm:px-7">
+    <div className="flex max-h-[600px] min-h-[458px] w-[92vw] max-w-[420px] flex-col justify-between gap-y-7 overflow-hidden rounded-xl bg-white px-6 py-10 sm:min-w-[380px] sm:px-7">
       {/* 상단 바 뒤로가기 */}
       <div className="flex flex-col gap-1">
         <div className="flex w-full items-center justify-start">
@@ -54,8 +53,68 @@ const HomeTermsDetailModal = () => {
       </div>
 
       {/* 본문 스크롤 영역 */}
-      <div className="h-80 overflow-y-auto rounded-lg bg-gray-50 p-4 text-xs leading-6 text-gray-600">
-        <pre className="whitespace-pre-wrap">{activeItem.content}</pre>
+      <div className="max-h-[323px] overflow-y-auto rounded-lg bg-gray-50 p-4 text-xs leading-6 text-gray-600">
+        {activeItem.content.map((item) => (
+          <>
+            <pre className="text-xs font-normal text-gray-600">{item.title}</pre>
+            {item.sections.map((section) => (
+              <>
+                <p className="ml-1 text-xs font-normal text-gray-600">{section.title}</p>
+                {section.body.map((item) => {
+                  if (item.type === "text") {
+                    return (
+                      <>
+                        {item.value.map((str, idx) => (
+                          <li key={idx} className="ml-5 list-disc text-xs text-gray-600">
+                            {str}
+                          </li>
+                        ))}
+                      </>
+                    );
+                  }
+
+                  if (item.type === "table") {
+                    return (
+                      <div className="my-2 overflow-hidden rounded-[10px] border border-gray-100">
+                        <table className="w-full text-xs">
+                          <thead>
+                            <tr>
+                              {item.headers.map((h) => (
+                                <th
+                                  key={h}
+                                  className="border-b border-gray-100 px-3 py-1 text-center font-normal text-gray-950 first:border-r"
+                                >
+                                  {h}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            {item.rows.map((row, rIdx) => (
+                              <tr key={rIdx} className="border-b border-gray-100 last:border-0">
+                                {row.map((cell, cIdx) => (
+                                  <td
+                                    key={cIdx}
+                                    className="px-3 py-1 text-center text-gray-950 first:border-r first:border-gray-100"
+                                  >
+                                    {cell}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    );
+                  }
+
+                  return null;
+                })}
+              </>
+            ))}
+          </>
+        ))}
       </div>
 
       {/* 동의하기 버튼 */}
