@@ -1,10 +1,10 @@
 // StepCardList.tsx
 import StepCard from "./StepCard";
 import type { SymptomGuideStep } from "@/pages/symptom/tabs/symptom-guide/SymptomGuideTab";
-import img1 from "@/assets/images/test/symptom_test1.png";
-import img2 from "@/assets/images/test/symptom_test2.jpg";
-import img3 from "@/assets/images/test/symptom_test3.jpg";
-import img4 from "@/assets/images/test/symptom_test4.png";
+import img1 from "/images/test/symptom_test1.png";
+import img2 from "/images/test/symptom_test2.jpg";
+import img3 from "/images/test/symptom_test3.jpg";
+import img4 from "/images/test/symptom_test4.png";
 
 interface StepCardListProps {
   steps: SymptomGuideStep[];
