@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SectionTitle from "@/pages/symptom/components/common/SectionTitle";
 import StepCardList from "@/pages/symptom/tabs/symptom-guide/components/StepCardList";
-import Button from "@/components/Button/Button";
 import StepDescription from "@/pages/symptom/tabs/symptom-guide/components/StepDescription";
+import Button from "@/components/Button/Button";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 
@@ -19,8 +19,20 @@ interface SymptomGuideTabProps {
   symptomName: string;
 }
 
+const CARD_W = 255;
+
+// 말풍선(꼬리 제외)
+const BUBBLE_W = 468;
+const BUBBLE_H = 113;
+
+// StepCardList 고정 높이
+const LIST_FIXED_H = 483 + 14;
+
+// ✅ completed일 때 가운데로 보여줄 카드 index (요구사항: 2단계)
+const COMPLETED_CENTER_INDEX = 1;
+
 const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
-  const { openModal } = useBaseModal();
+  const { openModal } = useBaseModal(); // 모달 다시 쓸 거면 유지, 아니면 지워도 됨
 
   const steps: SymptomGuideStep[] = useMemo(
     () => [
@@ -46,7 +58,7 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
         subtitle: "생활 관리/병원 고려",
         caption: "일상에서 참고할 수 있는 관리 방법이나,병원 방문을 고려해볼 수 있어요!",
         description:
-          "이 단계에서는 일상에서 참고할 수 있는 관리 방법이나, 병원 방문을 고려해볼 수 있어요.",
+          "이 단계에서는 일상에서 참고할 수 있는 관리 방법이나, 병원 방문을 고려할 수 있어요.",
       },
       {
         step: 4,
@@ -60,25 +72,29 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
     []
   );
 
-  const CARD_W = 255;
-
-  // 말풍선(꼬리 제외)
-  const BUBBLE_W = 468;
-  const BUBBLE_H = 113;
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completed, setCompleted] = useState(false);
 
-  const currentStep = steps[currentIndex];
+  // 모바일 여부
+  const [isMobile, setIsMobile] = useState(false);
 
-  const LIST_FIXED_H = 483 + 14;
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  // 현재 step은 "버튼 흐름" 기준
+  const currentStep = steps[currentIndex];
 
   const buttonText = useMemo(() => {
     if (completed) return "초기화";
     if (currentIndex === 0) return "이 증상에 대해 알아보고 싶어요";
     if (currentIndex === 1) return "이 증상에 대한 설명을 이해했어요";
     if (currentIndex === 2) return "대응 방법을 확인했어";
-    return "어깨 증상 가이드 확인 완료"; // step4
+    return "어깨 증상 가이드 확인 완료";
   }, [completed, currentIndex]);
 
   const onClickButton = () => {
@@ -94,14 +110,12 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
       return;
     }
 
-    // 2단계 -> 3단계로 넘어갈 때: 전문의 소견 확인 모달
-    // 임시: 모달을 한 번 이상 조회하면 트리거 미발생 하도록 수정 예정
+    // 2단계 -> 3단계: 전문의 소견 모달
     if (currentIndex === 1) {
       openModal(ModalType.STEP_DOCTOR_OPINION_REQUIRED);
       return;
     }
-
-    // 3단계 -> 4단계로 넘어갈 때: 대처방안/병원 정보 확인 모달
+    // 3단계 -> 4단계: 대처방안/병원 모달
     if (currentIndex === 2) {
       openModal(ModalType.STEP_TREATMENT_INFO_REQUIRED);
       return;
@@ -110,34 +124,34 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
     setCurrentIndex((prev) => Math.min(prev + 1, steps.length - 1));
   };
 
-  // 완료 상태면 카드 전체를 "완료 스타일"로 보여줘야 함
-  // - StepCardList에 completed 전달해서:
-  //   1) currentIndex를 강제로 마지막으로 보거나
-  //   2) 상태 계산을 전체 done으로 바꾸고, dim/grayscale 제거, 그라데이션 표시
-  const displayIndex = completed ? steps.length - 1 : currentIndex;
+  // 카드 표시용 index (완료 시 2단계를 중앙)
+  const displayIndex = completed ? COMPLETED_CENTER_INDEX : currentIndex;
 
-  // 말풍선 위치: step1~2는 카드 left 라인 시작 / step3~4는 카드 right 라인 끝
-  // 완료 상태에서는 말풍선을 가운데 고정
+  // 말풍선 내용
+  const bubbleStep = completed ? "확인 완료" : `Step ${currentStep.step}`;
+  const bubbleDescription = completed
+    ? "어깨 증상에 대한 확인할 수 있는 가이드를 모두 살펴봤어요.\n현재 상태를 지켜보며 필요하면 의료진 상담을 고려해 주세요."
+    : currentStep.description;
+
+  // 데스크탑 말풍선 위치/꼬리 방향
   let bubbleLeft = 0;
-  let side: "left" | "right" | "center" = "left";
+  let bubbleSide: "left" | "right" | "center" = "left";
 
   if (completed) {
-    const GRID_W = 1020;
-    bubbleLeft = (GRID_W - BUBBLE_W) / 2;
-    side = "center"; // 완료 문구는 꼬리 중앙
+    bubbleLeft = (1020 - BUBBLE_W) / 2;
+    bubbleSide = "center";
   } else {
     const cardLeftX = displayIndex * CARD_W;
     const cardRightX = (displayIndex + 1) * CARD_W;
 
     const isLeftGroup = displayIndex <= 1;
-    side = isLeftGroup ? "left" : "right";
+    bubbleSide = isLeftGroup ? "left" : "right";
     bubbleLeft = isLeftGroup ? cardLeftX : cardRightX - BUBBLE_W;
   }
 
-  const bubbleStep = completed ? "확인 완료" : `Step ${currentStep.step}`;
-  const bubbleDescription = completed
-    ? "어깨 증상에 대한 확인할 수 있는 가이드를 모두 살펴봤어요.\n현재 상태를 지켜보며 필요하면 의료진 상담을 고려해 주세요."
-    : currentStep.description;
+  // 모바일이면: 말풍선은 왼쪽 꼬리 + left=0
+  const finalBubbleLeft = isMobile ? 0 : bubbleLeft;
+  const finalBubbleSide: "left" | "right" | "center" = isMobile ? "left" : bubbleSide;
 
   return (
     <section className="flex flex-col items-center">
@@ -147,8 +161,11 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
         className="mb-12"
       />
 
-      {/* 스텝 카드 */}
-      <div className="w-full max-w-[1020px] overflow-visible" style={{ height: LIST_FIXED_H }}>
+      {/* 스텝 카드: 모바일 full-bleed / 데스크탑 max-w 유지 */}
+      <div
+        className={["w-screen overflow-visible", "md:w-full md:max-w-[1020px]"].join(" ")}
+        style={{ height: LIST_FIXED_H }}
+      >
         <StepCardList steps={steps} currentIndex={displayIndex} completed={completed} />
       </div>
 
@@ -160,9 +177,9 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
         <StepDescription
           step={currentStep.step}
           description={bubbleDescription}
-          left={bubbleLeft}
+          left={finalBubbleLeft}
           top={0}
-          side={side}
+          side={finalBubbleSide}
           headerText={bubbleStep}
         />
       </div>
