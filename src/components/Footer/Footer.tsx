@@ -24,9 +24,9 @@ const Footer = () => {
   const socialLinks: SocialLink[] = [
     { label: "Instagram", href: "#", iconName: "instagram-outline" },
     { label: "X", href: "#", iconName: "x-outline" },
-    { label: "LinkedIn", href: "#", iconName: "linkedIn-outline" },
+    { label: "LinkedIn", href: "#", iconName: "linkedin-outline" },
     { label: "Facebook", href: "#", iconName: "facebook-outline" },
-    { label: "YouTube", href: "#", iconName: "youTube-outline" },
+    { label: "YouTube", href: "#", iconName: "youtube-outline" },
   ];
 
   return (
