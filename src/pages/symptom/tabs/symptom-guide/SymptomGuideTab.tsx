@@ -56,7 +56,7 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
         step: 3,
         title: "대처 방법 참고하는 단계",
         subtitle: "생활 관리/병원 고려",
-        caption: "일상에서 참고할 수 있는 관리 방법이나,병원 방문을 고려해볼 수 있어요!",
+        caption: "일상에서 참고할 수 있는 관리 방법이나,병원 방문을 고려해볼 수 있어요.",
         description:
           "이 단계에서는 일상에서 참고할 수 있는 관리 방법이나, 병원 방문을 고려할 수 있어요.",
       },
