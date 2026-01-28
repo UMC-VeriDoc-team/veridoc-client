@@ -45,27 +45,45 @@ const StepCard = ({
   className,
 }: StepCardProps) => {
   const isDone = state === "done";
-
-  // 완료 전에는 선택된 카드만 컬러, 나머지는 전부 흑백
-  // 완료 후에는 전부 컬러
   const dimmed = !completed && !selected;
-
   const cardH = selected ? SELECT_H : BASE_H;
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className={["relative block overflow-visible rounded-[6px] text-left", className]
+      className={[
+        "relative block text-left",
+        // 모바일: 미선택은 각지게 / 선택은 라운드 유지
+        selected ? "rounded-[6px]" : "rounded-none md:rounded-[6px]",
+        "overflow-hidden md:overflow-visible",
+        className,
+      ]
         .filter(Boolean)
         .join(" ")}
       style={{ width: W, height: cardH }}
     >
+      {/* 모바일 미선택 */}
+      {!selected && (
+        <>
+          <div className="absolute inset-0 z-0 bg-white md:hidden" />
+
+          <div
+            className="absolute left-0 top-0 z-[5] border border-gray-400 bg-white md:hidden"
+            style={{ width: W, height: BASE_HEADER_H }}
+          />
+        </>
+      )}
+
       {selected ? (
         <>
           {/* 선택: 사진 */}
           <div
-            className="absolute left-0 z-0 overflow-hidden rounded-b-[6px] rounded-t-none border-[4px] border-brand-primary"
+            className={[
+              "absolute left-0 z-0 overflow-hidden",
+              "rounded-b-[6px] rounded-t-none",
+              "border-[4px] border-brand-primary",
+            ].join(" ")}
             style={{ top: SELECT_PHOTO_TOP, width: W, height: SELECT_PHOTO_H }}
           >
             <div
@@ -76,10 +94,8 @@ const StepCard = ({
               style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
             />
 
-            {/* 선택 상태는 그라데이션 항상 */}
             <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-brand-primary/90 via-brand-primary/45 to-transparent" />
 
-            {/* 완료 전에서만 선택 카드 caption 표시 / 완료 후엔 caption 없음 */}
             {!completed && caption && (
               <div className="absolute bottom-0 left-0 right-0 z-10 flex justify-center pb-7">
                 <div
@@ -130,9 +146,12 @@ const StepCard = ({
         </>
       ) : (
         <>
-          {/* 미선택: 사진 */}
+          {/* 미선택: 사진 (모바일은 각지게) */}
           <div
-            className="absolute left-0 z-0 overflow-hidden rounded-t-none"
+            className={[
+              "absolute left-0 z-0 overflow-hidden",
+              "rounded-none md:rounded-t-none",
+            ].join(" ")}
             style={{ top: BASE_PHOTO_TOP, width: W, height: PHOTO_VISIBLE_H }}
           >
             <div
@@ -146,12 +165,9 @@ const StepCard = ({
 
             {dimmed && <div className="absolute inset-0 bg-black/30" />}
 
-            {/* 완료 후(completed=true)일 때만 전체 그라데이션 */}
             {completed && (
               <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-brand-primary/90 via-brand-primary/45 to-transparent" />
             )}
-
-            {/* 완료 후에는 caption 없음 */}
           </div>
 
           {BASE_BOTTOM_GAP > 0 && (
@@ -161,11 +177,11 @@ const StepCard = ({
             />
           )}
 
-          {/* 미선택 헤더 */}
+          {/* 미선택 헤더: 모바일에서만 border 추가 + 각지게 */}
           <div
             className={[
               "absolute left-0 top-0 z-10 flex items-center gap-3 px-5",
-              "bg-transparent",
+              "md:bg-transparent",
               "rounded-none",
             ].join(" ")}
             style={{ width: W, height: BASE_HEADER_H }}
