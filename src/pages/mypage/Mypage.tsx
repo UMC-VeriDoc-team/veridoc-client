@@ -138,7 +138,7 @@ const MyPage = () => {
           <div className="relative">
             <div className="flex h-[275px] w-[275px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50">
               <Icon
-                name={gender === "FEMALE" ? "FEMALE" : "MALE"}
+                name={gender === "FEMALE" ? "female" : "male"}
                 className="h-full w-full object-cover"
               />
             </div>
