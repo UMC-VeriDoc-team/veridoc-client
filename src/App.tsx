@@ -55,10 +55,10 @@ const App = () => {
 
             {/* 증상 */}
             <Route path="/symptom" element={<SymptomPage />} />
-            
+
             {/* 마이페이지 */}
             <Route path="/my" element={<MyPage />} />
-            <Route path="/my/password" element={<MyPasswordPage />} /> 
+            <Route path="/my/password" element={<MyPasswordPage />} />
 
             {/* 추후 메인 홈과 합쳐질 예정 */}
             {/* 임시: 범용가이드 */}
