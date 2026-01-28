@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "@/assets/images/logo.svg";
+import logo from "/images/logo.svg";
 
 const OnboardingPage = () => {
   return (
