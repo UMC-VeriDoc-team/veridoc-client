@@ -18,6 +18,7 @@ import HomePreview from "@/pages/home/components/HomePreview";
 import MobileSplashPage from "@/pages/splash/MobileSplashPage";
 import useIsMobile from "./hooks/useIsMobile";
 import MyPage from "@/pages/mypage/Mypage";
+import MainPage from "@/pages/main/MainPage";
 
 const App = () => {
   const isMobile = useIsMobile();
@@ -65,6 +66,8 @@ const App = () => {
             <Route path="/guides" element={<HomeSymptomOnboarding />} />
             {/* 임시: 프리뷰 */}
             <Route path="/preview" element={<HomePreview />} />
+            {/* 홈 화면 */}
+            <Route path="/home" element={<MainPage />} />
 
             {/* 모달 테스트 페이지 */}
             <Route path="/modal-guide" element={<ModalGuidePage />} />
