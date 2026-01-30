@@ -14,13 +14,13 @@ import MyPasswordPage from "./pages/mypage/MyPasswordPage";
 import SignUpPage from "@/pages/signup/SignUpPage";
 import SignUpSymptomPage from "@/pages/signup/SignUpSymptomPage";
 import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding";
-import HomePreview from "@/pages/home/components/HomePreview";
 import MobileSplashPage from "@/pages/splash/MobileSplashPage";
 import useIsMobile from "@/hooks/useIsMobile";
 import MyPage from "@/pages/mypage/Mypage";
-import MainPage from "@/pages/main/MainPage";
-import HospitalMapSection from "@/pages/home/components/HospitalMapSection";
+import MainPage from "@/pages/home/MainPage";
 import OnboardingLayout from "./layouts/OnboardingLayout";
+import HospitalMapSection from "./pages/home/components/map/HospitalMapSection";
+import HomePreview from "./pages/home/components/HomePreview";
 
 const App = () => {
   const isMobile = useIsMobile();

@@ -1,7 +1,7 @@
-import HomeBody from "@/components/Modal/components/home/HomeBody";
-import HomeManage from "@/components/Modal/components/home/HomeManage";
-import HomeMap from "@/components/Modal/components/home/HomeMap";
-import HomeMovingImage from "@/components/Modal/components/home/HomeMovingImage";
+import HomeBody from "@/pages/home/components/HomeBody/HomeBody";
+import HomeManage from "@/pages/home/components/HomeBody/HomeManage";
+import HomeMap from "@/pages/home/components/map/HomeMap";
+import HomeMovingImage from "@/pages/home/components/banner/HomeMovingImage";
 
 const MainPage = () => {
   return (

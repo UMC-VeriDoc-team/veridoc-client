@@ -1,4 +1,4 @@
-import HospitalMapSection from "@/pages/home/components/HospitalMapSection";
+import HospitalMapSection from "./HospitalMapSection";
 
 const HomeMap = () => {
   return (
