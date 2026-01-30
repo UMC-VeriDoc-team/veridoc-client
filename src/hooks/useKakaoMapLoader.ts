@@ -7,17 +7,14 @@ interface UseKakaoMapLoaderOptions {
 }
 
 const useKakaoMapLoader = ({ appKey }: UseKakaoMapLoaderOptions) => {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState<boolean>(() => Boolean(window.kakao?.maps));
 
   useEffect(() => {
-    if (window.kakao?.maps) {
-      setLoaded(true);
-      return;
-    }
+    if (loaded) return;
 
-    const existing = document.getElementById(KAKAO_SCRIPT_ID);
+    const existing = document.getElementById(KAKAO_SCRIPT_ID) as HTMLScriptElement | null;
+
     if (existing) {
-      // 이미 로드 중인 경우
       const onLoad = () => setLoaded(true);
       existing.addEventListener("load", onLoad);
       return () => existing.removeEventListener("load", onLoad);
@@ -25,13 +22,19 @@ const useKakaoMapLoader = ({ appKey }: UseKakaoMapLoaderOptions) => {
 
     const script = document.createElement("script");
     script.id = KAKAO_SCRIPT_ID;
-    script.async = true;
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}`;
-    script.onload = () => setLoaded(true);
+    script.async = false;
+    script.defer = true;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`;
+
+    const onLoad = () => setLoaded(true);
+    script.addEventListener("load", onLoad);
+
     document.head.appendChild(script);
 
-    return () => {};
-  }, [appKey]);
+    return () => {
+      script.removeEventListener("load", onLoad);
+    };
+  }, [appKey, loaded]);
 
   return loaded;
 };

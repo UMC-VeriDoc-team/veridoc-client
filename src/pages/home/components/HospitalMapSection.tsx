@@ -1,21 +1,21 @@
+import { useMemo, useState } from "react";
 import Icon from "@/components/Icon/Icon";
 import { HOSPITALS_MOCK } from "@/constants/mock/home/hospital";
 import KakaoHospitalMap from "./KakaoHospitalMap";
-import { useEffect, useState } from "react";
-
-const data = HOSPITALS_MOCK;
 
 const HospitalMapSection = () => {
-  const [selectedHospitalId, setSelectedHospitalId] = useState<number | null>(
-    data.hospitals[0]?.hospitalId ?? null
-  );
+  const data = HOSPITALS_MOCK;
 
-  // hospitals가 바뀔 경우 대비 (나중에 API 연동 시 유용)
-  useEffect(() => {
-    if (data.hospitals.length > 0) {
-      setSelectedHospitalId(data.hospitals[0].hospitalId);
-    }
-  }, []);
+  const hospitals = data.hospitals;
+
+  const [selectedHospitalId, setSelectedHospitalId] = useState<number | null>(() => {
+    return hospitals[0]?.hospitalId ?? null;
+  });
+
+  const effectiveSelectedId = useMemo(() => {
+    if (selectedHospitalId !== null) return selectedHospitalId;
+    return hospitals[0]?.hospitalId ?? null;
+  }, [selectedHospitalId, hospitals]);
 
   return (
     <section className="flex w-full border border-[#17171940]">
@@ -72,8 +72,8 @@ const HospitalMapSection = () => {
       <article className="flex-1">
         <KakaoHospitalMap
           center={data.searchContext.center}
-          hospitals={data.hospitals}
-          selectedHospitalId={selectedHospitalId}
+          hospitals={hospitals}
+          selectedHospitalId={effectiveSelectedId}
           onSelectHospital={setSelectedHospitalId}
         />
       </article>
