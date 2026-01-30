@@ -1,14 +1,12 @@
 import type { SymptomTag } from "@/types/syptom";
-import { useState } from "react";
 
 type HomeSelectButtonProps = {
   tags: SymptomTag[];
   onClick?: (tagId: string) => void;
+  selectedTag?: string;
 };
-export const HomeSelectButton = ({ tags, onClick }: HomeSelectButtonProps) => {
-  const [selectedTag, setSelectedTag] = useState(tags[0]?.id || "");
+export const HomeSelectButton = ({ tags, onClick, selectedTag }: HomeSelectButtonProps) => {
   const handleClick = (tagId: string) => {
-    setSelectedTag(tagId);
     if (onClick) {
       onClick(tagId);
     }
