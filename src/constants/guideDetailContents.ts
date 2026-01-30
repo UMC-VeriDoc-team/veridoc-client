@@ -1,4 +1,4 @@
-import type { GuideDetailContent, GuideDetailType } from "../types/guideDetail";
+import type { GuideDetailContent, GuideDetailType } from "../components/Modal/types/guideDetail";
 
 export const GUIDE_DETAIL_CONTENTS: Record<GuideDetailType, GuideDetailContent> = {
   COMMON_SYMPTOMS: {
