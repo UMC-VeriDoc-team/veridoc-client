@@ -1,4 +1,4 @@
-import type { SymptomTag } from "@/types/syptom";
+import type { SymptomTag } from "@/types/symptom";
 export const SHOULDER_SYMPTOM: SymptomTag[] = [
   { id: "shoulder_stiff", label: "뻐근함" },
   { id: "shoulder_tingling", label: "찌릿함" },

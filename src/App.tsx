@@ -57,7 +57,6 @@ const App = () => {
 
           {/* 기본 레이아웃 (헤더+푸터) */}
           <Route element={<DefaultLayout />}>
-            {/* <Route path="/home" element={<HomePage />} /> */}
             <Route path="/hospital" element={<HospitalMapSection />} />
 
             {/* 증상 */}
@@ -67,13 +66,14 @@ const App = () => {
             <Route path="/my" element={<MyPage />} />
             <Route path="/my/password" element={<MyPasswordPage />} />
 
+            {/* 홈 화면 */}
+            <Route path="/home" element={<MainPage />} />
+
             {/* 추후 메인 홈과 합쳐질 예정 */}
             {/* 임시: 범용가이드 */}
             <Route path="/guides" element={<HomeSymptomOnboarding />} />
             {/* 임시: 프리뷰 */}
             <Route path="/preview" element={<HomePreview />} />
-            {/* 홈 화면 */}
-            <Route path="/home" element={<MainPage />} />
 
             {/* 모달 테스트 페이지 */}
             <Route path="/modal-guide" element={<ModalGuidePage />} />
