@@ -7,6 +7,7 @@ interface SymptomsItemProps {
   description: string;
 }
 
+// 프리뷰 증상 부위 소개
 const SymptomsItem = ({ key, iconName, symptomsName, description }: SymptomsItemProps) => {
   return (
     <div

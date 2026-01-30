@@ -1,5 +1,5 @@
 import { COMMON_GUIDES_MOCK } from "@/constants/mock/home/mockHomeTemporaryMeasure";
-import AlternativeCard from "./HomeBody/HomeAlternative/AlternativeCard";
+import AlternativeCard from "./HomeAlternative/AlternativeCard";
 
 const HomeManage = () => {
   return (

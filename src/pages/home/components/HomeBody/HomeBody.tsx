@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SHOULDER_SYMPTOM } from "@/constants/homeSelectButton";
-import { HomeSelectButton } from "./HomeBody/HomeSelectButton";
-import HomeOpinion from "./HomeBody/HomeOpinion";
+import { HomeSelectButton } from "./HomeSelectButton";
+import HomeOpinion from "./HomeOpinion";
 
 const HomeBody = () => {
   //TODO: SHOULDER_SYMPTOM 같은 경우는 Zustand로 상태관리 예정
