@@ -1,12 +1,21 @@
 import { Link } from "react-router-dom";
 import logo from "/images/logo.svg";
+import OnboardingImg from "/images/onboarding/onboarding.svg";
 
 const OnboardingPage = () => {
   return (
-    <div className="h-full w-full bg-white">
+    <div className="h-full w-full overflow-hidden bg-white">
       <div className="grid h-full grid-cols-1 lg:grid-cols-[1fr_620px]">
         {/* Left: Desktop only */}
-        <div className="hidden bg-brand-primary lg:block" />
+        <div className="relative hidden h-full overflow-hidden lg:block">
+          <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-brand-primary/90 via-brand-primary/45 to-transparent"></div>
+          <img
+            src={OnboardingImg}
+            alt="온보딩 이미지"
+            className="h-full w-full object-cover"
+            draggable={false}
+          />
+        </div>
 
         {/* Right: Logo + 회원가입 + 로그인 */}
         <div className="flex h-full items-center justify-center px-6 py-10 lg:px-12 lg:py-12">
