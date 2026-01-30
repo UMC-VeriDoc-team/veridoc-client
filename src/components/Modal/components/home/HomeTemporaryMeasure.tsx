@@ -1,10 +1,10 @@
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import GuideItem from "./components/GuideItem";
-import { MOCK_GUIDE_ITEMS } from "@/components/Modal/constants/mockGuideItem";
-import { MOCK_MEDICAL_CONSULTATION_GUIDE } from "@/components/Modal/constants/mockMedicalConsultationGuide";
 import { MedicalConsultationGuide } from "@/components/Modal/components/home/components/MedicalConsultationGuide";
 import SectionHeader from "@/components/Modal/components/home/components/SectionHeader";
+import { MOCK_GUIDE_ITEMS } from "@/constants/mock/modal/mockGuideItem";
+import { MOCK_MEDICAL_CONSULTATION_GUIDE } from "@/constants/mock/modal/mockMedicalConsultationGuide";
 
 interface ShareItem {
   iconName: string;
