@@ -1,9 +1,9 @@
 import Icon from "@/components/Icon/Icon";
 import { ModalType } from "@/components/Modal/types/modal";
 import { TermsKey } from "@/components/Modal/types/terms";
+import { TERMS_ITEMS } from "@/constants/terms/termsItems";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import useTermsAgreementStore from "@/stores/modal/useTermsAgreementStore";
-import { TERMS_ITEMS } from "../../constants/terms/termsItems";
 
 // 약관 상세 모달
 const HomeTermsDetailModal = () => {

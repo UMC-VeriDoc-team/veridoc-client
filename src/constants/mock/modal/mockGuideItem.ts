@@ -1,4 +1,4 @@
-import type { GuideItemProps } from "../components/home/components/GuideItem";
+import type { GuideItemProps } from "@/components/Modal/components/home/components/GuideItem";
 
 // 임시 데이터
 export const MOCK_GUIDE_ITEMS: GuideItemProps[] = [
