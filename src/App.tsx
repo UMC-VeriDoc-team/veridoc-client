@@ -18,6 +18,7 @@ import HomePreview from "@/pages/home/components/HomePreview";
 import MobileSplashPage from "@/pages/splash/MobileSplashPage";
 import useIsMobile from "@/hooks/useIsMobile";
 import MyPage from "@/pages/mypage/Mypage";
+import MainPage from "@/pages/main/MainPage";
 import HospitalMapSection from "@/pages/home/components/HospitalMapSection";
 import OnboardingLayout from "./layouts/OnboardingLayout";
 
@@ -56,7 +57,6 @@ const App = () => {
 
           {/* 기본 레이아웃 (헤더+푸터) */}
           <Route element={<DefaultLayout />}>
-            {/* <Route path="/home" element={<HomePage />} /> */}
             <Route path="/hospital" element={<HospitalMapSection />} />
 
             {/* 증상 */}
@@ -65,6 +65,9 @@ const App = () => {
             {/* 마이페이지 */}
             <Route path="/my" element={<MyPage />} />
             <Route path="/my/password" element={<MyPasswordPage />} />
+
+            {/* 홈 화면 */}
+            <Route path="/home" element={<MainPage />} />
 
             {/* 추후 메인 홈과 합쳐질 예정 */}
             {/* 임시: 범용가이드 */}
