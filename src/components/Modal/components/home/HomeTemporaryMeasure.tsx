@@ -127,6 +127,7 @@ const HomeTemporaryMeasure = () => {
               <div className="flex flex-col gap-9">
                 {MOCK_GUIDE_ITEMS.map((item) => (
                   <GuideItem
+                    key={item.id}
                     id={item.id}
                     title={item.title}
                     description={item.description}
