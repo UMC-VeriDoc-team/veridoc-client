@@ -8,7 +8,7 @@ const DefaultLayout = () => {
   const isMobile = useIsMobile();
 
   return (
-    <div className={`flex h-screen flex-col ${isMobile && "pb-16"}`}>
+    <div className={`flex min-h-svh flex-col ${isMobile && "pb-16"}`}>
       {/* 기본 페이지: Header + Footer */}
       <Header className="sticky top-0 z-50" />
 
