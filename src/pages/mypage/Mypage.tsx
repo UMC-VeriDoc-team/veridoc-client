@@ -308,40 +308,54 @@ const MyPage = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-white">
-      {/* 상단 로고 영역 */}
-      <div className="mb-8 mt-10 flex items-center justify-center">
+      <header className="flex w-full items-center justify-center pt-[14px] md:hidden">
+        <span className="text-[20px] font-semibold text-gray-950">마이페이지</span>
+      </header>
+
+      {/* 2. [PC Header] 로고 이미지
+          - hidden md:flex: 모바일에서는 숨김, PC에서만 보임
+          - 기존 PC 스타일 유지 (mb-8 mt-10)
+      */}
+      <div className="hidden md:mb-8 md:mt-10 md:flex md:items-center md:justify-center">
         <div className="h-[85px]">
           <img src={Logo} alt="VeriDoc Logo" className="h-full w-auto" />
         </div>
       </div>
 
-      {/* 탭 메뉴 (피그마 규격 777x69 반영) */}
-      <div className="mb-8 flex h-[69px] w-[777px] items-center justify-center gap-[13px] rounded-[10px] bg-gray-50">
-        {/* 1. 나의 증상 관리 탭 */}
-        <button
-          className={`flex h-[50px] w-[371px] shrink-0 items-center justify-center rounded-[10px] text-[20px] font-bold leading-[1.4] tracking-[-0.025em] text-gray-950 transition-all duration-200 ${
-            activeTab === "symptom"
-              ? "bg-white" // 선택됨: 흰배경 + 진한글씨
-              : "text-gray-600" // 선택안됨: 회색글씨
-          }`}
-          onClick={() => setSearchParams({ tab: "symptom" })}
-        >
-          나의 증상 관리
-        </button>
+      {/* 3. [Tab Menu] 탭 메뉴 (Segmented Control 스타일 적용)
+          - Container: 회색 배경 + 패딩 4px (이미지 3번 디테일 반영)
+          - Button: 선택됨(흰색+그림자) vs 선택안됨(투명)
+      */}
+      <div className="/* Mobile 배치 */ /* PC 배치 */ mb-8 mt-[24px] flex w-full justify-center px-[30px] md:mt-0 md:w-[777px] md:px-0">
+        {/* 실제 탭 컨테이너 (회색 박스) */}
+        <div className="/* Mobile 높이 */ /* PC 높이 */ flex h-[49px] w-full items-center justify-center rounded-[10px] bg-gray-50 p-[4px] md:h-[69px]">
+          {/* [Tab 1] 나의 증상 관리 */}
+          <button
+            className={`/* 폰트 설정 (Mobile: 18px Semi / PC: 20px Bold) */ flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
+              activeTab === "symptom"
+                ? "bg-white text-gray-950 shadow-sm" // ✨ 선택됨: 흰색 배경 + 그림자
+                : "bg-transparent text-gray-400" // 선택 안됨: 투명 + 회색 글씨
+            } `}
+            onClick={() => setSearchParams({ tab: "symptom" })}
+          >
+            나의 증상 관리
+          </button>
 
-        {/* 2. 정보 수정 탭 */}
-        <button
-          className={`flex h-[50px] w-[371px] shrink-0 items-center justify-center rounded-[10px] text-[20px] font-bold leading-[1.4] tracking-[-0.025em] text-gray-950 transition-all duration-200 ${
-            activeTab === "info"
-              ? "bg-white" // 선택됨
-              : "text-gray-600" // 선택안됨
-          }`}
-          onClick={() => setSearchParams({ tab: "info" })}
-        >
-          정보 수정
-        </button>
+          {/* [Tab 2] 정보 수정 */}
+          <button
+            className={`/* 폰트 설정 */ flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
+              activeTab === "info"
+                ? "bg-white text-gray-950 shadow-sm" // ✨ 선택됨
+                : "bg-transparent text-gray-400" // 선택 안됨
+            } `}
+            onClick={() => setSearchParams({ tab: "info" })}
+          >
+            정보 수정
+          </button>
+        </div>
       </div>
 
+      {/* 컨텐츠 렌더링 (이건 아까 수정한 함수들이 실행됨) */}
       {activeTab === "symptom" ? renderSymptomContent() : renderProfileForm()}
     </div>
   );
