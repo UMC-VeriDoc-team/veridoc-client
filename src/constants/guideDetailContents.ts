@@ -5,7 +5,7 @@ export const GUIDE_DETAIL_CONTENTS: Record<GuideDetailType, GuideDetailContent> 
     header: {
       title: "이런 증상은 흔해요",
       subtitle: "비슷한 증상들을 모아 원인을 분석해 드려요",
-      imageSrc: "/src/assets/images/home/guides/modal/guide-common-symptoms.svg",
+      imageSrc: "/public/images/home/guides/modal/guide-common-symptoms.svg",
     },
     source: {
       name: "국민건강보험공단 건강정보",
@@ -19,7 +19,7 @@ export const GUIDE_DETAIL_CONTENTS: Record<GuideDetailType, GuideDetailContent> 
     header: {
       title: "당장 병원에 가야 하는 경우",
       subtitle: "방치하면 위험한 신호들, 놓치지 말고 확인하세요",
-      imageSrc: "/src/assets/images/home/guides/modal/guide-need-hospital.svg",
+      imageSrc: "/public/images/home/guides/modal/guide-need-hospital.svg",
     },
     source: {
       name: "국민건강보험공단 건강정보",
@@ -55,7 +55,7 @@ export const GUIDE_DETAIL_CONTENTS: Record<GuideDetailType, GuideDetailContent> 
     header: {
       title: "일상에서 조심하면 좋은 점",
       subtitle: "작은 습관 하나로 내 몸을 더 건강하게 지켜요",
-      imageSrc: "/src/assets/images/home/guides/modal/guide-daily-care.svg",
+      imageSrc: "/public/images/home/guides/modal/guide-daily-care.svg",
     },
     source: {
       name: "국민건강보험공단 건강정보",
@@ -87,7 +87,7 @@ export const GUIDE_DETAIL_CONTENTS: Record<GuideDetailType, GuideDetailContent> 
     header: {
       title: "VeriDoc 이렇게 사용하세요",
       subtitle: "베리닥의 기능을 200% 활용하는 스마트한 방법!",
-      imageSrc: "/src/assets/images/home/guides/modal/guide-how-to-use.svg",
+      imageSrc: "/public/images/home/guides/modal/guide-how-to-use.svg",
     },
     source: {
       name: "국민건강보험공단 건강정보",
