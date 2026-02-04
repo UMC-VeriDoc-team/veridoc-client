@@ -87,15 +87,13 @@ const SignUpForm = () => {
 
     const birthDate = `${dob.year}-${dob.month.padStart(2, "0")}-${dob.day.padStart(2, "0")}`;
 
-    const genderValue: "M" | "F" = gender === "MALE" ? "M" : "F";
-
-    const payload: SignupPayload = {
+    const payload = {
       name: name.trim(),
       email: email.trim(),
       password,
       birthDate,
-      gender: genderValue,
-      ...(painAreaID != null ? { painAreaID } : {}),
+      gender: gender as "M" | "F",
+      painAreaID: painAreaID ?? null,
     };
 
     try {
