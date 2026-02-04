@@ -91,9 +91,9 @@ const HomePreview = () => {
           </p>
 
           <div className="mt-6 grid grid-cols-2 gap-4">
-            {SYMPTOMS.map((symptom) => (
+            {SYMPTOMS.map((symptom, idx) => (
               <SymptomsItem
-                key={symptom.key}
+                key={idx}
                 iconName={symptom.iconName}
                 symptomsName={symptom.label}
                 description={symptom.description}
@@ -222,9 +222,9 @@ const HomePreview = () => {
           </article>
           {/* 증상 아이템 */}
           <article className="grid grid-cols-[280px_280px_280px] gap-x-20 gap-y-[50px]">
-            {SYMPTOMS.map((symptom) => (
+            {SYMPTOMS.map((symptom, idx) => (
               <SymptomsItem
-                key={symptom.key}
+                key={idx}
                 iconName={symptom.iconName}
                 symptomsName={symptom.label}
                 description={symptom.description}
