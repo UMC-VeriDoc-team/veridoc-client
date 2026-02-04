@@ -170,18 +170,28 @@ const MyPage = () => {
     </>
   );
 
+  // [수정] 정보 수정 탭 (간격 조정 + 태블릿 잘림 해결)
   const renderProfileForm = () => (
-    <div className="mb-20 mt-12 flex w-[777px] flex-col">
+    <div className="/* Mobile: 꽉 찬 너비 + 패딩 30 */ /* ✨ PC(Large): 너비 777 (md -> lg로 변경하여 태블릿 대응) */ mb-20 flex w-full flex-col px-[30px] lg:mt-12 lg:w-[777px] lg:px-0">
       {/* === 상단: 프로필 + 입력 폼 영역 === */}
-      {/* 타이틀 */}
-      <h3 className="mb-6 w-full text-left text-[20px] font-bold text-gray-950">개인정보 수정</h3>
 
-      {/* === 상단: 프로필 + 입력 폼 영역 === */}
-      <div className="flex w-full flex-row items-start justify-between">
-        {/* 1. 왼쪽: 프로필 사진 */}
-        <div className="flex flex-col items-center">
+      {/* 타이틀: 개인정보 수정 
+          Mobile: mt-[30px] (40->30 축소), 20px Semi, Leading 24px
+          PC:     lg:mt-0 (PC는 상단 여백 없음)
+      */}
+      <h3 className="mb-[30px] mt-[30px] w-full text-left text-[20px] font-semibold leading-[24px] text-gray-950 lg:mb-6 lg:mt-0 lg:font-bold">
+        개인정보 수정
+      </h3>
+
+      {/* 컨텐츠 래퍼: 
+          - Mobile/Tablet: 세로 배치 (flex-col) -> 아이패드 미니도 여기 포함됨!
+          - PC (Large): 가로 배치 (flex-row)
+      */}
+      <div className="flex w-full flex-col items-center lg:flex-row lg:items-start lg:justify-between">
+        {/* 1. 프로필 사진 */}
+        <div className="flex flex-col items-center lg:block">
           <div className="relative">
-            <div className="flex h-[275px] w-[275px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50">
+            <div className="/* Mobile/Tablet: 지름 218.4px */ /* PC: 지름 275px */ flex h-[218.4px] w-[218.4px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50 lg:h-[275px] lg:w-[275px]">
               <Icon
                 name={gender === "FEMALE" ? "female" : "male"}
                 className="h-full w-full object-cover"
@@ -190,8 +200,8 @@ const MyPage = () => {
           </div>
         </div>
 
-        {/* 2. 오른쪽: 입력 폼 */}
-        <div className="flex w-[405px] flex-col space-y-4">
+        {/* 2. 입력 폼 */}
+        <div className="/* ✨ Mobile: 사진과 간격 30px (40->30 축소) */ /* PC: 가로 배치라 상단 마진 0 */ mt-[30px] flex w-full flex-col space-y-4 lg:mt-0 lg:w-[405px]">
           {/* 이름 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
@@ -213,21 +223,18 @@ const MyPage = () => {
             {errors.name && <p className="mt-1 text-xs text-error">{errors.name}</p>}
           </div>
 
-          {/* 생년월일 (3단 분리 + 유효성 검사) */}
+          {/* 생년월일 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               생년월일
             </label>
-
-            {/* 겉보기엔 하나의 박스지만, 실제론 3개의 입력칸이 들어있는 컨테이너 */}
             <div
               className={`flex w-full items-center rounded border p-3 ${
                 errors.birth
-                  ? "border-error focus-within:border-error" // 에러: 빨강
-                  : "border-gray-200 focus-within:border-brand-primary" // 정상: 파랑
+                  ? "border-error focus-within:border-error"
+                  : "border-gray-200 focus-within:border-brand-primary"
               }`}
             >
-              {/* 1. 년도 (YYYY) */}
               <input
                 type="text"
                 value={birth.year}
@@ -240,8 +247,6 @@ const MyPage = () => {
                 maxLength={4}
               />
               <span className="mx-2 text-gray-600">/</span>
-
-              {/* 2. 월 (MM) */}
               <input
                 type="text"
                 value={birth.month}
@@ -253,8 +258,6 @@ const MyPage = () => {
                 maxLength={2}
               />
               <span className="mx-2 text-gray-600">/</span>
-
-              {/* 3. 일 (DD) */}
               <input
                 type="text"
                 value={birth.day}
@@ -295,23 +298,28 @@ const MyPage = () => {
             <GenderSelect value={gender} onChange={setGender} />
           </div>
 
-          {/* 저장 버튼 */}
-          <Button onClick={handleSaveProfile}>
-            {isProfileEditing ? "개인정보 저장" : "개인정보 수정"}
-          </Button>
+          {/* 저장 버튼 (Mobile: 위쪽 간격 40) */}
+          <div className="pt-[40px] lg:pt-0">
+            <Button onClick={handleSaveProfile}>
+              {isProfileEditing ? "개인정보 저장" : "개인정보 수정"}
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* === 하단: 보안설정 & 회원탈퇴 === */}
-      <div className="mt-16 space-y-12">
-        {/* 보안설정 */}
+      {/* 1. mt-[60px]: 상단(프로필 폼)과의 거리
+          2. space-y-[60px]: 보안설정 섹션과 회원탈퇴 섹션 사이의 거리 (요청 반영: 넓힘)
+          3. mb-[100px]: 맨 아래 여백 추가 (피그마 반영 & 터치 영역 확보)
+      */}
+      <div className="mb-[100px] mt-[60px] space-y-[60px]">
+        {/* 보안설정 섹션 */}
         <section>
           <h3 className="mb-2 text-[20px] font-bold text-gray-950">보안설정</h3>
           <p className="mb-4 text-[18px] font-medium text-gray-950">
             계정 보안을 위해 주기적인 비밀번호 변경을 권장해요.
           </p>
           <button
-            // setInfoView 대신에 navigate 사용
             onClick={() => navigate("/my/password")}
             className="flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
@@ -322,21 +330,18 @@ const MyPage = () => {
           </button>
         </section>
 
-        {/* 회원탈퇴 */}
+        {/* 회원탈퇴 섹션 */}
         <section>
           <h3 className="mb-2 text-[20px] font-bold text-gray-950">회원탈퇴</h3>
           <p className="mb-4 text-[18px] font-medium text-gray-950">
             회원탈퇴를 신청하기 전에 아래 사항을 꼭 확인해 주세요.
           </p>
-
           <div className="mb-4 rounded bg-gray-50 px-6 py-9 text-[18px] font-medium leading-[1.6] text-gray-950">
             1. 회원 탈퇴 시 회원님의 개인정보는 관련 법령에 따라 일정 기간 보관 후 삭제됩니다.
             <br />
             2. 탈퇴 후에는 아이디 및 보유 혜택이 모두 소멸되며, 복구가 불가능합니다.
           </div>
-
           <button
-            // 회원탈퇴 모달
             onClick={() => openModal(ModalType.MY_WITHDRAW_NOTICE)}
             className="flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
