@@ -24,6 +24,8 @@ export interface KakaoMap {
   panTo: (latlng: KakaoLatLng) => void;
   setLevel: (level: number) => void;
   getLevel: () => number;
+  relayout?: () => void;
+  setCenter?: (latlng: KakaoLatLng) => void;
 }
 
 export interface KakaoCustomOverlay {
