@@ -1,4 +1,11 @@
+import useBaseModal from "@/stores/modal/useBaseModal";
+import { useNavigate } from "react-router-dom";
+import { ModalType } from "../Modal/types/modal";
+
 const GuideHeader = () => {
+  const navigate = useNavigate();
+  const { openModal } = useBaseModal();
+
   return (
     <div className="relative">
       {/* 이미지 */}
@@ -6,6 +13,7 @@ const GuideHeader = () => {
         src="/public/images/home/guides/banner/banner.svg"
         alt="범용 가이드 헤더"
         className="h-[360px] w-full object-cover sm:h-[420px] md:h-[520px] lg:h-[578px]"
+        onClick={() => navigate("/")}
       />
 
       {/* 블랙 오버레이 */}
@@ -25,6 +33,7 @@ const GuideHeader = () => {
             alt="Logout"
             className="mt-6 h-[32px] w-auto"
             draggable={false}
+            onClick={() => openModal(ModalType.AUTH_LOGOUT)}
           />
         </button>
       </div>

@@ -4,7 +4,7 @@ import useBaseModal from "@/stores/modal/useBaseModal";
 import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
 import type { GuideDetailType } from "@/components/Modal/types/guideDetail";
 import Icon from "@/components/Icon/Icon";
-import GuideHeader from "./GuideHeader";
+import GuideHeader from "@/components/Header/GuideHeader";
 import RecommendEntry from "./RecommendEntry";
 
 // 로그인 O, 증상 미선택
