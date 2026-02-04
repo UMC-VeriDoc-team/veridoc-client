@@ -24,8 +24,8 @@ const tabs = [
 
 const BottomTabBar = () => {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-100 bg-white pb-6 md:hidden">
-      <ul className="flex h-[64px] items-center justify-around">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-100 bg-white pb-2 md:hidden">
+      <ul className="flex h-[58px] items-center justify-around">
         {tabs.map((tab) => (
           <li key={tab.path} className="relative flex h-full flex-1">
             <NavLink
