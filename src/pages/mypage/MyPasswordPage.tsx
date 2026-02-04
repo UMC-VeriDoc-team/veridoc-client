@@ -75,6 +75,7 @@ const MyPasswordPage = () => {
     openModal(ModalType.AUTH_PASSWORD_CHANGED);
   };
 
+  // --- [Render] UI 렌더링 ---
   return (
     <div className="flex min-h-screen flex-col items-center bg-white">
       {/* [1] PC 전용 헤더 (Logo + Tabs) 
