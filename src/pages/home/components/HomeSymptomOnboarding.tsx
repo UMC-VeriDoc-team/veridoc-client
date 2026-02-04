@@ -27,7 +27,7 @@ const HomeSymptomOnboarding = () => {
           <div className="flex flex-col items-center justify-center gap-y-2 pt-10 text-center md:gap-y-3 md:pt-20">
             <div className="flex flex-col items-center">
               <p className="text-[28px] font-extrabold leading-[130%] text-gray-950 md:text-4xl">
-                <span className="text-brand-primary">Veridoc</span>이 믿을 수 있는
+                <span className="font-fredoka text-brand-primary">Veridoc</span>이 믿을 수 있는
               </p>
               <p className="text-[28px] font-extrabold leading-[130%] text-gray-950 md:text-4xl">
                 건강 콘텐츠를 추천드려요!
