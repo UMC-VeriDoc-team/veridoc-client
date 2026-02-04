@@ -17,7 +17,7 @@ const SignUpSymptomPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="h-full bg-white">
       {/* 모바일 레이아웃 */}
       <div className="flex min-h-screen flex-col bg-white pt-9 md:hidden">
         <AuthHeader backTo={backTo} />
@@ -39,7 +39,7 @@ const SignUpSymptomPage = () => {
               </p>
             </div>
 
-            <div className="mt-[100px] w-full md:mt-0">
+            <div className="my-[100px] w-full md:my-0">
               <SignUpSymptomForm />
             </div>
           </main>
