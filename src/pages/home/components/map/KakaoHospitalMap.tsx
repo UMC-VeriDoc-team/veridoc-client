@@ -14,12 +14,12 @@ import HospitalMarker from "./HospitalMarker";
 interface KakaoHospitalMapProps {
   center: LatLng;
   hospitals: HospitalMapItem[];
-  selectedHospitalId: number | null;
-  onSelectHospital: (id: number) => void;
+  selectedHospitalId: string | null;
+  onSelectHospital: (id: string) => void;
 }
 
 interface OverlayItem {
-  hospitalId: number;
+  hospitalId: string;
   position: KakaoLatLng;
   overlay: KakaoCustomOverlay;
   container: HTMLDivElement;
@@ -34,7 +34,7 @@ const KakaoHospitalMap = ({
 }: KakaoHospitalMapProps) => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<KakaoMap | null>(null);
-  const overlaysRef = useRef<Map<number, OverlayItem>>(new Map());
+  const overlaysRef = useRef<Map<string, OverlayItem>>(new Map());
   const [isMapReady, setIsMapReady] = useState(false);
 
   // 지도 초기화
@@ -83,7 +83,7 @@ const KakaoHospitalMap = ({
       reactRoot.render(
         <HospitalMarker
           active={h.hospitalId === selectedHospitalId}
-          thumbnailUrl={h.thumbnailUrl ?? null}
+          imageUrl={h.imageUrl ?? null}
         />
       );
 
@@ -126,10 +126,7 @@ const KakaoHospitalMap = ({
     overlaysRef.current.forEach((item, id) => {
       const hospital = hospitals.find((h) => h.hospitalId === id);
       item.reactRoot.render(
-        <HospitalMarker
-          active={id === selectedHospitalId}
-          thumbnailUrl={hospital?.thumbnailUrl ?? null}
-        />
+        <HospitalMarker active={id === selectedHospitalId} imageUrl={hospital?.imageUrl ?? null} />
       );
     });
   }, [isMapReady, selectedHospitalId, hospitals]);

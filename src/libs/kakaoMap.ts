@@ -4,13 +4,15 @@ export interface LatLng {
 }
 
 export interface HospitalMapItem {
-  hospitalId: number;
+  hospitalId: string;
   name: string;
   coordinate: LatLng;
-  thumbnailUrl?: string | null;
+  imageUrl: string | undefined;
   category: string;
   address: string;
   distanceMeters: number;
+  matchedSpecialty: string;
+  homepageUrl: string;
 }
 
 export interface KakaoLatLng {
