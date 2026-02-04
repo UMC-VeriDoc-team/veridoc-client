@@ -94,23 +94,55 @@ const MyPage = () => {
   // -----------------------------------------------------------------------
   // [화면 1] 나의 증상 관리 (PC 규격: 68px / 70px / 100px)
   // -----------------------------------------------------------------------
+  // [Corrected Version]
+  // 1. Blue Title (PC): 한 줄로 복구 (User's Request: Wide Screen = Single Line)
+  // 2. Blue Title (Mobile): 2줄 유지 (<br> 적용)
   const renderSymptomContent = () => (
     <>
-      {/* ✨ [수정] 68px -> 60px (시각적 보정) */}
-      <div className="mt-[60px] text-center">
-        <h2 className="mb-2 text-4xl font-extrabold tracking-tight text-brand-primary">
-          {isEditing ? "현재 확인 중인 증상을 변경해 보세요" : "현재 확인 중인 증상이에요"}
+      <div className="mt-[30px] px-[30px] text-left md:mt-[60px] md:px-0 md:text-center">
+        {/* [제목] 파란 글씨 */}
+        <h2 className="mb-0 text-[32px] font-extrabold leading-[1.4] tracking-[-0.025em] text-brand-primary md:text-4xl">
+          {isEditing ? (
+            <>
+              {/* Mobile: 2줄 (공간 좁음) */}
+              <span className="md:hidden">
+                현재 확인 중인 <br /> 증상을 변경해 보세요
+              </span>
+
+              {/* ✨ PC/Tablet: 1줄 (공간 넓음 -> 줄바꿈 제거) */}
+              <span className="hidden md:inline">현재 확인 중인 증상을 변경해 보세요</span>
+            </>
+          ) : (
+            <>
+              {/* Mobile: 2줄 */}
+              <span className="md:hidden">
+                현재 확인 중인 <br /> 증상이에요
+              </span>
+
+              {/* ✨ PC/Tablet: 1줄 (줄바꿈 제거) */}
+              <span className="hidden md:inline">현재 확인 중인 증상이에요</span>
+            </>
+          )}
         </h2>
-        <p className="mt-4 text-lg font-semibold leading-[1.4] tracking-tight text-gray-950">
-          다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요
-          <br />
-          필요하다면 증상을 선택하지 않고 넘어갈 수도 있어요
+
+        {/* [설명] 검은 글씨 (PC에서 2줄 되는 건 OK 하셨으므로 유지) */}
+        <p className="mt-[10px] break-keep text-[18px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-950 md:mt-4 md:text-lg">
+          <span className="md:hidden">
+            다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요 필요하다면 증상을 선택하지 않고
+            넘어갈 수도 있어요
+          </span>
+
+          <span className="hidden md:inline">
+            다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요
+            <br />
+            필요하다면 증상을 선택하지 않고 넘어갈 수도 있어요
+          </span>
         </p>
       </div>
 
-      {/* ✨ [수정] 간격 70px */}
+      {/* 2. 그리드 영역 (기존 유지) */}
       <div
-        className={`mt-[70px] flex justify-center ${!isEditing ? "pointer-events-none opacity-80" : ""}`}
+        className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${!isEditing ? "pointer-events-none opacity-80" : ""} `}
       >
         <SymptomGrid
           selectedKey={selectedKey}
@@ -119,8 +151,8 @@ const MyPage = () => {
         />
       </div>
 
-      {/* ✨ [수정] 간격 100px */}
-      <div className="mb-20 mt-[100px] w-[400px]">
+      {/* 3. 버튼 영역 (기존 유지) */}
+      <div className="mb-20 mt-[70px] w-full px-[30px] md:mt-[100px] md:w-[400px] md:px-0">
         <Button onClick={handleSaveSymptom}>{isEditing ? "저장하기" : "수정하기"}</Button>
       </div>
     </>
