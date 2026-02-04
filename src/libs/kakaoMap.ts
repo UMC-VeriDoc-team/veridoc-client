@@ -29,23 +29,6 @@ export interface KakaoCustomOverlay {
   setPosition: (latlng: KakaoLatLng) => void;
 }
 
-export interface KakaoCircle {
-  setMap: (map: KakaoMap | null) => void;
-  setPosition: (latlng: KakaoLatLng) => void;
-  setRadius: (radius: number) => void;
-}
-
-export type KakaoCircleCtor = new (options: {
-  center: KakaoLatLng;
-  radius: number;
-  strokeWeight?: number;
-  strokeColor?: string;
-  strokeOpacity?: number;
-  strokeStyle?: string;
-  fillColor?: string;
-  fillOpacity?: number;
-}) => KakaoCircle;
-
 export interface KakaoMaps {
   load: (cb: () => void) => void;
 
@@ -60,17 +43,6 @@ export interface KakaoMaps {
     yAnchor?: number;
     clickable?: boolean;
   }) => KakaoCustomOverlay;
-
-  Circle: new (options: {
-    center: KakaoLatLng;
-    radius: number;
-    strokeWeight?: number;
-    strokeColor?: string;
-    strokeOpacity?: number;
-    strokeStyle?: string;
-    fillColor?: string;
-    fillOpacity?: number;
-  }) => KakaoCircle;
 }
 
 declare global {

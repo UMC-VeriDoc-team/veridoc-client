@@ -188,7 +188,6 @@ const HospitalMapSection = () => {
       <article className="flex-1">
         <KakaoHospitalMap
           center={center}
-          userLocation={userLocation ?? undefined}
           hospitals={hospitals}
           selectedHospitalId={effectiveSelectedId}
           onSelectHospital={setSelectedHospitalId}
