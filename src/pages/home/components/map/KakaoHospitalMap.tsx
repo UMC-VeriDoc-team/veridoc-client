@@ -14,12 +14,12 @@ import HospitalMarker from "./HospitalMarker";
 interface KakaoHospitalMapProps {
   center: LatLng;
   hospitals: HospitalMapItem[];
-  selectedHospitalId: number | null;
-  onSelectHospital: (id: number) => void;
+  selectedHospitalId: string | null;
+  onSelectHospital: (id: string) => void;
 }
 
 interface OverlayItem {
-  hospitalId: number;
+  hospitalId: string;
   position: KakaoLatLng;
   overlay: KakaoCustomOverlay;
   container: HTMLDivElement;
@@ -34,8 +34,7 @@ const KakaoHospitalMap = ({
 }: KakaoHospitalMapProps) => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<KakaoMap | null>(null);
-  const overlaysRef = useRef<Map<number, OverlayItem>>(new Map());
-
+  const overlaysRef = useRef<Map<string, OverlayItem>>(new Map());
   const [isMapReady, setIsMapReady] = useState(false);
 
   // 지도 초기화
@@ -58,19 +57,20 @@ const KakaoHospitalMap = ({
     });
   }, [center.lat, center.lng]);
 
-  // 오버레이 생성/갱신
+  // 오버레이 생성/갱신 (병원)
   useEffect(() => {
     const map = mapRef.current;
     const maps = window.kakao?.maps;
     if (!isMapReady || !map || !maps) return;
 
-    // 기존 오버레이 제거 + React unmount
+    // 기존 오버레이 정리
     overlaysRef.current.forEach((item) => {
       item.overlay.setMap(null);
       item.reactRoot.unmount();
     });
     overlaysRef.current.clear();
 
+    // 새로 생성
     hospitals.forEach((h) => {
       const position = new maps.LatLng(h.coordinate.lat, h.coordinate.lng);
 
@@ -83,11 +83,10 @@ const KakaoHospitalMap = ({
       reactRoot.render(
         <HospitalMarker
           active={h.hospitalId === selectedHospitalId}
-          thumbnailUrl={h.thumbnailUrl}
+          imageUrl={h.imageUrl ?? null}
         />
       );
 
-      // 클릭 이벤트
       container.addEventListener("click", (e) => {
         e.preventDefault();
         onSelectHospital(h.hospitalId);
@@ -113,6 +112,7 @@ const KakaoHospitalMap = ({
     });
   }, [isMapReady, hospitals, selectedHospitalId, onSelectHospital]);
 
+  // 선택된 병원 panTo + 마커 active 갱신
   useEffect(() => {
     const map = mapRef.current;
     if (!isMapReady || !map) return;
@@ -126,10 +126,7 @@ const KakaoHospitalMap = ({
     overlaysRef.current.forEach((item, id) => {
       const hospital = hospitals.find((h) => h.hospitalId === id);
       item.reactRoot.render(
-        <HospitalMarker
-          active={id === selectedHospitalId}
-          thumbnailUrl={hospital?.thumbnailUrl ?? null}
-        />
+        <HospitalMarker active={id === selectedHospitalId} imageUrl={hospital?.imageUrl ?? null} />
       );
     });
   }, [isMapReady, selectedHospitalId, hospitals]);
@@ -151,13 +148,12 @@ const KakaoHospitalMap = ({
     <div className="relative h-full w-full overflow-hidden rounded-lg bg-gray-100">
       <div ref={mapContainerRef} className="h-full w-full" />
 
-      {/* zoom in / out */}
+      {/* 줌 컨트롤 */}
       <div className="absolute bottom-6 right-6 z-10 flex flex-col items-center overflow-hidden rounded-[4px] bg-white shadow-lg">
         <button
           type="button"
           onClick={handleZoomIn}
           className="flex h-10 w-10 items-center justify-center bg-white"
-          aria-label="Zoom in"
         >
           <Icon name="zoom-in" className="h-5 w-5" />
         </button>
@@ -166,7 +162,6 @@ const KakaoHospitalMap = ({
           type="button"
           onClick={handleZoomOut}
           className="flex h-10 w-10 items-center justify-center bg-white"
-          aria-label="Zoom out"
         >
           <Icon name="zoom-out" className="h-5 w-5" />
         </button>

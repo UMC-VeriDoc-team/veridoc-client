@@ -1,33 +1,106 @@
+import { useMemo, useState } from "react";
 import Icon from "@/components/Icon/Icon";
+import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { TermsKey } from "@/components/Modal/types/terms";
 import { TERMS_ITEMS } from "@/constants/terms/termsItems";
-import useBaseModal from "@/stores/modal/useBaseModal";
 import useTermsAgreementStore from "@/stores/modal/useTermsAgreementStore";
+import {
+  getLocationPermissionState,
+  makeGeoErrorMessage,
+  requestLocationOnce,
+} from "@/utils/locationPermission";
 
 // 약관 상세 모달
 const HomeTermsDetailModal = () => {
   const { modalPayload, openModal } = useBaseModal();
-  const { setChecked, setAll } = useTermsAgreementStore();
+  const { setChecked, setAll, locationError, setLocationError } = useTermsAgreementStore();
 
   const termsItems = TERMS_ITEMS;
 
-  const activeKey = modalPayload?.activeKey ?? TermsKey.SERVICE;
+  const activeKey: TermsKey = (modalPayload?.activeKey as TermsKey) ?? TermsKey.ALL;
   const activeItem = termsItems.find((t) => t.key === activeKey) ?? termsItems[0];
 
-  // 뒤로가기: 리스트 모달로 전환
+  const locationItem = useMemo(
+    () => termsItems.find((t) => t.key === TermsKey.LOCATION),
+    [termsItems]
+  );
+  const locationRequired = Boolean(locationItem?.required);
+
+  const [requesting, setRequesting] = useState(false);
+
+  const isLocationDetail = activeKey === TermsKey.LOCATION;
+  const isAllDetail = activeKey === TermsKey.ALL;
+  const needsGeoCheck = (isLocationDetail || isAllDetail) && locationRequired;
+
   const handleBack = () => {
     openModal(ModalType.HOME_TERMS_AGREEMENT);
   };
 
-  // 동의하기: 체크 후 리스트 모달로 전환
-  const handleAgree = () => {
-    if (activeKey === TermsKey.ALL) {
+  // 상세 모달의 동의하기 버튼 동작
+  const handleAgree = async () => {
+    // ALL 상세
+    if (isAllDetail) {
+      // 위치가 필수이면 위치 권한 확인/요청이 먼저 성공해야 전체 동의 가능
+      if (needsGeoCheck) {
+        setRequesting(true);
+        try {
+          const pState = await getLocationPermissionState();
+          if (pState === "denied") {
+            setLocationError(makeGeoErrorMessage("blocked"));
+            setChecked(TermsKey.LOCATION, false);
+            return;
+          }
+
+          const res = await requestLocationOnce();
+          if (!res.ok) {
+            setLocationError(makeGeoErrorMessage(res.reason));
+            setChecked(TermsKey.LOCATION, false);
+            return;
+          }
+
+          // 위치 OK
+          setLocationError(null);
+          setChecked(TermsKey.LOCATION, true);
+        } finally {
+          setRequesting(false);
+        }
+      }
+
+      // 전체 동의 처리
       setAll(true);
       openModal(ModalType.HOME_TERMS_AGREEMENT);
       return;
     }
 
+    // LOCATION 상세
+    if (isLocationDetail) {
+      setRequesting(true);
+      try {
+        const pState = await getLocationPermissionState();
+        if (pState === "denied") {
+          setLocationError(makeGeoErrorMessage("blocked"));
+          setChecked(TermsKey.LOCATION, false);
+          return;
+        }
+
+        const res = await requestLocationOnce();
+        if (!res.ok) {
+          setLocationError(makeGeoErrorMessage(res.reason));
+          setChecked(TermsKey.LOCATION, false);
+          return;
+        }
+
+        setLocationError(null);
+        setChecked(TermsKey.LOCATION, true);
+        openModal(ModalType.HOME_TERMS_AGREEMENT);
+        return;
+      } finally {
+        setRequesting(false);
+      }
+    }
+
+    // 기타 약관 상세
     setChecked(activeKey, true);
     openModal(ModalType.HOME_TERMS_AGREEMENT);
   };
@@ -55,31 +128,35 @@ const HomeTermsDetailModal = () => {
       {/* 본문 스크롤 영역 */}
       <div className="max-h-[323px] overflow-y-auto rounded-lg bg-gray-50 p-4 text-xs leading-6 text-gray-600">
         {activeItem.content.map((item) => (
-          <>
+          <div key={item.title}>
             <pre className="text-xs font-normal text-gray-600">{item.title}</pre>
             {item.sections.map((section) => (
-              <>
+              <div key={section.title}>
                 <p className="ml-1 text-xs font-normal text-gray-600">{section.title}</p>
-                {section.body.map((item) => {
-                  if (item.type === "text") {
+
+                {section.body.map((bodyItem, idx) => {
+                  if (bodyItem.type === "text") {
                     return (
-                      <>
-                        {item.value.map((str, idx) => (
-                          <li key={idx} className="ml-5 list-disc text-xs text-gray-600">
+                      <div key={`${section.title}-text-${idx}`}>
+                        {bodyItem.value.map((str, sIdx) => (
+                          <li key={sIdx} className="ml-5 list-disc text-xs text-gray-600">
                             {str}
                           </li>
                         ))}
-                      </>
+                      </div>
                     );
                   }
 
-                  if (item.type === "table") {
+                  if (bodyItem.type === "table") {
                     return (
-                      <div className="my-2 overflow-hidden rounded-[10px] border border-gray-100">
+                      <div
+                        key={`${section.title}-table-${idx}`}
+                        className="my-2 overflow-hidden rounded-[10px] border border-gray-100"
+                      >
                         <table className="w-full text-xs">
                           <thead>
                             <tr>
-                              {item.headers.map((h) => (
+                              {bodyItem.headers.map((h) => (
                                 <th
                                   key={h}
                                   className="border-b border-gray-100 px-3 py-1 text-center font-normal text-gray-950 first:border-r"
@@ -91,7 +168,7 @@ const HomeTermsDetailModal = () => {
                           </thead>
 
                           <tbody>
-                            {item.rows.map((row, rIdx) => (
+                            {bodyItem.rows.map((row, rIdx) => (
                               <tr key={rIdx} className="border-b border-gray-100 last:border-0">
                                 {row.map((cell, cIdx) => (
                                   <td
@@ -111,19 +188,25 @@ const HomeTermsDetailModal = () => {
 
                   return null;
                 })}
-              </>
+              </div>
             ))}
-          </>
+          </div>
         ))}
       </div>
+
+      {/* 위치 에러 문구 (차단/거부/불가일 때만 표시) */}
+      {locationError && needsGeoCheck && (
+        <div className="rounded-md bg-gray-50 p-3 text-xs text-red-600">{locationError}</div>
+      )}
 
       {/* 동의하기 버튼 */}
       <button
         type="button"
-        onClick={handleAgree}
-        className="inline-flex h-12 w-full items-center justify-center rounded-[4px] bg-brand-primary text-lg font-semibold text-white hover:opacity-90"
+        onClick={() => void handleAgree()}
+        disabled={requesting}
+        className="inline-flex h-12 w-full items-center justify-center rounded-[4px] bg-brand-primary text-lg font-semibold text-white hover:opacity-90 disabled:opacity-60"
       >
-        동의하기
+        {requesting ? "위치 권한 확인 중..." : "동의하기"}
       </button>
     </div>
   );

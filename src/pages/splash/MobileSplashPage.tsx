@@ -27,7 +27,7 @@ const MobileSplashPage = ({ onFinish }: MobileSplashProps) => {
   return (
     <div
       className={[
-        "flex min-h-screen items-center justify-center bg-white",
+        "flex min-h-dvh items-center justify-center bg-white",
         "transition-all duration-500 ease-out",
         isLeaving ? "scale-100 opacity-0" : "scale-100 opacity-100",
       ].join(" ")}
