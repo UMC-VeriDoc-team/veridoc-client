@@ -41,6 +41,7 @@ export default {
         kr: ["Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "system-ui", "sans-serif"],
         en: ["Roboto", "system-ui", "sans-serif"],
         brand: ["Montserrat", "system-ui", "sans-serif"],
+        fredoka: ["Fredoka", "system-ui", "sans-serif"],
       },
     },
   },
