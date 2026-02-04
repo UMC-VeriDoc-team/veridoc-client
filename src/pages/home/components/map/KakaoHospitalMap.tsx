@@ -35,6 +35,7 @@ const KakaoHospitalMap = ({
 }: KakaoHospitalMapProps) => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<KakaoMap | null>(null);
+  const mapsRef = useRef<KakaoMaps | null>(null);
   const overlaysRef = useRef<Map<string, OverlayItem>>(new Map());
   const onSelectHospitalRef = useRef(onSelectHospital);
   const [isMapReady, setIsMapReady] = useState(false);
@@ -120,9 +121,10 @@ const KakaoHospitalMap = ({
 
   // 오버레이 생성/갱신 (hospitals가 바뀔 때만)
   useEffect(() => {
+    if (!isMapReady) return;
     const map = mapRef.current;
-    const maps = window.kakao?.maps;
-    if (!isMapReady || !map || !maps) return;
+    const maps = mapsRef.current;
+    if (!map || !maps) return;
 
     // 이전 오버레이 정리
     overlaysRef.current.forEach((item) => item.cleanup());
@@ -201,15 +203,14 @@ const KakaoHospitalMap = ({
 
   // 선택된 병원 이동 + active 상태 갱신
   useEffect(() => {
+    if (!isMapReady) return;
     const map = mapRef.current;
     const maps = window.kakao?.maps;
     if (!isMapReady || !map || !maps) return;
     if (selectedHospitalId === null) return;
 
     const selected = overlaysRef.current.get(selectedHospitalId);
-    if (!selected) return;
-
-    map.panTo(selected.position);
+    if (selected) map.panTo(selected.position);
 
     overlaysRef.current.forEach((item, id) => {
       const hospital = hospitals.find((h) => h.hospitalId === id);
@@ -219,7 +220,6 @@ const KakaoHospitalMap = ({
     });
   }, [isMapReady, selectedHospitalId, hospitals]);
 
-  // 줌 버튼
   const handleZoomIn = () => {
     const map = mapRef.current;
     if (!map) return;

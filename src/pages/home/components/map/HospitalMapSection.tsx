@@ -11,7 +11,7 @@ const DEFAULT_CENTER: LatLng = { lat: 37.5563, lng: 126.9236 };
 const SkeletonHospitalCard = () => {
   return (
     <div className="flex gap-x-4 rounded-[10px] border border-[#E9E9E9] px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)]">
-      <div className="aspect-square min-w-[145px] animate-pulse rounded-[5px] bg-gray-100" />
+      <div className="aspect-square min-w-[120px] animate-pulse rounded-[5px] bg-gray-100 sm:min-w-[145px]" />
       <div className="flex w-full flex-col justify-between">
         <div className="flex flex-col gap-y-3">
           <div className="h-5 w-[65%] animate-pulse rounded bg-gray-100" />
