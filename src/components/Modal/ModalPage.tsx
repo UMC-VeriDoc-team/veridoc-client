@@ -31,6 +31,7 @@ import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
 import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
 import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
 import ServicePreparingModal from "./components/common/ServicePreparingModal";
+import AuthLogoutModal from "./components/auth/AuthLogoutModal";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -118,6 +119,8 @@ const ModalPage = () => {
       case ModalType.AUTH_REQUIRED:
         return <AuthLoginRequiredModal />;
       case ModalType.AUTH_LOGOUT:
+        return <AuthLogoutModal />;
+      case ModalType.AUTH_LOGOUT: // 로그아웃 모달
         return <AuthLogoutModal />;
 
       // 홈
