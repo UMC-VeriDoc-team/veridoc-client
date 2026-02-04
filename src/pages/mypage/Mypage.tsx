@@ -424,6 +424,7 @@ const MyPage = () => {
         </div>
       </div>
 
+      {/* 컨텐츠 렌더링 (이건 아까 수정한 함수들이 실행됨) */}
       {activeTab === "symptom" ? renderSymptomContent() : renderProfileForm()}
     </div>
   );
