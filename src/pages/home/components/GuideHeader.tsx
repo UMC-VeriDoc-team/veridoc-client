@@ -3,7 +3,7 @@ const GuideHeader = () => {
     <div className="relative">
       {/* 이미지 */}
       <img
-        src="/src/assets/images/home/guides/banner/banner.svg"
+        src="/public/images/home/guides/banner/banner.svg"
         alt="범용 가이드 헤더"
         className="h-[360px] w-full object-cover sm:h-[420px] md:h-[520px] lg:h-[578px]"
       />
