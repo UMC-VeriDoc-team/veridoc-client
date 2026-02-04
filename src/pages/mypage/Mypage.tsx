@@ -195,7 +195,7 @@ const MyPage = () => {
         </p>
       </div>
 
-      {/* ✨ [수정] 간격 70px */}
+      {/* 2. 그리드 영역 (기존 유지) */}
       <div
         className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${
           !isEditing ? "pointer-events-none opacity-80" : ""
