@@ -8,6 +8,27 @@ type UserLocation = LatLng & { accuracy: number };
 
 const DEFAULT_CENTER: LatLng = { lat: 37.5563, lng: 126.9236 };
 
+const SkeletonHospitalCard = () => {
+  return (
+    <div className="flex gap-x-4 rounded-[10px] border border-[#E9E9E9] px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)]">
+      <div className="aspect-square min-w-[145px] animate-pulse rounded-[5px] bg-gray-100" />
+      <div className="flex w-full flex-col justify-between">
+        <div className="flex flex-col gap-y-3">
+          <div className="h-5 w-[65%] animate-pulse rounded bg-gray-100" />
+          <div className="flex gap-x-2">
+            <div className="h-5 w-14 animate-pulse rounded bg-gray-100" />
+            <div className="h-5 w-20 animate-pulse rounded bg-gray-100" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-y-2">
+          <div className="h-4 w-[90%] animate-pulse rounded bg-gray-100" />
+          <div className="h-4 w-[55%] animate-pulse rounded bg-gray-100" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const HospitalMapSection = () => {
   const [center, setCenter] = useState<LatLng>(DEFAULT_CENTER);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
@@ -16,6 +37,7 @@ const HospitalMapSection = () => {
   const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(null);
 
   const [locationError, setLocationError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const debounceRef = useRef<number | null>(null);
   const watchIdRef = useRef<number | null>(null);
@@ -65,14 +87,12 @@ const HospitalMapSection = () => {
       }
     };
 
-    // 한번 트리거(프롬프트/초기 위치 확보)
     navigator.geolocation.getCurrentPosition(applyPos, applyErr, {
       enableHighAccuracy: true,
       maximumAge: 0,
       timeout: 10_000,
     });
 
-    // 이후 지속 갱신
     watchIdRef.current = navigator.geolocation.watchPosition(applyPos, applyErr, {
       enableHighAccuracy: true,
       maximumAge: 5_000,
@@ -85,7 +105,7 @@ const HospitalMapSection = () => {
     };
   }, []);
 
-  // 위치 변경 시 nearby API 호출
+  // 위치 변경 시 nearby API 호출 (디바운스 + 로딩)
   useEffect(() => {
     if (!userLocation) return;
 
@@ -93,6 +113,7 @@ const HospitalMapSection = () => {
 
     debounceRef.current = window.setTimeout(() => {
       void (async () => {
+        setIsLoading(true);
         try {
           const data = await GetNearbyHospital({
             lat: userLocation.lat,
@@ -111,6 +132,8 @@ const HospitalMapSection = () => {
         } catch (e) {
           console.error("GetNearbyHospital failed:", e);
           setHospitals([]);
+        } finally {
+          setIsLoading(false);
         }
       })();
     }, 700);
@@ -137,49 +160,63 @@ const HospitalMapSection = () => {
         </p>
 
         <div className="flex h-full flex-col gap-y-[10px] overflow-y-scroll">
-          {hospitals.map((hospital) => (
-            <div
-              key={hospital.hospitalId}
-              onClick={() => setSelectedHospitalId(hospital.hospitalId)}
-              className="border-1 flex cursor-pointer gap-x-4 rounded-[10px] border border-[#E9E9E9] px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)] hover:bg-gray-50/80"
-            >
-              {hospital.imageUrl ? (
-                <img
-                  src={hospital.imageUrl}
-                  alt={hospital.name}
-                  className="aspect-square min-w-[145px] rounded-[5px] object-cover"
-                />
-              ) : (
-                <div className="aspect-square min-w-[145px] rounded-[5px] bg-gray-100" />
-              )}
-              <div className="flex w-full flex-col justify-between">
-                <div className="flex flex-col gap-y-2">
-                  <p className="text-lg font-semibold text-gray-950">{hospital.name}</p>
-                  <div className="flex gap-x-[5px]">
-                    <div className="rounded-[4px] bg-brand-primary px-2 text-sm font-medium text-white">
-                      {hospital.category}
-                    </div>
-                    <div className="rounded-[4px] border border-brand-primary bg-white px-2 text-sm font-medium text-brand-primary">
-                      {hospital.matchedSpecialty}
-                    </div>
-                  </div>
-                </div>
+          {/* 로딩 중: 스켈레톤 */}
+          {isLoading ? (
+            <>
+              <SkeletonHospitalCard />
+              <SkeletonHospitalCard />
+              <SkeletonHospitalCard />
+            </>
+          ) : (
+            hospitals.map((hospital) => (
+              <div
+                key={hospital.hospitalId}
+                onClick={() => setSelectedHospitalId(hospital.hospitalId)}
+                className="border-1 flex cursor-pointer gap-x-4 rounded-[10px] border border-[#E9E9E9] px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)] hover:bg-gray-50/80"
+              >
+                {hospital.imageUrl ? (
+                  <img
+                    src={hospital.imageUrl}
+                    alt={hospital.name}
+                    className="aspect-square min-w-[145px] rounded-[5px] object-cover"
+                  />
+                ) : (
+                  <div className="aspect-square min-w-[145px] rounded-[5px] bg-gray-100" />
+                )}
 
-                <div className="flex flex-col gap-y-1">
-                  <div className="flex items-start gap-x-1">
-                    <Icon name="map-location" className="mt-[1px] h-4 w-4" />
-                    <p className="text-sm font-medium text-gray-600">{hospital.address}</p>
+                <div className="flex w-full flex-col justify-between">
+                  <div className="flex flex-col gap-y-2">
+                    <p className="text-lg font-semibold text-gray-950">{hospital.name}</p>
+                    <div className="flex gap-x-[5px]">
+                      <div className="rounded-[4px] bg-brand-primary px-2 text-sm font-medium text-white">
+                        {hospital.category}
+                      </div>
+
+                      {/* matchedSpecialty가 null일 수도 있으니 가드 */}
+                      {hospital.matchedSpecialty ? (
+                        <div className="rounded-[4px] border border-brand-primary bg-white px-2 text-sm font-medium text-brand-primary">
+                          {hospital.matchedSpecialty}
+                        </div>
+                      ) : null}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-x-1">
-                    <Icon name="map-walking" className="h-4 w-4" />
-                    <p className="text-sm font-medium text-gray-600">
-                      약 {hospital.distanceMeters}m
-                    </p>
+
+                  <div className="flex flex-col gap-y-1">
+                    <div className="flex items-start gap-x-1">
+                      <Icon name="map-location" className="mt-[1px] h-4 w-4" />
+                      <p className="text-sm font-medium text-gray-600">{hospital.address}</p>
+                    </div>
+                    <div className="flex items-center gap-x-1">
+                      <Icon name="map-walking" className="h-4 w-4" />
+                      <p className="text-sm font-medium text-gray-600">
+                        약 {hospital.distanceMeters}m
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </article>
 
