@@ -195,6 +195,7 @@ const MyPage = () => {
         </p>
       </div>
 
+      {/* ✨ [수정] 간격 70px */}
       <div
         className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${
           !isEditing ? "pointer-events-none opacity-80" : ""
