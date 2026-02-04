@@ -11,4 +11,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    host: true, // LAN/터널 접근 허용
+    allowedHosts: [
+      ".trycloudflare.com", // 모든 trycloudflare 서브도메인 허용
+    ],
+  },
 });
