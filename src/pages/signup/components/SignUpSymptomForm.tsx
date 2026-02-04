@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Button from "@/components/Button/Button";
 import Icon from "@/components/Icon/Icon";
 import SymptomGrid from "@/components/Symptom/SymptomGrid";
 import useSignupSymptomStore from "@/stores/signup/useSignupSymptomStore";
+import { getPainAreas, type PainArea } from "../services/getPainAreas";
+import { SYMPTOMS } from "@/constants/symptoms";
 
 type ErrorType = "multi" | null;
 
@@ -12,9 +14,36 @@ const SignUpSymptomForm = () => {
   const navigate = useNavigate();
 
   const selectedKey = useSignupSymptomStore((s) => s.selectedKey);
-  const setSelectedKey = useSignupSymptomStore((s) => s.setSelectedKey);
+  const setSelectedSymptom = useSignupSymptomStore((s) => s.setSelectedSymptom);
+
   const [multiAttemptedKey, setMultiAttemptedKey] = useState<string | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>(null);
+
+  // 서버 painAreas 로딩
+  const [painAreas, setPainAreas] = useState<PainArea[]>([]);
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const res = await getPainAreas();
+        setPainAreas(res.painAreas);
+      } catch {}
+    };
+    run();
+  }, []);
+
+  // key -> painAreaID 매칭 (SYMPTOMS.label(한글) <-> 서버 name(한글) 기준)
+  const painAreaIdByKey = useMemo(() => {
+    const mapByName = new Map(painAreas.map((p) => [p.name, p.painAreaID]));
+    const mapByKey = new Map<string, number>();
+
+    for (const s of SYMPTOMS) {
+      const id = mapByName.get(s.label);
+      if (id != null) mapByKey.set(s.key, id);
+    }
+
+    return mapByKey;
+  }, [painAreas]);
 
   const errorConfig = useMemo(() => {
     if (errorType === "multi") {
@@ -26,8 +55,11 @@ const SignUpSymptomForm = () => {
     return null;
   }, [errorType]);
 
+  // 선택 확정: key + painAreaID를 store에 함께 저장
   const confirmSelect = (key: string | null) => {
-    setSelectedKey(key);
+    const painAreaID = key ? (painAreaIdByKey.get(key) ?? null) : null;
+    setSelectedSymptom(key, painAreaID);
+
     setMultiAttemptedKey(null);
     setErrorType(null);
   };

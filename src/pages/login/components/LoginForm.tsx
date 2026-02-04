@@ -5,9 +5,14 @@ import { ModalType } from "@/components/Modal/types/modal";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useLogin } from "../hooks/useLogin";
 
 const LoginForm = () => {
   const { openModal } = useBaseModal();
+  const navigate = useNavigate();
+  const { loading, login } = useLogin();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,7 +28,7 @@ const LoginForm = () => {
 
   const passwordError = useMemo(() => {
     if (!touched.password) return "";
-    if (!password) return "필수 입력 사항입니다";
+    if (!password.trim()) return "필수 입력 사항입니다";
     if (password.length < 8) return "비밀번호 형식이 올바르지 않습니다";
     return "";
   }, [password, touched.password]);
@@ -31,14 +36,25 @@ const LoginForm = () => {
   const isFormValid =
     !emailError && !passwordError && email.trim() !== "" && password.trim() !== "";
 
-  const handleSubmit = () => {
+  const [serverError, setServerError] = useState("");
+
+  const handleSubmit = async () => {
     setTouched({ email: true, password: true });
-    if (!isFormValid) return; // 폼이 유효하지 않으면 제출하지 않음
+    setServerError("");
+    if (!isFormValid) return;
 
-    // TODO(feature/login): 로그인 API 연동 후 처리
+    const result = await login({ email: email.trim(), password });
 
-    // 로그인 실패 모달
-    openModal(ModalType.AUTH_LOGIN_FAILED);
+    if (result.ok) {
+      navigate("/");
+      return;
+    }
+
+    if (result.reason === "INVALID") {
+      openModal(ModalType.AUTH_LOGIN_FAILED);
+    } else {
+      setServerError("잠시 후 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -54,7 +70,7 @@ const LoginForm = () => {
 
             <EmailDomainInput
               value={email}
-              onChange={(nextEmail) => setEmail(nextEmail)}
+              onChange={setEmail}
               onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
               hasError={!!emailError}
             />
@@ -90,7 +106,16 @@ const LoginForm = () => {
       </div>
 
       <div className="mt-[60px]">
-        <Button onClick={handleSubmit}>로그인</Button>
+        {/* 서버 에러 메시지 */}
+        {serverError ? (
+          <p className="-mt-8 pb-3 text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+            {serverError}
+          </p>
+        ) : null}
+
+        <Button onClick={handleSubmit} disabled={loading}>
+          로그인
+        </Button>
       </div>
     </div>
   );
