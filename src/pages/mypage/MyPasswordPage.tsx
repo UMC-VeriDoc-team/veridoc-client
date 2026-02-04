@@ -2,9 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
-import AuthHeader from "@/components/Header/AuthHeader";
 import Icon from "../../components/Icon/Icon";
-// 👇 로고 경로 확인
 import LogoImage from "/images/logo.svg";
 
 // [TODO: 백엔드 연동 시 삭제] 테스트용 가짜 비밀번호
@@ -14,26 +12,22 @@ const MyPasswordPage = () => {
   const { openModal } = useBaseModal();
   const navigate = useNavigate();
 
-  // --- [State] 입력값 ---
+  // --- [State] ---
   const [passwordForm, setPasswordForm] = useState({
     current: "",
     new: "",
     confirm: "",
   });
-
-  // --- [State] 에러 메시지 ---
   const [pwdErrors, setPwdErrors] = useState({
     current: "",
     new: "",
     confirm: "",
   });
-
-  // --- [State] 비밀번호 토글 (눈 아이콘) ---
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  // --- [Logic] 핸들러 ---
+  // --- [Logic] ---
   const isMatchSuccess =
     passwordForm.new && passwordForm.new === passwordForm.confirm && passwordForm.new.length >= 8;
 
@@ -43,10 +37,7 @@ const MyPasswordPage = () => {
       const newErrors = { ...prev, [field]: "" };
       const nextNew = field === "new" ? value : passwordForm.new;
       const nextConfirm = field === "confirm" ? value : passwordForm.confirm;
-
-      if (nextNew === nextConfirm) {
-        newErrors.confirm = "";
-      }
+      if (nextNew === nextConfirm) newErrors.confirm = "";
       return newErrors;
     });
   };
@@ -55,7 +46,6 @@ const MyPasswordPage = () => {
     const { current, new: newPwd, confirm } = passwordForm;
     const newErrors = { current: "", new: "", confirm: "" };
     let isValid = true;
-
     if (!current) {
       newErrors.current = "필수 입력 사항입니다";
       isValid = false;
@@ -68,7 +58,6 @@ const MyPasswordPage = () => {
       newErrors.confirm = "필수 입력 사항입니다";
       isValid = false;
     }
-
     if (current && current !== MOCK_CURRENT_PASSWORD) {
       newErrors.current = "기존 비밀번호를 입력해주세요";
       isValid = false;
@@ -81,23 +70,21 @@ const MyPasswordPage = () => {
       newErrors.confirm = "입력한 비밀번호가 서로 일치하는지 확인해 주세요";
       isValid = false;
     }
-
     setPwdErrors(newErrors);
     if (!isValid) return;
-
     openModal(ModalType.AUTH_PASSWORD_CHANGED);
   };
 
-  // --- [Render] UI 렌더링 ---
   return (
     <div className="flex min-h-screen flex-col items-center bg-white">
-      {/* [Header 1] Mobile: 뒤로가기 화살표 */}
-      <div className="w-full md:hidden">
-        <AuthHeader backTo="/my?tab=info" />
-      </div>
+      {/* ✨ [삭제됨] 상단 헤더 div 삭제! 
+          이제 화살표가 컨텐츠 박스랑 한 몸이 되어 움직입니다.
+      */}
 
-      {/* [Header 2] PC: 로고(85px) + 탭 메뉴 */}
-      <div className="hidden w-full flex-col items-center md:flex">
+      {/* [1] PC 전용 헤더 (Logo + Tabs) 
+          - 1280px 이상에서만 보임
+      */}
+      <div className="hidden w-full flex-col items-center xl:flex">
         <div className="mb-8 mt-10 flex items-center justify-center">
           <div className="h-[85px]">
             <img src={LogoImage} alt="VeriDoc Logo" className="h-full w-auto" />
@@ -121,8 +108,25 @@ const MyPasswordPage = () => {
         </div>
       </div>
 
-      {/* [Content] 메인 컨텐츠 */}
-      <div className="mt-[10px] flex w-full flex-col px-[30px] md:mt-[60px] md:w-[400px] md:px-0">
+      {/* [2] 컨텐츠 영역
+          - md:w-[450px]: 태블릿에서 너비가 450px로 고정됨
+          - 이제 화살표도 이 박스 안에 있으므로, 왼쪽 라인(Start Line)을 공유함!
+      */}
+      <div className="mt-[40px] flex w-full flex-col px-[30px] md:w-[450px] md:px-0 xl:mt-[60px] xl:w-[400px] xl:px-0">
+        {/* ✨ [이동됨] 뒤로가기 화살표 
+            - xl:hidden (PC에서는 숨김)
+            - mb-2 (타이틀과 약간 띄움)
+            - -ml-2 (아이콘 자체 여백 보정해서 텍스트랑 라인 딱 맞춤)
+        */}
+        <div className="mb-6 w-full xl:hidden">
+          <button
+            onClick={() => navigate("/my?tab=info")}
+            className="-ml-2 flex h-[40px] w-[40px] items-center justify-center"
+          >
+            <Icon name="arrow-back" className="h-[24px] w-[24px] text-gray-950" />
+          </button>
+        </div>
+
         {/* 타이틀 영역 */}
         <div className="mb-12 text-left">
           <h2 className="mb-2 text-[20px] font-bold leading-[24px] text-gray-950">비밀번호 변경</h2>
@@ -150,13 +154,11 @@ const MyPasswordPage = () => {
                     : "border-gray-200 focus:border-brand-primary"
                 }`}
               />
-              {/* ✨ 입력값이 있을 때만 버튼 표시 */}
               {passwordForm.current && (
                 <button
                   onClick={() => setShowCurrent(!showCurrent)}
                   className="absolute right-3 top-[22px] -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {/* ✨ 로직 수정: 보일 때(show=true) -> eye-off(감음) / 안 보일 때 -> eye(뜸) */}
                   <Icon
                     name={showCurrent ? "password-eye-off" : "password-eye"}
                     className="h-5 w-5"
@@ -184,7 +186,6 @@ const MyPasswordPage = () => {
                     : "border-gray-200 focus:border-brand-primary"
                 }`}
               />
-              {/* ✨ 입력값이 있을 때만 버튼 표시 */}
               {passwordForm.new && (
                 <button
                   onClick={() => setShowNew(!showNew)}
@@ -214,7 +215,6 @@ const MyPasswordPage = () => {
                     : "border-gray-200 focus:border-brand-primary"
                 }`}
               />
-              {/* ✨ 입력값이 있을 때만 버튼 표시 */}
               {passwordForm.confirm && (
                 <button
                   onClick={() => setShowConfirm(!showConfirm)}
