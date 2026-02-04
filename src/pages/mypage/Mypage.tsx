@@ -24,26 +24,24 @@ const MyPage = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>("knee");
   const [isProfileEditing, setIsProfileEditing] = useState(false);
 
-  // 증상 선택 , 문자열 key -> 숫자 id 로 변환
+  // 증상 선택 로직
   const handleSelectSymptom = (key: string) => {
-    if (!isEditing) return; // 수정 모드 아니면 작동 안 함
+    if (!isEditing) return;
 
     setSelectedKey((prev) => {
-      if (prev === key) return null; // 이미 선택된 거 누르면 해제
-      return key; // 새로운 거 선택
+      if (prev === key) return null;
+      return key;
     });
   };
 
   // 증상 저장 로직
   const handleSaveSymptom = () => {
-    // 1. 수정하기 버튼을 눌렀을 때 (View -> Edit)
     if (!isEditing) {
       setIsEditing(true);
       return;
     }
     setIsEditing(false);
 
-    // [수정] null 체크 대상 변경 (selectedSymptom -> selectedKey)
     if (selectedKey === null) {
       openModal(ModalType.MY_SYMPTOM_NOT_SELECTED);
     } else {
@@ -51,7 +49,7 @@ const MyPage = () => {
     }
   };
 
-  // 이름 및 생년월일 유효성 검사 후 저장 로직
+  // 프로필 저장 로직
   const handleSaveProfile = () => {
     if (!isProfileEditing) {
       setIsProfileEditing(true);
@@ -94,11 +92,12 @@ const MyPage = () => {
   };
 
   // -----------------------------------------------------------------------
-  // [화면 1] 나의 증상 관리
+  // [화면 1] 나의 증상 관리 (PC 규격: 68px / 70px / 100px)
   // -----------------------------------------------------------------------
   const renderSymptomContent = () => (
     <>
-      <div className="mt-16 text-center">
+      {/* ✨ [수정] 68px -> 60px (시각적 보정) */}
+      <div className="mt-[60px] text-center">
         <h2 className="mb-2 text-4xl font-extrabold tracking-tight text-brand-primary">
           {isEditing ? "현재 확인 중인 증상을 변경해 보세요" : "현재 확인 중인 증상이에요"}
         </h2>
@@ -109,8 +108,9 @@ const MyPage = () => {
         </p>
       </div>
 
+      {/* ✨ [수정] 간격 70px */}
       <div
-        className={`mt-20 flex justify-center ${!isEditing ? "pointer-events-none opacity-80" : ""}`}
+        className={`mt-[70px] flex justify-center ${!isEditing ? "pointer-events-none opacity-80" : ""}`}
       >
         <SymptomGrid
           selectedKey={selectedKey}
@@ -119,7 +119,8 @@ const MyPage = () => {
         />
       </div>
 
-      <div className="mb-20 mt-16 w-[400px]">
+      {/* ✨ [수정] 간격 100px */}
+      <div className="mb-20 mt-[100px] w-[400px]">
         <Button onClick={handleSaveSymptom}>{isEditing ? "저장하기" : "수정하기"}</Button>
       </div>
     </>
@@ -247,7 +248,7 @@ const MyPage = () => {
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               성별
             </label>
-            <GenderSelect value={gender} onChange={setGender} />,
+            <GenderSelect value={gender} onChange={setGender} />
           </div>
 
           {/* 저장 버튼 */}
