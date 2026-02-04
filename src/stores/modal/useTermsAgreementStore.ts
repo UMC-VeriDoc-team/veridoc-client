@@ -9,6 +9,8 @@ interface TermsAgreementState {
   toggleChecked: (key: CheckableTermsKey) => void;
   setAll: (value: boolean) => void;
   reset: () => void;
+  locationError: string | null;
+  setLocationError: (msg: string | null) => void;
 }
 
 const initialChecked: CheckedMap = {
@@ -19,6 +21,7 @@ const initialChecked: CheckedMap = {
 
 const useTermsAgreementStore = create<TermsAgreementState>((set) => ({
   checked: initialChecked,
+  locationError: null,
 
   setChecked: (key, value) => set((s) => ({ checked: { ...s.checked, [key]: value } })),
 
@@ -30,6 +33,8 @@ const useTermsAgreementStore = create<TermsAgreementState>((set) => ({
     }),
 
   reset: () => set({ checked: initialChecked }),
+
+  setLocationError: (msg) => set({ locationError: msg }),
 }));
 
 export default useTermsAgreementStore;

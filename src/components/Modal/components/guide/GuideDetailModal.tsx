@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
-import { GUIDE_DETAIL_CONTENTS } from "../../constants/guideDetailContents";
+import { GUIDE_DETAIL_CONTENTS } from "../../../../constants/guideDetailContents";
 import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
 
 interface ShareItem {

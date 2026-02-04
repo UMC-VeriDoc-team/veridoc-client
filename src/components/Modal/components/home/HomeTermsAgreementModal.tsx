@@ -1,36 +1,134 @@
+import { useMemo, useState } from "react";
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { TermsKey, type CheckableTermsKey, type TermsItem } from "@/components/Modal/types/terms";
 import useTermsAgreementStore from "@/stores/modal/useTermsAgreementStore";
-import { TERMS_ITEMS } from "@/components/Modal/constants/terms/termsItems";
+import { TERMS_ITEMS } from "@/constants/terms/termsItems";
+import {
+  getLocationPermissionState,
+  makeGeoErrorMessage,
+  requestLocationOnce,
+} from "@/utils/locationPermission";
 
 // 서비스 약관 동의 모달
 const HomeTermsAgreementModal = () => {
   const { openModal, closeModal } = useBaseModal();
-  const { checked, toggleChecked, setAll, reset } = useTermsAgreementStore();
+  const { checked, toggleChecked, setChecked, setAll, reset, locationError, setLocationError } =
+    useTermsAgreementStore();
 
   const termsItems = TERMS_ITEMS;
 
-  // 전체 동의 여부
+  // 전체 동의 여부 (ALL 제외)
   const checkableItems = termsItems.filter(
     (t): t is TermsItem & { key: CheckableTermsKey } => t.key !== TermsKey.ALL
   );
 
   const allChecked = checkableItems.every((t) => checked[t.key]);
-  const canJoin = allChecked;
 
-  // 전체 동의 토글
-  const handleToggleAll = () => {
-    setAll(!allChecked);
-  };
+  const locationKey: CheckableTermsKey = TermsKey.LOCATION;
 
-  // 상세 모달 열기
+  const locationItem = useMemo(
+    () => termsItems.find((t) => t.key === TermsKey.LOCATION),
+    [termsItems]
+  );
+  const locationRequired = Boolean(locationItem?.required);
+
+  // 위치 권한 요청 중
+  const [requesting, setRequesting] = useState(false);
+
+  const canJoin = useMemo(() => {
+    if (!allChecked) return false;
+    if (locationRequired && !checked[locationKey]) return false;
+    if (locationRequired && locationError) return false;
+    return true;
+  }, [allChecked, locationRequired, checked, locationKey, locationError]);
+
   const openDetail = (key: TermsKey) => {
     openModal(ModalType.HOME_TERMS_DETAIL, { activeKey: key });
   };
 
-  // 동의하고 가입하기: 약관 동의 체크박스 리셋 + 모달 닫기
+  // 위치 약관을 체크하려는 순간 실행되는 공통 함수
+  const ensureLocationAllowedAndCheck = async (): Promise<boolean> => {
+    setRequesting(true);
+    try {
+      const pState = await getLocationPermissionState();
+
+      // 차단 상태면 요청 자체를 하지 않고 에러만 노출
+      if (pState === "denied") {
+        const msg = makeGeoErrorMessage("blocked");
+        setLocationError(msg);
+        setChecked(locationKey, false);
+        return false;
+      }
+
+      // prompt/unknown/granted면 실제 요청을 한 번 시도
+      const res = await requestLocationOnce();
+      if (res.ok) {
+        setLocationError(null);
+        setChecked(locationKey, true);
+        return true;
+      }
+
+      // 거부/불가/타임아웃 등
+      const msg = makeGeoErrorMessage(res.reason);
+      setLocationError(msg);
+      setChecked(locationKey, false);
+      return false;
+    } finally {
+      setRequesting(false);
+    }
+  };
+
+  // 전체 동의 토글
+  const handleToggleAll = async () => {
+    const next = !allChecked;
+
+    // 전체 해제
+    if (!next) {
+      setAll(false);
+      // 위치 체크 해제 시 에러도 제거
+      setLocationError(null);
+      return;
+    }
+
+    // 전체 동의 ON 시
+    if (locationRequired) {
+      const ok = await ensureLocationAllowedAndCheck();
+      if (!ok) {
+        // 전체 동의는 성립하지 않게 유지
+        setAll(false);
+        return;
+      }
+    }
+
+    // 위치 문제 없으면 전체 체크
+    setAll(true);
+  };
+
+  // 개별 약관 체크
+  const handleToggleTerm = async (key: CheckableTermsKey) => {
+    // 위치 약관일 때: 체크하려는 순간 권한 확인/요청
+    if (key === locationKey) {
+      const next = !checked[key];
+
+      // 체크 해제면 그냥 해제 + 에러 제거
+      if (!next) {
+        setChecked(key, false);
+        setLocationError(null);
+        return;
+      }
+
+      // 체크 ON 시도
+      await ensureLocationAllowedAndCheck();
+      return;
+    }
+
+    // 나머지 약관은 기존 토글
+    toggleChecked(key);
+  };
+
+  // 동의하고 가입하기
   const handleSubmit = () => {
     reset();
     closeModal();
@@ -64,8 +162,9 @@ const HomeTermsAgreementModal = () => {
             <input
               type="checkbox"
               checked={allChecked}
-              onChange={handleToggleAll}
+              onChange={() => void handleToggleAll()}
               className="h-6 w-6 accent-brand-primary"
+              disabled={requesting}
             />
             <span className="text-base font-semibold text-gray-900 sm:text-lg">약관 전체 동의</span>
           </label>
@@ -88,8 +187,9 @@ const HomeTermsAgreementModal = () => {
                 <input
                   type="checkbox"
                   checked={checked[t.key]}
-                  onChange={() => toggleChecked(t.key)}
+                  onChange={() => void handleToggleTerm(t.key)}
                   className="h-6 w-6 accent-brand-primary"
+                  disabled={requesting && t.key === locationKey}
                 />
                 <span className="text-base font-medium text-gray-900 sm:text-lg">
                   {t.required && <span className="text-brand-primary">[필수] </span>}
@@ -108,20 +208,25 @@ const HomeTermsAgreementModal = () => {
             </div>
           ))}
         </div>
+
+        {/* 위치 에러 문구 (차단/거부/불가일 때만) */}
+        {locationError && (
+          <div className="rounded-md bg-gray-50 p-3 text-xs text-red-600">{locationError}</div>
+        )}
       </div>
 
       {/* 하단 버튼 */}
       <div className="mt-6">
         <button
           type="button"
-          disabled={!canJoin}
+          disabled={!canJoin || requesting}
           onClick={handleSubmit}
           className={[
             "inline-flex h-12 w-full items-center justify-center rounded-[4px] text-lg font-semibold",
             canJoin ? "bg-brand-primary text-white hover:opacity-90" : "bg-gray-50 text-gray-600",
           ].join(" ")}
         >
-          동의하고 가입하기
+          {requesting ? "위치 권한 확인 중..." : "동의하고 가입하기"}
         </button>
       </div>
     </div>

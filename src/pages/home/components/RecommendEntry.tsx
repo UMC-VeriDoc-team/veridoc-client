@@ -17,9 +17,10 @@ const RecommendEntry = ({ showTitle = true }: RecommendEntryProps) => {
     <div className="w-full bg-white">
       {/* 상단 CTA */}
       {showTitle && (
-        <section className="mx-auto flex max-w-[960px] flex-col items-center px-6 pt-20 text-center">
+        <section className="mx-auto flex max-w-[960px] flex-col items-center px-6 text-center md:pt-20">
           <h1 className="text-2xl font-extrabold text-gray-950 sm:text-3xl">
-            나에게 해당되는 정보를 더 알고 싶다면?
+            나에게 해당되는 <br className="sm:hidden" />
+            정보를 더 알고 싶다면?
           </h1>
           <p className="mt-3 text-sm font-bold text-gray-950 sm:text-xl">
             Veridoc이 믿을 수 있는 건강 콘텐츠를 추천드려요!

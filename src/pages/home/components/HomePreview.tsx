@@ -21,23 +21,23 @@ const HomePreview = () => {
   // 이미지 경로
   const images: { src: string; alt: string }[] = [
     {
-      src: "/src/assets/images/home/previews/about-us.svg",
+      src: "/public/images/home/previews/about-us.svg",
       alt: "진료하는 사진",
     },
     {
-      src: "/src/assets/images/home/previews/doctor-1.svg",
+      src: "/public/images/home/previews/doctor-1.svg",
       alt: "의료진 사진 1",
     },
     {
-      src: "/src/assets/images/home/previews/doctor-2.svg",
+      src: "/public/images/home/previews/doctor-2.svg",
       alt: "의료진 사진 2",
     },
     {
-      src: "/src/assets/images/home/previews/doctor-3.svg",
+      src: "/public/images/home/previews/doctor-3.svg",
       alt: "의료진 사진 3",
     },
     {
-      src: "/src/assets/images/home/previews/doctor-4.svg",
+      src: "/public/images/home/previews/doctor-4.svg",
       alt: "의료진 사진 4",
     },
   ];
