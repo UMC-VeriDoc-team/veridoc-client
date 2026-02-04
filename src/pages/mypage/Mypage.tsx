@@ -140,7 +140,10 @@ const MyPage = () => {
         </p>
       </div>
 
-      {/* 2. 그리드 영역 (기존 유지) */}
+      {/* 2. 그리드 영역 
+          - Mobile: mt-[100px], px-[30px]
+          - PC: md:mt-[70px], md:px-0
+      */}
       <div
         className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${!isEditing ? "pointer-events-none opacity-80" : ""} `}
       >
@@ -151,9 +154,18 @@ const MyPage = () => {
         />
       </div>
 
-      {/* 3. 버튼 영역 (기존 유지) */}
+      {/* 3. 버튼 영역
+          - Mobile: mt-[70px], w-full, px-[30px]
+          - PC: md:mt-[100px], md:w-[400px], md:px-0
+      */}
       <div className="mb-20 mt-[70px] w-full px-[30px] md:mt-[100px] md:w-[400px] md:px-0">
-        <Button onClick={handleSaveSymptom}>{isEditing ? "저장하기" : "수정하기"}</Button>
+        {/* 버튼 폰트 스타일 적용 (18px / Semibold / 140%) */}
+        <Button
+          onClick={handleSaveSymptom}
+          className="text-[18px] font-semibold leading-[1.4] tracking-[-0.025em]"
+        >
+          {isEditing ? "저장하기" : "수정하기"}
+        </Button>
       </div>
     </>
   );
