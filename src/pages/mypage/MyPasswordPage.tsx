@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import AuthHeader from "@/components/Header/AuthHeader";
-// 👇 로고 이미지 경로 확인!
+import Icon from "../../components/Icon/Icon";
+// 👇 로고 경로 확인
 import LogoImage from "/images/logo.svg";
 
 // [TODO: 백엔드 연동 시 삭제] 테스트용 가짜 비밀번호
@@ -26,6 +27,11 @@ const MyPasswordPage = () => {
     new: "",
     confirm: "",
   });
+
+  // --- [State] 비밀번호 토글 (눈 아이콘) ---
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // --- [Logic] 핸들러 ---
   const isMatchSuccess =
@@ -85,22 +91,18 @@ const MyPasswordPage = () => {
   // --- [Render] UI 렌더링 ---
   return (
     <div className="flex min-h-screen flex-col items-center bg-white">
-      {/* [Header 1] Mobile 전용 헤더 (뒤로가기 화살표) */}
+      {/* [Header 1] Mobile: 뒤로가기 화살표 */}
       <div className="w-full md:hidden">
         <AuthHeader backTo="/my?tab=info" />
       </div>
 
-      {/* [Header 2] PC 전용 헤더 (로고 + 탭 메뉴) */}
+      {/* [Header 2] PC: 로고(85px) + 탭 메뉴 */}
       <div className="hidden w-full flex-col items-center md:flex">
-        {/* 1. 로고 영역 */}
         <div className="mb-8 mt-10 flex items-center justify-center">
-          {/* ✨ [수정 완료] 40px -> 85px로 복구! (원래 사이즈) */}
           <div className="h-[85px]">
             <img src={LogoImage} alt="VeriDoc Logo" className="h-full w-auto" />
           </div>
         </div>
-
-        {/* 2. 탭 메뉴 (이동패널) */}
         <div className="mb-8 w-[777px]">
           <div className="flex h-[69px] w-full items-center justify-center rounded-[10px] bg-gray-50 p-[4px]">
             <button
@@ -109,7 +111,6 @@ const MyPasswordPage = () => {
             >
               나의 증상 관리
             </button>
-
             <button
               className="flex h-full flex-1 items-center justify-center rounded-[7px] bg-white text-[20px] font-bold tracking-[-0.025em] text-gray-950 shadow-sm transition-all duration-200"
               onClick={() => navigate("/my?tab=info")}
@@ -120,12 +121,12 @@ const MyPasswordPage = () => {
         </div>
       </div>
 
-      {/* [Content] 메인 컨텐츠 영역 */}
+      {/* [Content] 메인 컨텐츠 */}
       <div className="mt-[10px] flex w-full flex-col px-[30px] md:mt-[60px] md:w-[400px] md:px-0">
-        {/* 타이틀 */}
-        <div className="mb-12 text-left md:text-center">
-          <h2 className="mb-2 text-[24px] font-bold text-gray-950 md:text-[32px]">비밀번호 변경</h2>
-          <p className="text-[16px] font-medium text-gray-600 md:text-[18px]">
+        {/* 타이틀 영역 */}
+        <div className="mb-12 text-left">
+          <h2 className="mb-2 text-[20px] font-bold leading-[24px] text-gray-950">비밀번호 변경</h2>
+          <p className="text-[18px] font-medium leading-[25px] text-gray-600">
             계정 보안을 위해 현재 비밀번호를 먼저 확인합니다
           </p>
         </div>
@@ -134,63 +135,97 @@ const MyPasswordPage = () => {
         <div className="flex flex-col gap-6">
           {/* 1. 현재 비밀번호 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-900">
+            <label className="mb-2 block text-[16px] font-medium leading-[1.18] text-gray-900">
               현재 비밀번호<span className="text-error">*</span>
             </label>
-            <div>
+            <div className="relative">
               <input
-                type="password"
+                type={showCurrent ? "text" : "password"}
                 placeholder="현재 비밀번호를 입력해주세요"
                 value={passwordForm.current}
                 onChange={(e) => handleChange("current", e.target.value)}
-                className={`w-full rounded border p-4 focus:outline-none ${
+                className={`w-full rounded border p-4 pr-10 focus:outline-none ${
                   pwdErrors.current
                     ? "border-error focus:border-error"
                     : "border-gray-200 focus:border-brand-primary"
                 }`}
               />
+              {/* ✨ 입력값이 있을 때만 버튼 표시 */}
+              {passwordForm.current && (
+                <button
+                  onClick={() => setShowCurrent(!showCurrent)}
+                  className="absolute right-3 top-[22px] -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {/* ✨ 로직 수정: 보일 때(show=true) -> eye-off(감음) / 안 보일 때 -> eye(뜸) */}
+                  <Icon
+                    name={showCurrent ? "password-eye-off" : "password-eye"}
+                    className="h-5 w-5"
+                  />
+                </button>
+              )}
             </div>
             {pwdErrors.current && <p className="mt-2 text-sm text-error">{pwdErrors.current}</p>}
           </div>
 
           {/* 2. 새 비밀번호 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-900">
+            <label className="mb-2 block text-[16px] font-medium leading-[1.18] text-gray-900">
               새 비밀번호<span className="text-error">*</span>
             </label>
-            <div>
+            <div className="relative">
               <input
-                type="password"
+                type={showNew ? "text" : "password"}
                 placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
                 value={passwordForm.new}
                 onChange={(e) => handleChange("new", e.target.value)}
-                className={`w-full rounded border p-4 focus:outline-none ${
+                className={`w-full rounded border p-4 pr-10 focus:outline-none ${
                   pwdErrors.new
                     ? "border-error focus:border-error"
                     : "border-gray-200 focus:border-brand-primary"
                 }`}
               />
+              {/* ✨ 입력값이 있을 때만 버튼 표시 */}
+              {passwordForm.new && (
+                <button
+                  onClick={() => setShowNew(!showNew)}
+                  className="absolute right-3 top-[22px] -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <Icon name={showNew ? "password-eye-off" : "password-eye"} className="h-5 w-5" />
+                </button>
+              )}
             </div>
             {pwdErrors.new && <p className="mt-2 text-sm text-error">{pwdErrors.new}</p>}
           </div>
 
           {/* 3. 새 비밀번호 확인 */}
           <div>
-            <label className="mb-2 block text-sm font-bold text-gray-900">
+            <label className="mb-2 block text-[16px] font-medium leading-[1.18] text-gray-900">
               새 비밀번호 확인<span className="text-error">*</span>
             </label>
-            <div>
+            <div className="relative">
               <input
-                type="password"
+                type={showConfirm ? "text" : "password"}
                 placeholder="새 비밀번호를 다시 입력하세요"
                 value={passwordForm.confirm}
                 onChange={(e) => handleChange("confirm", e.target.value)}
-                className={`w-full rounded border p-4 focus:outline-none ${
+                className={`w-full rounded border p-4 pr-10 focus:outline-none ${
                   pwdErrors.confirm
                     ? "border-error focus:border-error"
                     : "border-gray-200 focus:border-brand-primary"
                 }`}
               />
+              {/* ✨ 입력값이 있을 때만 버튼 표시 */}
+              {passwordForm.confirm && (
+                <button
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  className="absolute right-3 top-[22px] -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <Icon
+                    name={showConfirm ? "password-eye-off" : "password-eye"}
+                    className="h-5 w-5"
+                  />
+                </button>
+              )}
             </div>
             {pwdErrors.confirm && <p className="mt-2 text-sm text-error">{pwdErrors.confirm}</p>}
             {isMatchSuccess && (
