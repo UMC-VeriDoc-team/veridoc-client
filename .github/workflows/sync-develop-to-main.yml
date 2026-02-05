@@ -12,6 +12,12 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      # 레포를 러너에 체크아웃
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       # develop에서 main PR 자동 생성/업데이트
       - name: Create PR from develop to main
         id: cpr
@@ -23,7 +29,7 @@ jobs:
           title: "chore: sync develop into main"
           body: |
             develop 브랜치 변경사항을 main에 자동 반영하기 위한 PR입니다.
-            이 PR이 merge되면 main push가 발생하고, 배포 워크플로우가 실행됩니다.
+            merge되면 main push가 발생하고, Vercel 배포가 진행됩니다.
           commit-message: "chore: sync develop into main"
 
       # PR Auto-merge 활성화
