@@ -6,7 +6,7 @@ export interface Post {
   imageUrl: string | null;
 }
 
-export interface opinionDetail extends Post {
+export interface OpinionDetail extends Post {
   painAreaName: string;
   symptomName: string;
   content: string;
@@ -16,5 +16,5 @@ export interface opinionDetail extends Post {
 }
 
 export interface GetDoctorOpinionDetailResponse {
-  data: opinionDetail;
+  opinion: OpinionDetail;
 }
