@@ -1,28 +1,43 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Icon from "@/components/Icon/Icon";
+import useBaseModal from "@/stores/modal/useBaseModal";
+import { ModalType } from "../Modal/types/modal";
 
 const HOME_ACTIVE_PATHS = ["/home", "/guides", "/guide-detail", "/preview"];
 
 const BottomTabBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { openModal } = useBaseModal();
 
   // 임시: 로그인 연동 후 store로 관리
-  const isLoggedIn = true;
-  const hasSymptom = true;
+  const isLoggedIn = false;
+  const hasSymptom = false;
 
   const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guides") : "/preview";
 
   const isHomeActive = HOME_ACTIVE_PATHS.some((p) => location.pathname.startsWith(p));
-  const isMyActive = location.pathname.includes("/my");
+  const isMyActive = location.pathname.startsWith("/my");
+  const isSymptomActive = location.pathname.startsWith("/symptom");
 
-  const handleHomeClick = (e: React.MouseEvent) => {
+  const requireLogin = () => {
+    openModal(ModalType.AUTH_REQUIRED);
+  };
+
+  const handleHomeClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
     navigate(homeTarget);
   };
 
-  const handleMyClick = (e: React.MouseEvent) => {
+  const handleSymptomClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
+    if (!isLoggedIn) return requireLogin();
+    navigate("/symptom");
+  };
+
+  const handleMyClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.preventDefault();
+    if (!isLoggedIn) return requireLogin();
     navigate("/my");
   };
 
@@ -39,13 +54,11 @@ const BottomTabBar = () => {
               isHomeActive ? "text-brand-primary" : "text-gray-200",
             ].join(" ")}
           >
-            <>
-              {isHomeActive && (
-                <span className="absolute left-1/2 top-0 h-[2px] w-full -translate-x-1/2 bg-brand-primary" />
-              )}
-              <Icon name={`tab-bar-${isHomeActive ? "home-fill" : "home"}`} className="h-6 w-6" />
-              <span>홈</span>
-            </>
+            {isHomeActive && (
+              <span className="absolute left-1/2 top-0 h-[2px] w-full -translate-x-1/2 bg-brand-primary" />
+            )}
+            <Icon name={`tab-bar-${isHomeActive ? "home-fill" : "home"}`} className="h-6 w-6" />
+            <span>홈</span>
           </NavLink>
         </li>
 
@@ -53,25 +66,20 @@ const BottomTabBar = () => {
         <li className="relative flex h-full flex-1">
           <NavLink
             to="/symptom"
-            className={({ isActive }) =>
-              [
-                "flex flex-1 flex-col items-center justify-center gap-1 text-base font-medium",
-                isActive ? "text-brand-primary" : "text-gray-200",
-              ].join(" ")
-            }
+            onClick={handleSymptomClick}
+            className={[
+              "flex flex-1 flex-col items-center justify-center gap-1 text-base font-medium",
+              isSymptomActive ? "text-brand-primary" : "text-gray-200",
+            ].join(" ")}
           >
-            {({ isActive }) => (
-              <>
-                {isActive && (
-                  <span className="absolute left-1/2 top-0 h-[2px] w-full -translate-x-1/2 bg-brand-primary" />
-                )}
-                <Icon
-                  name={`tab-bar-${isActive ? "symptom-fill" : "symptom"}`}
-                  className="h-6 w-6"
-                />
-                <span>증상</span>
-              </>
+            {isSymptomActive && (
+              <span className="absolute left-1/2 top-0 h-[2px] w-full -translate-x-1/2 bg-brand-primary" />
             )}
+            <Icon
+              name={`tab-bar-${isSymptomActive ? "symptom-fill" : "symptom"}`}
+              className="h-6 w-6"
+            />
+            <span>증상</span>
           </NavLink>
         </li>
 
@@ -85,13 +93,11 @@ const BottomTabBar = () => {
               isMyActive ? "text-brand-primary" : "text-gray-200",
             ].join(" ")}
           >
-            <>
-              {isMyActive && (
-                <span className="absolute left-1/2 top-0 h-[2px] w-full -translate-x-1/2 bg-brand-primary" />
-              )}
-              <Icon name={`tab-bar-${isMyActive ? "my-fill" : "my"}`} className="h-6 w-6" />
-              <span>마이페이지</span>
-            </>
+            {isMyActive && (
+              <span className="absolute left-1/2 top-0 h-[2px] w-full -translate-x-1/2 bg-brand-primary" />
+            )}
+            <Icon name={`tab-bar-${isMyActive ? "my-fill" : "my"}`} className="h-6 w-6" />
+            <span>마이페이지</span>
           </NavLink>
         </li>
       </ul>

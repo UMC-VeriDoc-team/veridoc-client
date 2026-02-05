@@ -1,27 +1,55 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "/images/logo.svg";
+import useBaseModal from "@/stores/modal/useBaseModal";
+import { ModalType } from "@/components/Modal/types/modal";
 
-interface MenuItem {
-  label: string;
-  path: string;
-}
-
-const menus: MenuItem[] = [
-  { label: "홈", path: "/home" },
-  { label: "증상", path: "/symptom" },
-  { label: "마이페이지", path: "/my" },
-];
+const HOME_ACTIVE_PATHS = ["/home", "/guides", "/guide-detail", "/preview"];
 
 interface HeaderProps {
   className?: string;
 }
 
 const Header = ({ className }: HeaderProps) => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const { openModal } = useBaseModal();
+
+  // 임시: 나중에 실제 로그인/증상선택 store로 교체
+  const isLoggedIn = false;
+  const hasSymptom = false;
+
+  const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guides") : "/preview";
+
+  const isHomeActive = HOME_ACTIVE_PATHS.some((p) => location.pathname.startsWith(p));
+  const isSymptomActive = location.pathname.startsWith("/symptom");
+  const isMyActive = location.pathname.includes("/my");
+
+  const handleHomeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate(homeTarget);
+  };
+
+  const handleSymptomClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isLoggedIn) {
+      openModal(ModalType.AUTH_REQUIRED);
+      return;
+    }
+    navigate("/symptom");
+  };
+
+  const handleMyClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isLoggedIn) {
+      openModal(ModalType.AUTH_REQUIRED);
+      return;
+    }
+    navigate("/my");
+  };
 
   return (
     <header
-      className={`hidden w-full border-b border-gray-100 bg-white px-12 py-4 md:block ${className}`}
+      className={`hidden w-full border-b border-gray-100 bg-white px-12 py-4 md:block ${className ?? ""}`}
     >
       <nav className="flex items-center justify-between">
         {/* Logo */}
@@ -35,20 +63,41 @@ const Header = ({ className }: HeaderProps) => {
 
         {/* Navigation */}
         <div className="flex items-center gap-8">
-          {menus.map((menu) => (
-            <NavLink
-              key={menu.path}
-              to={menu.path}
-              className={({ isActive }) =>
-                [
-                  "cursor-pointer text-lg font-semibold transition-colors",
-                  isActive ? "text-black" : "text-gray-600 hover:text-gray-900",
-                ].join(" ")
-              }
-            >
-              {menu.label}
-            </NavLink>
-          ))}
+          {/* 홈 */}
+          <NavLink
+            to={homeTarget}
+            onClick={handleHomeClick}
+            className={[
+              "cursor-pointer text-lg font-semibold transition-colors",
+              isHomeActive ? "text-black" : "text-gray-600 hover:text-gray-900",
+            ].join(" ")}
+          >
+            홈
+          </NavLink>
+
+          {/* 증상 */}
+          <NavLink
+            to="/symptom"
+            onClick={handleSymptomClick}
+            className={[
+              "cursor-pointer text-lg font-semibold transition-colors",
+              isSymptomActive ? "text-black" : "text-gray-600 hover:text-gray-900",
+            ].join(" ")}
+          >
+            증상
+          </NavLink>
+
+          {/* 마이페이지 */}
+          <NavLink
+            to="/my"
+            onClick={handleMyClick}
+            className={[
+              "cursor-pointer text-lg font-semibold transition-colors",
+              isMyActive ? "text-black" : "text-gray-600 hover:text-gray-900",
+            ].join(" ")}
+          >
+            마이페이지
+          </NavLink>
         </div>
       </nav>
     </header>
