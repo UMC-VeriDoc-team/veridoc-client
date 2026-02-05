@@ -34,7 +34,7 @@ const GuideDetailContent = () => {
         />
         <div className="absolute inset-0 bg-black/30" />
 
-        <div className="absolute bottom-6 left-10 right-10">
+        <div className="absolute bottom-6 left-6 right-6 sm:left-10 sm:right-10">
           <p className="text-2xl font-extrabold text-white sm:text-3xl md:text-4xl">
             {content.header.title}
           </p>
@@ -43,11 +43,11 @@ const GuideDetailContent = () => {
           </p>
 
           <div className="mt-5 flex items-center gap-3">
-            <Icon name="hospital-white" className="h-12 w-12 text-white" />
-            <p className="text-base font-medium text-white">{content.source.name}</p>
+            <Icon name="hospital-white" className="h-10 w-10 text-white sm:h-12 sm:w-12" />
+            <p className="text-sm font-medium text-white sm:text-base">{content.source.name}</p>
 
             <button type="button" className="ml-auto flex items-center gap-2">
-              <p className="text-base font-medium text-white">원문 출처 보기</p>
+              <p className="text-sm font-medium text-white sm:text-base">원문 출처 보기</p>
               <Icon name="link" className="h-5 w-5" />
             </button>
           </div>
@@ -65,7 +65,6 @@ const GuideDetailContent = () => {
 
             {/* 번호 리스트 */}
             {(() => {
-              // steps가 없으면 렌더링하지 않음
               if (!content.steps || content.steps.length === 0) return null;
 
               const steps = content.steps;
@@ -74,31 +73,31 @@ const GuideDetailContent = () => {
                 <div className="w-full">
                   <ul className="space-y-10">
                     {steps.map((step, index) => {
-                      // 마지막 항목 여부
                       const isLast = index === steps.length - 1;
-
-                      // 번호 아이콘 이름
                       const numIconName = `step-${index + 1}`;
 
                       return (
-                        <li key={`${step.title}-${index}`} className="relative flex gap-7">
-                          {/* 왼쪽 번호 아이콘 + 세로 라인 */}
-                          <div className="relative flex w-16 justify-center">
-                            {/* 번호 아이콘 원 */}
-                            <div className="flex items-center justify-center rounded-full bg-[#2B7FFF1A] p-1">
-                              <Icon name={numIconName} className="h-10 w-10" />
+                        <li
+                          key={`${step.title}-${index}`}
+                          className="relative flex h-[100px] items-start gap-4 sm:h-16 sm:gap-7"
+                        >
+                          <div className="relative w-14 flex-shrink-0 sm:w-16">
+                            {/* 아이콘 */}
+                            <div className="z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#2B7FFF1A] sm:h-16 sm:w-16">
+                              <Icon name={numIconName} className="h-12 w-12" />
                             </div>
 
-                            {/* 세로 라인 */}
                             {!isLast && (
-                              <div className="absolute left-1/2 top-12 h-[40px] w-1 -translate-x-1/2 bg-brand-primary" />
+                              <div className="absolute bottom-[-40px] left-1/2 top-14 h-[85px] w-1 -translate-x-1/2 bg-brand-primary sm:top-16 sm:h-[41px]" />
                             )}
                           </div>
-
-                          {/* 텍스트 영역 */}
-                          <div className="min-w-0">
-                            <p className="text-base font-medium text-gray-950">{step.title}</p>
-                            <p className="text-sm font-medium text-[#ABB7C2]">{step.description}</p>
+                          <div className="min-w-0 flex-1">
+                            <p className="break-keep text-base font-medium text-gray-950">
+                              {step.title}
+                            </p>
+                            <p className="mt-1 break-keep text-sm font-medium text-[#ABB7C2]">
+                              {step.description}
+                            </p>
                           </div>
                         </li>
                       );
@@ -121,9 +120,9 @@ const GuideDetailContent = () => {
             {/* 구분선 */}
             <div className="w-full border-b border-gray-100"></div>
 
-            <div className="flex flex-col gap-6 pb-16 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center justify-between gap-6 sm:pb-16">
               {/* 공유 */}
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+              <div className="flex gap-3 sm:items-center sm:gap-4">
                 <p className="text-base font-medium text-gray-950">Share this</p>
                 <div className="flex gap-2">
                   {shares.map((item) => (
