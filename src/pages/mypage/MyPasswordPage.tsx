@@ -139,22 +139,35 @@ const MyPasswordPage = () => {
                 placeholder="현재 비밀번호를 입력해주세요"
                 value={passwordForm.current}
                 onChange={(e) => handleChange("current", e.target.value)}
-                className={`w-full rounded border p-4 pr-10 focus:outline-none ${
+                className={`w-full rounded border p-4 pr-[85px] focus:outline-none ${
                   pwdErrors.current
                     ? "border-error focus:border-error"
                     : "border-gray-200 focus:border-brand-primary"
                 }`}
               />
               {passwordForm.current && (
-                <button
-                  onClick={() => setShowCurrent(!showCurrent)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  <Icon
-                    name={showCurrent ? "password-eye-off" : "password-eye"}
-                    className="h-5 w-5"
-                  />
-                </button>
+                <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
+                  {/* (1) 눈 아이콘 */}
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrent(!showCurrent)}
+                    className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-600"
+                  >
+                    <Icon
+                      name={showCurrent ? "password-eye-off" : "password-eye"}
+                      className="h-6 w-6"
+                    />
+                  </button>
+
+                  {/* (2) 전체 삭제 버튼 */}
+                  <button
+                    type="button"
+                    onClick={() => handleChange("current", "")} // ✨ 해당 필드 초기화
+                    className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-600"
+                  >
+                    <Icon name="password-delete" className="h-5 w-5" />
+                  </button>
+                </div>
               )}
             </div>
             {pwdErrors.current && <p className="mt-2 text-sm text-error">{pwdErrors.current}</p>}
@@ -171,19 +184,35 @@ const MyPasswordPage = () => {
                 placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
                 value={passwordForm.new}
                 onChange={(e) => handleChange("new", e.target.value)}
-                className={`w-full rounded border p-4 pr-10 focus:outline-none ${
+                className={`w-full rounded border p-4 pr-[85px] focus:outline-none ${
                   pwdErrors.new
                     ? "border-error focus:border-error"
                     : "border-gray-200 focus:border-brand-primary"
                 }`}
               />
               {passwordForm.new && (
-                <button
-                  onClick={() => setShowNew(!showNew)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  <Icon name={showNew ? "password-eye-off" : "password-eye"} className="h-5 w-5" />
-                </button>
+                <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
+                  {/* (1) 눈 아이콘 */}
+                  <button
+                    type="button"
+                    onClick={() => setShowNew(!showNew)}
+                    className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-600"
+                  >
+                    <Icon
+                      name={showNew ? "password-eye-off" : "password-eye"}
+                      className="h-6 w-6"
+                    />
+                  </button>
+
+                  {/* (2) 전체 삭제 버튼 */}
+                  <button
+                    type="button"
+                    onClick={() => handleChange("new", "")} /* ✨ 여기가 "new"로 바뀜 */
+                    className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-600"
+                  >
+                    <Icon name="password-delete" className="h-5 w-5" />
+                  </button>
+                </div>
               )}
             </div>
             {pwdErrors.new && <p className="mt-2 text-sm text-error">{pwdErrors.new}</p>}
@@ -200,22 +229,35 @@ const MyPasswordPage = () => {
                 placeholder="새 비밀번호를 다시 입력하세요"
                 value={passwordForm.confirm}
                 onChange={(e) => handleChange("confirm", e.target.value)}
-                className={`w-full rounded border p-4 pr-10 focus:outline-none ${
+                className={`w-full rounded border p-4 pr-[85px] focus:outline-none ${
                   pwdErrors.confirm
                     ? "border-error focus:border-error"
                     : "border-gray-200 focus:border-brand-primary"
                 }`}
               />
               {passwordForm.confirm && (
-                <button
-                  onClick={() => setShowConfirm(!showConfirm)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  <Icon
-                    name={showConfirm ? "password-eye-off" : "password-eye"}
-                    className="h-5 w-5"
-                  />
-                </button>
+                <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
+                  {/* (1) 눈 아이콘 */}
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirm(!showConfirm)}
+                    className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-600"
+                  >
+                    <Icon
+                      name={showConfirm ? "password-eye-off" : "password-eye"}
+                      className="h-6 w-6"
+                    />
+                  </button>
+
+                  {/* (2) 전체 삭제 버튼 */}
+                  <button
+                    type="button"
+                    onClick={() => handleChange("confirm", "")}
+                    className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-600"
+                  >
+                    <Icon name="password-delete" className="h-5 w-5" />
+                  </button>
+                </div>
               )}
             </div>
             {pwdErrors.confirm && <p className="mt-2 text-sm text-error">{pwdErrors.confirm}</p>}
