@@ -14,10 +14,13 @@ import MyPasswordPage from "./pages/mypage/MyPasswordPage";
 import SignUpPage from "@/pages/signup/SignUpPage";
 import SignUpSymptomPage from "@/pages/signup/SignUpSymptomPage";
 import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding";
-import HomePreview from "@/pages/home/components/HomePreview";
 import MobileSplashPage from "@/pages/splash/MobileSplashPage";
-import useIsMobile from "./hooks/useIsMobile";
+import useIsMobile from "@/hooks/useIsMobile";
 import MyPage from "@/pages/mypage/Mypage";
+import MainPage from "@/pages/home/MainPage";
+import OnboardingLayout from "./layouts/OnboardingLayout";
+import HospitalMapSection from "./pages/home/components/map/HospitalMapSection";
+import HomePreview from "./pages/home/components/HomePreview";
 
 const App = () => {
   const isMobile = useIsMobile();
@@ -33,10 +36,13 @@ const App = () => {
         <MobileSplashPage onFinish={() => setShowSplash(false)} />
       ) : (
         <Routes>
-          {/* 헤더만 있는 레이아웃 (온보딩/로그인/회원가입) */}
-          <Route path="/" element={<HeaderOnlyLayout />}>
+          {/* 온보딩용 레이아웃 */}
+          <Route path="/" element={<OnboardingLayout />}>
             <Route index element={<OnboardingPage />} />
+          </Route>
 
+          {/* 헤더만 있는 레이아웃 (로그인/회원가입) */}
+          <Route element={<HeaderOnlyLayout />}>
             {/* 회원가입 */}
             <Route path="/select-symptom" element={<SignUpSymptomPage />} />
             <Route path="/signup" element={<SignUpPage />} />
@@ -51,7 +57,7 @@ const App = () => {
 
           {/* 기본 레이아웃 (헤더+푸터) */}
           <Route element={<DefaultLayout />}>
-            {/* <Route path="/home" element={<HomePage />} /> */}
+            <Route path="/hospital" element={<HospitalMapSection />} />
 
             {/* 증상 */}
             <Route path="/symptom" element={<SymptomPage />} />
@@ -59,6 +65,9 @@ const App = () => {
             {/* 마이페이지 */}
             <Route path="/my" element={<MyPage />} />
             <Route path="/my/password" element={<MyPasswordPage />} />
+
+            {/* 홈 화면 */}
+            <Route path="/home" element={<MainPage />} />
 
             {/* 추후 메인 홈과 합쳐질 예정 */}
             {/* 임시: 범용가이드 */}

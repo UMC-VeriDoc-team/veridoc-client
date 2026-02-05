@@ -1,4 +1,4 @@
-import type { ConsultationGuideItem } from "../components/home/components/MedicalConsultationGuide";
+import type { ConsultationGuideItem } from "@/components/Modal/components/home/components/MedicalConsultationGuide";
 
 // 진료 권유 목데이터
 export const MOCK_MEDICAL_CONSULTATION_GUIDE: ConsultationGuideItem[] = [

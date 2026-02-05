@@ -1,0 +1,56 @@
+export interface LatLng {
+  lat: number;
+  lng: number;
+}
+
+export interface HospitalMapItem {
+  hospitalId: string;
+  name: string;
+  coordinate: LatLng;
+  imageUrl: string | undefined;
+  category: string;
+  address: string;
+  distanceMeters: number;
+  matchedSpecialty: string;
+  homepageUrl: string;
+}
+
+export interface KakaoLatLng {
+  getLat: () => number;
+  getLng: () => number;
+}
+
+export interface KakaoMap {
+  panTo: (latlng: KakaoLatLng) => void;
+  setLevel: (level: number) => void;
+  getLevel: () => number;
+}
+
+export interface KakaoCustomOverlay {
+  setMap: (map: KakaoMap | null) => void;
+  setPosition: (latlng: KakaoLatLng) => void;
+}
+
+export interface KakaoMaps {
+  load: (cb: () => void) => void;
+
+  Map: new (container: HTMLElement, options: { center: KakaoLatLng; level: number }) => KakaoMap;
+
+  LatLng: new (lat: number, lng: number) => KakaoLatLng;
+
+  CustomOverlay: new (options: {
+    position: KakaoLatLng;
+    content: HTMLElement;
+    xAnchor?: number;
+    yAnchor?: number;
+    clickable?: boolean;
+  }) => KakaoCustomOverlay;
+}
+
+declare global {
+  interface Window {
+    kakao?: {
+      maps: KakaoMaps;
+    };
+  }
+}
