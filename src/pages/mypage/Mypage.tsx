@@ -92,11 +92,8 @@ const MyPage = () => {
   };
 
   // -----------------------------------------------------------------------
-  // [화면 1] 나의 증상 관리 (PC 규격: 68px / 70px / 100px)
+  // [화면 1] 나의 증상 관리
   // -----------------------------------------------------------------------
-  // [Corrected Version]
-  // 1. Blue Title (PC): 한 줄로 복구 (User's Request: Wide Screen = Single Line)
-  // 2. Blue Title (Mobile): 2줄 유지 (<br> 적용)
   const renderSymptomContent = () => (
     <>
       <div className="mt-[30px] px-[30px] text-left md:mt-[60px] md:px-0 md:text-center">
@@ -104,28 +101,23 @@ const MyPage = () => {
         <h2 className="mb-0 text-[32px] font-extrabold leading-[1.4] tracking-[-0.025em] text-brand-primary md:text-4xl">
           {isEditing ? (
             <>
-              {/* Mobile: 2줄 (공간 좁음) */}
               <span className="md:hidden">
                 현재 확인 중인 <br /> 증상을 변경해 보세요
               </span>
 
-              {/* ✨ PC/Tablet: 1줄 (공간 넓음 -> 줄바꿈 제거) */}
               <span className="hidden md:inline">현재 확인 중인 증상을 변경해 보세요</span>
             </>
           ) : (
             <>
-              {/* Mobile: 2줄 */}
               <span className="md:hidden">
                 현재 확인 중인 <br /> 증상이에요
               </span>
 
-              {/* ✨ PC/Tablet: 1줄 (줄바꿈 제거) */}
               <span className="hidden md:inline">현재 확인 중인 증상이에요</span>
             </>
           )}
         </h2>
 
-        {/* [설명] 검은 글씨 (PC에서 2줄 되는 건 OK 하셨으므로 유지) */}
         <p className="mt-[10px] break-keep text-[18px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-950 md:mt-4 md:text-lg">
           <span className="md:hidden">
             다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요 필요하다면 증상을 선택하지 않고
@@ -153,7 +145,6 @@ const MyPage = () => {
 
       {/* 3. 버튼 영역 */}
       <div className="mb-20 mt-[70px] w-full px-[30px] md:mt-[100px] md:w-[400px]">
-        {/* 버튼 폰트 스타일 적용 (18px / Semibold / 140%) */}
         <Button
           onClick={handleSaveSymptom}
           className="text-[18px] font-semibold leading-[1.4] tracking-[-0.025em]"
@@ -164,22 +155,19 @@ const MyPage = () => {
     </>
   );
 
-  // [수정] 정보 수정 탭 (간격 조정 + 태블릿 잘림 해결)
+  // 정보 수정 탭
   const renderProfileForm = () => (
-    <div className="/* Mobile: 꽉 찬 너비 + 패딩 30 */ /* ✨ PC(Large): 너비 777 (md -> lg로 변경하여 태블릿 대응) */ mb-20 flex w-full flex-col px-[30px] lg:mt-12 lg:w-[777px]">
+    <div className="mb-20 flex w-full flex-col px-[30px] lg:mt-12 lg:w-[777px]">
       <h3 className="mb-[30px] mt-[30px] w-full text-left text-[20px] font-semibold leading-[24px] text-gray-950 lg:mb-6 lg:mt-0 lg:font-bold">
         개인정보 수정
       </h3>
 
-      {/* 컨텐츠 래퍼: 
-          - Mobile/Tablet: 세로 배치 (flex-col) -> 아이패드 미니도 여기 포함됨!
-          - PC (Large): 가로 배치 (flex-row)
-      */}
+      {/* === 상단: 프로필 수정 폼 === */}
       <div className="flex w-full flex-col items-center lg:flex-row lg:items-start lg:justify-between">
         {/* 1. 프로필 사진 */}
         <div className="flex flex-col items-center lg:block">
           <div className="relative">
-            <div className="/* Mobile/Tablet: 지름 218.4px */ /* PC: 지름 275px */ flex h-[218.4px] w-[218.4px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50 lg:h-[275px] lg:w-[275px]">
+            <div className="flex h-[218.4px] w-[218.4px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50 lg:h-[275px] lg:w-[275px]">
               <Icon
                 name={gender === "FEMALE" ? "female" : "male"}
                 className="h-full w-full object-cover"
@@ -189,7 +177,7 @@ const MyPage = () => {
         </div>
 
         {/* 2. 입력 폼 */}
-        <div className="/* ✨ Mobile: 사진과 간격 30px (40->30 축소) */ /* PC: 가로 배치라 상단 마진 0 */ mt-[30px] flex w-full flex-col space-y-4 lg:mt-0 lg:w-[405px]">
+        <div className="mt-[30px] flex w-full flex-col space-y-4 lg:mt-0 lg:w-[405px]">
           {/* 이름 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
@@ -286,7 +274,7 @@ const MyPage = () => {
             <GenderSelect value={gender} onChange={setGender} />
           </div>
 
-          {/* 저장 버튼 (Mobile: 위쪽 간격 40) */}
+          {/* 저장 버튼 */}
           <div className="pt-[40px] lg:pt-0">
             <Button onClick={handleSaveProfile}>
               {isProfileEditing ? "개인정보 저장" : "개인정보 수정"}
@@ -296,10 +284,6 @@ const MyPage = () => {
       </div>
 
       {/* === 하단: 보안설정 & 회원탈퇴 === */}
-      {/* 1. mt-[60px]: 상단(프로필 폼)과의 거리
-          2. space-y-[60px]: 보안설정 섹션과 회원탈퇴 섹션 사이의 거리 (요청 반영: 넓힘)
-          3. mb-[100px]: 맨 아래 여백 추가 (피그마 반영 & 터치 영역 확보)
-      */}
       <div className="mb-[100px] mt-[60px] space-y-[60px]">
         {/* 보안설정 섹션 */}
         <section>
@@ -349,29 +333,23 @@ const MyPage = () => {
         <span className="text-[20px] font-semibold text-gray-950">마이페이지</span>
       </header>
 
-      {/* 2. [PC Header] 로고 이미지
-          - hidden md:flex: 모바일에서는 숨김, PC에서만 보임
-          - 기존 PC 스타일 유지 (mb-8 mt-10)
-      */}
+      {/* 2. [Logo] 로고 영역 */}
       <div className="hidden md:mb-8 md:mt-10 md:flex md:items-center md:justify-center">
         <div className="h-[85px]">
           <img src={Logo} alt="VeriDoc Logo" className="h-full w-auto" />
         </div>
       </div>
 
-      {/* 3. [Tab Menu] 탭 메뉴 (Segmented Control 스타일 적용)
-          - Container: 회색 배경 + 패딩 4px (이미지 3번 디테일 반영)
-          - Button: 선택됨(흰색+그림자) vs 선택안됨(투명)
-      */}
-      <div className="/* Mobile 배치 */ /* PC 배치 */ mb-8 mt-[24px] flex w-full justify-center px-[30px] md:mt-0 md:w-[777px] md:px-0">
+      {/* 3. [Tabs] 탭 영역 */}
+      <div className="mb-8 mt-[24px] flex w-full justify-center px-[30px] md:mt-0 md:w-[777px] md:px-0">
         {/* 실제 탭 컨테이너 (회색 박스) */}
-        <div className="/* Mobile 높이 */ /* PC 높이 */ flex h-[49px] w-full items-center justify-center rounded-[10px] bg-gray-50 p-[4px] md:h-[69px]">
+        <div className="flex h-[49px] w-full items-center justify-center rounded-[10px] bg-gray-50 p-[4px] md:h-[69px]">
           {/* [Tab 1] 나의 증상 관리 */}
           <button
-            className={`/* 폰트 설정 (Mobile: 18px Semi / PC: 20px Bold) */ flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
+            className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
               activeTab === "symptom"
-                ? "bg-white text-gray-950 shadow-sm" // ✨ 선택됨: 흰색 배경 + 그림자
-                : "bg-transparent text-gray-400" // 선택 안됨: 투명 + 회색 글씨
+                ? "bg-white text-gray-950 shadow-sm"
+                : "bg-transparent text-gray-400"
             } `}
             onClick={() => setSearchParams({ tab: "symptom" })}
           >
@@ -380,10 +358,10 @@ const MyPage = () => {
 
           {/* [Tab 2] 정보 수정 */}
           <button
-            className={`/* 폰트 설정 */ flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
+            className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
               activeTab === "info"
-                ? "bg-white text-gray-950 shadow-sm" // ✨ 선택됨
-                : "bg-transparent text-gray-400" // 선택 안됨
+                ? "bg-white text-gray-950 shadow-sm"
+                : "bg-transparent text-gray-400"
             } `}
             onClick={() => setSearchParams({ tab: "info" })}
           >
