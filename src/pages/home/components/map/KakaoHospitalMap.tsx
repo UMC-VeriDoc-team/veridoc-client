@@ -24,7 +24,7 @@ interface OverlayItem {
   overlay: KakaoCustomOverlay;
   container: HTMLDivElement;
   reactRoot: Root;
-  onClick: (e: MouseEvent) => void;
+  cleanup: () => void;
 }
 
 const KakaoHospitalMap = ({
@@ -35,64 +35,96 @@ const KakaoHospitalMap = ({
 }: KakaoHospitalMapProps) => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<KakaoMap | null>(null);
-  const mapsRef = useRef<KakaoMaps | null>(null);
   const overlaysRef = useRef<Map<string, OverlayItem>>(new Map());
+
   const [isMapReady, setIsMapReady] = useState(false);
 
-  // 최초 지도 생성
+  // 컴포넌트 언마운트/스플래시 전환 중 콜백 방지용
+  const aliveRef = useRef(true);
+
+  useEffect(() => {
+    aliveRef.current = true;
+    return () => {
+      aliveRef.current = false;
+    };
+  }, []);
+
+  // 지도 초기화 1회
   useEffect(() => {
     if (!mapContainerRef.current) return;
     if (!window.kakao?.maps) return;
 
-    window.kakao.maps.load(() => {
+    let rafId = 0;
+
+    const init = () => {
+      if (!aliveRef.current) return;
+
+      const container = mapContainerRef.current;
       const maps = window.kakao?.maps;
+
+      // 컨테이너가 사라졌거나 연결이 끊겼으면 중단
+      if (!container || !container.isConnected) return;
       if (!maps) return;
 
-      mapsRef.current = maps;
+      const rect = container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) {
+        // 다음 프레임에 재시도
+        rafId = requestAnimationFrame(init);
+        return;
+      }
 
-      const map = new maps.Map(mapContainerRef.current as HTMLElement, {
-        center: new maps.LatLng(center.lat, center.lng),
-        level: 4,
+      maps.load(() => {
+        if (!aliveRef.current) return;
+
+        const c = mapContainerRef.current;
+        if (!c || !c.isConnected) return;
+
+        const r = c.getBoundingClientRect();
+        if (r.width === 0 || r.height === 0) return;
+
+        const kakaoMaps: KakaoMaps = window.kakao!.maps;
+
+        // 이미 만들어졌으면 다시 만들지 않기
+        if (mapRef.current) return;
+
+        const map = new kakaoMaps.Map(c, {
+          center: new kakaoMaps.LatLng(center.lat, center.lng),
+          level: 4,
+        });
+
+        mapRef.current = map;
+        setIsMapReady(true);
       });
+    };
 
-      mapRef.current = map;
-      setIsMapReady(true);
+    rafId = requestAnimationFrame(init);
 
-      const handleResize = () => {
-        window.setTimeout(() => {
-          mapRef.current?.relayout?.();
-        }, 0);
-      };
-
-      window.addEventListener("resize", handleResize);
-      window.addEventListener("orientationchange", handleResize);
-
-      return () => {
-        window.removeEventListener("resize", handleResize);
-        window.removeEventListener("orientationchange", handleResize);
-      };
-    });
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
+  // center 바뀌면 map panTo만
   useEffect(() => {
-    if (!isMapReady) return;
     const map = mapRef.current;
-    const maps = mapsRef.current;
-    if (!map || !maps) return;
+    const maps = window.kakao?.maps;
+    if (!isMapReady || !map || !maps) return;
 
     const pos = new maps.LatLng(center.lat, center.lng);
     map.panTo(pos);
   }, [isMapReady, center.lat, center.lng]);
 
+  // 오버레이 생성/갱신 (cleanup에서만 제거)
   useEffect(() => {
-    if (!isMapReady) return;
     const map = mapRef.current;
-    const maps = mapsRef.current;
-    if (!map || !maps) return;
+    const maps = window.kakao?.maps;
+    if (!isMapReady || !map || !maps) return;
 
-    const prev = overlaysRef.current;
-    const next = new Map<string, OverlayItem>();
+    // 이전 오버레이 정리
+    overlaysRef.current.forEach((item) => item.cleanup());
+    overlaysRef.current.clear();
 
+    // 새 오버레이 생성
     hospitals.forEach((h) => {
       const position = new maps.LatLng(h.coordinate.lat, h.coordinate.lng);
 
@@ -109,11 +141,11 @@ const KakaoHospitalMap = ({
         />
       );
 
-      const onClick = (e: MouseEvent) => {
+      const handleClick = (e: MouseEvent) => {
         e.preventDefault();
         onSelectHospital(h.hospitalId);
       };
-      container.addEventListener("click", onClick);
+      container.addEventListener("click", handleClick);
 
       const overlay = new maps.CustomOverlay({
         position,
@@ -125,40 +157,45 @@ const KakaoHospitalMap = ({
 
       overlay.setMap(map);
 
-      next.set(h.hospitalId, {
+      const cleanup = () => {
+        try {
+          container.removeEventListener("click", handleClick);
+        } catch {}
+        try {
+          overlay.setMap(null);
+        } catch {}
+        try {
+          reactRoot.unmount();
+        } catch {}
+      };
+
+      overlaysRef.current.set(h.hospitalId, {
         hospitalId: h.hospitalId,
         position,
         overlay,
         container,
         reactRoot,
-        onClick,
+        cleanup,
       });
     });
 
-    overlaysRef.current = next;
-
     return () => {
-      prev.forEach((item) => {
-        item.container.removeEventListener("click", item.onClick);
-        item.overlay.setMap(null);
-        try {
-          item.reactRoot.unmount();
-        } catch {
-          // ignore
-        }
-      });
-      prev.clear();
+      overlaysRef.current.forEach((item) => item.cleanup());
+      overlaysRef.current.clear();
     };
-  }, [isMapReady, hospitals, onSelectHospital]);
+  }, [isMapReady, hospitals, onSelectHospital, selectedHospitalId]);
 
+  // 선택된 병원 이동 + active 상태 갱신
   useEffect(() => {
-    if (!isMapReady) return;
     const map = mapRef.current;
-    if (!map) return;
-    if (selectedHospitalId == null) return;
+    const maps = window.kakao?.maps;
+    if (!isMapReady || !map || !maps) return;
+    if (selectedHospitalId === null) return;
 
     const selected = overlaysRef.current.get(selectedHospitalId);
-    if (selected) map.panTo(selected.position);
+    if (!selected) return;
+
+    map.panTo(selected.position);
 
     overlaysRef.current.forEach((item, id) => {
       const hospital = hospitals.find((h) => h.hospitalId === id);
@@ -168,6 +205,7 @@ const KakaoHospitalMap = ({
     });
   }, [isMapReady, selectedHospitalId, hospitals]);
 
+  // 줌 버튼
   const handleZoomIn = () => {
     const map = mapRef.current;
     if (!map) return;
