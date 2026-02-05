@@ -146,7 +146,7 @@ const HospitalMapSection = () => {
   }, [selectedHospitalId, hospitals]);
 
   return (
-    <section className="flex w-full flex-col border border-[#17171940] md:h-[630px] md:flex-row">
+    <section className="flex w-full flex-col border border-[#17171940] md:h-[670px] md:flex-row">
       <article className="order-1 h-[320px] w-full md:order-2 md:h-full md:flex-1">
         <KakaoHospitalMap
           center={center}
@@ -181,7 +181,10 @@ const HospitalMapSection = () => {
                 <div
                   key={hospital.hospitalId}
                   onClick={() => setSelectedHospitalId(hospital.hospitalId)}
-                  className="cursor-pointer rounded-[10px] border border-[#E9E9E9] px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)] hover:bg-gray-50/80"
+                  className={[
+                    "cursor-pointer rounded-[10px] border px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)] hover:bg-gray-50/80",
+                    isSelected ? "border-brand-primary" : "border-[#E9E9E9]",
+                  ].join(" ")}
                 >
                   <div className="flex gap-x-4">
                     {hospital.imageUrl ? (
