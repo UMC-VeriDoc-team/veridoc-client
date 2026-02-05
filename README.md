@@ -119,3 +119,5 @@ npm run build
 - Vite + React + TypeScript 환경에서 레퍼런스와 예제가 풍부합니다.
 
 > 프로젝트의 안정성과 협업 효율을 우선하여 Tailwind CSS v3를 선택했습니다.
+
+<!-- ci test -->
