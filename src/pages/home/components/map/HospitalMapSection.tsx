@@ -42,7 +42,7 @@ const HospitalMapSection = () => {
   const debounceRef = useRef<number | null>(null);
   const watchIdRef = useRef<number | null>(null);
 
-  // 위치 갱신 로직
+  // 위치 갱신
   useEffect(() => {
     if (!navigator.geolocation) {
       setLocationError("이 브라우저에서는 위치 기능을 사용할 수 없어요.");
@@ -54,10 +54,7 @@ const HospitalMapSection = () => {
     const applyPos = (pos: GeolocationPosition) => {
       if (cancelled) return;
 
-      const nextCenter: LatLng = {
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-      };
+      const nextCenter: LatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
       const nextUser: UserLocation = {
         lat: pos.coords.latitude,
         lng: pos.coords.longitude,
@@ -105,7 +102,7 @@ const HospitalMapSection = () => {
     };
   }, []);
 
-  // 위치 변경 시 nearby API 호출 (디바운스 + 로딩)
+  // nearby API 호출
   useEffect(() => {
     if (!userLocation) return;
 
@@ -115,14 +112,14 @@ const HospitalMapSection = () => {
       void (async () => {
         setIsLoading(true);
         try {
-          const data = await GetNearbyHospital({
+          const res = await GetNearbyHospital({
             lat: userLocation.lat,
             lng: userLocation.lng,
             painAreaId: 1,
             limit: 3,
           });
 
-          const list = data.hospitals ?? [];
+          const list = res.hospitals ?? [];
           setHospitals(list);
 
           setSelectedHospitalId((prev) => {
@@ -149,8 +146,25 @@ const HospitalMapSection = () => {
   }, [selectedHospitalId, hospitals]);
 
   return (
-    <section className="flex h-[630px] w-full border border-[#17171940]">
-      <article className="h-full w-[40%] border-r border-[#17171940] p-4">
+    <section
+      className={[
+        "w-full border border-[#17171940]",
+        // 데스크탑: 좌우 / 모바일: 위아래
+        "flex flex-col md:flex-row",
+        "md:h-[630px]",
+      ].join(" ")}
+    >
+      {/* 모바일: 지도 먼저 / 데스크탑: 리스트 먼저 */}
+      <article className="order-1 h-[320px] w-full md:order-2 md:h-full md:flex-1">
+        <KakaoHospitalMap
+          center={center}
+          hospitals={hospitals}
+          selectedHospitalId={effectiveSelectedId}
+          onSelectHospital={setSelectedHospitalId}
+        />
+      </article>
+
+      <article className="order-2 w-full border-t border-[#17171940] p-4 md:order-1 md:h-full md:w-[40%] md:border-r md:border-t-0">
         {locationError && (
           <div className="mb-3 rounded-md bg-gray-50 p-3 text-xs text-red-600">{locationError}</div>
         )}
@@ -159,8 +173,8 @@ const HospitalMapSection = () => {
           <span className="font-semibold text-brand-primary">{hospitals.length}</span> 개 병원
         </p>
 
-        <div className="flex h-full flex-col gap-y-[10px] overflow-y-scroll">
-          {/* 로딩 중: 스켈레톤 */}
+        {/* 모바일: 아래 영역 스크롤 / 데스크탑도 그대로 스크롤 */}
+        <div className="flex max-h-[320px] flex-col gap-y-[10px] overflow-y-auto md:h-full md:max-h-none">
           {isLoading ? (
             <>
               <SkeletonHospitalCard />
@@ -187,12 +201,11 @@ const HospitalMapSection = () => {
                 <div className="flex w-full flex-col justify-between">
                   <div className="flex flex-col gap-y-2">
                     <p className="text-lg font-semibold text-gray-950">{hospital.name}</p>
-                    <div className="flex gap-x-[5px]">
+                    <div className="flex flex-wrap gap-x-[5px] gap-y-1">
                       <div className="rounded-[4px] bg-brand-primary px-2 text-sm font-medium text-white">
                         {hospital.category}
                       </div>
 
-                      {/* matchedSpecialty가 null일 수도 있으니 가드 */}
                       {hospital.matchedSpecialty ? (
                         <div className="rounded-[4px] border border-brand-primary bg-white px-2 text-sm font-medium text-brand-primary">
                           {hospital.matchedSpecialty}
@@ -218,15 +231,6 @@ const HospitalMapSection = () => {
             ))
           )}
         </div>
-      </article>
-
-      <article className="flex-1">
-        <KakaoHospitalMap
-          center={center}
-          hospitals={hospitals}
-          selectedHospitalId={effectiveSelectedId}
-          onSelectHospital={setSelectedHospitalId}
-        />
       </article>
     </section>
   );

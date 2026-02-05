@@ -1,5 +1,5 @@
 import useBaseModal from "@/stores/modal/useBaseModal";
-import GuideHeader from "./GuideHeader";
+import GuideHeader from "@/components/Header/GuideHeader";
 import RecommendEntry from "./RecommendEntry";
 import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
 import { ModalType } from "@/components/Modal/types/modal";
