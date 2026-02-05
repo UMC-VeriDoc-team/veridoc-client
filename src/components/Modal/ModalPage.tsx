@@ -20,6 +20,9 @@ import GuideDetailModal from "./components/guide/GuideDetailModal";
 import StepDoctorOpinionRequiredModal from "./components/symptom/StepDoctorOpinionRequiredModal";
 import StepTreatmentInfoRequiredModal from "./components/symptom/StepTreatmentInfoRequiredModal";
 import AuthLogoutModal from "./components/auth/AuthLogoutModal";
+import useIsMobile from "@/hooks/useIsMobile";
+import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
+import { useNavigate } from "react-router-dom";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -28,7 +31,18 @@ const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
 };
 
 const ModalPage = () => {
-  const { isModalOpen, modalType } = useBaseModal();
+  const { isModalOpen, modalType, closeModal } = useBaseModal();
+  const navigate = useNavigate();
+  const isMobile = useIsMobile();
+  const { guideType } = useGuideDetailModalStore();
+
+  useEffect(() => {
+    if (!isModalOpen || modalType !== ModalType.HOME_GUIDE_DETAIL) return;
+    if (!isMobile) return;
+
+    closeModal();
+    navigate("/guide-detail", { state: { guideType } });
+  }, [isModalOpen, modalType, isMobile, closeModal, navigate, guideType]);
 
   useEffect(() => {
     const prevOverflow = document.body.style.overflow;
@@ -68,11 +82,11 @@ const ModalPage = () => {
       case ModalType.HOME_TERMS_DETAIL: // 약관 상세
         return <HomeTermsDetailModal />;
       case ModalType.HOME_DOCTOR_OPINION: // 전문의 소견 전체 보기
-        return <HomeDoctorOpinionModal />;
+        return isMobile ? null : <HomeDoctorOpinionModal />;
       case ModalType.HOME_TEMPORARY_MEASURE: // 임시 대처 방안 상세
-        return <HomeTemporaryMeasure />;
+        return isMobile ? null : <HomeTemporaryMeasure />;
       case ModalType.HOME_GUIDE_DETAIL: // 범용 가이드 상세
-        return <GuideDetailModal />;
+        return isMobile ? null : <GuideDetailModal />;
 
       // 증상
       case ModalType.STEP_DOCTOR_OPINION_REQUIRED: // 전문의 답변 미확인

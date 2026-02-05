@@ -21,6 +21,7 @@ import MainPage from "@/pages/home/MainPage";
 import OnboardingLayout from "./layouts/OnboardingLayout";
 import HospitalMapSection from "./pages/home/components/map/HospitalMapSection";
 import HomePreview from "./pages/home/components/HomePreview";
+import GuideDetailPage from "./components/Modal/components/guide/GuideDetailPage";
 
 const App = () => {
   const isMobile = useIsMobile();
@@ -72,6 +73,7 @@ const App = () => {
             {/* 추후 메인 홈과 합쳐질 예정 */}
             {/* 임시: 범용가이드 */}
             <Route path="/guides" element={<HomeSymptomOnboarding />} />
+            <Route path="/guide-detail" element={<GuideDetailPage />} />
             {/* 임시: 프리뷰 */}
             <Route path="/preview" element={<HomePreview />} />
 
