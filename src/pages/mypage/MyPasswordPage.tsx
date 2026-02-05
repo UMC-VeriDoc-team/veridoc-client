@@ -157,7 +157,7 @@ const MyPasswordPage = () => {
               {passwordForm.current && (
                 <button
                   onClick={() => setShowCurrent(!showCurrent)}
-                  className="absolute right-3 top-[22px] -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   <Icon
                     name={showCurrent ? "password-eye-off" : "password-eye"}
@@ -189,7 +189,7 @@ const MyPasswordPage = () => {
               {passwordForm.new && (
                 <button
                   onClick={() => setShowNew(!showNew)}
-                  className="absolute right-3 top-[22px] -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   <Icon name={showNew ? "password-eye-off" : "password-eye"} className="h-5 w-5" />
                 </button>
@@ -218,7 +218,7 @@ const MyPasswordPage = () => {
               {passwordForm.confirm && (
                 <button
                   onClick={() => setShowConfirm(!showConfirm)}
-                  className="absolute right-3 top-[22px] -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   <Icon
                     name={showConfirm ? "password-eye-off" : "password-eye"}

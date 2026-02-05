@@ -140,10 +140,7 @@ const MyPage = () => {
         </p>
       </div>
 
-      {/* 2. 그리드 영역 
-          - Mobile: mt-[100px], px-[30px]
-          - PC: md:mt-[70px], md:px-0
-      */}
+      {/* 2. 그리드 영역 */}
       <div
         className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${!isEditing ? "pointer-events-none opacity-80" : ""} `}
       >
@@ -154,11 +151,8 @@ const MyPage = () => {
         />
       </div>
 
-      {/* 3. 버튼 영역
-          - Mobile: mt-[70px], w-full, px-[30px]
-          - PC: md:mt-[100px], md:w-[400px], md:px-0
-      */}
-      <div className="mb-20 mt-[70px] w-full px-[30px] md:mt-[100px] md:w-[400px] md:px-0">
+      {/* 3. 버튼 영역 */}
+      <div className="mb-20 mt-[70px] w-full px-[30px] md:mt-[100px] md:w-[400px]">
         {/* 버튼 폰트 스타일 적용 (18px / Semibold / 140%) */}
         <Button
           onClick={handleSaveSymptom}
@@ -172,13 +166,7 @@ const MyPage = () => {
 
   // [수정] 정보 수정 탭 (간격 조정 + 태블릿 잘림 해결)
   const renderProfileForm = () => (
-    <div className="/* Mobile: 꽉 찬 너비 + 패딩 30 */ /* ✨ PC(Large): 너비 777 (md -> lg로 변경하여 태블릿 대응) */ mb-20 flex w-full flex-col px-[30px] lg:mt-12 lg:w-[777px] lg:px-0">
-      {/* === 상단: 프로필 + 입력 폼 영역 === */}
-
-      {/* 타이틀: 개인정보 수정 
-          Mobile: mt-[30px] (40->30 축소), 20px Semi, Leading 24px
-          PC:     lg:mt-0 (PC는 상단 여백 없음)
-      */}
+    <div className="/* Mobile: 꽉 찬 너비 + 패딩 30 */ /* ✨ PC(Large): 너비 777 (md -> lg로 변경하여 태블릿 대응) */ mb-20 flex w-full flex-col px-[30px] lg:mt-12 lg:w-[777px]">
       <h3 className="mb-[30px] mt-[30px] w-full text-left text-[20px] font-semibold leading-[24px] text-gray-950 lg:mb-6 lg:mt-0 lg:font-bold">
         개인정보 수정
       </h3>
