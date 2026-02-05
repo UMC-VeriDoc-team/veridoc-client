@@ -80,6 +80,7 @@ const LoginForm = () => {
               hasError={!!passwordError}
               passwordToggle
               clearable
+              onClear={() => setPassword("")}
             />
 
             {passwordError ? (

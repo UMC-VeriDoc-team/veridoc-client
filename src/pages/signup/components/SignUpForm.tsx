@@ -104,6 +104,7 @@ const SignUpForm = () => {
               onBlur={() => handleBlur("name")}
               hasError={!!nameError}
               clearable
+              onClear={() => setName("")}
             />,
             nameError
           )}
@@ -130,6 +131,7 @@ const SignUpForm = () => {
               hasError={!!passwordError}
               passwordToggle
               clearable
+              onClear={() => setPassword("")}
             />,
             passwordError
           )}
