@@ -77,10 +77,6 @@ const MyPasswordPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-white">
-      {/* ✨ [삭제됨] 상단 헤더 div 삭제! 
-          이제 화살표가 컨텐츠 박스랑 한 몸이 되어 움직입니다.
-      */}
-
       {/* [1] PC 전용 헤더 (Logo + Tabs) 
           - 1280px 이상에서만 보임
       */}
@@ -110,14 +106,9 @@ const MyPasswordPage = () => {
 
       {/* [2] 컨텐츠 영역
           - md:w-[450px]: 태블릿에서 너비가 450px로 고정됨
-          - 이제 화살표도 이 박스 안에 있으므로, 왼쪽 라인(Start Line)을 공유함!
       */}
       <div className="mt-[40px] flex w-full flex-col px-[30px] md:w-[450px] md:px-0 xl:mt-[60px] xl:w-[400px] xl:px-0">
-        {/* ✨ [이동됨] 뒤로가기 화살표 
-            - xl:hidden (PC에서는 숨김)
-            - mb-2 (타이틀과 약간 띄움)
-            - -ml-2 (아이콘 자체 여백 보정해서 텍스트랑 라인 딱 맞춤)
-        */}
+        {/* 뒤로 가기 버튼 (모바일 전용) */}
         <div className="mb-6 w-full xl:hidden">
           <button
             onClick={() => navigate("/my?tab=info")}
