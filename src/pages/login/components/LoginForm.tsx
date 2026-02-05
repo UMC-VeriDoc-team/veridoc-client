@@ -1,6 +1,5 @@
 import Button from "@/components/Button/Button";
 import EmailDomainInput from "@/components/Input/EmailDomainInput";
-import Input from "@/components/Input/Input";
 import InputField from "@/components/Input/InputField";
 import { ModalType } from "@/components/Modal/types/modal";
 import useBaseModal from "@/stores/modal/useBaseModal";
