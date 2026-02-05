@@ -4,10 +4,15 @@ export interface LatLng {
 }
 
 export interface HospitalMapItem {
-  hospitalId: number;
+  hospitalId: string;
   name: string;
   coordinate: LatLng;
-  thumbnailUrl?: string | null;
+  imageUrl: string | undefined;
+  category: string;
+  address: string;
+  distanceMeters: number;
+  matchedSpecialty: string;
+  homepageUrl: string;
 }
 
 export interface KakaoLatLng {
@@ -19,6 +24,8 @@ export interface KakaoMap {
   panTo: (latlng: KakaoLatLng) => void;
   setLevel: (level: number) => void;
   getLevel: () => number;
+  relayout?: () => void;
+  setCenter?: (latlng: KakaoLatLng) => void;
 }
 
 export interface KakaoCustomOverlay {

@@ -24,26 +24,24 @@ const MyPage = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>("knee");
   const [isProfileEditing, setIsProfileEditing] = useState(false);
 
-  // 증상 선택 , 문자열 key -> 숫자 id 로 변환
+  // 증상 선택 로직
   const handleSelectSymptom = (key: string) => {
-    if (!isEditing) return; // 수정 모드 아니면 작동 안 함
+    if (!isEditing) return;
 
     setSelectedKey((prev) => {
-      if (prev === key) return null; // 이미 선택된 거 누르면 해제
-      return key; // 새로운 거 선택
+      if (prev === key) return null;
+      return key;
     });
   };
 
   // 증상 저장 로직
   const handleSaveSymptom = () => {
-    // 1. 수정하기 버튼을 눌렀을 때 (View -> Edit)
     if (!isEditing) {
       setIsEditing(true);
       return;
     }
     setIsEditing(false);
 
-    // [수정] null 체크 대상 변경 (selectedSymptom -> selectedKey)
     if (selectedKey === null) {
       openModal(ModalType.MY_SYMPTOM_NOT_SELECTED);
     } else {
@@ -51,7 +49,7 @@ const MyPage = () => {
     }
   };
 
-  // 이름 및 생년월일 유효성 검사 후 저장 로직
+  // 프로필 저장 로직
   const handleSaveProfile = () => {
     if (!isProfileEditing) {
       setIsProfileEditing(true);
@@ -98,19 +96,45 @@ const MyPage = () => {
   // -----------------------------------------------------------------------
   const renderSymptomContent = () => (
     <>
-      <div className="mt-16 text-center">
-        <h2 className="mb-2 text-4xl font-extrabold tracking-tight text-brand-primary">
-          {isEditing ? "현재 확인 중인 증상을 변경해 보세요" : "현재 확인 중인 증상이에요"}
+      <div className="mt-[30px] px-[30px] text-left md:mt-[60px] md:px-0 md:text-center">
+        {/* [제목] 파란 글씨 */}
+        <h2 className="mb-0 text-[32px] font-extrabold leading-[1.4] tracking-[-0.025em] text-brand-primary md:text-4xl">
+          {isEditing ? (
+            <>
+              <span className="md:hidden">
+                현재 확인 중인 <br /> 증상을 변경해 보세요
+              </span>
+
+              <span className="hidden md:inline">현재 확인 중인 증상을 변경해 보세요</span>
+            </>
+          ) : (
+            <>
+              <span className="md:hidden">
+                현재 확인 중인 <br /> 증상이에요
+              </span>
+
+              <span className="hidden md:inline">현재 확인 중인 증상이에요</span>
+            </>
+          )}
         </h2>
-        <p className="mt-4 text-lg font-semibold leading-[1.4] tracking-tight text-gray-950">
-          다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요
-          <br />
-          필요하다면 증상을 선택하지 않고 넘어갈 수도 있어요
+
+        <p className="mt-[10px] break-keep text-[18px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-950 md:mt-4 md:text-lg">
+          <span className="md:hidden">
+            다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요 필요하다면 증상을 선택하지 않고
+            넘어갈 수도 있어요
+          </span>
+
+          <span className="hidden md:inline">
+            다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요
+            <br />
+            필요하다면 증상을 선택하지 않고 넘어갈 수도 있어요
+          </span>
         </p>
       </div>
 
+      {/* 2. 그리드 영역 */}
       <div
-        className={`mt-20 flex justify-center ${!isEditing ? "pointer-events-none opacity-80" : ""}`}
+        className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${!isEditing ? "pointer-events-none opacity-80" : ""} `}
       >
         <SymptomGrid
           selectedKey={selectedKey}
@@ -119,24 +143,31 @@ const MyPage = () => {
         />
       </div>
 
-      <div className="mb-20 mt-16 w-[400px]">
-        <Button onClick={handleSaveSymptom}>{isEditing ? "저장하기" : "수정하기"}</Button>
+      {/* 3. 버튼 영역 */}
+      <div className="mb-20 mt-[70px] w-full px-[30px] md:mt-[100px] md:w-[400px]">
+        <Button
+          onClick={handleSaveSymptom}
+          className="text-[18px] font-semibold leading-[1.4] tracking-[-0.025em]"
+        >
+          {isEditing ? "저장하기" : "수정하기"}
+        </Button>
       </div>
     </>
   );
 
+  // 정보 수정 탭
   const renderProfileForm = () => (
-    <div className="mb-20 mt-12 flex w-[777px] flex-col">
-      {/* === 상단: 프로필 + 입력 폼 영역 === */}
-      {/* 타이틀 */}
-      <h3 className="mb-6 w-full text-left text-[20px] font-bold text-gray-950">개인정보 수정</h3>
+    <div className="mb-20 flex w-full flex-col px-[30px] lg:mt-12 lg:w-[777px]">
+      <h3 className="mb-[30px] mt-[30px] w-full text-left text-[20px] font-semibold leading-[24px] text-gray-950 lg:mb-6 lg:mt-0 lg:font-bold">
+        개인정보 수정
+      </h3>
 
-      {/* === 상단: 프로필 + 입력 폼 영역 === */}
-      <div className="flex w-full flex-row items-start justify-between">
-        {/* 1. 왼쪽: 프로필 사진 */}
-        <div className="flex flex-col items-center">
+      {/* === 상단: 프로필 수정 폼 === */}
+      <div className="flex w-full flex-col items-center lg:flex-row lg:items-start lg:justify-between">
+        {/* 1. 프로필 사진 */}
+        <div className="flex flex-col items-center lg:block">
           <div className="relative">
-            <div className="flex h-[275px] w-[275px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50">
+            <div className="flex h-[218.4px] w-[218.4px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50 lg:h-[275px] lg:w-[275px]">
               <Icon
                 name={gender === "FEMALE" ? "female" : "male"}
                 className="h-full w-full object-cover"
@@ -145,8 +176,8 @@ const MyPage = () => {
           </div>
         </div>
 
-        {/* 2. 오른쪽: 입력 폼 */}
-        <div className="flex w-[405px] flex-col space-y-4">
+        {/* 2. 입력 폼 */}
+        <div className="mt-[30px] flex w-full flex-col space-y-4 lg:mt-0 lg:w-[405px]">
           {/* 이름 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
@@ -168,21 +199,18 @@ const MyPage = () => {
             {errors.name && <p className="mt-1 text-xs text-error">{errors.name}</p>}
           </div>
 
-          {/* 생년월일 (3단 분리 + 유효성 검사) */}
+          {/* 생년월일 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               생년월일
             </label>
-
-            {/* 겉보기엔 하나의 박스지만, 실제론 3개의 입력칸이 들어있는 컨테이너 */}
             <div
               className={`flex w-full items-center rounded border p-3 ${
                 errors.birth
-                  ? "border-error focus-within:border-error" // 에러: 빨강
-                  : "border-gray-200 focus-within:border-brand-primary" // 정상: 파랑
+                  ? "border-error focus-within:border-error"
+                  : "border-gray-200 focus-within:border-brand-primary"
               }`}
             >
-              {/* 1. 년도 (YYYY) */}
               <input
                 type="text"
                 value={birth.year}
@@ -195,8 +223,6 @@ const MyPage = () => {
                 maxLength={4}
               />
               <span className="mx-2 text-gray-600">/</span>
-
-              {/* 2. 월 (MM) */}
               <input
                 type="text"
                 value={birth.month}
@@ -208,8 +234,6 @@ const MyPage = () => {
                 maxLength={2}
               />
               <span className="mx-2 text-gray-600">/</span>
-
-              {/* 3. 일 (DD) */}
               <input
                 type="text"
                 value={birth.day}
@@ -247,26 +271,27 @@ const MyPage = () => {
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               성별
             </label>
-            <GenderSelect value={gender} onChange={setGender} />,
+            <GenderSelect value={gender} onChange={setGender} />
           </div>
 
           {/* 저장 버튼 */}
-          <Button onClick={handleSaveProfile}>
-            {isProfileEditing ? "개인정보 저장" : "개인정보 수정"}
-          </Button>
+          <div className="pt-[40px] lg:pt-0">
+            <Button onClick={handleSaveProfile}>
+              {isProfileEditing ? "개인정보 저장" : "개인정보 수정"}
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* === 하단: 보안설정 & 회원탈퇴 === */}
-      <div className="mt-16 space-y-12">
-        {/* 보안설정 */}
+      <div className="mb-[100px] mt-[60px] space-y-[60px]">
+        {/* 보안설정 섹션 */}
         <section>
           <h3 className="mb-2 text-[20px] font-bold text-gray-950">보안설정</h3>
           <p className="mb-4 text-[18px] font-medium text-gray-950">
             계정 보안을 위해 주기적인 비밀번호 변경을 권장해요.
           </p>
           <button
-            // setInfoView 대신에 navigate 사용
             onClick={() => navigate("/my/password")}
             className="flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
@@ -277,21 +302,18 @@ const MyPage = () => {
           </button>
         </section>
 
-        {/* 회원탈퇴 */}
+        {/* 회원탈퇴 섹션 */}
         <section>
           <h3 className="mb-2 text-[20px] font-bold text-gray-950">회원탈퇴</h3>
           <p className="mb-4 text-[18px] font-medium text-gray-950">
             회원탈퇴를 신청하기 전에 아래 사항을 꼭 확인해 주세요.
           </p>
-
           <div className="mb-4 rounded bg-gray-50 px-6 py-9 text-[18px] font-medium leading-[1.6] text-gray-950">
             1. 회원 탈퇴 시 회원님의 개인정보는 관련 법령에 따라 일정 기간 보관 후 삭제됩니다.
             <br />
             2. 탈퇴 후에는 아이디 및 보유 혜택이 모두 소멸되며, 복구가 불가능합니다.
           </div>
-
           <button
-            // 회원탈퇴 모달
             onClick={() => openModal(ModalType.MY_WITHDRAW_NOTICE)}
             className="flex w-full items-center justify-between rounded border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
           >
@@ -307,40 +329,48 @@ const MyPage = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-white">
-      {/* 상단 로고 영역 */}
-      <div className="mb-8 mt-10 flex items-center justify-center">
+      <header className="flex w-full items-center justify-center pt-[14px] md:hidden">
+        <span className="text-[20px] font-semibold text-gray-950">마이페이지</span>
+      </header>
+
+      {/* 2. [Logo] 로고 영역 */}
+      <div className="hidden md:mb-8 md:mt-10 md:flex md:items-center md:justify-center">
         <div className="h-[85px]">
           <img src={Logo} alt="VeriDoc Logo" className="h-full w-auto" />
         </div>
       </div>
 
-      {/* 탭 메뉴 (피그마 규격 777x69 반영) */}
-      <div className="mb-8 flex h-[69px] w-[777px] items-center justify-center gap-[13px] rounded-[10px] bg-gray-50">
-        {/* 1. 나의 증상 관리 탭 */}
-        <button
-          className={`flex h-[50px] w-[371px] shrink-0 items-center justify-center rounded-[10px] text-[20px] font-bold leading-[1.4] tracking-[-0.025em] text-gray-950 transition-all duration-200 ${
-            activeTab === "symptom"
-              ? "bg-white" // 선택됨: 흰배경 + 진한글씨
-              : "text-gray-600" // 선택안됨: 회색글씨
-          }`}
-          onClick={() => setSearchParams({ tab: "symptom" })}
-        >
-          나의 증상 관리
-        </button>
+      {/* 3. [Tabs] 탭 영역 */}
+      <div className="mb-8 mt-[24px] flex w-full justify-center px-[30px] md:mt-0 md:w-[777px] md:px-0">
+        {/* 실제 탭 컨테이너 (회색 박스) */}
+        <div className="flex h-[49px] w-full items-center justify-center rounded-[10px] bg-gray-50 p-[4px] md:h-[69px]">
+          {/* [Tab 1] 나의 증상 관리 */}
+          <button
+            className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
+              activeTab === "symptom"
+                ? "bg-white text-gray-950 shadow-sm"
+                : "bg-transparent text-gray-400"
+            } `}
+            onClick={() => setSearchParams({ tab: "symptom" })}
+          >
+            나의 증상 관리
+          </button>
 
-        {/* 2. 정보 수정 탭 */}
-        <button
-          className={`flex h-[50px] w-[371px] shrink-0 items-center justify-center rounded-[10px] text-[20px] font-bold leading-[1.4] tracking-[-0.025em] text-gray-950 transition-all duration-200 ${
-            activeTab === "info"
-              ? "bg-white" // 선택됨
-              : "text-gray-600" // 선택안됨
-          }`}
-          onClick={() => setSearchParams({ tab: "info" })}
-        >
-          정보 수정
-        </button>
+          {/* [Tab 2] 정보 수정 */}
+          <button
+            className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
+              activeTab === "info"
+                ? "bg-white text-gray-950 shadow-sm"
+                : "bg-transparent text-gray-400"
+            } `}
+            onClick={() => setSearchParams({ tab: "info" })}
+          >
+            정보 수정
+          </button>
+        </div>
       </div>
 
+      {/* 컨텐츠 렌더링 (이건 아까 수정한 함수들이 실행됨) */}
       {activeTab === "symptom" ? renderSymptomContent() : renderProfileForm()}
     </div>
   );

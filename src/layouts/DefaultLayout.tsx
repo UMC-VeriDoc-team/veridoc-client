@@ -8,12 +8,12 @@ const DefaultLayout = () => {
   const isMobile = useIsMobile();
 
   return (
-    <div className={`flex h-screen flex-col ${isMobile && "pb-16"}`}>
+    <div className={`flex h-dvh flex-col ${isMobile && "pb-16"}`}>
       {/* 기본 페이지: Header + Footer */}
-      <Header className="sticky top-0 z-50" />
+      <Header className="sticky top-0 z-50 shrink-0" />
 
       {/* Header/Footer 사이 공간 */}
-      <main className="flex-1">
+      <main className="flex-1 overflow-y-auto">
         <Outlet />
         {isMobile ? <BottomTabBar /> : <Footer />}
       </main>

@@ -19,6 +19,7 @@ import AuthLoginRequiredModal from "./components/auth/AuthRequiredModal";
 import GuideDetailModal from "./components/guide/GuideDetailModal";
 import StepDoctorOpinionRequiredModal from "./components/symptom/StepDoctorOpinionRequiredModal";
 import StepTreatmentInfoRequiredModal from "./components/symptom/StepTreatmentInfoRequiredModal";
+import AuthLogoutModal from "./components/auth/AuthLogoutModal";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -58,6 +59,8 @@ const ModalPage = () => {
         return <AuthSignUpSuccess />;
       case ModalType.AUTH_REQUIRED: // 접근 제한
         return <AuthLoginRequiredModal />;
+      case ModalType.AUTH_LOGOUT: // 로그아웃 모달
+        return <AuthLogoutModal />;
 
       // 홈
       case ModalType.HOME_TERMS_AGREEMENT: // 서비스 약관 동의

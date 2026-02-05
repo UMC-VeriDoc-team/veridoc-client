@@ -1,7 +1,7 @@
 import Button from "@/components/Button/Button";
 import DateOfBirthInput from "@/components/Input/DateOfBirthInput";
 import EmailDomainInput from "@/components/Input/EmailDomainInput";
-import Input from "@/components/Input/Input";
+import InputField from "@/components/Input/InputField";
 import type { Gender } from "@/components/Select/GenderSelect";
 import GenderSelect from "@/components/Select/GenderSelect";
 import useBaseModal from "@/stores/modal/useBaseModal";
@@ -96,13 +96,15 @@ const SignUpForm = () => {
         <div className="mt-[30px] flex flex-col gap-[30px]">
           {renderField(
             "이름",
-            <Input
+            <InputField
               type="text"
               placeholder="이름을 입력해주세요"
               value={name}
               onChange={(e) => setName(e.target.value)}
               onBlur={() => handleBlur("name")}
               hasError={!!nameError}
+              clearable
+              onClear={() => setName("")}
             />,
             nameError
           )}
@@ -120,13 +122,16 @@ const SignUpForm = () => {
 
           {renderField(
             "비밀번호",
-            <Input
+            <InputField
               type="password"
               placeholder="비밀번호를 입력해주세요 (8자 이상)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onBlur={() => handleBlur("password")}
               hasError={!!passwordError}
+              passwordToggle
+              clearable
+              onClear={() => setPassword("")}
             />,
             passwordError
           )}

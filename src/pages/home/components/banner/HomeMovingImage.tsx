@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import MovingDot from "./HomeMovingImage/MovingDot";
 import Icon from "@/components/Icon/Icon";
+import MovingDot from "./MovingDot";
 
 const image1 = "/images/ShoulderBackGround1.png";
 const image2 = "/images/ShoulderBackGround2.png";
