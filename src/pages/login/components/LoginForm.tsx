@@ -1,6 +1,7 @@
 import Button from "@/components/Button/Button";
 import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import Input from "@/components/Input/Input";
+import InputField from "@/components/Input/InputField";
 import { ModalType } from "@/components/Modal/types/modal";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
@@ -87,13 +88,15 @@ const LoginForm = () => {
               비밀번호 <span className="text-error">*</span>
             </label>
 
-            <Input
+            <InputField
               type="password"
               placeholder="비밀번호를 입력해주세요 (8자 이상)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onBlur={() => setTouched((prev) => ({ ...prev, password: true }))}
               hasError={!!passwordError}
+              passwordToggle
+              clearable
             />
 
             {passwordError ? (
