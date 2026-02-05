@@ -1,3 +1,4 @@
+import type { Gender } from "@/components/Select/GenderSelect";
 import { api } from "@/utils/api/api";
 
 export interface SignupPayload {
@@ -5,8 +6,8 @@ export interface SignupPayload {
   email: string;
   password: string;
   birth: string; // "YYYY-MM-DD"
-  gender: "MALE" | "FEMALE";
-  painAreaID: number | null;
+  gender: Gender;
+  painAreaID?: number | null;
 }
 
 export interface SignupResponse {
