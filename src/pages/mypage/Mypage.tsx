@@ -195,10 +195,7 @@ const MyPage = () => {
         </p>
       </div>
 
-      {/* 2. 그리드 영역 
-          - Mobile: mt-[100px], px-[30px]
-          - PC: md:mt-[70px], md:px-0
-      */}
+      {/* 2. 그리드 영역 */}
       <div
         className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${
           !isEditing ? "pointer-events-none opacity-80" : ""
