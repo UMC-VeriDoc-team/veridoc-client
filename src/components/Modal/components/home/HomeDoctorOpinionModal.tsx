@@ -1,5 +1,6 @@
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
+import { useEffect } from "react";
 
 interface ShareItem {
   iconName: string;
@@ -29,6 +30,8 @@ const posts: PostItem[] = [
   { image: "null", title: "가벼운 일상 동작" },
 ];
 
+useEffect(() => {}, []);
+
 // 전문의 소견 전체 보기 모달
 const HomeDoctorOpinionModal = () => {
   const { closeModal } = useBaseModal();
@@ -49,7 +52,7 @@ const HomeDoctorOpinionModal = () => {
       <div className="flex-1 overflow-y-auto px-1 py-2 sm:px-4 sm:py-4 md:px-7 md:py-6">
         <div className="flex flex-col gap-6 sm:gap-8">
           <div className="flex gap-4">
-            <p className="text-sm text-[#000D2F] underline">어깨</p>
+            <p className="text-sm text-[#000D2F] underline">{}</p>
             <p className="text-sm text-[#000D2F] underline">전문의소견</p>
           </div>
 
