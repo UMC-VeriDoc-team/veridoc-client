@@ -6,7 +6,7 @@ export interface SignupPayload {
   password: string;
   birthDate: string; // "YYYY-MM-DD"
   gender: "M" | "F";
-  painAreaID: number | null;
+  painAreaID?: number | null;
 }
 
 export interface SignupResponse {

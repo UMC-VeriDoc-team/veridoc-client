@@ -10,6 +10,7 @@ import { ModalType } from "@/components/Modal/types/modal";
 import { validateEmail } from "@/utils/validateEmail";
 import useSignupSymptomStore from "@/stores/signup/useSignupSymptomStore";
 import { useSignup } from "../hooks/useSignup";
+import type { SignupPayload } from "../services/postSignup";
 
 type TouchedState = {
   name: boolean;
@@ -86,13 +87,15 @@ const SignUpForm = () => {
 
     const birthDate = `${dob.year}-${dob.month.padStart(2, "0")}-${dob.day.padStart(2, "0")}`;
 
-    const payload = {
+    const genderValue: "M" | "F" = gender === "MALE" ? "M" : "F";
+
+    const payload: SignupPayload = {
       name: name.trim(),
       email: email.trim(),
       password,
       birthDate,
-      gender: gender as "M" | "F",
-      painAreaID: painAreaID ?? null,
+      gender: genderValue,
+      ...(painAreaID != null ? { painAreaID } : {}),
     };
 
     try {
