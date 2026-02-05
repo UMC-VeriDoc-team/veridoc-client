@@ -1,0 +1,36 @@
+name: Sync develop to main
+
+on:
+  push:
+    branches: [develop]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      # develop에서 main PR 자동 생성/업데이트
+      - name: Create PR from develop to main
+        id: cpr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: bot/sync-develop-to-main
+          title: "chore: sync develop into main"
+          body: |
+            develop 브랜치 변경사항을 main에 자동 반영하기 위한 PR입니다.
+            이 PR이 merge되면 main push가 발생하고, 배포 워크플로우가 실행됩니다.
+          commit-message: "chore: sync develop into main"
+
+      # PR Auto-merge 활성화
+      - name: Enable PR auto-merge
+        if: steps.cpr.outputs.pull-request-number != ''
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
