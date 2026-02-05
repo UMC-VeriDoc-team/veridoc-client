@@ -63,8 +63,9 @@ const InputField = ({
       {showClear && (
         <button
           type="button"
-          onClick={onClear ?? (() => onChange({ target: { value: "" } } as any))}
-          className="absolute right-4 top-1/2 -translate-y-1/2"
+          onClick={onClear}
+          disabled={!onClear}
+          className="absolute right-4 top-1/2 -translate-y-1/2 disabled:opacity-50"
           aria-label="입력 내용 삭제"
         >
           <Icon name="input-close" />
