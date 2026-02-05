@@ -102,7 +102,7 @@ const HospitalMapSection = () => {
     };
   }, []);
 
-  // nearby API 호출
+  // 병원 조회
   useEffect(() => {
     if (!userLocation) return;
 
@@ -146,15 +146,7 @@ const HospitalMapSection = () => {
   }, [selectedHospitalId, hospitals]);
 
   return (
-    <section
-      className={[
-        "w-full border border-[#17171940]",
-        // 데스크탑: 좌우 / 모바일: 위아래
-        "flex flex-col md:flex-row",
-        "md:h-[630px]",
-      ].join(" ")}
-    >
-      {/* 모바일: 지도 먼저 / 데스크탑: 리스트 먼저 */}
+    <section className="flex w-full flex-col border border-[#17171940] md:h-[670px] md:flex-row">
       <article className="order-1 h-[320px] w-full md:order-2 md:h-full md:flex-1">
         <KakaoHospitalMap
           center={center}
@@ -173,7 +165,6 @@ const HospitalMapSection = () => {
           <span className="font-semibold text-brand-primary">{hospitals.length}</span> 개 병원
         </p>
 
-        {/* 모바일: 아래 영역 스크롤 / 데스크탑도 그대로 스크롤 */}
         <div className="flex max-h-[320px] flex-col gap-y-[10px] overflow-y-auto md:h-full md:max-h-none">
           {isLoading ? (
             <>
@@ -182,54 +173,79 @@ const HospitalMapSection = () => {
               <SkeletonHospitalCard />
             </>
           ) : (
-            hospitals.map((hospital) => (
-              <div
-                key={hospital.hospitalId}
-                onClick={() => setSelectedHospitalId(hospital.hospitalId)}
-                className="border-1 flex cursor-pointer gap-x-4 rounded-[10px] border border-[#E9E9E9] px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)] hover:bg-gray-50/80"
-              >
-                {hospital.imageUrl ? (
-                  <img
-                    src={hospital.imageUrl}
-                    alt={hospital.name}
-                    className="aspect-square min-w-[145px] rounded-[5px] object-cover"
-                  />
-                ) : (
-                  <div className="aspect-square min-w-[145px] rounded-[5px] bg-gray-100" />
-                )}
+            hospitals.map((hospital) => {
+              const isSelected = effectiveSelectedId === hospital.hospitalId;
+              const homepageUrl = hospital.homepageUrl;
 
-                <div className="flex w-full flex-col justify-between">
-                  <div className="flex flex-col gap-y-2">
-                    <p className="text-lg font-semibold text-gray-950">{hospital.name}</p>
-                    <div className="flex flex-wrap gap-x-[5px] gap-y-1">
-                      <div className="rounded-[4px] bg-brand-primary px-2 text-sm font-medium text-white">
-                        {hospital.category}
+              return (
+                <div
+                  key={hospital.hospitalId}
+                  onClick={() => setSelectedHospitalId(hospital.hospitalId)}
+                  className={[
+                    "cursor-pointer rounded-[10px] border px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)] hover:bg-gray-50/80",
+                    isSelected ? "border-brand-primary" : "border-[#E9E9E9]",
+                  ].join(" ")}
+                >
+                  <div className="flex gap-x-4">
+                    {hospital.imageUrl ? (
+                      <img
+                        src={hospital.imageUrl}
+                        alt={hospital.name}
+                        className="aspect-square min-w-[145px] rounded-[5px] object-cover"
+                      />
+                    ) : (
+                      <div className="aspect-square min-w-[145px] rounded-[5px] bg-gray-100" />
+                    )}
+
+                    <div className="flex w-full flex-col justify-between">
+                      <div className="flex flex-col gap-y-2">
+                        <p className="text-lg font-semibold text-gray-950">{hospital.name}</p>
+                        <div className="flex flex-wrap gap-x-[5px] gap-y-1">
+                          <div className="rounded-[4px] bg-brand-primary px-2 text-sm font-medium text-white">
+                            {hospital.category}
+                          </div>
+                          {hospital.matchedSpecialty ? (
+                            <div className="rounded-[4px] border border-brand-primary bg-white px-2 text-sm font-medium text-brand-primary">
+                              {hospital.matchedSpecialty}
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
 
-                      {hospital.matchedSpecialty ? (
-                        <div className="rounded-[4px] border border-brand-primary bg-white px-2 text-sm font-medium text-brand-primary">
-                          {hospital.matchedSpecialty}
+                      <div className="flex flex-col gap-y-1">
+                        <div className="flex items-start gap-x-1">
+                          <Icon name="map-location" className="mt-[1px] h-4 w-4" />
+                          <p className="text-sm font-medium text-gray-600">{hospital.address}</p>
                         </div>
-                      ) : null}
+                        <div className="flex items-center gap-x-1">
+                          <Icon name="map-walking" className="h-4 w-4" />
+                          <p className="text-sm font-medium text-gray-600">
+                            약 {hospital.distanceMeters}m
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-y-1">
-                    <div className="flex items-start gap-x-1">
-                      <Icon name="map-location" className="mt-[1px] h-4 w-4" />
-                      <p className="text-sm font-medium text-gray-600">{hospital.address}</p>
-                    </div>
-                    <div className="flex items-center gap-x-1">
-                      <Icon name="map-walking" className="h-4 w-4" />
-                      <p className="text-sm font-medium text-gray-600">
-                        약 {hospital.distanceMeters}m
-                      </p>
-                    </div>
-                  </div>
+                  {isSelected && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!homepageUrl) return;
+                        window.open(homepageUrl, "_blank", "noopener,noreferrer");
+                      }}
+                      className="mt-[10px] h-[39px] w-full rounded-[4px] bg-brand-primary text-sm font-semibold text-white hover:opacity-90"
+                    >
+                      홈페이지
+                    </button>
+                  )}
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
+
+          <div className="h-6 shrink-0" />
         </div>
       </article>
     </section>
