@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "@/components/Icon/Icon";
 import KakaoHospitalMap from "./KakaoHospitalMap";
 import type { HospitalMapItem, LatLng } from "@/libs/kakaoMap";
@@ -8,27 +8,6 @@ type UserLocation = LatLng & { accuracy: number };
 
 const DEFAULT_CENTER: LatLng = { lat: 37.5563, lng: 126.9236 };
 
-const SkeletonHospitalCard = () => {
-  return (
-    <div className="flex gap-x-4 rounded-[10px] border border-[#E9E9E9] px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)]">
-      <div className="aspect-square min-w-[145px] animate-pulse rounded-[5px] bg-gray-100" />
-      <div className="flex w-full flex-col justify-between">
-        <div className="flex flex-col gap-y-3">
-          <div className="h-5 w-[65%] animate-pulse rounded bg-gray-100" />
-          <div className="flex gap-x-2">
-            <div className="h-5 w-14 animate-pulse rounded bg-gray-100" />
-            <div className="h-5 w-20 animate-pulse rounded bg-gray-100" />
-          </div>
-        </div>
-        <div className="flex flex-col gap-y-2">
-          <div className="h-4 w-[90%] animate-pulse rounded bg-gray-100" />
-          <div className="h-4 w-[55%] animate-pulse rounded bg-gray-100" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const HospitalMapSection = () => {
   const [center, setCenter] = useState<LatLng>(DEFAULT_CENTER);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
@@ -36,11 +15,7 @@ const HospitalMapSection = () => {
   const [hospitals, setHospitals] = useState<HospitalMapItem[]>([]);
   const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(null);
 
-  const [locationError, setLocationError] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-
   const debounceRef = useRef<number | null>(null);
-  const watchIdRef = useRef<number | null>(null);
 
   const [isLocating, setIsLocating] = useState(false);
   const [hasStartedTracking, setHasStartedTracking] = useState(false);
@@ -120,7 +95,7 @@ const HospitalMapSection = () => {
   useEffect(() => {
     if (!userLocation) return;
 
-    if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
 
     debounceRef.current = window.setTimeout(() => {
       void (async () => {
@@ -154,18 +129,13 @@ const HospitalMapSection = () => {
     };
   }, [userLocation?.lat, userLocation?.lng]);
 
-  const effectiveSelectedId = useMemo(() => {
-    if (selectedHospitalId !== null) return selectedHospitalId;
-    return hospitals[0]?.hospitalId ?? null;
-  }, [selectedHospitalId, hospitals]);
-
   return (
     <section className="flex w-full flex-col border border-[#17171940] md:h-[400px] md:flex-row lg:h-[670px]">
       <article className="order-1 h-[320px] w-full md:order-2 md:h-full md:flex-1">
         <KakaoHospitalMap
           center={center}
           hospitals={hospitals}
-          selectedHospitalId={effectiveSelectedId}
+          selectedHospitalId={selectedHospitalId}
           onSelectHospital={setSelectedHospitalId}
         />
       </article>
