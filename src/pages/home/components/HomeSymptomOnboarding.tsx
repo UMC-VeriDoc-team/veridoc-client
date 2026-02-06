@@ -41,12 +41,12 @@ const HomeSymptomOnboarding = () => {
 
           {/* 카드 영역 */}
           <section className="mt-10 flex w-full items-center justify-center px-5 pb-16 md:mt-16 md:px-6 md:pb-20">
-            <div className="grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:gap-6">
+            <div className="grid w-full grid-cols-1 justify-items-center gap-4 sm:w-fit sm:grid-cols-2 md:gap-6">
               {GUIDE_CARDS.map((card) => (
                 <button
                   key={card.id}
                   type="button"
-                  className="group relative h-[260px] w-[380px] overflow-hidden rounded-[12px] text-left md:h-auto md:w-auto md:rounded-[4px]"
+                  className="group relative h-[260px] w-full overflow-hidden rounded-[12px] text-left sm:w-[380px] md:h-auto md:w-auto md:rounded-[4px]"
                   onClick={() => onClickOpenGuideDetail(card.id)}
                 >
                   {/* 이미지 */}
