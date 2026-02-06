@@ -19,6 +19,7 @@ import MyWithdrawDoneModal from "@/components/Modal/components/my/MyWithdrawDone
 
 import HomeTermsAgreementModal from "@/components/Modal/components/home/HomeTermsAgreementModal";
 import HomeTermsDetailModal from "@/components/Modal/components/home/HomeTermsDetailModal";
+
 import HomeDoctorOpinionModal from "@/components/Modal/components/home/HomeDoctorOpinionModal";
 import HomeTemporaryMeasureModal from "./components/home/HomeTemporaryMeasureModal";
 import GuideDetailModal from "./components/guide/GuideDetailModal";
