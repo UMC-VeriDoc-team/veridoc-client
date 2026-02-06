@@ -2,10 +2,13 @@ import type { ModalType } from "@/components/Modal/types/modal";
 import type { TermsKey } from "@/components/Modal/types/terms";
 import { create } from "zustand";
 
+type TermsDetailPayload = {
+  activeKey: TermsKey;
+  from?: "footer" | undefined;
+};
+
 type ModalPayloadMap = {
-  [K in ModalType]: K extends typeof ModalType.HOME_TERMS_DETAIL
-    ? { activeKey: TermsKey }
-    : undefined;
+  [K in ModalType]: K extends typeof ModalType.HOME_TERMS_DETAIL ? TermsDetailPayload : undefined;
 };
 
 type ModalPayload = ModalPayloadMap[ModalType] | undefined;

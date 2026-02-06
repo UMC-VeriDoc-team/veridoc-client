@@ -13,8 +13,11 @@ import {
 
 // 약관 상세 모달
 const HomeTermsDetailModal = () => {
-  const { modalPayload, openModal } = useBaseModal();
+  const { modalPayload, openModal, closeModal } = useBaseModal();
   const { setChecked, setAll, locationError, setLocationError } = useTermsAgreementStore();
+
+  const from = (modalPayload?.from as string | undefined) ?? "agreement";
+  const isFooterView = from === "footer";
 
   const termsItems = TERMS_ITEMS;
 
@@ -34,11 +37,17 @@ const HomeTermsDetailModal = () => {
   const needsGeoCheck = (isLocationDetail || isAllDetail) && locationRequired;
 
   const handleBack = () => {
+    // 약관 동의 플로우에서만 뒤로가기 동작
     openModal(ModalType.HOME_TERMS_AGREEMENT);
   };
 
-  // 상세 모달의 동의하기 버튼 동작
-  const handleAgree = async () => {
+  // 하단 버튼 동작
+  const handlePrimaryAction = async () => {
+    if (isFooterView) {
+      closeModal();
+      return;
+    }
+
     // ALL 상세
     if (isAllDetail) {
       // 위치가 필수이면 위치 권한 확인/요청이 먼저 성공해야 전체 동의 가능
@@ -107,13 +116,15 @@ const HomeTermsDetailModal = () => {
 
   return (
     <div className="flex max-h-[600px] min-h-[458px] w-[92vw] max-w-[420px] flex-col justify-between gap-y-7 overflow-hidden rounded-xl bg-white px-6 py-10 sm:min-w-[380px] sm:px-7">
-      {/* 상단 바 뒤로가기 */}
+      {/* 상단 바 (푸터일 때 뒤로가기 숨김) */}
       <div className="flex flex-col gap-1">
-        <div className="flex w-full items-center justify-start">
-          <button type="button" onClick={handleBack} aria-label="이전" className="rounded-md p-2">
-            <Icon name="chevron-left" className="h-4 w-4 text-[#4E5876]" />
-          </button>
-        </div>
+        {!isFooterView && (
+          <div className="flex w-full items-center justify-start">
+            <button type="button" onClick={handleBack} aria-label="이전" className="rounded-md p-2">
+              <Icon name="chevron-left" className="h-4 w-4 text-[#4E5876]" />
+            </button>
+          </div>
+        )}
 
         <div className="text-center">
           <p className="text-lg font-bold text-gray-900 sm:text-xl">
@@ -130,6 +141,7 @@ const HomeTermsDetailModal = () => {
         {activeItem.content.map((item) => (
           <div key={item.title}>
             <pre className="text-xs font-normal text-gray-600">{item.title}</pre>
+
             {item.sections.map((section) => (
               <div key={section.title}>
                 <p className="ml-1 text-xs font-normal text-gray-600">{section.title}</p>
@@ -194,19 +206,19 @@ const HomeTermsDetailModal = () => {
         ))}
       </div>
 
-      {/* 위치 에러 문구 (차단/거부/불가일 때만 표시) */}
-      {locationError && needsGeoCheck && (
+      {/* 위치 에러 문구: 동의 플로우에서만 보여주기 */}
+      {!isFooterView && locationError && needsGeoCheck && (
         <div className="rounded-md bg-gray-50 p-3 text-xs text-red-600">{locationError}</div>
       )}
 
-      {/* 동의하기 버튼 */}
+      {/* 하단 버튼 */}
       <button
         type="button"
-        onClick={() => void handleAgree()}
-        disabled={requesting}
+        onClick={() => void handlePrimaryAction()}
+        disabled={!isFooterView && requesting}
         className="inline-flex h-12 w-full items-center justify-center rounded-[4px] bg-brand-primary text-lg font-semibold text-white hover:opacity-90 disabled:opacity-60"
       >
-        {requesting ? "위치 권한 확인 중..." : "동의하기"}
+        {isFooterView ? "확인" : requesting ? "위치 권한 확인 중..." : "동의하기"}
       </button>
     </div>
   );
