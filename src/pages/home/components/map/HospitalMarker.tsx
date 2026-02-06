@@ -7,7 +7,7 @@ interface HospitalMarkerProps {
 
 const HospitalMarker = ({ active, imageUrl }: HospitalMarkerProps) => {
   return (
-    <div className="relative h-[80px] w-[80px]">
+    <div className="relative h-12 w-12 sm:h-[80px] sm:w-[80px]">
       {/* 마커 */}
       <Icon
         name={active ? "marker-active" : "marker-default"}

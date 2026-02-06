@@ -1,14 +1,17 @@
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
+import { useNavigate } from "react-router-dom";
 
 // 로그아웃 모달
 const AuthLogoutModal = () => {
+  const navigate = useNavigate();
   const { closeModal } = useBaseModal();
 
   // 로그아웃
   const handleLogout = () => {
     // 로그아웃 API
     closeModal();
+    navigate("/");
   };
 
   return (

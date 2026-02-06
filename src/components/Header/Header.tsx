@@ -57,47 +57,74 @@ const Header = ({ className }: HeaderProps) => {
           onClick={() => navigate("/")}
           src={logo}
           alt="VeriDoc 로고"
-          className="h-[40px] w-auto cursor-pointer object-contain"
+          className="h-9 w-auto cursor-pointer object-contain"
           draggable={false}
         />
 
-        {/* Navigation */}
-        <div className="flex items-center gap-8">
-          {/* 홈 */}
-          <NavLink
-            to={homeTarget}
-            onClick={handleHomeClick}
-            className={[
-              "cursor-pointer text-lg font-semibold transition-colors",
-              isHomeActive ? "text-black" : "text-gray-600 hover:text-gray-900",
-            ].join(" ")}
-          >
-            홈
-          </NavLink>
+        <div className="flex h-[40px] gap-x-[90px]">
+          {/* Navigation */}
+          <div className="flex items-center gap-8">
+            {/* 홈 */}
+            <NavLink
+              to={homeTarget}
+              onClick={handleHomeClick}
+              className={[
+                "cursor-pointer text-lg font-semibold transition-colors",
+                isHomeActive ? "text-black" : "text-gray-600 hover:text-gray-900",
+              ].join(" ")}
+            >
+              홈
+            </NavLink>
 
-          {/* 증상 */}
-          <NavLink
-            to="/symptom"
-            onClick={handleSymptomClick}
-            className={[
-              "cursor-pointer text-lg font-semibold transition-colors",
-              isSymptomActive ? "text-black" : "text-gray-600 hover:text-gray-900",
-            ].join(" ")}
-          >
-            증상
-          </NavLink>
+            {/* 증상 */}
+            <NavLink
+              to="/symptom"
+              onClick={handleSymptomClick}
+              className={[
+                "cursor-pointer text-lg font-semibold transition-colors",
+                isSymptomActive ? "text-black" : "text-gray-600 hover:text-gray-900",
+              ].join(" ")}
+            >
+              증상
+            </NavLink>
 
-          {/* 마이페이지 */}
-          <NavLink
-            to="/my"
-            onClick={handleMyClick}
-            className={[
-              "cursor-pointer text-lg font-semibold transition-colors",
-              isMyActive ? "text-black" : "text-gray-600 hover:text-gray-900",
-            ].join(" ")}
-          >
-            마이페이지
-          </NavLink>
+            {/* 마이페이지 */}
+            <NavLink
+              to="/my"
+              onClick={handleMyClick}
+              className={[
+                "cursor-pointer text-lg font-semibold transition-colors",
+                isMyActive ? "text-black" : "text-gray-600 hover:text-gray-900",
+              ].join(" ")}
+            >
+              마이페이지
+            </NavLink>
+          </div>
+          {isLoggedIn ? (
+            <div className="flex w-[200px] justify-end">
+              <button
+                onClick={() => openModal(ModalType.AUTH_LOGOUT)}
+                className={`items-center rounded-lg border border-brand-primary bg-white px-5 py-2 text-center font-semibold text-brand-primary hover:opacity-80`}
+              >
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <div className="flex w-[200px] gap-x-3">
+              <NavLink
+                to="/signup"
+                className={`items-center rounded-lg border border-brand-primary bg-white px-5 py-2 text-center font-semibold text-brand-primary hover:opacity-80`}
+              >
+                회원가입
+              </NavLink>
+              <NavLink
+                to="/login"
+                className={`items-center rounded-lg bg-brand-primary px-5 py-2 text-center font-semibold text-white hover:opacity-80`}
+              >
+                로그인
+              </NavLink>
+            </div>
+          )}
         </div>
       </nav>
     </header>
