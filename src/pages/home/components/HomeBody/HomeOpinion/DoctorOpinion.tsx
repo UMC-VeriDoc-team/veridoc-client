@@ -8,7 +8,7 @@ export const DoctorOpinion = ({ text }: DoctorOpinionProps) => {
       {text.split("\n").map((line, index) => (
         <span
           key={index}
-          className="text-lg font-semibold leading-[140%] tracking-[-0.025em] text-black"
+          className="font-['Pretendard'] text-[18px] font-medium leading-[140%] tracking-[-0.025em] text-[#000] md:text-lg md:font-semibold md:leading-[140%] md:tracking-[-0.025em] md:text-black"
         >
           {line.replace("\\n", "").trim()}
           <br />
