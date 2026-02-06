@@ -1,8 +1,6 @@
-// InputField.tsx
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Input from "./Input";
 import Icon from "@/components/Icon/Icon";
-import { Eye, EyeOff } from "lucide-react";
 
 interface InputFieldProps {
   value: string;
@@ -30,12 +28,16 @@ const InputField = ({
   const [showPassword, setShowPassword] = useState(false);
 
   const isPassword = passwordToggle && type === "password";
-  const showClear = clearable && value.length > 0;
   const showEye = isPassword && value.length > 0;
+  const showClear = clearable && value.length > 0 && !!onClear;
 
   const inputType = isPassword ? (showPassword ? "text" : "password") : type;
 
-  const rightPadding = showEye && showClear ? "pr-20" : showEye || showClear ? "pr-14" : "";
+  const rightPadding = useMemo(() => {
+    if (showEye && showClear) return "pr-[85px]";
+    if (showEye || showClear) return "pr-10";
+    return "";
+  }, [showEye, showClear]);
 
   return (
     <div className="relative">
@@ -49,27 +51,30 @@ const InputField = ({
         className={rightPadding}
       />
 
-      {showEye && (
-        <button
-          type="button"
-          onClick={() => setShowPassword((p) => !p)}
-          className="absolute right-10 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
-        >
-          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-        </button>
-      )}
+      {(showEye || showClear) && (
+        <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
+          {showEye && (
+            <button
+              type="button"
+              onClick={() => setShowPassword((p) => !p)}
+              className="flex h-[20px] w-[20px] items-center justify-center text-gray-400 hover:text-gray-600"
+              aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+            >
+              <Icon name={showPassword ? "password-eye-off" : "password-eye"} className="h-6 w-6" />
+            </button>
+          )}
 
-      {showClear && (
-        <button
-          type="button"
-          onClick={onClear}
-          disabled={!onClear}
-          className="absolute right-4 top-1/2 -translate-y-1/2 disabled:opacity-50"
-          aria-label="입력 내용 삭제"
-        >
-          <Icon name="input-close" />
-        </button>
+          {showClear && (
+            <button
+              type="button"
+              onClick={onClear}
+              className="flex h-[14px] w-[14px] items-center justify-center text-gray-400 hover:text-gray-600"
+              aria-label="입력 내용 삭제"
+            >
+              <Icon name="input-close" className="h-5 w-5" />
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
