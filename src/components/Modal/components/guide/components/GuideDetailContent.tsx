@@ -79,7 +79,7 @@ const GuideDetailContent = () => {
                       return (
                         <li
                           key={`${step.title}-${index}`}
-                          className="relative flex h-[100px] items-start gap-4 sm:h-16 sm:gap-7"
+                          className="relative flex h-[100px] items-start gap-4 sm:h-16 sm:items-center sm:gap-7"
                         >
                           <div className="relative w-14 flex-shrink-0 sm:w-16">
                             {/* 아이콘 */}

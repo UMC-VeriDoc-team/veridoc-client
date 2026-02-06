@@ -33,16 +33,16 @@ const DoctorOpinionContent = () => {
     <div className="flex-1 overflow-y-auto px-1 py-2 sm:px-4 sm:py-4 md:px-7 md:py-6">
       <div className="flex flex-col gap-6 sm:gap-8">
         <div className="flex gap-4">
-          <p className="text-sm text-[#000D2F] underline">{}</p>
-          <p className="text-sm text-[#000D2F] underline">전문의소견</p>
+          <p className="text-xs text-[#000D2F] underline sm:text-sm">어깨</p>
+          <p className="text-xs text-[#000D2F] underline sm:text-sm">전문의소견</p>
         </div>
 
         {/* 제목 */}
         <div className="flex flex-col space-y-2">
-          <p className="text-4xl font-extrabold text-gray-950 sm:text-3xl md:text-4xl">
+          <p className="text-2xl font-extrabold leading-[-2.5%] text-gray-950 sm:text-4xl md:text-4xl">
             반복되는 두통과 어깨 결림,
           </p>
-          <p className="text-4xl font-extrabold text-gray-950 sm:text-3xl md:text-4xl">
+          <p className="text-2xl font-extrabold leading-[-2.5%] text-gray-950 sm:text-4xl md:text-4xl">
             거북목증후군을 의심해보세요
           </p>
         </div>
@@ -54,30 +54,27 @@ const DoctorOpinionContent = () => {
           </div>
 
           {/* 공개의료 Q&A / export / 출처 링크 */}
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center justify-between gap-3">
             <div className="flex flex-wrap gap-2">
               <div className="flex gap-1 border border-brand-primary px-2 py-1">
-                <Icon name="medical-info" className="w-4" />
-                <p className="pt-[2px] text-center text-sm font-medium text-brand-primary sm:text-base">
+                <Icon name="medical-info" className="w-3 sm:w-4" />
+                <p className="pt-[2px] text-center text-xs font-medium text-brand-primary sm:text-base">
                   공개 의료 Q&A
                 </p>
               </div>
-              <div className="flex gap-1 border border-brand-green px-2 py-1">
-                <Icon name="check-fill-green" className="w-4" />
-                <p className="pt-[2px] text-center text-sm font-medium text-brand-green sm:text-base">
+              <div className="flex items-center gap-1 border border-brand-green px-2 py-1">
+                <Icon name="check-fill-green" className="w-3 sm:w-4" />
+                <p className="pt-[2px] text-center text-xs font-medium text-brand-green sm:text-base">
                   export
                 </p>
               </div>
             </div>
 
-            <button
-              type="button"
-              className="flex items-center justify-center gap-2 self-start sm:self-auto"
-            >
+            <button type="button" className="flex items-center justify-center gap-2">
               <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
                 원문 출처 보기
               </p>
-              <Icon name="link" className="h-6 w-6 rounded-full bg-gray-200" />
+              <Icon name="link" className="h-5 w-5 rounded-full bg-gray-200 sm:h-6 sm:w-6" />
             </button>
           </div>
         </div>
@@ -103,10 +100,7 @@ const DoctorOpinionContent = () => {
             <div className="flex flex-col">
               <p className="text-sm font-medium text-brand-orange">
                 본 내용은 공개된 의료 상담을 바탕으로 정리된 정보이며, 개인의 상태에 따라 다를 수
-                있습니다.
-              </p>
-              <p className="text-sm font-medium text-brand-orange">
-                통증이 지속되거나 심해질 경우 의료기관 방문이 필요할 수 있습니다.
+                있습니다. 통증이 지속되거나 심해질 경우 의료기관 방문이 필요할 수 있습니다.
               </p>
             </div>
           </div>
@@ -117,25 +111,25 @@ const DoctorOpinionContent = () => {
 
         {/* 하단: 공유 / 해시태그 / 포스트 더보기 */}
         <div className="flex flex-col gap-10 sm:gap-16">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center justify-between gap-6">
             {/* 공유 */}
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-              <p className="text-base font-medium text-gray-950">Share this</p>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <p className="truncate text-sm font-medium text-gray-950 sm:text-base">Share this</p>
               <div className="flex gap-2">
                 {shares.map((item) => (
                   <button key={item.iconName} type="button">
-                    <Icon name={item.iconName} className="h-6 w-6" />
+                    <Icon name={item.iconName} className="h-5 w-5 sm:h-6 sm:w-6" />
                   </button>
                 ))}
               </div>
             </div>
 
             {/* 해시태그 */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2">
               {hashtags.map((hashtag) => (
                 <div
                   key={hashtag.content}
-                  className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-sm font-medium text-brand-primary"
+                  className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-xs font-medium text-brand-primary sm:text-sm"
                 >
                   {hashtag.content}
                 </div>
@@ -149,7 +143,10 @@ const DoctorOpinionContent = () => {
 
             <div className="mt-3 flex w-full flex-nowrap gap-5 overflow-x-auto pb-2">
               {posts.map((post) => (
-                <div key={post.title} className="flex w-60 shrink-0 cursor-pointer flex-col gap-2">
+                <div
+                  key={post.title}
+                  className="flex w-44 shrink-0 cursor-pointer flex-col gap-2 sm:w-60"
+                >
                   <div className="h-32 w-full bg-gray-100"></div>
                   <p className="text-sm font-medium text-gray-950">{post.title}</p>
                 </div>

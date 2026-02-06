@@ -11,14 +11,9 @@ const HomeDoctorOpinionPage = () => {
   };
 
   return (
-    <div className="relative flex min-h-dvh flex-col bg-white">
+    <div className="flex min-h-dvh flex-col bg-white p-[30px]">
       {/* 상단 바 */}
-      <button
-        className="absolute left-6 top-6 z-50 sm:left-11 sm:top-11"
-        type="button"
-        onClick={handleBack}
-        aria-label="뒤로가기"
-      >
+      <button className="pb-[40px]" type="button" onClick={handleBack} aria-label="뒤로가기">
         <Icon name="arrow-back" className="h-5 w-5" />
       </button>
 

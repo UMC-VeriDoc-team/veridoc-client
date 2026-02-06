@@ -38,8 +38,8 @@ const TemporaryMeasureContent = () => {
     <div className="flex-1 overflow-y-auto px-1 py-2 sm:px-4 sm:py-4 md:px-7 md:py-6">
       <div className="flex flex-col gap-6 sm:gap-8">
         <div className="flex gap-4">
-          <p className="text-sm text-[#000D2F] underline">어깨</p>
-          <p className="text-sm text-[#000D2F] underline">임시대처방안</p>
+          <p className="text-xs text-[#000D2F] underline sm:text-sm">어깨</p>
+          <p className="text-xs text-[#000D2F] underline sm:text-sm">임시대처방안</p>
         </div>
 
         {/* 제목 */}
@@ -47,38 +47,35 @@ const TemporaryMeasureContent = () => {
           <p className="text-2xl font-extrabold text-gray-950 sm:text-3xl md:text-4xl">
             허리 스트레칭 방법
           </p>
-          <p className="text-md font-semibold text-gray-950 sm:text-base md:text-lg">
+          <p className="text-base font-semibold text-gray-950 md:text-lg">
             허리 근육 긴장을 풀어주는 가벼운 스트레칭
           </p>
         </div>
 
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-4">
-            <Icon name="hospital" className="h-10 w-10 rounded-full sm:h-12 sm:w-12" />
+            <Icon name="hospital" className="h-12 w-12 rounded-full" />
             <p className="text-sm font-medium text-gray-950 sm:text-base">서울아산병원 건강정보</p>
           </div>
 
           {/* 평균 소요 시간 / 증상 / 출처 링크 */}
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-wrap gap-2">
-              <div className="flex gap-2 border border-brand-primary px-2 py-1">
-                <Icon name="repeat" className="w-4" />
+          <div className="flex justify-between gap-3 sm:items-end">
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="flex w-fit gap-2 border border-brand-primary px-2 py-1">
+                <Icon name="repeat" className="w-3 sm:w-4" />
                 <p className="pt-[2px] text-center text-sm font-medium text-brand-primary sm:text-base">
                   평균 소요 시간 10분
                 </p>
               </div>
-              <div className="flex gap-2 border border-brand-primary px-2 py-1">
-                <Icon name="clock" className="w-4" />
+              <div className="flex w-fit gap-2 border border-brand-primary px-2 py-1">
+                <Icon name="clock" className="w-3 sm:w-4" />
                 <p className="pt-[2px] text-center text-sm font-medium text-brand-primary sm:text-base">
                   허리 · 스트레칭
                 </p>
               </div>
             </div>
 
-            <button
-              type="button"
-              className="flex items-center justify-center gap-2 self-start sm:self-auto"
-            >
+            <button type="button" className="flex items-center justify-center gap-2 self-end">
               <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
                 원문 출처 보기
               </p>
@@ -88,7 +85,7 @@ const TemporaryMeasureContent = () => {
         </div>
 
         {/* 이미지 */}
-        <div className="h-[180px] w-full rounded-[10px] bg-gray-100 sm:h-[220px] md:h-[260px]"></div>
+        <div className="h-[180px] w-full rounded-[5px] bg-gray-100 sm:h-[220px] md:h-[260px]"></div>
 
         {/* 본문 / 경고문 */}
         <div className="flex flex-col gap-10 sm:gap-[80px]">
@@ -156,25 +153,25 @@ const TemporaryMeasureContent = () => {
 
         {/* 하단: 공유 / 해시태그 / 포스트 더보기 */}
         <div className="flex flex-col gap-10 sm:gap-16">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center justify-between gap-6">
             {/* 공유 */}
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-              <p className="text-base font-medium text-gray-950">Share this</p>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <p className="truncate text-sm font-medium text-gray-950 sm:text-base">Share this</p>
               <div className="flex gap-2">
                 {shares.map((item) => (
                   <button key={item.iconName} type="button">
-                    <Icon name={item.iconName} className="h-6 w-6" />
+                    <Icon name={item.iconName} className="h-5 w-5 sm:h-6 sm:w-6" />
                   </button>
                 ))}
               </div>
             </div>
 
             {/* 해시태그 */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2">
               {hashtags.map((hashtag) => (
                 <div
                   key={hashtag.content}
-                  className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-sm font-medium text-brand-primary"
+                  className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-xs font-medium text-brand-primary sm:text-sm"
                 >
                   {hashtag.content}
                 </div>
@@ -188,7 +185,10 @@ const TemporaryMeasureContent = () => {
 
             <div className="mt-3 flex w-full flex-nowrap gap-5 overflow-x-auto pb-2">
               {posts.map((post) => (
-                <div key={post.title} className="flex w-60 shrink-0 cursor-pointer flex-col gap-2">
+                <div
+                  key={post.title}
+                  className="flex w-44 shrink-0 cursor-pointer flex-col gap-2 sm:w-60"
+                >
                   <div className="h-32 w-full bg-gray-100"></div>
                   <p className="text-sm font-medium text-gray-950">{post.title}</p>
                 </div>

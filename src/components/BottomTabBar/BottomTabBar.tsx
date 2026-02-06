@@ -12,7 +12,7 @@ const BottomTabBar = () => {
 
   // 임시: 로그인 연동 후 store로 관리
   const isLoggedIn = true;
-  const hasSymptom = false;
+  const hasSymptom = true;
 
   const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guide") : "/preview";
 
