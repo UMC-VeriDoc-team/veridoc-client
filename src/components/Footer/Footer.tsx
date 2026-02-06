@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "../Modal/types/modal";
+import { TermsKey } from "../Modal/types/terms";
 
-interface FooterLink {
+interface PolicyModalLink {
   label: string;
-  to: string;
+  termsKey: TermsKey;
 }
 
 interface SocialLink {
@@ -14,11 +14,10 @@ interface SocialLink {
   iconName: string;
 }
 
-const policyLinks: FooterLink[] = [
-  // 임시 링크
-  { label: "서비스 이용 약관", to: "/terms" },
-  { label: "개인정보처리방침", to: "/privacy" },
-  { label: "이메일 무단수집 거부", to: "/email-policy" },
+const policyLinks: PolicyModalLink[] = [
+  { label: "서비스 이용 약관", termsKey: TermsKey.SERVICE },
+  { label: "개인정보처리방침", termsKey: TermsKey.PRIVACY },
+  { label: "위치서비스 이용 약관", termsKey: TermsKey.LOCATION },
 ];
 
 const Footer = () => {
@@ -44,11 +43,18 @@ const Footer = () => {
     }
   };
 
+  const handleOpenPolicy = (termsKey: TermsKey) => {
+    openModal(ModalType.HOME_TERMS_DETAIL, {
+      activeKey: termsKey,
+      from: "footer",
+    });
+  };
+
   return (
     <footer className="hidden w-full justify-center border-t border-layout-footerBorder bg-layout-footerBg px-20 py-14 md:flex xl:px-28">
       <div className="flex w-fit flex-col gap-12">
         {/* 상단 1행: 브랜드 / 설명 / 링크 */}
-        <div className="grid grid-cols-12 gap-8">
+        <div className="gap-8 sm:grid sm:grid-cols-6 lg:grid-cols-12">
           {/* Left: Logo + Social */}
           <div className="col-span-12 flex h-fit flex-col gap-4 md:col-span-3">
             <div className="font-brand text-xl font-bold text-layout-footerTitle">VeriDoc</div>
@@ -87,13 +93,14 @@ const Footer = () => {
 
           <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-8">
             {policyLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="truncate font-medium text-layout-footerText transition-colors"
+              <button
+                key={link.label}
+                type="button"
+                onClick={() => handleOpenPolicy(link.termsKey)}
+                className="truncate font-medium text-layout-footerText transition-colors hover:opacity-80"
               >
                 {link.label}
-              </Link>
+              </button>
             ))}
           </div>
         </div>
