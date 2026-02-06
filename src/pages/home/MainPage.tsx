@@ -5,16 +5,17 @@ import HomeMovingImage from "@/pages/home/components/banner/HomeMovingImage";
 
 const MainPage = () => {
   return (
-    <div className="flex w-full flex-col">
+    <div className="w-full">
       <HomeMovingImage />
-      <div className="grid grid-cols-[1fr_1350px_1fr] pb-32 pt-[69px]">
-        <div />
-        <div className="flex w-full flex-col items-center gap-y-[140px]">
-          <HomeBody />
-          <HomeManage />
-          <HomeMap />
+
+      <div className="pb-24 pt-0 sm:pb-32 sm:pt-[69px]">
+        <div className="mx-auto w-full max-w-[1360px] sm:px-8">
+          <div className="flex flex-col gap-y-24 sm:gap-y-[140px]">
+            <HomeBody />
+            <HomeManage />
+            <HomeMap />
+          </div>
         </div>
-        <div />
       </div>
     </div>
   );

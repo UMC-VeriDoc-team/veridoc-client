@@ -36,11 +36,15 @@ const KakaoHospitalMap = ({
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<KakaoMap | null>(null);
   const overlaysRef = useRef<Map<string, OverlayItem>>(new Map());
-
+  const onSelectHospitalRef = useRef(onSelectHospital);
   const [isMapReady, setIsMapReady] = useState(false);
 
   // 컴포넌트 언마운트/스플래시 전환 중 콜백 방지용
   const aliveRef = useRef(true);
+
+  useEffect(() => {
+    onSelectHospitalRef.current = onSelectHospital;
+  }, [onSelectHospital]);
 
   useEffect(() => {
     aliveRef.current = true;
@@ -114,7 +118,7 @@ const KakaoHospitalMap = ({
     map.panTo(pos);
   }, [isMapReady, center.lat, center.lng]);
 
-  // 오버레이 생성/갱신 (cleanup에서만 제거)
+  // 오버레이 생성/갱신 (hospitals가 바뀔 때만)
   useEffect(() => {
     const map = mapRef.current;
     const maps = window.kakao?.maps;
@@ -124,7 +128,6 @@ const KakaoHospitalMap = ({
     overlaysRef.current.forEach((item) => item.cleanup());
     overlaysRef.current.clear();
 
-    // 새 오버레이 생성
     hospitals.forEach((h) => {
       const position = new maps.LatLng(h.coordinate.lat, h.coordinate.lng);
 
@@ -136,14 +139,14 @@ const KakaoHospitalMap = ({
       const reactRoot = createRoot(container);
       reactRoot.render(
         <HospitalMarker
-          active={h.hospitalId === selectedHospitalId}
+          active={h.hospitalId === selectedHospitalId} // 초기 한번만
           imageUrl={h.imageUrl ?? null}
         />
       );
 
       const handleClick = (e: MouseEvent) => {
         e.preventDefault();
-        onSelectHospital(h.hospitalId);
+        onSelectHospitalRef.current(h.hospitalId);
       };
       container.addEventListener("click", handleClick);
 
@@ -160,19 +163,24 @@ const KakaoHospitalMap = ({
       const cleanup = () => {
         try {
           container.removeEventListener("click", handleClick);
-        } catch {
-          console.log("err");
+        } catch (err) {
+          void err;
         }
+
         try {
           overlay.setMap(null);
-        } catch {
-          console.log("err");
+        } catch (err) {
+          void err;
         }
-        try {
-          reactRoot.unmount();
-        } catch {
-          console.log("err");
-        }
+
+        // React가 렌더링 중일 때 unmount는 다음 tick으로
+        queueMicrotask(() => {
+          try {
+            reactRoot.unmount();
+          } catch (err) {
+            void err;
+          }
+        });
       };
 
       overlaysRef.current.set(h.hospitalId, {
@@ -189,7 +197,7 @@ const KakaoHospitalMap = ({
       overlaysRef.current.forEach((item) => item.cleanup());
       overlaysRef.current.clear();
     };
-  }, [isMapReady, hospitals, onSelectHospital, selectedHospitalId]);
+  }, [isMapReady, hospitals, onSelectHospital]);
 
   // 선택된 병원 이동 + active 상태 갱신
   useEffect(() => {

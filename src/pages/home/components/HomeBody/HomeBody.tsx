@@ -12,7 +12,7 @@ const HomeBody = () => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-20">
+    <div className="flex w-full flex-col gap-y-12 p-[30px] sm:gap-20 sm:p-0">
       <HomeSelectButton
         onClick={handleSelectButtonClick}
         tags={SHOULDER_SYMPTOM}

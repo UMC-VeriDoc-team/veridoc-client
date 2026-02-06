@@ -34,32 +34,43 @@ const AlternativeCard = ({
     <div
       key={guideId}
       onClick={handleShowTemporaryMeasure}
-      className="flex w-full cursor-pointer flex-col justify-between hover:opacity-80"
+      className="flex w-full min-w-[220px] cursor-pointer flex-col justify-between hover:opacity-80 sm:min-w-[250px]"
     >
       <div className="flex flex-col gap-y-5">
         <div className="relative">
           <img
             src={imageUrl}
             alt="임시 대처 방안 이미지"
-            className="z-20 w-full rounded-[5px] object-cover brightness-50"
+            className="h-[170px] w-full rounded-[5px] object-cover brightness-50 sm:h-[300px] md:z-20"
           />
-          <div className="absolute left-5 top-5 z-30 flex gap-x-1">
+          <div className="absolute left-3 top-3 z-30 flex gap-x-1 md:left-5 md:top-5">
             {badges.map((badge: string, idx) => (
-              <div key={idx} className="rounded-[4px] bg-[#FFFFFF33] px-[10px] py-2 text-white">
+              <div
+                key={idx}
+                className="rounded-[4px] bg-[#FFFFFF33] px-2 py-1 text-xs text-white sm:py-2 sm:text-base md:px-[10px]"
+              >
                 {badge}
               </div>
             ))}
           </div>
         </div>
-        <p className="text-[28px] font-bold text-gray-950">{title}</p>
-        <p className="h-36 text-xl text-[#6C757D]">{description}</p>
+
+        <p className="text-xl font-bold tracking-[-0.45px] text-gray-950 md:text-3xl md:font-bold">
+          {title}
+        </p>
+        <p className="text-lg text-[#6C757D] md:h-36 md:text-xl">{description}</p>
       </div>
-      <div className="flex items-center gap-x-3">
-        <p className="mt-1 text-base font-medium text-gray-950">{type}</p>
-        <div className="h-1 w-5 border-b border-[#121416CF]" />
-        <div className="flex items-center gap-x-1">
+
+      <div className="mt-4 flex items-center gap-x-2 sm:gap-x-3 md:mt-0">
+        <p className="md:text-base-[#121416]/81 text-normal whitespace-nowrap text-sm font-medium leading-[40px] text-[#6C757D] md:text-base">
+          {type}
+        </p>
+        <div className="h-[1px] w-4 bg-[#121416CF]" />
+        <div className="flex shrink-0 items-center gap-x-1">
           <Icon name="clock" className="h-4 w-4" />
-          <p className="mt-1 text-base font-medium text-brand-primary">{duration}</p>
+          <p className="whitespace-nowrap text-sm font-medium text-brand-primary md:text-base">
+            {duration}
+          </p>
         </div>
       </div>
     </div>
