@@ -2,9 +2,9 @@ import Icon from "@/components/Icon/Icon";
 
 export const BlueBox = () => {
   return (
-    <div className="flex shrink-0 items-center justify-center gap-1 border border-brand-primary bg-white px-2.5 py-1">
+    <div className="flex min-h-fit shrink-0 items-center justify-center gap-1 border border-brand-primary bg-white px-1 py-1 sm:px-2.5">
       <Icon name="medical-info" className="w-3" />
-      <span className="font-['Pretendard'] text-[14px] font-medium leading-[20px] tracking-[-0.35px] text-[#2B7FFF] md:font-medium md:leading-[20px] md:tracking-[-0.025em] md:text-brand-primary">
+      <span className="text-xs font-medium leading-[20px] tracking-[-0.35px] text-brand-primary sm:text-sm">
         공개 의료 Q&A
       </span>
     </div>

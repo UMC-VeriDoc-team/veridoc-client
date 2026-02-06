@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const MOBILE_MAX_WIDTH = 768;
+const MOBILE_MAX_WIDTH = 767;
 
 // 모바일 판별 훅
 const useIsMobile = () => {

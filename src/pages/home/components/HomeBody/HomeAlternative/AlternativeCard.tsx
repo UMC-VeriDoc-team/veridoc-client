@@ -34,20 +34,20 @@ const AlternativeCard = ({
     <div
       key={guideId}
       onClick={handleShowTemporaryMeasure}
-      className="flex w-[200px] shrink-0 cursor-pointer flex-col justify-between hover:opacity-80 md:w-[380px]"
+      className="flex w-full min-w-[220px] cursor-pointer flex-col justify-between hover:opacity-80 sm:min-w-[250px]"
     >
       <div className="flex flex-col gap-y-5">
         <div className="relative">
           <img
             src={imageUrl}
             alt="임시 대처 방안 이미지"
-            className="h-[170px] w-[200px] rounded-[5px] object-cover md:z-20 md:h-[395px] md:w-full md:brightness-50"
+            className="h-[170px] w-full rounded-[5px] object-cover brightness-50 sm:h-[300px] md:z-20"
           />
           <div className="absolute left-3 top-3 z-30 flex gap-x-1 md:left-5 md:top-5">
             {badges.map((badge: string, idx) => (
               <div
                 key={idx}
-                className="rounded-[4px] bg-[#FFFFFF33] px-2 py-1 text-xs text-white md:px-[10px] md:py-2 md:text-base"
+                className="rounded-[4px] bg-[#FFFFFF33] px-2 py-1 text-xs text-white sm:py-2 sm:text-base md:px-[10px]"
               >
                 {badge}
               </div>
@@ -55,19 +55,17 @@ const AlternativeCard = ({
           </div>
         </div>
 
-        {/* 제목: 모바일 20px -> 데스크탑 28px */}
-        <p className="text-[20px] font-semibold tracking-[-0.45px] text-[#171719] md:text-[28px] md:font-bold md:text-gray-950">
+        <p className="text-xl font-bold tracking-[-0.45px] text-gray-950 md:text-3xl md:font-bold">
           {title}
         </p>
-
-        {/* 설명: 데스크탑에서만 표시 */}
-        <p className="hidden text-[#6C757D] md:block md:h-36 md:text-xl">{description}</p>
+        <p className="text-lg text-[#6C757D] md:h-36 md:text-xl">{description}</p>
       </div>
 
-      <div className="mt-4 flex items-center gap-x-3 md:mt-0">
-        <p className="md:text-base-[#121416]/81 text-normal whitespace-nowrap font-['Pretendard'] text-[14px] font-medium leading-[40px] text-[#6C757D] md:text-base">
+      <div className="mt-4 flex items-center gap-x-2 sm:gap-x-3 md:mt-0">
+        <p className="md:text-base-[#121416]/81 text-normal whitespace-nowrap text-sm font-medium leading-[40px] text-[#6C757D] md:text-base">
           {type}
         </p>
+        <div className="h-[1px] w-4 bg-[#121416CF]" />
         <div className="flex shrink-0 items-center gap-x-1">
           <Icon name="clock" className="h-4 w-4" />
           <p className="whitespace-nowrap text-sm font-medium text-brand-primary md:text-base">

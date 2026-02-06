@@ -146,7 +146,7 @@ const HospitalMapSection = () => {
   }, [selectedHospitalId, hospitals]);
 
   return (
-    <section className="flex w-full flex-col border border-[#17171940] md:h-[670px] md:flex-row">
+    <section className="flex w-full flex-col border border-[#17171940] md:h-[400px] md:flex-row lg:h-[670px]">
       <article className="order-1 h-[320px] w-full md:order-2 md:h-full md:flex-1">
         <KakaoHospitalMap
           center={center}
@@ -156,7 +156,7 @@ const HospitalMapSection = () => {
         />
       </article>
 
-      <article className="order-2 w-full border-t border-[#17171940] p-4 md:order-1 md:h-full md:w-[40%] md:border-r md:border-t-0">
+      <article className="order-2 w-full overflow-hidden border-t border-[#17171940] p-4 md:order-1 md:h-full md:w-[40%] md:min-w-[400px] md:border-r md:border-t-0">
         {locationError && (
           <div className="mb-3 rounded-md bg-gray-50 p-3 text-xs text-red-600">{locationError}</div>
         )}
@@ -165,7 +165,7 @@ const HospitalMapSection = () => {
           <span className="font-semibold text-brand-primary">{hospitals.length}</span> 개 병원
         </p>
 
-        <div className="flex max-h-[320px] flex-col gap-y-[10px] overflow-y-auto md:h-full md:max-h-none">
+        <div className="flex max-h-[320px] flex-col gap-y-[10px] overflow-y-auto sm:pb-2 md:h-full md:max-h-none">
           {isLoading ? (
             <>
               <SkeletonHospitalCard />
@@ -191,15 +191,17 @@ const HospitalMapSection = () => {
                       <img
                         src={hospital.imageUrl}
                         alt={hospital.name}
-                        className="aspect-square min-w-[145px] rounded-[5px] object-cover"
+                        className="aspect-square min-w-[129px] rounded-[5px] object-cover sm:min-w-[145px]"
                       />
                     ) : (
-                      <div className="aspect-square min-w-[145px] rounded-[5px] bg-gray-100" />
+                      <div className="aspect-square min-w-[129px] rounded-[5px] bg-gray-100 sm:min-w-[145px]" />
                     )}
 
-                    <div className="flex w-full flex-col justify-between">
+                    <div className="flex w-full flex-col gap-y-2 sm:justify-between">
                       <div className="flex flex-col gap-y-2">
-                        <p className="text-lg font-semibold text-gray-950">{hospital.name}</p>
+                        <p className="text-base font-semibold text-gray-950 sm:text-lg">
+                          {hospital.name}
+                        </p>
                         <div className="flex flex-wrap gap-x-[5px] gap-y-1">
                           <div className="rounded-[4px] bg-brand-primary px-2 text-sm font-medium text-white">
                             {hospital.category}
@@ -215,11 +217,13 @@ const HospitalMapSection = () => {
                       <div className="flex flex-col gap-y-1">
                         <div className="flex items-start gap-x-1">
                           <Icon name="map-location" className="mt-[1px] h-4 w-4" />
-                          <p className="text-sm font-medium text-gray-600">{hospital.address}</p>
+                          <p className="text-xs font-medium text-gray-600 sm:text-sm">
+                            {hospital.address}
+                          </p>
                         </div>
                         <div className="flex items-center gap-x-1">
                           <Icon name="map-walking" className="h-4 w-4" />
-                          <p className="text-sm font-medium text-gray-600">
+                          <p className="text-xs font-medium text-gray-600 sm:text-sm">
                             약 {hospital.distanceMeters}m
                           </p>
                         </div>
