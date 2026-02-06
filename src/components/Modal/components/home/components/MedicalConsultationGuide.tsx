@@ -12,7 +12,7 @@ export type MedicalConsultationGuideProps = {
   items: ConsultationGuideItem[];
 };
 
-// 아이콘 매핑 정보
+// 임시: 아이콘 매핑 정보
 const iconMaps: {
   id: number;
   iconName: "calendar" | "health" | "sleep";
@@ -35,25 +35,28 @@ export const MedicalConsultationGuide = ({ items }: MedicalConsultationGuideProp
           const icon = iconMaps[index];
 
           return (
-            <li key={item.id} className="relative flex gap-7">
+            <li
+              key={item.id}
+              className="relative flex h-[100px] items-start gap-4 sm:h-16 sm:gap-7"
+            >
               {/* 왼쪽 아이콘 + 세로 라인 */}
-              <div className="relative flex w-16 justify-center">
+              <div className="relative w-14 flex-shrink-0 sm:w-16">
                 {/* 아이콘 원 */}
                 <div
-                  className={`flex items-center justify-center rounded-full bg-brand-primarySoft p-3`}
+                  className={`z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#2B7FFF1A] sm:h-16 sm:w-16`}
                 >
                   {icon && <Icon name={icon.iconName} className="h-5 w-5" />}
                 </div>
 
                 {!isLast && (
                   <div
-                    className={`absolute left-1/2 top-11 h-[40px] w-1 -translate-x-1/2 bg-brand-primary`}
+                    className={`absolute bottom-[-40px] left-1/2 top-14 h-[85px] w-1 -translate-x-1/2 bg-brand-primary sm:top-16 sm:h-[41px]`}
                   />
                 )}
               </div>
 
               {/* 텍스트 영역 */}
-              <div className="min-w-0">
+              <div className="min-w-0 sm:self-center">
                 <h3 className="text-base font-medium text-gray-950">{item.title}</h3>
                 <p className="text-sm font-medium text-[#ABB7C2]">{item.description}</p>
               </div>
