@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import Icon from "@/components/Icon/Icon";
+import useBaseModal from "@/stores/modal/useBaseModal";
+import { ModalType } from "../Modal/types/modal";
 
 interface FooterLink {
   label: string;
@@ -20,14 +22,27 @@ const policyLinks: FooterLink[] = [
 ];
 
 const Footer = () => {
-  // 임시 SNS 링크
+  const { openModal } = useBaseModal();
+
+  // SNS 링크
   const socialLinks: SocialLink[] = [
-    { label: "Instagram", href: "#", iconName: "instagram-outline" },
+    {
+      label: "Instagram",
+      href: "https://www.instagram.com/veridoc_?igsh=ZHJqbnBtb3lybWEy&utm_source=qr",
+      iconName: "instagram-outline",
+    },
     { label: "X", href: "#", iconName: "x-outline" },
     { label: "LinkedIn", href: "#", iconName: "linkedin-outline" },
     { label: "Facebook", href: "#", iconName: "facebook-outline" },
     { label: "YouTube", href: "#", iconName: "youtube-outline" },
   ];
+
+  const goToSNS = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href === "#") {
+      e.preventDefault();
+      openModal(ModalType.SERVICE_PREPARING);
+    }
+  };
 
   return (
     <footer className="hidden w-full justify-center border-t border-layout-footerBorder bg-layout-footerBg px-20 py-14 md:flex xl:px-28">
@@ -44,9 +59,10 @@ const Footer = () => {
                   key={item.label}
                   href={item.href}
                   aria-label={item.label}
-                  target="_blank"
-                  rel="noreferrer"
+                  target={item.href === "#" ? undefined : "_blank"}
+                  rel={item.href === "#" ? undefined : "noreferrer"}
                   className="shrink-0"
+                  onClick={(e) => goToSNS(e, item.href)}
                 >
                   <Icon name={item.iconName} className="h-5 w-5" />
                 </a>
