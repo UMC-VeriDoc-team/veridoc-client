@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import confetti from "canvas-confetti";
+import { useMemo, useState, useRef } from "react";
 import SectionTitle from "@/pages/symptom/components/common/SectionTitle";
 import StepCardList from "@/pages/symptom/tabs/symptom-guide/components/StepCardList";
 import StepDescription from "@/pages/symptom/tabs/symptom-guide/components/StepDescription";
@@ -35,6 +36,17 @@ const COMPLETED_CENTER_INDEX = 1;
 const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
   const { openModal } = useBaseModal(); // 모달 다시 쓸 거면 유지, 아니면 지워도 됨
   const isMobile = useIsMobile();
+
+  // 완료 시 컨페티 효과
+  const didFireConfettiRef = useRef(false);
+
+  const fireConfetti = () => {
+    confetti({
+      particleCount: 140,
+      spread: 90,
+      origin: { x: 0.5, y: 0.6 },
+    });
+  };
 
   const steps: SymptomGuideStep[] = useMemo(
     () => [
@@ -92,12 +104,20 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
     if (completed) {
       setCompleted(false);
       setCurrentIndex(0);
+
+      didFireConfettiRef.current = false;
       return;
     }
 
     // step4에서 누르면 완료 상태로 전환
     if (currentIndex === steps.length - 1) {
       setCompleted(true);
+
+      // 컨페티 효과(1회)
+      if (!didFireConfettiRef.current) {
+        didFireConfettiRef.current = true;
+        fireConfetti();
+      }
       return;
     }
 
