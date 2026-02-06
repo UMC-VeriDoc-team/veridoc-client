@@ -13,7 +13,7 @@ export const HomeSelectButton = ({ tags, onClick, selectedTag }: HomeSelectButto
     }
   };
   return (
-    <div className="scrollbar-hide flex w-full gap-2 overflow-x-auto pb-4">
+    <div className="scrollbar-hide flex w-full gap-2 overflow-x-auto px-[30px] pb-4 md:px-0">
       {tags.map((tag) => (
         <button
           key={tag.id}

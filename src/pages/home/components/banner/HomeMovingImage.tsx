@@ -44,15 +44,15 @@ const HomeMovingImage = () => {
 
       {/* 텍스트 및 Dot 컨텐츠 (슬라이드 위로) */}
       <div className="pointer-events-none absolute inset-0 z-[10]">
-        <div className="ml-[90px]">
-          <div className="mt-[113px] flex h-[95px] w-[101px] items-center justify-center rounded-[10px]">
+        <div className="ml-[30px] md:ml-[90px]">
+          <div className="mt-[150px] flex h-[95px] w-[101px] items-center justify-center rounded-[10px] md:mt-[113px]">
             <Icon
               name="shoulder"
-              className="w-[100px] rounded-[10px] shadow-[1px_2px_4px_rgba(0,0,0,0.25)]"
+              className="h-[66px] w-[70px] rounded-[10px] shadow-[1px_2px_4px_rgba(0,0,0,0.25)] md:w-[100px]"
             />
           </div>
 
-          <div className="mb-[151px] mt-[31px] flex flex-col text-[36px] font-extrabold not-italic leading-[140%] tracking-[-0.9px] text-white">
+          <div className="mt-[90px]md:mt-[20px] mb-[70px] flex flex-col font-['Pretendard'] text-[20px] font-bold leading-[1.4] tracking-[-0.5px] text-white md:mb-[151px] md:mt-[31px] md:text-[36px] md:font-extrabold md:not-italic md:leading-[140%] md:tracking-[-0.9px]">
             <div>어깨 통증은 잘못된자세,</div>
             <div>혹은 회전근개 염증이 주요 원인입니다.</div>
           </div>
