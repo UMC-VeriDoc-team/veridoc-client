@@ -128,7 +128,6 @@ const KakaoHospitalMap = ({
     overlaysRef.current.forEach((item) => item.cleanup());
     overlaysRef.current.clear();
 
-    // 새 오버레이 생성
     hospitals.forEach((h) => {
       const position = new maps.LatLng(h.coordinate.lat, h.coordinate.lng);
 
@@ -198,7 +197,7 @@ const KakaoHospitalMap = ({
       overlaysRef.current.forEach((item) => item.cleanup());
       overlaysRef.current.clear();
     };
-  }, [isMapReady, hospitals, onSelectHospital, selectedHospitalId]);
+  }, [isMapReady, hospitals, onSelectHospital]);
 
   // 선택된 병원 이동 + active 상태 갱신
   useEffect(() => {
