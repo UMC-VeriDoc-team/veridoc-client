@@ -55,7 +55,7 @@ const GuideDetailContent = () => {
       </div>
 
       {/* 본문 */}
-      <div className="px-4 py-8 sm:px-7 md:px-9">
+      <div className="px-6 py-8 sm:px-7 md:px-9">
         <div className="flex flex-col gap-y-20">
           {/* 문단 */}
           <div className="flex flex-col gap-y-12">

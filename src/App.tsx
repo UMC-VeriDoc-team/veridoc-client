@@ -22,6 +22,8 @@ import OnboardingLayout from "./layouts/OnboardingLayout";
 import HospitalMapSection from "./pages/home/components/map/HospitalMapSection";
 import HomePreview from "./pages/home/components/HomePreview";
 import GuideDetailPage from "./components/Modal/components/guide/GuideDetailPage";
+import HomeTemporaryMeasurePage from "./components/Modal/components/home/HomeTemporaryMeasurePage";
+import HomeDoctorOpinionPage from "./components/Modal/components/home/HomeDoctorOpinionPage";
 
 const App = () => {
   const isMobile = useIsMobile();
@@ -61,7 +63,12 @@ const App = () => {
             <Route path="/hospital" element={<HospitalMapSection />} />
 
             {/* 증상 */}
-            <Route path="/symptom" element={<SymptomPage />} />
+            <Route path="/symptom">
+              <Route index element={<SymptomPage />} />
+              {/* 모바일: 모달 상세 */}
+              <Route path="measure/:id" element={<HomeTemporaryMeasurePage />} />
+              <Route path="doctor/:id" element={<HomeDoctorOpinionPage />} />
+            </Route>
 
             {/* 마이페이지 */}
             <Route path="/my" element={<MyPage />} />
@@ -70,11 +77,13 @@ const App = () => {
             {/* 홈 화면 */}
             <Route path="/home" element={<MainPage />} />
 
-            {/* 추후 메인 홈과 합쳐질 예정 */}
-            {/* 임시: 범용가이드 */}
-            <Route path="/guides" element={<HomeSymptomOnboarding />} />
-            <Route path="/guide-detail" element={<GuideDetailPage />} />
-            {/* 임시: 프리뷰 */}
+            {/* 로그인O, 증상 부위 선택X: 범용가이드 */}
+            <Route path="/guide">
+              <Route index element={<HomeSymptomOnboarding />} />
+              <Route path="detail" element={<GuideDetailPage />} />
+            </Route>
+
+            {/* 로그인X: 프리뷰 */}
             <Route path="/preview" element={<HomePreview />} />
 
             {/* 모달 테스트 페이지 */}

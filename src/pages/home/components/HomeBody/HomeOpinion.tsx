@@ -6,6 +6,7 @@ import { SYMPTOM_TEXT } from "@/constants/homeSelectButton";
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
+import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
 
 type HomeOpinionProps = {
   symptom: string;
@@ -13,6 +14,13 @@ type HomeOpinionProps = {
 
 const HomeOpinion = ({ symptom }: HomeOpinionProps) => {
   const { openModal } = useBaseModal();
+  const { setDoctorOpinionId } = useDoctorOpinionModalStore();
+
+  const handleShowDoctorOpinion = () => {
+    // setDoctorOpinionId(opinion.id);
+    setDoctorOpinionId("1");
+    openModal(ModalType.HOME_DOCTOR_OPINION);
+  };
 
   return (
     <div className="flex flex-col">
@@ -31,7 +39,7 @@ const HomeOpinion = ({ symptom }: HomeOpinionProps) => {
           </div>
           <div className="flex justify-end">
             <button
-              onClick={() => openModal(ModalType.HOME_DOCTOR_OPINION)}
+              onClick={handleShowDoctorOpinion}
               className="flex shrink-0 items-center justify-end gap-2 rounded-[5px] bg-brand-primary px-4 py-2 hover:opacity-80"
             >
               <p className="text-[18px] font-semibold leading-[24px] text-white">전체 보기</p>

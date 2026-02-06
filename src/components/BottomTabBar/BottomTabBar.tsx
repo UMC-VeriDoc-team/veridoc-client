@@ -3,7 +3,7 @@ import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "../Modal/types/modal";
 
-const HOME_ACTIVE_PATHS = ["/home", "/guides", "/guide-detail", "/preview"];
+const HOME_ACTIVE_PATHS = ["/home", "/guide", "/preview"];
 
 const BottomTabBar = () => {
   const location = useLocation();
@@ -11,10 +11,10 @@ const BottomTabBar = () => {
   const { openModal } = useBaseModal();
 
   // 임시: 로그인 연동 후 store로 관리
-  const isLoggedIn = false;
+  const isLoggedIn = true;
   const hasSymptom = false;
 
-  const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guides") : "/preview";
+  const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guide") : "/preview";
 
   const isHomeActive = HOME_ACTIVE_PATHS.some((p) => location.pathname.startsWith(p));
   const isMyActive = location.pathname.startsWith("/my");

@@ -1,6 +1,7 @@
 import Icon from "@/components/Icon/Icon";
 import { ModalType } from "@/components/Modal/types/modal";
 import useBaseModal from "@/stores/modal/useBaseModal";
+import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
 
 interface AlternativeCardProps {
   guideId: number;
@@ -22,11 +23,17 @@ const AlternativeCard = ({
   duration,
 }: AlternativeCardProps) => {
   const { openModal } = useBaseModal();
+  const { setMeasureId } = useTemporaryMeasureModalStore();
+
+  const handleShowTemporaryMeasure = () => {
+    setMeasureId(String(guideId));
+    openModal(ModalType.HOME_TEMPORARY_MEASURE);
+  };
 
   return (
     <div
       key={guideId}
-      onClick={() => openModal(ModalType.HOME_TEMPORARY_MEASURE)}
+      onClick={handleShowTemporaryMeasure}
       className="flex w-full cursor-pointer flex-col justify-between hover:opacity-80"
     >
       <div className="flex flex-col gap-y-5">

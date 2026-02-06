@@ -3,7 +3,7 @@ import logo from "/images/logo.svg";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 
-const HOME_ACTIVE_PATHS = ["/home", "/guides", "/guide-detail", "/preview"];
+const HOME_ACTIVE_PATHS = ["/home", "/guide", "/preview"];
 
 interface HeaderProps {
   className?: string;
@@ -15,10 +15,10 @@ const Header = ({ className }: HeaderProps) => {
   const { openModal } = useBaseModal();
 
   // 임시: 나중에 실제 로그인/증상선택 store로 교체
-  const isLoggedIn = false;
-  const hasSymptom = false;
+  const isLoggedIn = true;
+  const hasSymptom = true;
 
-  const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guides") : "/preview";
+  const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guide") : "/preview";
 
   const isHomeActive = HOME_ACTIVE_PATHS.some((p) => location.pathname.startsWith(p));
   const isSymptomActive = location.pathname.startsWith("/symptom");
