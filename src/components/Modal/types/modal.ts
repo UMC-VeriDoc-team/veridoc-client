@@ -24,6 +24,9 @@ export const ModalType = {
   MY_PROFILE_UPDATED: "MY_PROFILE_UPDATED",
   MY_WITHDRAW_NOTICE: "MY_WITHDRAW_NOTICE",
   MY_WITHDRAW_DONE: "MY_WITHDRAW_DONE",
+
+  // 서비스 준비 안내
+  SERVICE_PREPARING: "SERVICE_PREPARING",
 } as const;
 
 export type ModalType = (typeof ModalType)[keyof typeof ModalType];

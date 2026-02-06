@@ -19,7 +19,6 @@ import MyWithdrawDoneModal from "@/components/Modal/components/my/MyWithdrawDone
 
 import HomeTermsAgreementModal from "@/components/Modal/components/home/HomeTermsAgreementModal";
 import HomeTermsDetailModal from "@/components/Modal/components/home/HomeTermsDetailModal";
-
 import HomeDoctorOpinionModal from "@/components/Modal/components/home/HomeDoctorOpinionModal";
 import HomeTemporaryMeasureModal from "./components/home/HomeTemporaryMeasureModal";
 import GuideDetailModal from "./components/guide/GuideDetailModal";
@@ -31,6 +30,7 @@ import useIsMobile from "@/hooks/useIsMobile";
 import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
 import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
 import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
+import ServicePreparingModal from "./components/common/ServicePreparingModal";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -151,6 +151,10 @@ const ModalPage = () => {
         return <MyWithdrawNoticeModal />;
       case ModalType.MY_WITHDRAW_DONE:
         return <MyWithdrawDoneModal />;
+
+      // 서비스 준비 중 안내
+      case ModalType.SERVICE_PREPARING:
+        return <ServicePreparingModal />;
       default:
         return null;
     }
