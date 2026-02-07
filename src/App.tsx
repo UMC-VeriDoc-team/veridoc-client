@@ -26,6 +26,9 @@ import HomeTemporaryMeasurePage from "./components/Modal/components/home/HomeTem
 import HomeDoctorOpinionPage from "./components/Modal/components/home/HomeDoctorOpinionPage";
 import ScrollToTop from "./components/Scroll/ScrollToTop";
 import SignupSymptomResetGuard from "./components/Guard/SignupSymptomResetGuard";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   const isMobile = useIsMobile();
@@ -34,73 +37,75 @@ const App = () => {
   const shouldShowSplash = isMobile && showSplash;
 
   return (
-    <BrowserRouter>
-      <SignupSymptomResetGuard />
-      <ScrollToTop />
-      <ModalPage />
-      {shouldShowSplash ? (
-        <MobileSplashPage onFinish={() => setShowSplash(false)} />
-      ) : (
-        <Routes>
-          {/* 온보딩용 레이아웃 */}
-          <Route path="/" element={<OnboardingLayout />}>
-            <Route index element={<OnboardingPage />} />
-          </Route>
-
-          {/* 헤더만 있는 레이아웃 (로그인/회원가입) */}
-          <Route element={<HeaderOnlyLayout />}>
-            {/* 회원가입 */}
-            <Route path="/select-symptom" element={<SignUpSymptomPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
-
-            {/* 로그인 */}
-            <Route path="/login" element={<LoginPage />} />
-
-            {/* 비밀번호 찾기 */}
-            <Route path="/find-password" element={<PasswordEmailPage />} />
-            <Route path="/password/reset" element={<PasswordResetPage />} />
-          </Route>
-
-          {/* 기본 레이아웃 (헤더+푸터) */}
-          <Route element={<DefaultLayout />}>
-            <Route path="/hospital" element={<HospitalMapSection />} />
-
-            {/* 증상 */}
-            <Route path="/symptom">
-              <Route index element={<SymptomPage />} />
-              {/* 모바일: 모달 상세 */}
-              <Route path="measure/:id" element={<HomeTemporaryMeasurePage />} />
-              <Route path="doctor/:id" element={<HomeDoctorOpinionPage />} />
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <SignupSymptomResetGuard />
+        <ScrollToTop />
+        <ModalPage />
+        {shouldShowSplash ? (
+          <MobileSplashPage onFinish={() => setShowSplash(false)} />
+        ) : (
+          <Routes>
+            {/* 온보딩용 레이아웃 */}
+            <Route path="/" element={<OnboardingLayout />}>
+              <Route index element={<OnboardingPage />} />
             </Route>
 
-            {/* 마이페이지 */}
-            <Route path="/my" element={<MyPage />} />
-            <Route path="/my/password" element={<MyPasswordPage />} />
+            {/* 헤더만 있는 레이아웃 (로그인/회원가입) */}
+            <Route element={<HeaderOnlyLayout />}>
+              {/* 회원가입 */}
+              <Route path="/select-symptom" element={<SignUpSymptomPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
 
-            {/* 홈 화면 */}
-            <Route path="/home" element={<MainPage />} />
+              {/* 로그인 */}
+              <Route path="/login" element={<LoginPage />} />
 
-            {/* 로그인O, 증상 부위 선택X: 범용가이드 */}
-            <Route path="/guide">
-              <Route index element={<HomeSymptomOnboarding />} />
-              <Route path="detail" element={<GuideDetailPage />} />
+              {/* 비밀번호 찾기 */}
+              <Route path="/find-password" element={<PasswordEmailPage />} />
+              <Route path="/password/reset" element={<PasswordResetPage />} />
             </Route>
 
-            {/* 로그인X: 프리뷰 */}
-            <Route path="/preview" element={<HomePreview />} />
+            {/* 기본 레이아웃 (헤더+푸터) */}
+            <Route element={<DefaultLayout />}>
+              <Route path="/hospital" element={<HospitalMapSection />} />
 
-            {/* 모달 테스트 페이지 */}
-            <Route path="/modal-guide" element={<ModalGuidePage />} />
-          </Route>
+              {/* 증상 */}
+              <Route path="/symptom">
+                <Route index element={<SymptomPage />} />
+                {/* 모바일: 모달 상세 */}
+                <Route path="measure/:id" element={<HomeTemporaryMeasurePage />} />
+                <Route path="doctor/:id" element={<HomeDoctorOpinionPage />} />
+              </Route>
 
-          {/* tailwind custom color 시각화 */}
-          <Route path="/color-guide" element={<ColorGuide />} />
+              {/* 마이페이지 */}
+              <Route path="/my" element={<MyPage />} />
+              <Route path="/my/password" element={<MyPasswordPage />} />
 
-          {/* 404 처리 */}
-          <Route path="*" element={<div className="p-8">Not Found</div>} />
-        </Routes>
-      )}
-    </BrowserRouter>
+              {/* 홈 화면 */}
+              <Route path="/home" element={<MainPage />} />
+
+              {/* 로그인O, 증상 부위 선택X: 범용가이드 */}
+              <Route path="/guide">
+                <Route index element={<HomeSymptomOnboarding />} />
+                <Route path="detail" element={<GuideDetailPage />} />
+              </Route>
+
+              {/* 로그인X: 프리뷰 */}
+              <Route path="/preview" element={<HomePreview />} />
+
+              {/* 모달 테스트 페이지 */}
+              <Route path="/modal-guide" element={<ModalGuidePage />} />
+            </Route>
+
+            {/* tailwind custom color 시각화 */}
+            <Route path="/color-guide" element={<ColorGuide />} />
+
+            {/* 404 처리 */}
+            <Route path="*" element={<div className="p-8">Not Found</div>} />
+          </Routes>
+        )}
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 
