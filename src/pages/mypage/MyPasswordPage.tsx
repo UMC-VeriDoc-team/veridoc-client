@@ -81,13 +81,13 @@ const MyPasswordPage = () => {
           - 1280px 이상에서만 보임
       */}
       <div className="hidden w-full flex-col items-center xl:flex">
-        <div className="mb-8 mt-10 flex items-center justify-center">
+        <div className="md:mb-8 md:mt-10 md:flex md:items-center md:justify-center">
           <div className="h-[85px]">
             <img src={LogoImage} alt="VeriDoc Logo" className="h-full w-auto" />
           </div>
         </div>
         <div className="mb-8 w-[777px]">
-          <div className="flex h-[69px] w-full items-center justify-center rounded-[10px] bg-gray-50 p-[4px]">
+          <div className="flex h-[48px] w-[354px] rounded-[10px] bg-gray-50 p-[6px] md:h-[69px] md:w-full md:max-w-[777px] md:p-0 md:px-[11px] md:py-[10px]">
             <button
               className="flex h-full flex-1 items-center justify-center rounded-[7px] bg-transparent text-[20px] font-bold tracking-[-0.025em] text-gray-400 transition-all duration-200"
               onClick={() => navigate("/my?tab=symptom")}
@@ -95,7 +95,7 @@ const MyPasswordPage = () => {
               나의 증상 관리
             </button>
             <button
-              className="flex h-full flex-1 items-center justify-center rounded-[7px] bg-white text-[20px] font-bold tracking-[-0.025em] text-gray-950 shadow-sm transition-all duration-200"
+              className="flex h-full flex-1 items-center justify-center rounded-[7px] bg-white text-[20px] font-bold tracking-[-0.025em] text-gray-950 transition-all duration-200"
               onClick={() => navigate("/my?tab=info")}
             >
               정보 수정

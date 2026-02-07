@@ -17,7 +17,7 @@ interface SocialLink {
 const policyLinks: PolicyModalLink[] = [
   { label: "서비스 이용 약관", termsKey: TermsKey.SERVICE },
   { label: "개인정보처리방침", termsKey: TermsKey.PRIVACY },
-  { label: "위치서비스 이용 약관", termsKey: TermsKey.LOCATION },
+  { label: "위치기반 서비스 이용", termsKey: TermsKey.LOCATION },
 ];
 
 const Footer = () => {

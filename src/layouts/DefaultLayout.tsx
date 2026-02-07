@@ -13,7 +13,7 @@ const DefaultLayout = () => {
       <Header className="sticky top-0 z-50 shrink-0" />
 
       {/* Header/Footer 사이 공간 */}
-      <main className="flex-1 overflow-y-auto">
+      <main id="app-scroll-container" className="flex-1 overflow-y-auto">
         <Outlet />
         {isMobile ? <BottomTabBar /> : <Footer />}
       </main>

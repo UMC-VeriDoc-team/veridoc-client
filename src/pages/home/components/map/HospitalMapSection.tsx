@@ -42,18 +42,34 @@ const HospitalMapSection = () => {
   const debounceRef = useRef<number | null>(null);
   const watchIdRef = useRef<number | null>(null);
 
-  // 위치 갱신
+  const [isLocating, setIsLocating] = useState(false);
+  const [hasStartedTracking, setHasStartedTracking] = useState(false);
+
+  // 언마운트 시 watch 정리만
   useEffect(() => {
+    return () => {
+      if (watchIdRef.current != null) navigator.geolocation.clearWatch(watchIdRef.current);
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    };
+  }, []);
+
+  // 유저 버튼 클릭 후 위치 요청 시작
+  const startLocationTracking = () => {
     if (!navigator.geolocation) {
       setLocationError("이 브라우저에서는 위치 기능을 사용할 수 없어요.");
       return;
     }
 
-    let cancelled = false;
+    // 기존 watch가 있으면 정리하고 다시 시작
+    if (watchIdRef.current != null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
+
+    setIsLocating(true);
+    setLocationError("");
 
     const applyPos = (pos: GeolocationPosition) => {
-      if (cancelled) return;
-
       const nextCenter: LatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
       const nextUser: UserLocation = {
         lat: pos.coords.latitude,
@@ -64,11 +80,11 @@ const HospitalMapSection = () => {
       setCenter(nextCenter);
       setUserLocation(nextUser);
       setLocationError("");
+      setIsLocating(false);
+      setHasStartedTracking(true);
     };
 
     const applyErr = (err: GeolocationPositionError) => {
-      if (cancelled) return;
-
       if (err.code === 1) {
         setLocationError(
           "위치 권한이 거부되어 있어요. 브라우저 설정에서 위치 권한을 허용해 주세요."
@@ -82,25 +98,23 @@ const HospitalMapSection = () => {
       } else {
         setLocationError("위치 정보를 가져올 수 없어요.");
       }
+      setIsLocating(false);
     };
 
+    // 최초 1회 즉시 가져오기
     navigator.geolocation.getCurrentPosition(applyPos, applyErr, {
       enableHighAccuracy: true,
       maximumAge: 0,
       timeout: 10_000,
     });
 
+    // 이후 변경 추적
     watchIdRef.current = navigator.geolocation.watchPosition(applyPos, applyErr, {
       enableHighAccuracy: true,
       maximumAge: 5_000,
       timeout: 10_000,
     });
-
-    return () => {
-      cancelled = true;
-      if (watchIdRef.current != null) navigator.geolocation.clearWatch(watchIdRef.current);
-    };
-  }, []);
+  };
 
   // 병원 조회
   useEffect(() => {
@@ -157,6 +171,22 @@ const HospitalMapSection = () => {
       </article>
 
       <article className="order-2 w-full overflow-hidden border-t border-[#17171940] p-4 md:order-1 md:h-full md:w-[40%] md:min-w-[400px] md:border-r md:border-t-0">
+        {/* 임시 */}
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <button
+            type="button"
+            onClick={startLocationTracking}
+            disabled={isLocating}
+            className="h-9 rounded-[4px] bg-brand-primary px-3 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60"
+          >
+            {isLocating
+              ? "위치 확인 중..."
+              : hasStartedTracking
+                ? "내 위치로 새로고침"
+                : "내 위치로 찾기"}
+          </button>
+        </div>
+
         {locationError && (
           <div className="mb-3 rounded-md bg-gray-50 p-3 text-xs text-red-600">{locationError}</div>
         )}
