@@ -8,7 +8,7 @@ const HeaderOnlyLayout = () => {
       <Header className="sticky top-0 z-50" />
 
       {/* Header 제외 영역 */}
-      <main className="flex-1">
+      <main id="app-scroll-container" className="flex-1">
         <Outlet />
       </main>
     </div>
