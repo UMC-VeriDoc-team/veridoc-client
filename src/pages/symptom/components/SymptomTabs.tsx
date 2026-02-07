@@ -17,7 +17,7 @@ export const SymptomTabs = ({ value, onChange }: SymptomTabsProps) => {
         type="button"
         onClick={() => onChange("life")}
         className={[
-          "flex-1 rounded-[10px] text-[16px] font-bold leading-[140%] tracking-[-0.025em] transition",
+          "flex-1 rounded-[10px] text-base font-semibold leading-[140%] tracking-[-0.025em] transition",
           "md:h-[50px] md:w-[371px] md:text-xl",
           value === "life" ? "bg-white text-gray-950" : "text-gray-950",
         ].join(" ")}
@@ -29,7 +29,7 @@ export const SymptomTabs = ({ value, onChange }: SymptomTabsProps) => {
         type="button"
         onClick={() => onChange("guide")}
         className={[
-          "ml-2 flex-1 rounded-[10px] text-[16px] font-bold leading-[140%] tracking-[-0.025em] transition",
+          "ml-2 flex-1 rounded-[10px] text-base font-semibold leading-[140%] tracking-[-0.025em] transition",
           "md:ml-[13px] md:h-[50px] md:w-[371px] md:text-xl",
           value === "guide" ? "bg-white text-gray-950" : "text-gray-950",
         ].join(" ")}

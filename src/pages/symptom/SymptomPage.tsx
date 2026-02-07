@@ -64,21 +64,21 @@ const SymptomPage = () => {
       </div>
 
       {/* 데스크탑 */}
-      <div className="md:mb-8 md:mt-10 md:flex md:items-center md:justify-center">
+      <div className="hidden md:mb-8 md:mt-10 md:flex md:items-center md:justify-center">
         <div className="h-[85px]">
           <img src={logo} alt="VeriDoc Logo" className="h-full w-auto" />
         </div>
       </div>
 
       {/* 공통 wrapper: life/guide 모두 여기 안에서 렌더 */}
-      <div className="w-full bg-white px-[30px] pb-10">
+      <div className="flex w-full flex-col items-center bg-white px-[30px] pb-10">
         {/* 탭 */}
-        <div className="flex justify-center">
+        <div className="mb-8 mt-[24px] flex w-full justify-center px-[30px] md:mt-0 md:w-[777px] md:px-0">
           <SymptomTabs value={tab} onChange={setTab} />
         </div>
 
         {/* 콘텐츠 */}
-        <div className="mt-6 flex justify-center md:mt-[68px]">
+        <div className="mt-6 flex justify-center md:mt-[60px]">
           <div
             className={[
               // 모바일
