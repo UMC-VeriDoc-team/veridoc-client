@@ -44,24 +44,27 @@ const RecommendEntry = ({ showTitle = true }: RecommendEntryProps) => {
         {/* 하단 배경 그래픽 */}
         <Icon
           name="guide-bg"
-          className="pointer-events-none absolute bottom-[-90px] left-1/2 w-full -translate-x-1/2"
+          className="pointer-events-none absolute bottom-[-20px] left-1/2 min-w-[140%] -translate-x-1/2 sm:bottom-[-70px] sm:w-[120%] md:bottom-[-90px] md:w-full"
         />
 
         {/* 비주얼 컨테이너 */}
-        <div className="relative mx-auto flex max-w-[960px] justify-center px-6 pb-16 pt-10">
+        <div className="relative mx-auto flex max-w-[960px] justify-center px-6 sm:pb-16 sm:pt-10">
           {/* 노트북 메인 */}
-          <Icon name="laptop" className="w-full max-w-[860px] pb-20 sm:max-w-[920px]" />
+          <Icon
+            name="laptop"
+            className="w-full max-w-[400px] pb-10 sm:max-w-[860px] sm:pb-20 md:max-w-[920px]"
+          />
 
           {/* 왼쪽 로고(파랑) */}
           <Icon
             name="logo-symbol-blue"
-            className="absolute left-[15%] top-[52%] w-16 -translate-x-1/2 -translate-y-1/2 -rotate-45 sm:w-20 md:w-24"
+            className="absolute left-[15%] top-[52%] w-14 -translate-x-1/2 -translate-y-1/2 -rotate-45 sm:w-20 md:w-24"
           />
 
           {/* 오른쪽 로고(흰색) */}
           <Icon
             name="logo-symbol"
-            className="absolute right-[15%] top-[40%] w-16 -translate-y-1/2 translate-x-1/2 rotate-45 rounded-full bg-white p-2 shadow-lg sm:w-20 md:w-24"
+            className="absolute right-[15%] top-[40%] w-14 -translate-y-1/2 translate-x-1/2 rotate-45 rounded-full bg-white p-2 shadow-lg sm:w-20 md:w-24"
           />
         </div>
       </section>
