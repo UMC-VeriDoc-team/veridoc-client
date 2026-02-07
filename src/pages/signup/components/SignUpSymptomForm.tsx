@@ -26,7 +26,9 @@ const SignUpSymptomForm = () => {
       try {
         const res = await getPainAreas();
         setPainAreas(res?.data.painAreas);
-      } catch {}
+      } catch (err) {
+        void err;
+      }
     };
     run();
   }, []);

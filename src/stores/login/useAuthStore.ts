@@ -1,5 +1,14 @@
 import { create } from "zustand";
+import type { AxiosError } from "axios";
 import { postLogin } from "@/pages/login/services/postLogin";
+
+type LoginFailReason = "INVALID" | "UNKNOWN";
+
+type LoginResult = { ok: true } | { ok: false; reason: LoginFailReason };
+
+type LoginErrorBody = {
+  code?: string;
+};
 
 interface AuthState {
   accessToken: string | null;
@@ -9,14 +18,19 @@ interface AuthState {
   isLoggedIn: boolean;
   loading: boolean;
 
-  login: (payload: {
-    email: string;
-    password: string;
-  }) => Promise<{ ok: true } | { ok: false; reason: "INVALID" | "UNKNOWN" }>;
+  login: (payload: { email: string; password: string }) => Promise<LoginResult>;
 
   logout: () => void;
   setPainAreaID: (id: number | null) => void;
 }
+
+const getAxiosStatus = (error: unknown): number | undefined => {
+  if (error instanceof Error && "isAxiosError" in error) {
+    const axiosError = error as AxiosError<LoginErrorBody>;
+    return axiosError.response?.status;
+  }
+  return undefined;
+};
 
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: localStorage.getItem("accessToken"),
@@ -40,11 +54,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
 
       return { ok: true };
-    } catch (e: any) {
-      const status = e?.response?.status;
+    } catch (error: unknown) {
+      const status = getAxiosStatus(error);
+
       if (status === 400 || status === 401) {
         return { ok: false, reason: "INVALID" };
       }
+
       return { ok: false, reason: "UNKNOWN" };
     } finally {
       set({ loading: false });
