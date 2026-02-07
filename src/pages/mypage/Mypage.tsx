@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
@@ -7,24 +7,77 @@ import Logo from "/images/logo.svg";
 import SymptomGrid from "@/components/Symptom/SymptomGrid";
 import Button from "@/components/Button/Button";
 import GenderSelect, { type Gender } from "@/components/Select/GenderSelect";
+import { SYMPTOMS } from "@/constants/symptoms";
+import { getPainAreas, type PainArea } from "@/pages/signup/services/getPainAreas";
+import { useAuthStore } from "@/stores/login/useAuthStore";
+import { parseBirthYMD } from "@/utils/formatBirth";
 
 const MyPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const activeTab = searchParams.get("tab") === "info" ? "info" : "symptom";
-  const [isEditing, setIsEditing] = useState(false);
   const { openModal } = useBaseModal();
 
-  // 프로필 관련 State
-  const [name, setName] = useState("홍길동");
-  const [gender, setGender] = useState<Gender>("MALE");
-  const [birth, setBirth] = useState({ year: "2000", month: "11", day: "10" });
-  const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
-  const [selectedKey, setSelectedKey] = useState<string | null>("knee");
+  const {
+    name: storeName,
+    email: storeEmail,
+    birth: storeBirth,
+    gender: storeGender,
+    painAreaName,
+    setPainAreaID,
+    fetchMe,
+  } = useAuthStore();
+
+  useEffect(() => {
+    void fetchMe();
+  }, [fetchMe]);
+
+  const [painAreas, setPainAreas] = useState<PainArea[]>([]);
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const res = await getPainAreas();
+        setPainAreas(res?.data?.painAreas ?? []);
+      } catch {
+        setPainAreas([]);
+      }
+    };
+    void run();
+  }, []);
+
+  // 부위명과 painAreaId 매핑
+  const painAreaIdByName = useMemo(() => {
+    return new Map(painAreas.map((p) => [p.name, p.painAreaID]));
+  }, [painAreas]);
+
+  // store에 저장된 painAreaName으로 selectedKey 추출
+  const storeSelectedKey = useMemo(() => {
+    if (!painAreaName) return null;
+    const matched = SYMPTOMS.find((s) => s.label === painAreaName);
+    return matched?.key ?? null;
+  }, [painAreaName]);
+
+  const [isEditing, setIsEditing] = useState(false);
   const [isProfileEditing, setIsProfileEditing] = useState(false);
 
-  // 증상 선택 로직
+  // 편집 모드에서만 쓸 state
+  const [name, setName] = useState("");
+  const [gender, setGender] = useState<Gender>("MALE");
+  const [birth, setBirth] = useState({ year: "", month: "", day: "" });
+  const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
+
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+
+  // 화면에 보여줄 값: 편집 중이면 local, 아니면 store
+  const viewName = isProfileEditing ? name : (storeName ?? "");
+  const viewGender = isProfileEditing ? gender : (storeGender ?? "MALE");
+  const viewBirth = isProfileEditing ? birth : parseBirthYMD(storeBirth);
+
+  const viewSelectedKey = isEditing ? selectedKey : storeSelectedKey;
+
+  // 증상 선택
   const handleSelectSymptom = (key: string) => {
     if (!isEditing) return;
 
@@ -34,24 +87,39 @@ const MyPage = () => {
     });
   };
 
-  // 증상 저장 로직
   const handleSaveSymptom = () => {
+    // 편집 시작 시점에 store값을 local로 복사
     if (!isEditing) {
+      setSelectedKey(storeSelectedKey);
       setIsEditing(true);
       return;
     }
+
+    // 저장(편집 종료)
     setIsEditing(false);
 
+    // 선택 안 한 경우: null로 저장
     if (selectedKey === null) {
+      setPainAreaID(null);
       openModal(ModalType.MY_SYMPTOM_NOT_SELECTED);
-    } else {
-      openModal(ModalType.MY_SYMPTOM_CHANGED);
+      return;
     }
+
+    const label = SYMPTOMS.find((s) => s.key === selectedKey)?.label ?? null;
+    const nextId = label ? (painAreaIdByName.get(label) ?? null) : null;
+
+    setPainAreaID(nextId);
+    openModal(ModalType.MY_SYMPTOM_CHANGED);
   };
 
-  // 프로필 저장 로직
+  // 프로필 저장
   const handleSaveProfile = () => {
+    // 편집 시작 시점에 store값을 local로 복사
     if (!isProfileEditing) {
+      setName(storeName ?? "");
+      setGender(storeGender ?? "MALE");
+      setBirth(parseBirthYMD(storeBirth));
+      setErrors({ name: "", birth: "", gender: "" });
       setIsProfileEditing(true);
       return;
     }
@@ -84,16 +152,14 @@ const MyPage = () => {
     }
 
     setErrors(newErrors);
-
     if (!isValid) return;
 
+    // 프로필 수정 API 호출 + 성공 시 store 반영
     openModal(ModalType.MY_PROFILE_UPDATED);
     setIsProfileEditing(false);
   };
 
-  // -----------------------------------------------------------------------
-  // [화면 1] 나의 증상 관리
-  // -----------------------------------------------------------------------
+  // 나의 증상 관리
   const renderSymptomContent = () => (
     <>
       <div className="mt-6 px-[30px] text-left md:mt-[60px] md:px-0 md:text-center">
@@ -104,7 +170,6 @@ const MyPage = () => {
               <span className="md:hidden">
                 현재 확인 중인 <br /> 증상을 변경해 보세요
               </span>
-
               <span className="hidden md:inline">현재 확인 중인 증상을 변경해 보세요</span>
             </>
           ) : (
@@ -112,7 +177,6 @@ const MyPage = () => {
               <span className="md:hidden">
                 현재 확인 중인 <br /> 증상이에요
               </span>
-
               <span className="hidden md:inline">현재 확인 중인 증상이에요</span>
             </>
           )}
@@ -123,7 +187,6 @@ const MyPage = () => {
             다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요 필요하다면 증상을 선택하지 않고
             넘어갈 수도 있어요
           </span>
-
           <span className="hidden md:inline">
             다른 증상을 확인하고 싶다면 선택을 변경할 수 있어요
             <br />
@@ -132,18 +195,18 @@ const MyPage = () => {
         </p>
       </div>
 
-      {/* 2. 그리드 영역 */}
       <div
-        className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${!isEditing ? "pointer-events-none opacity-80" : ""} `}
+        className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${
+          !isEditing ? "pointer-events-none opacity-80" : ""
+        } `}
       >
         <SymptomGrid
-          selectedKey={selectedKey}
+          selectedKey={viewSelectedKey}
           multiAttemptedKey={null}
           onSelect={handleSelectSymptom}
         />
       </div>
 
-      {/* 3. 버튼 영역 */}
       <div className="mb-20 mt-[70px] w-full px-[30px] md:mt-[100px] md:w-[400px]">
         <Button
           onClick={handleSaveSymptom}
@@ -162,30 +225,26 @@ const MyPage = () => {
         개인정보 수정
       </h3>
 
-      {/* === 상단: 프로필 수정 폼 === */}
       <div className="flex w-full flex-col items-center lg:flex-row lg:items-start lg:justify-between">
-        {/* 1. 프로필 사진 */}
         <div className="flex flex-col items-center lg:block">
           <div className="relative">
             <div className="flex h-[218.4px] w-[218.4px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50 lg:h-[275px] lg:w-[275px]">
               <Icon
-                name={gender === "FEMALE" ? "female" : "male"}
+                name={viewGender === "FEMALE" ? "female" : "male"}
                 className="h-full w-full object-cover"
               />
             </div>
           </div>
         </div>
 
-        {/* 2. 입력 폼 */}
         <div className="mt-[30px] flex w-full flex-col space-y-4 lg:mt-0 lg:w-[405px]">
-          {/* 이름 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               이름
             </label>
             <input
               type="text"
-              value={name}
+              value={viewName}
               onChange={(e) => setName(e.target.value)}
               disabled={!isProfileEditing}
               className={`w-full rounded border bg-white p-3 focus:outline-none ${
@@ -199,7 +258,6 @@ const MyPage = () => {
             {errors.name && <p className="mt-1 text-xs text-error">{errors.name}</p>}
           </div>
 
-          {/* 생년월일 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               생년월일
@@ -213,7 +271,7 @@ const MyPage = () => {
             >
               <input
                 type="text"
-                value={birth.year}
+                value={viewBirth.year}
                 onChange={(e) => setBirth({ ...birth, year: e.target.value })}
                 disabled={!isProfileEditing}
                 className={`w-full bg-transparent text-center focus:outline-none ${
@@ -225,8 +283,9 @@ const MyPage = () => {
               <span className="mx-2 text-gray-600">/</span>
               <input
                 type="text"
-                value={birth.month}
+                value={viewBirth.month}
                 onChange={(e) => setBirth({ ...birth, month: e.target.value })}
+                disabled={!isProfileEditing}
                 className={`w-full bg-transparent text-center focus:outline-none ${
                   !isProfileEditing && "cursor-not-allowed text-gray-400"
                 }`}
@@ -236,8 +295,9 @@ const MyPage = () => {
               <span className="mx-2 text-gray-600">/</span>
               <input
                 type="text"
-                value={birth.day}
+                value={viewBirth.day}
                 onChange={(e) => setBirth({ ...birth, day: e.target.value })}
+                disabled={!isProfileEditing}
                 className={`w-full bg-transparent text-center focus:outline-none ${
                   !isProfileEditing && "cursor-not-allowed text-gray-400"
                 }`}
@@ -248,7 +308,6 @@ const MyPage = () => {
             {errors.birth && <p className="mt-1 text-xs text-error">{errors.birth}</p>}
           </div>
 
-          {/* 이메일 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               이메일
@@ -256,7 +315,7 @@ const MyPage = () => {
             <div className="relative">
               <input
                 type="email"
-                defaultValue="honggil2000@naver.com"
+                value={storeEmail ?? ""}
                 disabled
                 className="w-full cursor-not-allowed rounded border border-gray-200 bg-gray-50 p-3 text-gray-950"
               />
@@ -266,15 +325,13 @@ const MyPage = () => {
             </div>
           </div>
 
-          {/* 성별 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               성별
             </label>
-            <GenderSelect value={gender} onChange={setGender} />
+            <GenderSelect value={viewGender} onChange={setGender} />
           </div>
 
-          {/* 저장 버튼 */}
           <div className="pt-[40px] lg:pt-0">
             <Button onClick={handleSaveProfile}>
               {isProfileEditing ? "개인정보 저장" : "개인정보 수정"}
@@ -333,18 +390,18 @@ const MyPage = () => {
         <span className="pt-10 text-lg font-semibold text-gray-950">마이페이지</span>
       </header>
 
-      {/* 2. [Logo] 로고 영역 */}
+      {/* 로고 영역 */}
       <div className="hidden md:mb-8 md:mt-10 md:flex md:items-center md:justify-center">
         <div className="h-[85px]">
           <img src={Logo} alt="VeriDoc Logo" className="h-full w-auto" />
         </div>
       </div>
 
-      {/* 3. [Tabs] 탭 영역 */}
+      {/* 탭 영역 */}
       <div className="mb-8 mt-[24px] flex w-full justify-center px-[30px] md:mt-0 md:w-[777px] md:px-0">
         {/* 실제 탭 컨테이너 (회색 박스) */}
         <div className="flex h-[48px] w-[354px] rounded-[10px] bg-gray-50 p-[6px] md:h-[69px] md:w-full md:max-w-[777px] md:p-0 md:px-[11px] md:py-[10px]">
-          {/* [Tab 1] 나의 증상 관리 */}
+          {/* 나의 증상 관리 */}
           <button
             className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-base font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
               activeTab === "symptom" ? "bg-white text-gray-950" : "bg-transparent text-gray-400"
@@ -354,7 +411,7 @@ const MyPage = () => {
             나의 증상 관리
           </button>
 
-          {/* [Tab 2] 정보 수정 */}
+          {/* 정보 수정 */}
           <button
             className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-base font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
               activeTab === "info" ? "bg-white text-gray-950" : "bg-transparent text-gray-400"
@@ -366,7 +423,6 @@ const MyPage = () => {
         </div>
       </div>
 
-      {/* 컨텐츠 렌더링 (이건 아까 수정한 함수들이 실행됨) */}
       {activeTab === "symptom" ? renderSymptomContent() : renderProfileForm()}
     </div>
   );
