@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import logo from "/images/logo.svg";
 import { SymptomTabs } from "@/pages/symptom/components/SymptomTabs";
 import { SymptomEmptyState } from "@/pages/symptom/components/SymptomEmptyState";
@@ -9,6 +9,7 @@ import SymptomGuideTab from "@/pages/symptom/tabs/symptom-guide/SymptomGuideTab"
 type TabKey = "life" | "guide";
 
 const SymptomPage = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const symptomId = searchParams.get("symptomId");
@@ -46,12 +47,13 @@ const SymptomPage = () => {
   // };
 
   const onClickSelectSymptom = () => {
-    setSearchParams((prev) => {
-      const nextParams = new URLSearchParams(prev);
-      nextParams.set("symptomId", "1"); // 기본 선택(임시)
-      nextParams.set("tab", "life");
-      return nextParams;
-    });
+    navigate("/my?tab=symptom");
+    // setSearchParams((prev) => {
+    //   const nextParams = new URLSearchParams(prev);
+    //   nextParams.set("symptomId", "1"); // 기본 선택(임시)
+    //   nextParams.set("tab", "life");
+    //   return nextParams;
+    // });
   };
 
   return (
