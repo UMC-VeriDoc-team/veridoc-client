@@ -52,7 +52,7 @@ const MyPage = () => {
     return new Map(painAreas.map((p) => [p.name, p.painAreaID]));
   }, [painAreas]);
 
-  // store painAreaName -> selectedKey(SYMPTOMS.key)
+  // store에 저장된 painAreaName으로 selectedKey 추출
   const storeSelectedKey = useMemo(() => {
     if (!painAreaName) return null;
     const matched = SYMPTOMS.find((s) => s.label === painAreaName);
@@ -160,9 +160,7 @@ const MyPage = () => {
     setIsProfileEditing(false);
   };
 
-  // -----------------------------------------------------------------------
-  // [화면 1] 나의 증상 관리
-  // -----------------------------------------------------------------------
+  // 나의 증상 관리
   const renderSymptomContent = () => (
     <>
       <div className="mt-6 px-[30px] text-left md:mt-[60px] md:px-0 md:text-center">
