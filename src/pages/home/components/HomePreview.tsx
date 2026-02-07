@@ -18,11 +18,11 @@ const HomePreview = () => {
   };
 
   const images: { src: string; alt: string }[] = [
-    { src: "/public/images/home/previews/about-us.svg", alt: "진료하는 사진" },
-    { src: "/public/images/home/previews/doctor-1.svg", alt: "의료진 사진 1" },
-    { src: "/public/images/home/previews/doctor-2.svg", alt: "의료진 사진 2" },
-    { src: "/public/images/home/previews/doctor-3.svg", alt: "의료진 사진 3" },
-    { src: "/public/images/home/previews/doctor-4.svg", alt: "의료진 사진 4" },
+    { src: "/images/home/previews/about-us.svg", alt: "진료하는 사진" },
+    { src: "/images/home/previews/doctor-1.svg", alt: "의료진 사진 1" },
+    { src: "/images/home/previews/doctor-2.svg", alt: "의료진 사진 2" },
+    { src: "/images/home/previews/doctor-3.svg", alt: "의료진 사진 3" },
+    { src: "/images/home/previews/doctor-4.svg", alt: "의료진 사진 4" },
   ];
 
   const aboutUs = images[0];
