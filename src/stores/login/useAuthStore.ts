@@ -14,6 +14,9 @@ type LoginErrorBody = { code?: string };
 interface AuthState {
   // auth
   accessToken: string | null;
+  userID: number | null;
+  painAreaID: number | null;
+
   isLoggedIn: boolean;
   loading: boolean;
 
