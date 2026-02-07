@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { postSignup, type SignupPayload } from "../services/postSignup";
 
-type FieldKey = "name" | "email" | "password" | "birthDate" | "gender" | "painAreaID";
+type FieldKey = "name" | "email" | "password" | "birth" | "gender" | "painAreaID";
 type FieldErrors = Partial<Record<FieldKey, string>>;
 
 export const useSignup = () => {
@@ -43,7 +43,7 @@ export const useSignup = () => {
             setFieldErrors({ password: "비밀번호 형식이 올바르지 않습니다." });
             break;
           case "INVALID_BIRTHDATE_FORMAT":
-            setFieldErrors({ birthDate: "생년월일 형식이 올바르지 않습니다." });
+            setFieldErrors({ birth: "생년월일 형식이 올바르지 않습니다." });
             break;
           default:
             setFormError("입력값을 다시 확인해주세요.");

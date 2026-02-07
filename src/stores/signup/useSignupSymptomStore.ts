@@ -6,6 +6,7 @@ interface SignupSymptomState {
 
   // UI + 서버용 값 함께 설정 -> 동기화
   setSelectedSymptom: (key: string | null, painAreaID: number | null) => void;
+  resetSelectedSymptom: () => void;
 }
 
 const useSignupSymptomStore = create<SignupSymptomState>((set) => ({
@@ -14,6 +15,8 @@ const useSignupSymptomStore = create<SignupSymptomState>((set) => ({
 
   setSelectedSymptom: (key, painAreaID) =>
     set({ selectedKey: key, selectedPainAreaID: painAreaID }),
+
+  resetSelectedSymptom: () => set({ selectedKey: null, selectedPainAreaID: null }),
 }));
 
 export default useSignupSymptomStore;

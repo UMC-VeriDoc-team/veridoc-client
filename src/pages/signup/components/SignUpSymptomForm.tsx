@@ -13,8 +13,7 @@ type ErrorType = "multi" | null;
 const SignUpSymptomForm = () => {
   const navigate = useNavigate();
 
-  const selectedKey = useSignupSymptomStore((s) => s.selectedKey);
-  const setSelectedSymptom = useSignupSymptomStore((s) => s.setSelectedSymptom);
+  const { selectedKey, setSelectedSymptom } = useSignupSymptomStore();
 
   const [multiAttemptedKey, setMultiAttemptedKey] = useState<string | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>(null);
@@ -57,7 +56,9 @@ const SignUpSymptomForm = () => {
 
   // 선택 확정: key + painAreaID를 store에 함께 저장
   const confirmSelect = (key: string | null) => {
-    const painAreaID = key ? (painAreaIdByKey.get(key) ?? null) : null;
+    // 미선택(null)이면 8로 저장
+    const painAreaID = key ? (painAreaIdByKey.get(key) ?? 8) : 8;
+
     setSelectedSymptom(key, painAreaID);
 
     setMultiAttemptedKey(null);
@@ -107,6 +108,11 @@ const SignUpSymptomForm = () => {
     if (multiAttemptedKey) {
       setErrorType("multi");
       return;
+    }
+
+    // 아무 것도 선택 안 한 상태면(selectedKey == null) 8로 저장하고 진행
+    if (selectedKey === null) {
+      setSelectedSymptom(null, 8);
     }
 
     navigate("/signup");

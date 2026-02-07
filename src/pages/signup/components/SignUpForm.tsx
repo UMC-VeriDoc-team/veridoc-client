@@ -10,7 +10,7 @@ import { ModalType } from "@/components/Modal/types/modal";
 import { validateEmail } from "@/utils/validateEmail";
 import useSignupSymptomStore from "@/stores/signup/useSignupSymptomStore";
 import { useSignup } from "../hooks/useSignup";
-import type { SignupPayload } from "../services/postSignup";
+import { PASSWORD_REGEX } from "@/utils/vaildatePassword";
 
 type TouchedState = {
   name: boolean;
@@ -55,7 +55,8 @@ const SignUpForm = () => {
   const passwordClientError = useMemo(() => {
     if (!shouldShowError("password")) return null;
     if (!password.trim()) return "필수 입력 사항입니다";
-    if (password.length < 8) return "비밀번호 형식이 올바르지 않습니다";
+    if (!PASSWORD_REGEX.test(password))
+      return "비밀번호는 8자 이상이며 대문자/소문자/특수문자를 각각 1개 이상 포함해야 합니다";
     return null;
   }, [password, touched.password, submitted]);
 
@@ -69,7 +70,7 @@ const SignUpForm = () => {
   const nameError = nameClientError ?? fieldErrors.name ?? null;
   const emailError = emailClientError ?? fieldErrors.email ?? null;
   const passwordError = passwordClientError ?? fieldErrors.password ?? null;
-  const dobError = fieldErrors.birthDate ?? null;
+  const dobError = fieldErrors.birth ?? null;
   const genderError = genderClientError ?? fieldErrors.gender ?? null;
 
   const isFormValid =
@@ -85,14 +86,14 @@ const SignUpForm = () => {
 
     if (!isFormValid) return;
 
-    const birthDate = `${dob.year}-${dob.month.padStart(2, "0")}-${dob.day.padStart(2, "0")}`;
+    const birth = `${dob.year}-${dob.month.padStart(2, "0")}-${dob.day.padStart(2, "0")}`;
 
     const payload = {
       name: name.trim(),
       email: email.trim(),
       password,
-      birthDate,
-      gender: gender as "M" | "F",
+      birth,
+      gender: gender as Gender,
       painAreaID: painAreaID ?? null,
     };
 
@@ -181,7 +182,7 @@ const SignUpForm = () => {
               value={dob}
               onChange={(next) => {
                 setDob(next);
-                clearFieldError("birthDate");
+                clearFieldError("birth");
               }}
               touched={shouldShowError("dob")}
               onBlur={() => handleBlur("dob")}

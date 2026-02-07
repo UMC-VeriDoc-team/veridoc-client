@@ -4,8 +4,8 @@ export interface SignupPayload {
   name: string;
   email: string;
   password: string;
-  birthDate: string; // "YYYY-MM-DD"
-  gender: "M" | "F";
+  birth: string; // "YYYY-MM-DD"
+  gender: "MALE" | "FEMALE";
   painAreaID: number | null;
 }
 
