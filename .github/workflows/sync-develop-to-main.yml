@@ -59,11 +59,10 @@ jobs:
           set -e
           PR_NUMBER="$(gh pr list --base main --head develop --state open --json number --jq '.[0].number')"
           echo "PR_NUMBER=$PR_NUMBER"
-      
+
           if [ -z "$PR_NUMBER" ]; then
             echo "No PR to enable auto-merge. Exit."
             exit 0
           fi
-      
-          gh pr merge "$PR_NUMBER" --squash --auto || echo "Auto-merge not enabled. Skipping."
 
+          gh pr merge "$PR_NUMBER" --squash --auto || echo "Auto-merge not enabled. Skipping."

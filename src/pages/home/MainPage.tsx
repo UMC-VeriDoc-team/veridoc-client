@@ -2,8 +2,16 @@ import HomeBody from "@/pages/home/components/HomeBody/HomeBody";
 import HomeManage from "@/pages/home/components/HomeBody/HomeManage";
 import HomeMap from "@/pages/home/components/map/HomeMap";
 import HomeMovingImage from "@/pages/home/components/banner/HomeMovingImage";
+import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useEffect } from "react";
 
 const MainPage = () => {
+  const { initAuth } = useAuthStore();
+
+  useEffect(() => {
+    void initAuth();
+  }, [initAuth]);
+
   return (
     <div className="w-full">
       <HomeMovingImage />
