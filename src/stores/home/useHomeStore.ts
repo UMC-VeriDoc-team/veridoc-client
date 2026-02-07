@@ -1,5 +1,10 @@
 import { create } from "zustand";
+
 import getHomeData from "@/pages/home/services/getHomeData";
+import getDoctorOpinionSummary, {
+  type GetDoctorOpinionSummaryResponse,
+} from "@/pages/home/services/getDoctorOpinionSummary";
+
 import type {
   HomeBannerItem,
   HomeSymptomItem,
@@ -16,18 +21,23 @@ type HomeState = {
   symptoms: HomeSymptomItem[];
   temporaryGuides: HomeTemporaryGuideItem[];
 
-  fetchHome: () => Promise<void>;
+  doctorOpinionSummary: GetDoctorOpinionSummaryResponse | null;
+
+  fetchHome: (answerId?: string | number) => Promise<void>;
   resetHome: () => void;
 };
 
 const initial = {
   loading: false,
   error: null as string | null,
+
   painAreaId: null as number | null,
   painAreaName: null as string | null,
   banners: [] as HomeBannerItem[],
   symptoms: [] as HomeSymptomItem[],
   temporaryGuides: [] as HomeTemporaryGuideItem[],
+
+  doctorOpinionSummary: null as GetDoctorOpinionSummaryResponse | null,
 };
 
 export const useHomeStore = create<HomeState>((set) => ({
@@ -35,18 +45,34 @@ export const useHomeStore = create<HomeState>((set) => ({
 
   resetHome: () => set({ ...initial }),
 
-  fetchHome: async () => {
+  fetchHome: async (answerId) => {
     set({ loading: true, error: null });
+
     try {
-      const data = await getHomeData();
+      // 홈 데이터 조회
+      const home = await getHomeData();
+
       set({
-        painAreaId: data.painAreaId ?? null,
-        painAreaName: data.painAreaName ?? null,
-        banners: data.banners ?? [],
-        symptoms: data.symptoms ?? [],
-        temporaryGuides: data.temporaryGuides ?? [],
+        painAreaId: home.painAreaId ?? null,
+        painAreaName: home.painAreaName ?? null,
+        banners: home.banners ?? [],
+        symptoms: home.symptoms ?? [],
+        temporaryGuides: home.temporaryGuides ?? [],
       });
-    } catch (e) {
+
+      // 전문의 요약
+      if (answerId !== undefined && answerId !== null && `${answerId}`.trim() !== "") {
+        try {
+          const summary = await getDoctorOpinionSummary(answerId);
+          set({ doctorOpinionSummary: summary ?? null });
+        } catch {
+          // 요약만 실패한 경우: 요약만 null
+          set({ doctorOpinionSummary: null });
+        }
+      } else {
+        set({ doctorOpinionSummary: null });
+      }
+    } catch {
       set({ error: "홈 전체 데이터 조회 실패" });
     } finally {
       set({ loading: false });
