@@ -145,7 +145,6 @@ const HomeTermsAgreementModal = () => {
 
     postTerm(requestData, {
       onSuccess: () => {
-        alert("약관 동의가 완료되었습니다!");
         reset();
         closeModal();
       },
