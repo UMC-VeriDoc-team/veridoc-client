@@ -96,7 +96,7 @@ const MyPage = () => {
   // -----------------------------------------------------------------------
   const renderSymptomContent = () => (
     <>
-      <div className="mt-[30px] px-[30px] text-left md:mt-[60px] md:px-0 md:text-center">
+      <div className="mt-6 px-[30px] text-left md:mt-[60px] md:px-0 md:text-center">
         {/* [제목] 파란 글씨 */}
         <h2 className="mb-0 text-[32px] font-extrabold leading-[1.4] tracking-[-0.025em] text-brand-primary md:text-4xl">
           {isEditing ? (
@@ -329,8 +329,8 @@ const MyPage = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-white">
-      <header className="flex w-full items-center justify-center pt-[14px] md:hidden">
-        <span className="text-[20px] font-semibold text-gray-950">마이페이지</span>
+      <header className="flex w-full items-center justify-center md:hidden">
+        <span className="pt-10 text-lg font-semibold text-gray-950">마이페이지</span>
       </header>
 
       {/* 2. [Logo] 로고 영역 */}
@@ -346,7 +346,7 @@ const MyPage = () => {
         <div className="flex h-[48px] w-[354px] rounded-[10px] bg-gray-50 p-[6px] md:h-[69px] md:w-full md:max-w-[777px] md:p-0 md:px-[11px] md:py-[10px]">
           {/* [Tab 1] 나의 증상 관리 */}
           <button
-            className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
+            className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-base font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
               activeTab === "symptom" ? "bg-white text-gray-950" : "bg-transparent text-gray-400"
             } `}
             onClick={() => setSearchParams({ tab: "symptom" })}
@@ -356,7 +356,7 @@ const MyPage = () => {
 
           {/* [Tab 2] 정보 수정 */}
           <button
-            className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
+            className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-base font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
               activeTab === "info" ? "bg-white text-gray-950" : "bg-transparent text-gray-400"
             } `}
             onClick={() => setSearchParams({ tab: "info" })}
