@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Icon from "@/components/Icon/Icon";
 import KakaoHospitalMap from "./KakaoHospitalMap";
 import type { HospitalMapItem, LatLng } from "@/libs/kakaoMap";
-import GetNearbyHospital from "@/services/home/GetNearbyHospital";
+import getNearbyHospital from "@/pages/home/services/getNearbyHospital";
 
 type UserLocation = LatLng & { accuracy: number };
 
@@ -126,7 +126,7 @@ const HospitalMapSection = () => {
       void (async () => {
         setIsLoading(true);
         try {
-          const res = await GetNearbyHospital({
+          const res = await getNearbyHospital({
             lat: userLocation.lat,
             lng: userLocation.lng,
             painAreaId: 1,
@@ -141,7 +141,7 @@ const HospitalMapSection = () => {
             return list[0]?.hospitalId ?? null;
           });
         } catch (e) {
-          console.error("GetNearbyHospital failed:", e);
+          console.error("getNearbyHospital failed:", e);
           setHospitals([]);
         } finally {
           setIsLoading(false);

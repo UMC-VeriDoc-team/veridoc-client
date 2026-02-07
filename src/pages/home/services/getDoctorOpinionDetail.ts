@@ -6,7 +6,7 @@ interface GetDoctorOpinionDetail {
 }
 
 // 전문의 답변 상세 조회
-const GetDoctorOpinionDetail = async ({
+const getDoctorOpinionDetail = async ({
   answerId,
 }: GetDoctorOpinionDetail): Promise<GetDoctorOpinionDetailResponse> => {
   const res = await authApiWrapper.get<GetDoctorOpinionDetailResponse>(
@@ -16,4 +16,4 @@ const GetDoctorOpinionDetail = async ({
   return res.data;
 };
 
-export default GetDoctorOpinionDetail;
+export default getDoctorOpinionDetail;

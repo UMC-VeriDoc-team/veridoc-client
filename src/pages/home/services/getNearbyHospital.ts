@@ -8,7 +8,7 @@ interface GetNearbyHospitalParams {
   limit: number;
 }
 
-const GetNearbyHospital = async ({
+const getNearbyHospital = async ({
   lat,
   lng,
   painAreaId,
@@ -26,4 +26,4 @@ const GetNearbyHospital = async ({
   return res.data;
 };
 
-export default GetNearbyHospital;
+export default getNearbyHospital;
