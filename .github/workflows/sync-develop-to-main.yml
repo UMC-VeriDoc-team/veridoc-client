@@ -52,17 +52,18 @@ jobs:
             --body "develop 브랜치 변경사항을 main에 자동 반영하기 위한 PR입니다. merge되면 main push가 발생하고 Vercel 배포가 진행됩니다."
 
       # PR 자동 머지 활성화 (squash)
-      - name: Enable PR auto-merge
+      - name: Enable PR auto-merge (optional)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
           PR_NUMBER="$(gh pr list --base main --head develop --state open --json number --jq '.[0].number')"
           echo "PR_NUMBER=$PR_NUMBER"
-
+      
           if [ -z "$PR_NUMBER" ]; then
             echo "No PR to enable auto-merge. Exit."
             exit 0
           fi
+      
+          gh pr merge "$PR_NUMBER" --squash --auto || echo "Auto-merge not enabled. Skipping."
 
-          gh pr merge "$PR_NUMBER" --squash --auto
