@@ -2,8 +2,18 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "/images/logo.svg";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
+import { useAuthStore } from "@/stores/login/useAuthStore";
 
 const HOME_ACTIVE_PATHS = ["/home", "/guide", "/preview"];
+
+const authButtonVisiblePaths = [
+  "/",
+  "/select-symptom",
+  "/signup",
+  "/login",
+  "/find-password",
+  "/password/reset",
+];
 
 interface HeaderProps {
   className?: string;
@@ -12,11 +22,12 @@ interface HeaderProps {
 const Header = ({ className }: HeaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { openModal } = useBaseModal();
 
-  // 임시: 나중에 실제 로그인/증상선택 store로 교체
-  const isLoggedIn = true;
-  const hasSymptom = true;
+  const { openModal } = useBaseModal();
+  const { isLoggedIn, painAreaID } = useAuthStore();
+
+  // 증상 선택 여부
+  const hasSymptom = Boolean(painAreaID);
 
   const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guide") : "/preview";
 
@@ -46,6 +57,9 @@ const Header = ({ className }: HeaderProps) => {
     }
     navigate("/my");
   };
+
+  // 현재 경로가 버튼 표시 대상인지 여부
+  const showAuthButtons = authButtonVisiblePaths.some((path) => location.pathname.includes(path));
 
   return (
     <header
@@ -110,20 +124,25 @@ const Header = ({ className }: HeaderProps) => {
               </button>
             </div>
           ) : (
-            <div className="flex w-[200px] gap-x-3">
-              <NavLink
-                to="/signup"
-                className={`items-center rounded-lg border border-brand-primary bg-white px-5 py-2 text-center font-semibold text-brand-primary hover:opacity-80`}
-              >
-                회원가입
-              </NavLink>
-              <NavLink
-                to="/login"
-                className={`items-center rounded-lg bg-brand-primary px-5 py-2 text-center font-semibold text-white hover:opacity-80`}
-              >
-                로그인
-              </NavLink>
-            </div>
+            <>
+              {!showAuthButtons && (
+                <div className="flex w-[200px] gap-x-3">
+                  <NavLink
+                    to="/signup"
+                    className="rounded-lg border border-brand-primary bg-white px-5 py-2 text-center font-semibold text-brand-primary hover:opacity-80"
+                  >
+                    회원가입
+                  </NavLink>
+
+                  <NavLink
+                    to="/login"
+                    className="rounded-lg bg-brand-primary px-5 py-2 text-center font-semibold text-white hover:opacity-80"
+                  >
+                    로그인
+                  </NavLink>
+                </div>
+              )}
+            </>
           )}
         </div>
       </nav>
