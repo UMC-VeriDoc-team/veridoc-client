@@ -24,6 +24,7 @@ import HomePreview from "./pages/home/components/HomePreview";
 import GuideDetailPage from "./components/Modal/components/guide/GuideDetailPage";
 import HomeTemporaryMeasurePage from "./components/Modal/components/home/HomeTemporaryMeasurePage";
 import HomeDoctorOpinionPage from "./components/Modal/components/home/HomeDoctorOpinionPage";
+import ScrollToTop from "./components/Scroll/ScrollToTop";
 
 const App = () => {
   const isMobile = useIsMobile();
@@ -33,8 +34,8 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <ModalPage />
-
       {shouldShowSplash ? (
         <MobileSplashPage onFinish={() => setShowSplash(false)} />
       ) : (

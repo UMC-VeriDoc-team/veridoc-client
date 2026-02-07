@@ -343,13 +343,11 @@ const MyPage = () => {
       {/* 3. [Tabs] 탭 영역 */}
       <div className="mb-8 mt-[24px] flex w-full justify-center px-[30px] md:mt-0 md:w-[777px] md:px-0">
         {/* 실제 탭 컨테이너 (회색 박스) */}
-        <div className="flex h-[49px] w-full items-center justify-center rounded-[10px] bg-gray-50 p-[4px] md:h-[69px]">
+        <div className="flex h-[48px] w-[354px] rounded-[10px] bg-gray-50 p-[6px] md:h-[69px] md:w-full md:max-w-[777px] md:p-0 md:px-[11px] md:py-[10px]">
           {/* [Tab 1] 나의 증상 관리 */}
           <button
             className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
-              activeTab === "symptom"
-                ? "bg-white text-gray-950 shadow-sm"
-                : "bg-transparent text-gray-400"
+              activeTab === "symptom" ? "bg-white text-gray-950" : "bg-transparent text-gray-400"
             } `}
             onClick={() => setSearchParams({ tab: "symptom" })}
           >
@@ -359,9 +357,7 @@ const MyPage = () => {
           {/* [Tab 2] 정보 수정 */}
           <button
             className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-[18px] font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
-              activeTab === "info"
-                ? "bg-white text-gray-950 shadow-sm"
-                : "bg-transparent text-gray-400"
+              activeTab === "info" ? "bg-white text-gray-950" : "bg-transparent text-gray-400"
             } `}
             onClick={() => setSearchParams({ tab: "info" })}
           >
