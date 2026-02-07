@@ -1,74 +1,65 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { postLogin, type LoginPayload } from "@/pages/login/services/postLogin";
-import { useUserStore } from "../user/useUserStore";
+import { postLogin } from "@/pages/login/services/postLogin";
 
-type AuthState = {
+interface AuthState {
   accessToken: string | null;
+  userID: number | null;
+  painAreaID: number | null;
+
   isLoggedIn: boolean;
   loading: boolean;
 
-  setAccessToken: (token: string | null) => void;
-  login: (
-    payload: LoginPayload
-  ) => Promise<
-    | { ok: true; data: { userID: number; accessToken: string } }
-    | { ok: false; reason: "INVALID" | "UNKNOWN" }
-  >;
+  login: (payload: {
+    email: string;
+    password: string;
+  }) => Promise<{ ok: true } | { ok: false; reason: "INVALID" | "UNKNOWN" }>;
+
   logout: () => void;
-};
+  setPainAreaID: (id: number | null) => void;
+}
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set, get) => ({
-      accessToken: null,
-      isLoggedIn: false,
-      loading: false,
+export const useAuthStore = create<AuthState>((set) => ({
+  accessToken: localStorage.getItem("accessToken"),
+  userID: null,
+  painAreaID: 1, // 임시
 
-      setAccessToken: (token) =>
-        set({
-          accessToken: token,
-          isLoggedIn: Boolean(token),
-        }),
+  isLoggedIn: Boolean(localStorage.getItem("accessToken")),
+  loading: false,
 
-      login: async (payload) => {
-        set({ loading: true });
-        try {
-          const data = await postLogin(payload);
+  login: async (payload) => {
+    set({ loading: true });
+    try {
+      const data = await postLogin(payload);
 
-          // auth 저장
-          get().setAccessToken(data.accessToken);
+      localStorage.setItem("accessToken", data.accessToken);
 
-          // user 저장
-          useUserStore.getState().setUserID(data.userID);
+      set({
+        accessToken: data.accessToken,
+        userID: data.userID,
+        isLoggedIn: true,
+      });
 
-          return { ok: true as const, data };
-        } catch (e: any) {
-          const status = e?.response?.status;
-          if (status === 400 || status === 401) {
-            return { ok: false as const, reason: "INVALID" as const };
-          }
-          return { ok: false as const, reason: "UNKNOWN" as const };
-        } finally {
-          set({ loading: false });
-        }
-      },
-
-      logout: () => {
-        // auth 초기화
-        set({ accessToken: null, isLoggedIn: false });
-
-        // user 초기화
-        useUserStore.getState().resetUser();
-      },
-    }),
-    {
-      name: "auth-store",
-      // persist된 값에서 복원될 때 isLoggedIn 동기화
-      onRehydrateStorage: () => (state) => {
-        if (!state) return;
-        state.isLoggedIn = Boolean(state.accessToken);
-      },
+      return { ok: true };
+    } catch (e: any) {
+      const status = e?.response?.status;
+      if (status === 400 || status === 401) {
+        return { ok: false, reason: "INVALID" };
+      }
+      return { ok: false, reason: "UNKNOWN" };
+    } finally {
+      set({ loading: false });
     }
-  )
-);
+  },
+
+  logout: () => {
+    localStorage.removeItem("accessToken");
+    set({
+      accessToken: null,
+      userID: null,
+      painAreaID: null,
+      isLoggedIn: false,
+    });
+  },
+
+  setPainAreaID: (id) => set({ painAreaID: id }),
+}));

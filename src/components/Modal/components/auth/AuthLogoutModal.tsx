@@ -1,4 +1,5 @@
 import Icon from "@/components/Icon/Icon";
+import { useAuthStore } from "@/stores/login/useAuthStore";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { useNavigate } from "react-router-dom";
 
@@ -6,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 const AuthLogoutModal = () => {
   const navigate = useNavigate();
   const { closeModal } = useBaseModal();
+  const { logout } = useAuthStore();
 
   // 로그아웃
   const handleLogout = () => {
     // 로그아웃 API
     closeModal();
+    logout();
     navigate("/");
   };
 
