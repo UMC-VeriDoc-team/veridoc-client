@@ -62,12 +62,14 @@ const SymptomPage = () => {
       </div>
 
       {/* 데스크탑 */}
-      <div className="hidden w-full items-center justify-center bg-white pt-[68px] md:flex">
-        <img src={logo} alt="VeriDoc 로고" className="h-[85px] w-[285px]" draggable={false} />
+      <div className="md:mb-8 md:mt-10 md:flex md:items-center md:justify-center">
+        <div className="h-[85px]">
+          <img src={logo} alt="VeriDoc Logo" className="h-full w-auto" />
+        </div>
       </div>
 
       {/* 공통 wrapper: life/guide 모두 여기 안에서 렌더 */}
-      <div className="w-full bg-white px-[30px] py-10 md:pt-[29px]">
+      <div className="w-full bg-white px-[30px] pb-10">
         {/* 탭 */}
         <div className="flex justify-center">
           <SymptomTabs value={tab} onChange={setTab} />
