@@ -1,7 +1,9 @@
-import { COMMON_GUIDES_MOCK } from "@/constants/mock/home/mockHomeTemporaryMeasure";
 import AlternativeCard from "./HomeAlternative/AlternativeCard";
+import { useHomeStore } from "@/stores/home/useHomeStore";
 
 const HomeManage = () => {
+  const { temporaryGuides } = useHomeStore();
+
   return (
     <section className="flex w-full flex-col pl-[30px] text-left sm:px-0">
       <div className="flex flex-col">
@@ -17,7 +19,7 @@ const HomeManage = () => {
 
       <article className="mt-5 flex md:mt-[40px] md:overflow-x-hidden">
         <div className="flex flex-nowrap gap-x-5 overflow-x-scroll last:pr-[30px] md:grid md:grid-cols-3 md:gap-x-[30px] md:px-0">
-          {COMMON_GUIDES_MOCK.map((guide) => (
+          {temporaryGuides.map((guide) => (
             <AlternativeCard
               key={guide.guideId}
               guideId={guide.guideId}
