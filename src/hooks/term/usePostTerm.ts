@@ -1,6 +1,6 @@
+import { postTerm } from "@/components/Modal/services/term/postTerm";
 import type { PostTermRequest, PostTermResponse } from "@/components/Modal/types/terms";
 import type { ApiError, ApiErrorBody } from "@/types/error";
-import { postTerm } from "@/utils/api/term/postTerm";
 import { useMutation } from "@tanstack/react-query";
 
 /** 약관 동의 API 전송 훅 (usePostTerm). Zustand 대신 이 훅으로 전송 처리 */
