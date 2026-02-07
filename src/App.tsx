@@ -25,6 +25,7 @@ import GuideDetailPage from "./components/Modal/components/guide/GuideDetailPage
 import HomeTemporaryMeasurePage from "./components/Modal/components/home/HomeTemporaryMeasurePage";
 import HomeDoctorOpinionPage from "./components/Modal/components/home/HomeDoctorOpinionPage";
 import ScrollToTop from "./components/Scroll/ScrollToTop";
+import SignupSymptomResetGuard from "./components/Guard/SignupSymptomResetGuard";
 
 const App = () => {
   const isMobile = useIsMobile();
@@ -34,6 +35,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      <SignupSymptomResetGuard />
       <ScrollToTop />
       <ModalPage />
       {shouldShowSplash ? (
