@@ -2,6 +2,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "../Modal/types/modal";
+import { useAuthStore } from "@/stores/login/useAuthStore";
 
 const HOME_ACTIVE_PATHS = ["/home", "/guide", "/preview"];
 
@@ -9,10 +10,10 @@ const BottomTabBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { openModal } = useBaseModal();
+  const { isLoggedIn, painAreaID } = useAuthStore();
 
-  // 임시: 로그인 연동 후 store로 관리
-  const isLoggedIn = true;
-  const hasSymptom = true;
+  // 증상 선택 여부
+  const hasSymptom = Boolean(painAreaID);
 
   const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guide") : "/preview";
 
