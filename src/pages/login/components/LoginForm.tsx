@@ -2,16 +2,16 @@ import Button from "@/components/Button/Button";
 import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import InputField from "@/components/Input/InputField";
 import { ModalType } from "@/components/Modal/types/modal";
+import { useAuthStore } from "@/stores/login/useAuthStore";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLogin } from "../hooks/useLogin";
 
 const LoginForm = () => {
   const { openModal } = useBaseModal();
   const navigate = useNavigate();
-  const { loading, login } = useLogin();
+  const { loading, login } = useAuthStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,8 +45,9 @@ const LoginForm = () => {
 
     const result = await login({ email: email.trim(), password });
 
+    // 로그인 성공 후 홈으로 이동
     if (result.ok) {
-      navigate("/");
+      navigate("/home");
       return;
     }
 
