@@ -1,4 +1,4 @@
-import { postTerm } from "@/components/Modal/services/term/postTerm";
+import { postTerm } from "@/components/Modal/services/postTerm";
 import type { PostTermRequest, PostTermResponse } from "@/components/Modal/types/terms";
 import type { ApiError, ApiErrorBody } from "@/types/error";
 import { useMutation } from "@tanstack/react-query";
@@ -7,11 +7,11 @@ import { useMutation } from "@tanstack/react-query";
 export const usePostTerm = () => {
   return useMutation<PostTermResponse, ApiError<ApiErrorBody>, PostTermRequest>({
     mutationFn: (data: PostTermRequest): Promise<PostTermResponse> => postTerm(data),
-    onSuccess: (data) => {
-      console.log("Terms agreement successful:", data);
+    onSuccess: () => {
+      console.log("약관 동의 성공");
     },
-    onError: (error) => {
-      console.error("Terms agreement failed:", error);
+    onError: () => {
+      console.error("약관 동의 실패");
     },
   });
 };

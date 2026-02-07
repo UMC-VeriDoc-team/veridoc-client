@@ -5,6 +5,9 @@ import { postLogin } from "@/pages/login/services/postLogin";
 import getUserData from "@/pages/login/services/getUserData";
 import type { GetUserDataResponse } from "@/pages/login/services/getUserData";
 import type { Gender } from "@/components/Select/GenderSelect";
+import getAgreementStatus, {
+  normalizeAgreement,
+} from "@/components/Modal/services/getAgreementStatus";
 
 type LoginFailReason = "INVALID" | "UNKNOWN";
 type LoginResult = { ok: true } | { ok: false; reason: LoginFailReason };
@@ -14,9 +17,12 @@ type LoginErrorBody = { code?: string };
 interface AuthState {
   // auth
   accessToken: string | null;
-
   isLoggedIn: boolean;
   loading: boolean;
+
+  // term
+  hasAgreedTerms: boolean | null;
+  needsAgreementModal: boolean;
 
   // user
   userID: number | null;
@@ -36,6 +42,8 @@ interface AuthState {
   resetMe: () => void;
 
   setPainAreaID: (id: number | null) => void;
+
+  fetchAgreement: () => Promise<boolean>;
 
   // 앱 시작 시 토큰 기반 초기화
   initAuth: () => Promise<void>;
@@ -68,12 +76,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isLoggedIn: Boolean(localStorage.getItem("accessToken")),
   loading: false,
 
+  hasAgreedTerms: null,
+  needsAgreementModal: false,
+
   userID: null,
   name: null,
   email: null,
   birth: null,
   gender: null,
-
   painAreaID: null,
   painAreaName: null,
 
@@ -88,8 +98,32 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       painAreaName: null,
     }),
 
+  fetchAgreement: async () => {
+    const token = get().accessToken;
+
+    if (!token) {
+      set({ hasAgreedTerms: null, needsAgreementModal: false });
+      return false;
+    }
+
+    try {
+      const res = await getAgreementStatus();
+      const agreed = normalizeAgreement(res);
+
+      set({
+        hasAgreedTerms: agreed,
+        needsAgreementModal: !agreed,
+      });
+
+      return agreed;
+    } catch {
+      console.log("약관 동의 현황 조회 실패");
+      set({ hasAgreedTerms: false, needsAgreementModal: true });
+      return false;
+    }
+  },
+
   fetchMe: async () => {
-    // 토큰 없으면 호출하지 않음
     if (!get().accessToken) {
       set({ isLoggedIn: false });
       get().resetMe();
@@ -105,16 +139,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isLoggedIn: true,
       });
     } catch {
-      // 토큰이 있는데 me 실패 → 정책은 팀 기준에 맞춰 선택
-      // 1) 만료로 간주하고 logout
-      // 2) 로그인 유지 + user 비움
-      // 여기선 "유저만 비움"으로 둠
       get().resetMe();
     }
   },
 
   login: async (payload) => {
-    set({ loading: true });
+    set({ loading: true, needsAgreementModal: false });
+
     try {
       const data = await postLogin(payload);
 
@@ -125,9 +156,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isLoggedIn: true,
       });
 
-      // 로그인 직후 내 정보 조회
-      await get().fetchMe();
-
       return { ok: true };
     } catch (error: unknown) {
       const status = getAxiosStatus(error);
@@ -135,7 +163,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (status === 400 || status === 401) {
         return { ok: false, reason: "INVALID" };
       }
-
       return { ok: false, reason: "UNKNOWN" };
     } finally {
       set({ loading: false });
@@ -148,6 +175,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       accessToken: null,
       isLoggedIn: false,
       loading: false,
+      hasAgreedTerms: null,
+      needsAgreementModal: false,
     });
     get().resetMe();
   },
@@ -156,13 +185,28 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   initAuth: async () => {
     const token = localStorage.getItem("accessToken");
+
     if (!token) {
-      set({ accessToken: null, isLoggedIn: false });
+      set({
+        accessToken: null,
+        isLoggedIn: false,
+        hasAgreedTerms: null,
+        needsAgreementModal: false,
+      });
       get().resetMe();
       return;
     }
 
     set({ accessToken: token, isLoggedIn: true });
+
+    // 내 정보
     await get().fetchMe();
+
+    // 약관 체크
+    const agreed = await get().fetchAgreement();
+
+    if (!agreed) {
+      set({ needsAgreementModal: true });
+    }
   },
 }));
