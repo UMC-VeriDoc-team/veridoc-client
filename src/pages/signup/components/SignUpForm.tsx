@@ -11,6 +11,7 @@ import { validateEmail } from "@/utils/validateEmail";
 import useSignupSymptomStore from "@/stores/signup/useSignupSymptomStore";
 import { useSignup } from "../hooks/useSignup";
 import { PASSWORD_REGEX } from "@/utils/vaildatePassword";
+import type { SignupPayload } from "../services/postSignup";
 
 type TouchedState = {
   name: boolean;
@@ -88,7 +89,7 @@ const SignUpForm = () => {
 
     const birth = `${dob.year}-${dob.month.padStart(2, "0")}-${dob.day.padStart(2, "0")}`;
 
-    const payload = {
+    const payload: SignupPayload = {
       name: name.trim(),
       email: email.trim(),
       password,

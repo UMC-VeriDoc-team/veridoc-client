@@ -14,6 +14,7 @@ type LoginErrorBody = { code?: string };
 interface AuthState {
   // auth
   accessToken: string | null;
+
   isLoggedIn: boolean;
   loading: boolean;
 
@@ -134,6 +135,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (status === 400 || status === 401) {
         return { ok: false, reason: "INVALID" };
       }
+
       return { ok: false, reason: "UNKNOWN" };
     } finally {
       set({ loading: false });

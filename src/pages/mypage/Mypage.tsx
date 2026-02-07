@@ -195,6 +195,7 @@ const MyPage = () => {
         </p>
       </div>
 
+      {/* 2. 그리드 영역 */}
       <div
         className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${
           !isEditing ? "pointer-events-none opacity-80" : ""
@@ -423,6 +424,7 @@ const MyPage = () => {
         </div>
       </div>
 
+      {/* 컨텐츠 렌더링 (이건 아까 수정한 함수들이 실행됨) */}
       {activeTab === "symptom" ? renderSymptomContent() : renderProfileForm()}
     </div>
   );

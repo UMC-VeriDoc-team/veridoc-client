@@ -2,7 +2,12 @@ import { useMemo, useState } from "react";
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
-import { TermsKey, type CheckableTermsKey, type TermsItem } from "@/components/Modal/types/terms";
+import {
+  TermsKey,
+  type CheckableTermsKey,
+  type PostTermRequest,
+  type TermsItem,
+} from "@/components/Modal/types/terms";
 import useTermsAgreementStore from "@/stores/modal/useTermsAgreementStore";
 import { TERMS_ITEMS } from "@/constants/terms/termsItems";
 import {
@@ -10,10 +15,12 @@ import {
   makeGeoErrorMessage,
   requestLocationOnce,
 } from "@/utils/locationPermission";
+import { usePostTerm } from "@/hooks/term/usePostTerm";
 
-// 서비스 약관 동의 모달
+// 서비스 약관 동의 모달 (체크 상태는 Zustand, 전송은 usePostTerm. API response는 사용하지 않음)
 const HomeTermsAgreementModal = () => {
   const { openModal, closeModal } = useBaseModal();
+  const { mutate: postTerm } = usePostTerm();
   const { checked, toggleChecked, setChecked, setAll, reset, locationError, setLocationError } =
     useTermsAgreementStore();
 
@@ -128,10 +135,24 @@ const HomeTermsAgreementModal = () => {
     toggleChecked(key);
   };
 
-  // 동의하고 가입하기
+  // 동의하고 가입하기 (usePostTerm으로 전송만 수행, 응답값은 사용하지 않음)
   const handleSubmit = () => {
-    reset();
-    closeModal();
+    const requestData: PostTermRequest = {
+      termsOfService: checked[TermsKey.SERVICE],
+      privacyPolicy: checked[TermsKey.PRIVACY],
+      locationService: checked[TermsKey.LOCATION],
+    };
+
+    postTerm(requestData, {
+      onSuccess: () => {
+        reset();
+        closeModal();
+      },
+      onError: (error) => {
+        console.error(error);
+        alert("API 연동 중 오류가 발생했습니다.");
+      },
+    });
   };
 
   return (
