@@ -10,7 +10,7 @@ const GuideHeader = () => {
     <div className="relative">
       {/* 이미지 */}
       <img
-        src="/public/images/home/guides/banner/banner.svg"
+        src="/images/home/guides/banner/banner.svg"
         alt="범용 가이드 헤더"
         className="h-[360px] w-full object-cover sm:h-[420px] md:h-[520px] lg:h-[578px]"
         onClick={() => navigate("/")}
@@ -22,14 +22,14 @@ const GuideHeader = () => {
       {/* 모바일 */}
       <div className="absolute left-0 right-0 top-0 z-10 flex items-start justify-between px-6 pt-6 md:hidden">
         <img
-          src="/public/images/responsive-logo.svg"
+          src="/images/responsive-logo.svg"
           alt="VeriDoc"
           className="mt-6 h-[40px] w-auto"
           draggable={false}
         />
         <button type="button" aria-label="Logout" className="shrink-0">
           <img
-            src="/public/images/logout-button.svg"
+            src="/images/logout-button.svg"
             alt="Logout"
             className="mt-6 h-[32px] w-auto"
             draggable={false}
