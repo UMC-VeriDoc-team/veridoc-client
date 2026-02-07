@@ -119,8 +119,6 @@ const ModalPage = () => {
         return <AuthLoginRequiredModal />;
       case ModalType.AUTH_LOGOUT:
         return <AuthLogoutModal />;
-      case ModalType.AUTH_LOGOUT:
-        return <AuthLogoutModal />;
 
       // 홈
       case ModalType.HOME_TERMS_AGREEMENT:
