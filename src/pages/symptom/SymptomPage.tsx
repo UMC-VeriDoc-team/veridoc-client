@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import logo from "/images/logo.svg";
 import { SymptomTabs } from "@/pages/symptom/components/SymptomTabs";
 import { SymptomEmptyState } from "@/pages/symptom/components/SymptomEmptyState";
@@ -9,6 +9,7 @@ import SymptomGuideTab from "@/pages/symptom/tabs/symptom-guide/SymptomGuideTab"
 type TabKey = "life" | "guide";
 
 const SymptomPage = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const symptomId = searchParams.get("symptomId");
@@ -46,12 +47,13 @@ const SymptomPage = () => {
   // };
 
   const onClickSelectSymptom = () => {
-    setSearchParams((prev) => {
-      const nextParams = new URLSearchParams(prev);
-      nextParams.set("symptomId", "1"); // 기본 선택(임시)
-      nextParams.set("tab", "life");
-      return nextParams;
-    });
+    navigate("/my?tab=symptom");
+    // setSearchParams((prev) => {
+    //   const nextParams = new URLSearchParams(prev);
+    //   nextParams.set("symptomId", "1"); // 기본 선택(임시)
+    //   nextParams.set("tab", "life");
+    //   return nextParams;
+    // });
   };
 
   return (
@@ -62,12 +64,14 @@ const SymptomPage = () => {
       </div>
 
       {/* 데스크탑 */}
-      <div className="hidden w-full items-center justify-center bg-white pt-[68px] md:flex">
-        <img src={logo} alt="VeriDoc 로고" className="h-[85px] w-[285px]" draggable={false} />
+      <div className="md:mb-8 md:mt-10 md:flex md:items-center md:justify-center">
+        <div className="h-[85px]">
+          <img src={logo} alt="VeriDoc Logo" className="h-full w-auto" />
+        </div>
       </div>
 
       {/* 공통 wrapper: life/guide 모두 여기 안에서 렌더 */}
-      <div className="w-full bg-white px-[30px] py-10 md:pt-[29px]">
+      <div className="w-full bg-white px-[30px] pb-10">
         {/* 탭 */}
         <div className="flex justify-center">
           <SymptomTabs value={tab} onChange={setTab} />
