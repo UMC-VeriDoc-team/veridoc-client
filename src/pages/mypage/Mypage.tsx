@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
@@ -7,24 +7,84 @@ import Logo from "/images/logo.svg";
 import SymptomGrid from "@/components/Symptom/SymptomGrid";
 import Button from "@/components/Button/Button";
 import GenderSelect, { type Gender } from "@/components/Select/GenderSelect";
+import { SYMPTOMS } from "@/constants/symptoms";
+import { getPainAreas, type PainArea } from "@/pages/signup/services/getPainAreas";
+import { useAuthStore } from "@/stores/login/useAuthStore";
+import { parseBirthYMD } from "@/utils/formatBirth";
 
 const MyPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const activeTab = searchParams.get("tab") === "info" ? "info" : "symptom";
-  const [isEditing, setIsEditing] = useState(false);
   const { openModal } = useBaseModal();
 
-  // 프로필 관련 State
-  const [name, setName] = useState("홍길동");
-  const [gender, setGender] = useState<Gender>("MALE");
-  const [birth, setBirth] = useState({ year: "2000", month: "11", day: "10" });
-  const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
-  const [selectedKey, setSelectedKey] = useState<string | null>("knee");
+  const {
+    name: storeName,
+    email: storeEmail,
+    birth: storeBirth,
+    gender: storeGender,
+    painAreaName,
+    setPainAreaID,
+    fetchMe,
+  } = useAuthStore();
+
+  useEffect(() => {
+    void fetchMe();
+  }, [fetchMe]);
+
+  const [painAreas, setPainAreas] = useState<PainArea[]>([]);
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const res = await getPainAreas();
+        setPainAreas(res?.data?.painAreas ?? []);
+      } catch {
+        setPainAreas([]);
+      }
+    };
+    void run();
+  }, []);
+
+  // 부위명과 painAreaId 매핑
+  const painAreaIdByName = useMemo(() => {
+    return new Map(painAreas.map((p) => [p.name, p.painAreaID]));
+  }, [painAreas]);
+
+  // store painAreaName -> selectedKey(SYMPTOMS.key)
+  const storeSelectedKey = useMemo(() => {
+    if (!painAreaName) return null;
+    const matched = SYMPTOMS.find((s) => s.label === painAreaName);
+    return matched?.key ?? null;
+  }, [painAreaName]);
+
+  const [isEditing, setIsEditing] = useState(false);
   const [isProfileEditing, setIsProfileEditing] = useState(false);
 
-  // 증상 선택 로직
+  const [name, setName] = useState(storeName ?? "");
+  const [gender, setGender] = useState<Gender>(storeGender ?? "MALE");
+  const [birth, setBirth] = useState({ year: "", month: "", day: "" });
+  const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
+
+  const [selectedKey, setSelectedKey] = useState<string | null>(storeSelectedKey);
+
+  // store 값이 바뀌었을 때 편집 중이 아니면 화면도 동기화
+  useEffect(() => {
+    if (!isProfileEditing) {
+      setName(storeName ?? "");
+      setGender(storeGender ?? "MALE");
+      setBirth(parseBirthYMD(storeBirth));
+    }
+  }, [storeName, storeGender, storeBirth, isProfileEditing]);
+
+  useEffect(() => {
+    if (!isEditing) {
+      setSelectedKey(storeSelectedKey);
+    }
+  }, [storeSelectedKey, isEditing]);
+
+  // 증상 선택
   const handleSelectSymptom = (key: string) => {
     if (!isEditing) return;
 
@@ -34,22 +94,31 @@ const MyPage = () => {
     });
   };
 
-  // 증상 저장 로직
   const handleSaveSymptom = () => {
     if (!isEditing) {
       setIsEditing(true);
       return;
     }
+
     setIsEditing(false);
 
+    // 선택 안 한 경우: null로 저장
     if (selectedKey === null) {
+      setPainAreaID(null);
       openModal(ModalType.MY_SYMPTOM_NOT_SELECTED);
-    } else {
-      openModal(ModalType.MY_SYMPTOM_CHANGED);
+      return;
     }
+
+    // key -> label -> pain_area_id로 변환해서 store에 저장
+    const label = SYMPTOMS.find((s) => s.key === selectedKey)?.label ?? null;
+    const nextId = label ? (painAreaIdByName.get(label) ?? null) : null;
+
+    setPainAreaID(nextId);
+
+    openModal(ModalType.MY_SYMPTOM_CHANGED);
   };
 
-  // 프로필 저장 로직
+  // 프로필 저장
   const handleSaveProfile = () => {
     if (!isProfileEditing) {
       setIsProfileEditing(true);
@@ -84,9 +153,9 @@ const MyPage = () => {
     }
 
     setErrors(newErrors);
-
     if (!isValid) return;
 
+    // 프로필 수정 API 호출 + 성공 시 store 반영
     openModal(ModalType.MY_PROFILE_UPDATED);
     setIsProfileEditing(false);
   };
@@ -104,7 +173,6 @@ const MyPage = () => {
               <span className="md:hidden">
                 현재 확인 중인 <br /> 증상을 변경해 보세요
               </span>
-
               <span className="hidden md:inline">현재 확인 중인 증상을 변경해 보세요</span>
             </>
           ) : (
@@ -112,7 +180,6 @@ const MyPage = () => {
               <span className="md:hidden">
                 현재 확인 중인 <br /> 증상이에요
               </span>
-
               <span className="hidden md:inline">현재 확인 중인 증상이에요</span>
             </>
           )}
@@ -132,7 +199,6 @@ const MyPage = () => {
         </p>
       </div>
 
-      {/* 2. 그리드 영역 */}
       <div
         className={`mt-[100px] flex w-full justify-center px-[30px] md:mt-[70px] md:px-0 ${!isEditing ? "pointer-events-none opacity-80" : ""} `}
       >
@@ -143,7 +209,6 @@ const MyPage = () => {
         />
       </div>
 
-      {/* 3. 버튼 영역 */}
       <div className="mb-20 mt-[70px] w-full px-[30px] md:mt-[100px] md:w-[400px]">
         <Button
           onClick={handleSaveSymptom}
@@ -162,9 +227,7 @@ const MyPage = () => {
         개인정보 수정
       </h3>
 
-      {/* === 상단: 프로필 수정 폼 === */}
       <div className="flex w-full flex-col items-center lg:flex-row lg:items-start lg:justify-between">
-        {/* 1. 프로필 사진 */}
         <div className="flex flex-col items-center lg:block">
           <div className="relative">
             <div className="flex h-[218.4px] w-[218.4px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50 lg:h-[275px] lg:w-[275px]">
@@ -176,9 +239,7 @@ const MyPage = () => {
           </div>
         </div>
 
-        {/* 2. 입력 폼 */}
         <div className="mt-[30px] flex w-full flex-col space-y-4 lg:mt-0 lg:w-[405px]">
-          {/* 이름 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               이름
@@ -199,7 +260,6 @@ const MyPage = () => {
             {errors.name && <p className="mt-1 text-xs text-error">{errors.name}</p>}
           </div>
 
-          {/* 생년월일 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               생년월일
@@ -248,7 +308,6 @@ const MyPage = () => {
             {errors.birth && <p className="mt-1 text-xs text-error">{errors.birth}</p>}
           </div>
 
-          {/* 이메일 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               이메일
@@ -256,7 +315,7 @@ const MyPage = () => {
             <div className="relative">
               <input
                 type="email"
-                defaultValue="honggil2000@naver.com"
+                value={storeEmail ?? ""}
                 disabled
                 className="w-full cursor-not-allowed rounded border border-gray-200 bg-gray-50 p-3 text-gray-950"
               />
@@ -266,7 +325,6 @@ const MyPage = () => {
             </div>
           </div>
 
-          {/* 성별 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               성별
@@ -274,7 +332,6 @@ const MyPage = () => {
             <GenderSelect value={gender} onChange={setGender} />
           </div>
 
-          {/* 저장 버튼 */}
           <div className="pt-[40px] lg:pt-0">
             <Button onClick={handleSaveProfile}>
               {isProfileEditing ? "개인정보 저장" : "개인정보 수정"}
