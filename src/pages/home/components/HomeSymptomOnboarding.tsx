@@ -6,16 +6,23 @@ import type { GuideDetailType } from "@/components/Modal/types/guideDetail";
 import Icon from "@/components/Icon/Icon";
 import GuideHeader from "@/components/Header/GuideHeader";
 import RecommendEntry from "./RecommendEntry";
+import { useEffect } from "react";
+import { useAuthStore } from "@/stores/login/useAuthStore";
 
 // 로그인 O, 증상 미선택
 const HomeSymptomOnboarding = () => {
   const { openModal } = useBaseModal();
   const { setGuideType } = useGuideDetailModalStore();
+  const { initAuth } = useAuthStore();
 
   const onClickOpenGuideDetail = (guideType: GuideDetailType) => {
     setGuideType(guideType);
     openModal(ModalType.HOME_GUIDE_DETAIL);
   };
+
+  useEffect(() => {
+    void initAuth();
+  }, [initAuth]);
 
   return (
     <>

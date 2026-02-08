@@ -7,12 +7,7 @@ export interface GetUserDataResponse {
   email: string;
   birth: string;
   gender: Gender;
-  user_pain_areas: Array<{
-    pain_areas: {
-      pain_area_id: number;
-      name: string;
-    };
-  }>;
+  painAreaID: number | null;
 }
 
 // 사용자 정보 조회

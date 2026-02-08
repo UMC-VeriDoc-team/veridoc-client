@@ -1,4 +1,4 @@
-import type { GetNearbyHospitalResponse } from "@/types/homeMapHospital";
+import type { GetNearbyHospitalResponse } from "@/pages/home/types/homeMapHospital";
 import { api } from "@/utils/api/api";
 
 interface GetNearbyHospitalParams {
