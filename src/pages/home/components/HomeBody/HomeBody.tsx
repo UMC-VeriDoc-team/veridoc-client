@@ -9,10 +9,11 @@ const HomeBody = () => {
 
   const tags = useMemo(() => {
     return (symptoms ?? [])
-      .filter((s) => s?.symptomId != null && s?.name)
+      .filter((s) => s?.answerId != null && s?.name)
       .map((s) => ({
         id: String(s.symptomId),
         label: s.name,
+        answerId: String(s.answerId),
       }));
   }, [symptoms]);
 
@@ -24,14 +25,15 @@ const HomeBody = () => {
     if (tags.length > 0) setSelectedTag(tags[0].id);
   }, [tags, selectedTag]);
 
-  const handleSelectButtonClick = (tag: string) => {
-    setSelectedTag(tag);
-  };
+  // 선택된 symptomId(selectedTag) -> answerId 매칭
+  const selectedAnswerId = useMemo(() => {
+    return tags.find((t) => t.id === selectedTag)?.answerId ?? "";
+  }, [tags, selectedTag]);
 
   return (
     <div className="flex w-full flex-col gap-y-12 p-[30px] sm:gap-20 sm:p-0">
-      <HomeSelectButton onClick={handleSelectButtonClick} tags={tags} selectedTag={selectedTag} />
-      <HomeOpinion symptom={selectedTag} />
+      <HomeSelectButton onClick={setSelectedTag} tags={tags} selectedTag={selectedTag} />
+      <HomeOpinion answerId={selectedAnswerId} />
     </div>
   );
 };
