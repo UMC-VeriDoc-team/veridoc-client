@@ -1,39 +1,54 @@
 import { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ColorGuide from "@/pages/guide/ColorGuide";
-import LoginPage from "@/pages/login/LoginPage";
-import PasswordEmailPage from "@/pages/password/PasswordEmailPage";
-import PasswordResetPage from "@/pages/password/PasswordResetPage";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import useIsMobile from "@/hooks/useIsMobile";
+import { useAuthStore } from "@/stores/login/useAuthStore";
+
+import ScrollToTop from "@/components/Scroll/ScrollToTop";
+import ModalPage from "@/components/Modal/ModalPage";
+import SignupSymptomResetGuard from "@/components/Guard/SignupSymptomResetGuard";
+
+/* layouts */
 import HeaderOnlyLayout from "@/layouts/HeaderOnlyLayout";
 import DefaultLayout from "@/layouts/DefaultLayout";
+import OnboardingLayout from "@/layouts/OnboardingLayout";
+
+/* pages */
+import MobileSplashPage from "@/pages/splash/MobileSplashPage";
 import OnboardingPage from "@/pages/onboarding/OnboardingPage";
-import ModalPage from "@/components/Modal/ModalPage";
-import ModalGuidePage from "@/pages/guide/ModalGuidePage";
-import SymptomPage from "@/pages/symptom/SymptomPage";
-import MyPasswordPage from "./pages/mypage/MyPasswordPage";
+import LoginPage from "@/pages/login/LoginPage";
 import SignUpPage from "@/pages/signup/SignUpPage";
 import SignUpSymptomPage from "@/pages/signup/SignUpSymptomPage";
-import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding";
-import MobileSplashPage from "@/pages/splash/MobileSplashPage";
-import useIsMobile from "@/hooks/useIsMobile";
-import MyPage from "@/pages/mypage/Mypage";
+import PasswordEmailPage from "@/pages/password/PasswordEmailPage";
+import PasswordResetPage from "@/pages/password/PasswordResetPage";
 import MainPage from "@/pages/home/MainPage";
-import OnboardingLayout from "./layouts/OnboardingLayout";
-import HospitalMapSection from "./pages/home/components/map/HospitalMapSection";
-import HomePreview from "./pages/home/components/HomePreview";
-import GuideDetailPage from "./components/Modal/components/guide/GuideDetailPage";
-import HomeTemporaryMeasurePage from "./components/Modal/components/home/HomeTemporaryMeasurePage";
-import HomeDoctorOpinionPage from "./components/Modal/components/home/HomeDoctorOpinionPage";
-import ScrollToTop from "./components/Scroll/ScrollToTop";
-import SignupSymptomResetGuard from "./components/Guard/SignupSymptomResetGuard";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import MyPage from "@/pages/mypage/Mypage";
+import MyPasswordPage from "@/pages/mypage/MyPasswordPage";
+import SymptomPage from "@/pages/symptom/SymptomPage";
+import HospitalMapSection from "@/pages/home/components/map/HospitalMapSection";
+import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding";
+import HomePreview from "@/pages/home/components/HomePreview";
+import ModalGuidePage from "@/pages/guide/ModalGuidePage";
+import ColorGuide from "@/pages/guide/ColorGuide";
+
+/* modal pages */
+import GuideDetailPage from "@/components/Modal/components/guide/GuideDetailPage";
+import HomeTemporaryMeasurePage from "@/components/Modal/components/home/HomeTemporaryMeasurePage";
+import HomeDoctorOpinionPage from "@/components/Modal/components/home/HomeDoctorOpinionPage";
+import PublicOnly from "./components/Guard/PublicOnly";
+import RequireAuth from "./components/Guard/RequireAuth";
+import RequirePainArea from "./components/Guard/RequirePainArea";
+
+/* route guards */
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const isMobile = useIsMobile();
-  const [showSplash, setShowSplash] = useState(true);
+  const { isLoggedIn, painAreaID } = useAuthStore();
 
+  const [showSplash, setShowSplash] = useState(true);
   const shouldShowSplash = isMobile && showSplash;
 
   return (
@@ -42,32 +57,74 @@ const App = () => {
         <SignupSymptomResetGuard />
         <ScrollToTop />
         <ModalPage />
+
         {shouldShowSplash ? (
           <MobileSplashPage onFinish={() => setShowSplash(false)} />
         ) : (
           <Routes>
-            {/* 온보딩용 레이아웃 */}
-            <Route path="/" element={<OnboardingLayout />}>
+            {/* 온보딩: 로그인 안 한 상태에서만 */}
+            <Route
+              path="/"
+              element={
+                !isLoggedIn ? (
+                  <OnboardingLayout />
+                ) : (
+                  <Navigate to={painAreaID == null ? "/guide" : "/home"} replace />
+                )
+              }
+            >
               <Route index element={<OnboardingPage />} />
             </Route>
 
-            {/* 헤더만 있는 레이아웃 (로그인/회원가입) */}
+            {/* 로그인/회원가입 레이아웃 */}
             <Route element={<HeaderOnlyLayout />}>
+              {/* 로그인 */}
+              <Route path="/login" element={<LoginPage />} />
+
               {/* 회원가입 */}
               <Route path="/select-symptom" element={<SignUpSymptomPage />} />
               <Route path="/signup" element={<SignUpPage />} />
-
-              {/* 로그인 */}
-              <Route path="/login" element={<LoginPage />} />
 
               {/* 비밀번호 찾기 */}
               <Route path="/find-password" element={<PasswordEmailPage />} />
               <Route path="/password/reset" element={<PasswordResetPage />} />
             </Route>
 
-            {/* 기본 레이아웃 (헤더+푸터) */}
-            <Route element={<DefaultLayout />}>
-              <Route path="/hospital" element={<HospitalMapSection />} />
+            {/* 프리뷰: 비로그인 전용으로 하고 싶으면 PublicOnly로 감싸기 */}
+            <Route
+              path="/preview"
+              element={
+                <PublicOnly>
+                  <DefaultLayout />
+                </PublicOnly>
+              }
+            >
+              <Route index element={<HomePreview />} />
+            </Route>
+
+            {/* 로그인 후 서비스 영역 */}
+            <Route
+              element={
+                <RequireAuth>
+                  <DefaultLayout />
+                </RequireAuth>
+              }
+            >
+              {/* 홈: painAreaID 없으면 /guide로 */}
+              <Route
+                path="/home"
+                element={
+                  <RequirePainArea>
+                    <MainPage />
+                  </RequirePainArea>
+                }
+              />
+
+              {/* guide: painAreaID 없어도 들어갈 수 있어야 함 */}
+              <Route path="/guide">
+                <Route index element={<HomeSymptomOnboarding />} />
+                <Route path="detail" element={<GuideDetailPage />} />
+              </Route>
 
               {/* 증상 */}
               <Route path="/symptom">
@@ -77,30 +134,19 @@ const App = () => {
                 <Route path="doctor/:id" element={<HomeDoctorOpinionPage />} />
               </Route>
 
+              {/* 병원 */}
+              <Route path="/hospital" element={<HospitalMapSection />} />
+
               {/* 마이페이지 */}
               <Route path="/my" element={<MyPage />} />
               <Route path="/my/password" element={<MyPasswordPage />} />
 
-              {/* 홈 화면 */}
-              <Route path="/home" element={<MainPage />} />
-
-              {/* 로그인O, 증상 부위 선택X: 범용가이드 */}
-              <Route path="/guide">
-                <Route index element={<HomeSymptomOnboarding />} />
-                <Route path="detail" element={<GuideDetailPage />} />
-              </Route>
-
-              {/* 로그인X: 프리뷰 */}
-              <Route path="/preview" element={<HomePreview />} />
-
-              {/* 모달 테스트 페이지 */}
+              {/* 모달 테스트 */}
               <Route path="/modal-guide" element={<ModalGuidePage />} />
             </Route>
 
-            {/* tailwind custom color 시각화 */}
+            {/* 기타 */}
             <Route path="/color-guide" element={<ColorGuide />} />
-
-            {/* 404 처리 */}
             <Route path="*" element={<div className="p-8">Not Found</div>} />
           </Routes>
         )}

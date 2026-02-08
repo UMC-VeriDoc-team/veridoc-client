@@ -58,16 +58,13 @@ const getAxiosStatus = (error: unknown): number | undefined => {
 };
 
 const mapUserMeToState = (dto: GetUserDataResponse) => {
-  const firstPainArea = dto.user_pain_areas?.[0]?.pain_areas ?? null;
-
   return {
     userID: dto.user_id ?? null,
     name: dto.name ?? null,
     email: dto.email ?? null,
     birth: dto.birth ?? null,
     gender: (dto.gender ?? null) as Gender | null,
-    painAreaID: firstPainArea?.pain_area_id ?? null,
-    painAreaName: firstPainArea?.name ?? null,
+    painAreaID: dto.painAreaID ?? null,
   };
 };
 
@@ -181,7 +178,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     get().resetMe();
   },
 
-  setPainAreaID: (id) => set({ painAreaID: id }),
+  setPainAreaID: (id) =>
+    set({
+      painAreaID: id,
+    }),
 
   initAuth: async () => {
     const token = localStorage.getItem("accessToken");

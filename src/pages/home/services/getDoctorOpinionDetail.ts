@@ -1,4 +1,4 @@
-import type { GetDoctorOpinionDetailResponse } from "@/types/homeDoctorOpinion";
+import type { GetDoctorOpinionDetailResponse } from "@/pages/home/types/homeDoctorOpinion";
 import { authApiWrapper } from "@/utils/api/api";
 
 interface GetDoctorOpinionDetail {

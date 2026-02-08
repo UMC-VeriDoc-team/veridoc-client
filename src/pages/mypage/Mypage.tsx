@@ -12,6 +12,8 @@ import { getPainAreas, type PainArea } from "@/pages/signup/services/getPainArea
 import { useAuthStore } from "@/stores/login/useAuthStore";
 import { parseBirthYMD } from "@/utils/formatBirth";
 
+export const UNSELECTED_PAIN_AREA_ID = 8;
+
 const MyPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,7 +26,7 @@ const MyPage = () => {
     email: storeEmail,
     birth: storeBirth,
     gender: storeGender,
-    painAreaName,
+    painAreaID: storePainAreaID,
     setPainAreaID,
     fetchMe,
   } = useAuthStore();
@@ -47,17 +49,26 @@ const MyPage = () => {
     void run();
   }, []);
 
-  // 부위명과 painAreaId 매핑
-  const painAreaIdByName = useMemo(() => {
-    return new Map(painAreas.map((p) => [p.name, p.painAreaID]));
-  }, [painAreas]);
+  // painAreaId -> name
+  const storePainAreaName = useMemo(() => {
+    if (!storePainAreaID) return null;
+    const found = painAreas.find((p) => p.painAreaID === storePainAreaID);
+    return found?.name ?? null;
+  }, [painAreas, storePainAreaID]);
 
-  // store에 저장된 painAreaName으로 selectedKey 추출
+  // store painAreaID -> selectedKey(SYMPTOMS.key)
   const storeSelectedKey = useMemo(() => {
-    if (!painAreaName) return null;
-    const matched = SYMPTOMS.find((s) => s.label === painAreaName);
+    if (!storePainAreaID) return null;
+
+    if (storePainAreaID === UNSELECTED_PAIN_AREA_ID) return null;
+
+    const matched = SYMPTOMS.find((s) => s.label === storePainAreaName);
     return matched?.key ?? null;
-  }, [painAreaName]);
+  }, [storePainAreaID, storePainAreaName]);
+
+  const painAreaIdByName = useMemo(() => {
+    return new Map<string, number>(painAreas.map((p) => [p.name, p.painAreaID]));
+  }, [painAreas]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [isProfileEditing, setIsProfileEditing] = useState(false);
@@ -88,25 +99,27 @@ const MyPage = () => {
   };
 
   const handleSaveSymptom = () => {
-    // 편집 시작 시점에 store값을 local로 복사
     if (!isEditing) {
       setSelectedKey(storeSelectedKey);
       setIsEditing(true);
       return;
     }
 
-    // 저장(편집 종료)
+    // 저장
     setIsEditing(false);
 
-    // 선택 안 한 경우: null로 저장
+    // 선택 안 함: 미선택(8)
     if (selectedKey === null) {
-      setPainAreaID(null);
+      setPainAreaID(UNSELECTED_PAIN_AREA_ID);
       openModal(ModalType.MY_SYMPTOM_NOT_SELECTED);
       return;
     }
 
-    const label = SYMPTOMS.find((s) => s.key === selectedKey)?.label ?? null;
-    const nextId = label ? (painAreaIdByName.get(label) ?? null) : null;
+    // key -> label -> painAreaID
+    const label = SYMPTOMS.find((s) => s.key === selectedKey)?.label;
+    const nextId = label
+      ? (painAreaIdByName.get(label) ?? UNSELECTED_PAIN_AREA_ID)
+      : UNSELECTED_PAIN_AREA_ID;
 
     setPainAreaID(nextId);
     openModal(ModalType.MY_SYMPTOM_CHANGED);
@@ -114,7 +127,6 @@ const MyPage = () => {
 
   // 프로필 저장
   const handleSaveProfile = () => {
-    // 편집 시작 시점에 store값을 local로 복사
     if (!isProfileEditing) {
       setName(storeName ?? "");
       setGender(storeGender ?? "MALE");
