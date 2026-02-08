@@ -5,19 +5,21 @@ import { SymptomTabs } from "@/pages/symptom/components/SymptomTabs";
 import { SymptomEmptyState } from "@/pages/symptom/components/SymptomEmptyState";
 import { LifeGuideTab } from "@/pages/symptom/tabs/life-guide/LifeGuideTab";
 import SymptomGuideTab from "@/pages/symptom/tabs/symptom-guide/SymptomGuideTab";
+import { useAuthStore } from "@/stores/login/useAuthStore";
 
 type TabKey = "life" | "guide";
 
 const SymptomPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { painAreaID } = useAuthStore();
 
   const symptomId = searchParams.get("symptomId");
   //const symptomId = 2; // [임시 하드코딩]
   const tab = (searchParams.get("tab") as TabKey) ?? "life";
 
   const symptomName = useMemo(() => {
-    if (!symptomId) return "";
+    if (!painAreaID) return "";
     const map: Record<string, string> = {
       "1": "어깨",
       "2": "허리",
@@ -26,8 +28,8 @@ const SymptomPage = () => {
       "5": "두통",
       "6": "복통",
     };
-    return map[symptomId] ?? "어깨";
-  }, [symptomId]);
+    return map[painAreaID] ?? "어깨";
+  }, [painAreaID]);
 
   const setTab = (next: TabKey) => {
     setSearchParams((prev) => {
@@ -37,24 +39,10 @@ const SymptomPage = () => {
     });
   };
 
-  // blocked 처리: guide 탭에서 막을 때
-  // 체크사항: 사용되지 않은 변수나 함수는 CI 검사에서 실패를 유도합니다. 따라서 임시 방편으로 검증 통과되도록 해두었으니 이후 개발 시에 체크바랍니다:)
-  // const [blockedMessage, setBlockedMessage] = useState<string | null>(null);
   const [blockedMessage] = useState<string | null>(null);
-
-  // const onBlocked = (message: string) => {
-  //   setBlockedMessage(message);
-  //   window.alert(message); // TODO: 모달로 교체
-  // };
 
   const onClickSelectSymptom = () => {
     navigate("/my?tab=symptom");
-    // setSearchParams((prev) => {
-    //   const nextParams = new URLSearchParams(prev);
-    //   nextParams.set("symptomId", "1"); // 기본 선택(임시)
-    //   nextParams.set("tab", "life");
-    //   return nextParams;
-    // });
   };
 
   return (
@@ -93,7 +81,6 @@ const SymptomPage = () => {
             ) : tab === "guide" ? (
               <SymptomGuideTab symptomName={symptomName} />
             ) : (
-              //<LifeGuideTab symptomName={symptomName} />
               <LifeGuideTab />
             )}
           </div>

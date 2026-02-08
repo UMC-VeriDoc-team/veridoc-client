@@ -7,8 +7,6 @@ import { getLifeStyleGuide } from "@/pages/symptom/services/getLifeStyleGuide";
 import type { LifeStyleGuideData } from "@/types/symptom";
 
 export const LifeGuideTab = () => {
-  //console.log("🔥 LifeGuideTab 컴포넌트 렌더링됨!");
-
   const { painAreaID } = useAuthStore();
   //const painAreaID = 2; // [임시 하드코딩]
 
@@ -16,14 +14,12 @@ export const LifeGuideTab = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    //console.log("✅ useEffect 실행됨, painAreaID:", painAreaID);
     const fetchData = async () => {
       // ID가 없거나 '미선택(8)'이면 실행하지 않음
       if (!painAreaID || painAreaID === 8) return;
       setLoading(true);
       try {
         const res = await getLifeStyleGuide(painAreaID);
-        //console.log(" 서버에서 온 데이터:", res); // [디버그]
         if (res && res.data) {
           setGuideData(res.data);
         }
@@ -50,7 +46,7 @@ export const LifeGuideTab = () => {
   if (loading) return <div className="py-20 text-center">로딩 중...</div>;
   if (!guideData) return <div className="py-20 text-center">데이터가 없습니다.</div>;
 
-  const mainVideo = guideData.videos[0]; // 첫 번째 영상을 메인으로 사용 -> 나중에 정해진대로 변경
+  const mainVideo = guideData.videos[0];
 
   return (
     <section>
