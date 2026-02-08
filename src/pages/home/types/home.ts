@@ -4,6 +4,7 @@ export type HomeBannerItem = { title?: string; id?: number; imageUrl?: string };
 export type HomeSymptomItem = {
   symptomId: number;
   name: string;
+  answerId: number;
 };
 
 export type HomeTemporaryGuideItem = {

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 const LoginForm = () => {
   const { openModal } = useBaseModal();
   const navigate = useNavigate();
-  const { loading, login } = useAuthStore();
+  const { loading, login, painAreaID } = useAuthStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,7 +47,7 @@ const LoginForm = () => {
 
     // 로그인 성공 후 홈으로 이동
     if (result.ok) {
-      navigate("/home");
+      painAreaID ? navigate("/home") : navigate("/guide");
       return;
     }
 
