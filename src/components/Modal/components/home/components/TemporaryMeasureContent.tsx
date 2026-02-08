@@ -1,9 +1,13 @@
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Icon from "@/components/Icon/Icon";
-import GuideItem from "./GuideItem";
-import SectionHeader from "./SectionHeader";
-import { MedicalConsultationGuide } from "./MedicalConsultationGuide";
-import { MOCK_GUIDE_ITEMS } from "@/constants/mock/modal/mockGuideItem";
-import { MOCK_MEDICAL_CONSULTATION_GUIDE } from "@/constants/mock/modal/mockMedicalConsultationGuide";
+import GuideItem from "@/components/Modal/components/home/components/GuideItem";
+import SectionHeader from "@/components/Modal/components/home/components/SectionHeader";
+import { MedicalConsultationGuide } from "@/components/Modal/components/home/components/MedicalConsultationGuide";
+import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
+import useIsMobile from "@/hooks/useIsMobile";
+import type { TemporaryGuideDetail } from "@/types/temporaryGuide";
+import { getTemporaryGuideDetail } from "@/components/Modal/services/getTemporaryDetail";
 
 interface ShareItem {
   iconName: string;
@@ -15,47 +19,96 @@ const shares: ShareItem[] = [
   { iconName: "instagram-fill" },
 ];
 
-interface HashtagItem {
-  content: string;
-}
-
-// 임시 해시태그
-const hashtags: HashtagItem[] = [{ content: "집·사무실" }, { content: "하루 1-2회" }];
-
-interface PostItem {
-  image: string;
-  title: string;
-}
-
-// 임시 포스트
-const posts: PostItem[] = [
-  { image: "null", title: "통증 부위 온찜질/냉찜질" },
-  { image: "null", title: "가벼운 일상 동작" },
-];
-
 const TemporaryMeasureContent = () => {
+  const { id } = useParams(); // /symptom/measure/:id
+  const isMobile = useIsMobile();
+  const { measureId, setMeasureId } = useTemporaryMeasureModalStore();
+  const navigate = useNavigate();
+
+  const guideId = useMemo(() => {
+    const raw = measureId ?? id;
+    const n = Number(raw);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }, [id, measureId]);
+
+  const [detail, setDetail] = useState<TemporaryGuideDetail | null>(null);
+
+  useEffect(() => {
+    const run = async () => {
+      if (!guideId) {
+        setDetail(null);
+        return;
+      }
+
+      try {
+        const res = await getTemporaryGuideDetail(guideId);
+        setDetail(res.data ?? null);
+      } catch (e) {
+        console.error("[TemporaryGuideDetail] error:", e);
+        setDetail(null);
+      }
+    };
+
+    run();
+  }, [guideId]);
+
+  const handleSelectMorePost = (answerId: number) => {
+    if (isMobile) {
+      navigate(`/symptom/measure/${answerId}`);
+      return;
+    }
+
+    // 데스크탑(모달)에서는 모달 내용만 교체
+    setMeasureId(String(answerId));
+  };
+
+  if (!detail) {
+    return <div className="flex-1 overflow-y-auto px-1 py-2 sm:px-4 sm:py-4 md:px-7 md:py-6" />;
+  }
+
+  const {
+    painAreaName,
+    title,
+    subtitle,
+    sourceName,
+    sourceUrl,
+    duration,
+    type,
+    imageUrl,
+    highlighter,
+    content,
+    badges,
+    notes,
+    cautions,
+    helps,
+    morePosts,
+  } = detail;
+
+  const handleOpenSource = () => {
+    if (!sourceUrl) return;
+    window.open(sourceUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="flex-1 overflow-y-auto px-1 py-2 sm:px-4 sm:py-4 md:px-7 md:py-6">
       <div className="flex flex-col gap-6 sm:gap-8">
         <div className="flex gap-4">
-          <p className="text-xs text-[#000D2F] underline sm:text-sm">어깨</p>
+          <p className="text-xs text-[#000D2F] underline sm:text-sm">{painAreaName}</p>
           <p className="text-xs text-[#000D2F] underline sm:text-sm">임시대처방안</p>
         </div>
 
         {/* 제목 */}
         <div className="flex flex-col space-y-2">
-          <p className="text-2xl font-extrabold text-gray-950 sm:text-3xl md:text-4xl">
-            허리 스트레칭 방법
-          </p>
-          <p className="text-base font-semibold text-gray-950 md:text-lg">
-            허리 근육 긴장을 풀어주는 가벼운 스트레칭
-          </p>
+          <p className="text-2xl font-extrabold text-gray-950 sm:text-3xl md:text-4xl">{title}</p>
+          {subtitle ? (
+            <p className="text-base font-semibold text-gray-950 md:text-lg">{subtitle}</p>
+          ) : null}
         </div>
 
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-4">
             <Icon name="hospital" className="h-12 w-12 rounded-full" />
-            <p className="text-sm font-medium text-gray-950 sm:text-base">서울아산병원 건강정보</p>
+            <p className="text-sm font-medium text-gray-950 sm:text-base">{sourceName ?? ""}</p>
           </div>
 
           {/* 평균 소요 시간 / 증상 / 출처 링크 */}
@@ -64,18 +117,24 @@ const TemporaryMeasureContent = () => {
               <div className="flex w-fit gap-2 border border-brand-primary px-2 py-1">
                 <Icon name="repeat" className="w-3 sm:w-4" />
                 <p className="pt-[2px] text-center text-sm font-medium text-brand-primary sm:text-base">
-                  평균 소요 시간 10분
+                  {duration}
                 </p>
               </div>
+
               <div className="flex w-fit gap-2 border border-brand-primary px-2 py-1">
                 <Icon name="clock" className="w-3 sm:w-4" />
                 <p className="pt-[2px] text-center text-sm font-medium text-brand-primary sm:text-base">
-                  허리 · 스트레칭
+                  {type}
                 </p>
               </div>
             </div>
 
-            <button type="button" className="flex items-center justify-center gap-2 self-end">
+            <button
+              type="button"
+              onClick={handleOpenSource}
+              disabled={!sourceUrl}
+              className="flex items-center justify-center gap-2 self-end"
+            >
               <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
                 원문 출처 보기
               </p>
@@ -85,57 +144,65 @@ const TemporaryMeasureContent = () => {
         </div>
 
         {/* 이미지 */}
-        <div className="h-[180px] w-full rounded-[5px] bg-gray-100 sm:h-[220px] md:h-[260px]"></div>
+        <div className="h-[180px] w-full rounded-[5px] bg-gray-100 sm:h-[220px] md:h-[260px]">
+          {imageUrl ? (
+            <img src={imageUrl} alt={title} className="h-full w-full object-cover" />
+          ) : (
+            <div className="h-full w-full" />
+          )}
+        </div>
 
         {/* 본문 / 경고문 */}
         <div className="flex flex-col gap-10 sm:gap-[80px]">
           <div className="flex flex-col">
-            <SectionHeader
-              iconName="idea"
-              title="무리하지 않는 선에서, 어깨를 부드럽게 풀어주세요"
-            />
+            {highlighter ? <SectionHeader iconName="idea" title={highlighter} /> : null}
 
             {/* 설명 */}
-            <p className="pb-9 text-base font-medium text-gray-950">
-              어깨 통증은 장시간 같은 자세를 유지하거나 근육이 긴장되면서 발생하는 경우가 많습니다.
-              통증이 심하지 않다면 무리하지 않는 범위에서 가벼운 스트레칭은 근육 긴장을 완화하는 데
-              도움이 될 수 있습니다.
-            </p>
+            {content ? <p className="pb-9 text-base font-medium text-gray-950">{content}</p> : null}
 
             {/* 가이드 */}
-            <div className="flex flex-col gap-9">
-              {MOCK_GUIDE_ITEMS.map((item) => (
-                <GuideItem
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  description={item.description}
-                  icon={item.icon}
-                />
-              ))}
-            </div>
+            {notes.length > 0 ? (
+              <div className="flex flex-col gap-9">
+                {notes.map((item) => (
+                  <GuideItem
+                    key={item.id}
+                    id={String(item.id)}
+                    title={item.title}
+                    description={item.description}
+                    icon={{ src: item.imageUrl, alt: item.title || "guide" }}
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
 
           {/* 진료 권유 */}
           <div className="flex flex-col gap-7">
             <SectionHeader iconName="warning" title="이런 증상이 있다면 진료가 필요할 수 있어요" />
-            <MedicalConsultationGuide items={MOCK_MEDICAL_CONSULTATION_GUIDE} />
+            {cautions.length > 0 ? (
+              <MedicalConsultationGuide
+                items={cautions.map((c) => ({
+                  id: String(c.id),
+                  title: c.title,
+                  description: c.description,
+                  iconUrl: c.iconUrl,
+                }))}
+              />
+            ) : null}
           </div>
 
           {/* 도움 */}
           <div className="flex flex-col gap-2">
             <SectionHeader iconName="help-chat" title="이런 경우라면 도움이 될 수 있어요" />
-            <ul className="pl-6">
-              <li className="list-disc text-base font-medium text-gray-950">
-                오래 같은 자세로 앉아 있어 어깨가 뻐근할 때
-              </li>
-              <li className="list-disc text-base font-medium text-gray-950">
-                긴장으로 어깨와 목 주변이 뻣뻣하게 느껴질 때
-              </li>
-              <li className="list-disc text-base font-medium text-gray-950">
-                통증은 심하지 않지만 어깨가 무겁고 답답할 때
-              </li>
-            </ul>
+            {helps.length > 0 ? (
+              <ul className="pl-6">
+                {helps.map((h) => (
+                  <li key={h.id} className="list-disc text-base font-medium text-gray-950">
+                    {h.description}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </div>
 
           {/* 경고문 */}
@@ -149,7 +216,7 @@ const TemporaryMeasureContent = () => {
         </div>
 
         {/* 구분선 */}
-        <div className="my-2 w-full border-b border-gray-100"></div>
+        <div className="my-2 w-full border-b border-gray-100" />
 
         {/* 하단: 공유 / 해시태그 / 포스트 더보기 */}
         <div className="flex flex-col gap-10 sm:gap-16">
@@ -168,33 +235,47 @@ const TemporaryMeasureContent = () => {
 
             {/* 해시태그 */}
             <div className="flex gap-2">
-              {hashtags.map((hashtag) => (
+              {badges.map((b) => (
                 <div
-                  key={hashtag.content}
+                  key={b}
                   className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-xs font-medium text-brand-primary sm:text-sm"
                 >
-                  {hashtag.content}
+                  {b}
                 </div>
               ))}
             </div>
           </div>
 
           {/* 포스트 더보기 */}
-          <div>
-            <p className="text-base font-medium text-gray-950">More Posts</p>
+          {morePosts.length > 0 ? (
+            <div>
+              <p className="text-base font-medium text-gray-950">More Posts</p>
 
-            <div className="mt-3 flex w-full flex-nowrap gap-5 overflow-x-auto pb-2">
-              {posts.map((post) => (
-                <div
-                  key={post.title}
-                  className="flex w-44 shrink-0 cursor-pointer flex-col gap-2 sm:w-60"
-                >
-                  <div className="h-32 w-full bg-gray-100"></div>
-                  <p className="text-sm font-medium text-gray-950">{post.title}</p>
-                </div>
-              ))}
+              <div className="mt-3 flex w-full flex-nowrap gap-5 overflow-x-auto pb-2">
+                {morePosts.map((post) => (
+                  <button
+                    key={post.answerId}
+                    type="button"
+                    className="flex w-44 shrink-0 cursor-pointer flex-col gap-2 sm:w-60"
+                    onClick={() => handleSelectMorePost(post.answerId)}
+                  >
+                    <div className="h-32 w-full bg-gray-100">
+                      {post.imageUrl ? (
+                        <img
+                          src={post.imageUrl}
+                          alt={post.title}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="h-full w-full" />
+                      )}
+                    </div>
+                    <p className="text-sm font-medium text-gray-950">{post.title}</p>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     </div>

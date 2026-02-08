@@ -1,7 +1,9 @@
 import Icon from "@/components/Icon/Icon";
 import { ModalType } from "@/components/Modal/types/modal";
+import useIsMobile from "@/hooks/useIsMobile";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
+import { useNavigate } from "react-router-dom";
 
 interface AlternativeCardProps {
   guideId: number | null;
@@ -22,13 +24,17 @@ const AlternativeCard = ({
   type,
   duration,
 }: AlternativeCardProps) => {
+  const navigate = useNavigate();
   const { openModal } = useBaseModal();
   const { setMeasureId } = useTemporaryMeasureModalStore();
-
-  const safeGuideId = guideId ?? -1;
+  const isMobile = useIsMobile();
 
   const handleShowTemporaryMeasure = () => {
-    if (guideId == null) return;
+    if (isMobile) {
+      navigate(`/symptom/measure/${guideId}`);
+      return;
+    }
+
     setMeasureId(String(guideId));
     openModal(ModalType.HOME_TEMPORARY_MEASURE);
   };
@@ -62,7 +68,7 @@ const AlternativeCard = ({
           <div className="absolute left-3 top-3 z-30 flex flex-wrap gap-1 md:left-5 md:top-5">
             {(badges ?? []).map((badge, idx) => (
               <div
-                key={`${safeGuideId}-badge-${idx}`}
+                key={`badge-${idx}`}
                 className="rounded-[4px] bg-[#FFFFFF33] px-2 py-1 text-xs text-white sm:py-2 sm:text-base md:px-[10px]"
               >
                 {badge}
