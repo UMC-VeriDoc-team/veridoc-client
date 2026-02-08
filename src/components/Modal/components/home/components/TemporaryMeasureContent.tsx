@@ -252,9 +252,9 @@ const TemporaryMeasureContent = () => {
               <p className="text-base font-medium text-gray-950">More Posts</p>
 
               <div className="mt-3 flex w-full flex-nowrap gap-5 overflow-x-auto pb-2">
-                {morePosts.map((post) => (
+                {morePosts.map((post, idx) => (
                   <button
-                    key={post.answerId}
+                    key={idx}
                     type="button"
                     className="flex w-44 shrink-0 cursor-pointer flex-col gap-2 sm:w-60"
                     onClick={() => handleSelectMorePost(post.answerId)}
