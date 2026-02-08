@@ -1,8 +1,11 @@
 import Button from "@/components/Button/Button";
 import Icon from "@/components/Icon/Icon";
 import Input from "@/components/Input/Input";
+import { ModalType } from "@/components/Modal/types/modal";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { useMemo, useState } from "react";
+import postResetPassword from "../services/postResetPassword";
+import { useSearchParams } from "react-router-dom";
 
 // 새 비밀번호 형식 검증: 미입력 / 8자 미만
 const validateNewPassword = (password: string) => {
@@ -13,6 +16,9 @@ const validateNewPassword = (password: string) => {
 
 const PasswordResetForm = () => {
   const { openModal } = useBaseModal();
+
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -69,17 +75,18 @@ const PasswordResetForm = () => {
     return currentOk && newOk && confirmOk;
   }, [currentPassword, newPassword, confirmNewPassword]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setTouched({
       currentPassword: true,
       newPassword: true,
       confirmNewPassword: true,
     });
 
-    if (!isFormValid) return;
+    if (!isFormValid || !token) return;
 
-    // TODO: 비밀번호 변경 완료 -> 로그인 화면으로 이동
-    openModal("AUTH_PASSWORD_CHANGED");
+    await postResetPassword({ token, newPassword: confirmNewPassword });
+
+    openModal(ModalType.AUTH_PASSWORD_CHANGED);
   };
 
   return (
