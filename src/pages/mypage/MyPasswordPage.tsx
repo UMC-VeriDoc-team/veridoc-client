@@ -4,9 +4,7 @@ import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import Icon from "../../components/Icon/Icon";
 import LogoImage from "/images/logo.svg";
-
-// [TODO: 백엔드 연동 시 삭제] 테스트용 가짜 비밀번호
-const MOCK_CURRENT_PASSWORD = "12345678";
+import { putMyPassword } from "./services/putMyPassword";
 
 const MyPasswordPage = () => {
   const { openModal } = useBaseModal();
@@ -42,7 +40,7 @@ const MyPasswordPage = () => {
     });
   };
 
-  const handleSavePassword = () => {
+  const handleSavePassword = async () => {
     const { current, new: newPwd, confirm } = passwordForm;
     const newErrors = { current: "", new: "", confirm: "" };
     let isValid = true;
@@ -58,10 +56,6 @@ const MyPasswordPage = () => {
       newErrors.confirm = "필수 입력 사항입니다";
       isValid = false;
     }
-    if (current && current !== MOCK_CURRENT_PASSWORD) {
-      newErrors.current = "기존 비밀번호를 입력해주세요";
-      isValid = false;
-    }
     if (newPwd && newPwd.length < 8) {
       newErrors.new = "새 비밀번호 형식이 올바르지 않습니다";
       isValid = false;
@@ -72,7 +66,32 @@ const MyPasswordPage = () => {
     }
     setPwdErrors(newErrors);
     if (!isValid) return;
-    openModal(ModalType.AUTH_PASSWORD_CHANGED);
+
+    try {
+      await putMyPassword({
+        currentPassword: current,
+        newPassword: newPwd,
+      });
+      openModal(ModalType.AUTH_PASSWORD_CHANGED);
+
+      setPasswordForm({ current: "", new: "", confirm: "" });
+    } catch (e: any) {
+      const status = e?.response?.status;
+      const errorCode = e?.response?.data?.errorCode;
+
+      if (status === 400 && errorCode === "INVALID_CREDENTIALS") {
+        setPwdErrors((prev) => ({ ...prev, current: "현재 비밀번호가 올바르지 않습니다." }));
+        return;
+      }
+
+      if (status === 401) {
+        // 토큰 만료/누락 -> 재로그인 유도
+        navigate("/login");
+        return;
+      }
+
+      console.error(e);
+    }
   };
 
   return (
