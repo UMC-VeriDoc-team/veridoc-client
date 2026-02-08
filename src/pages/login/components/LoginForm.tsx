@@ -47,7 +47,7 @@ const LoginForm = () => {
 
     // 로그인 성공 후 홈으로 이동
     if (result.ok) {
-      painAreaID !== 8 ? navigate("/home") : navigate("/guide");
+      painAreaID !== 8 && navigate("/home");
       return;
     }
 
