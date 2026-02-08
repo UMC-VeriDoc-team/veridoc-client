@@ -8,14 +8,12 @@ import type { LifeStyleGuideData } from "@/types/symptom";
 
 export const LifeGuideTab = () => {
   const { painAreaID } = useAuthStore();
-  //const painAreaID = 2; // [임시 하드코딩]
 
   const [guideData, setGuideData] = useState<LifeStyleGuideData | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      // ID가 없거나 '미선택(8)'이면 실행하지 않음
       if (!painAreaID || painAreaID === 8) return;
       setLoading(true);
       try {
@@ -33,7 +31,7 @@ export const LifeGuideTab = () => {
     fetchData();
   }, [painAreaID]);
 
-  //  4. 유튜브 링크 변환 함수 (watch?v= -> embed/)
+  // 유튜브 링크 변환 함수 (watch?v= -> embed/)
   const getEmbedUrl = (url: string) => {
     if (!url) return "";
     const videoIdMatch = url.match(/(?:v=|\/)([\w-]{11})(?:\?|&|$)/);
@@ -42,7 +40,7 @@ export const LifeGuideTab = () => {
     return `https://www.youtube.com/embed/${videoId}`;
   };
 
-  //  5. 로딩 중이거나 데이터가 없을 때 방어 코드
+  // 로딩 중이거나 데이터가 없을 때 방어 코드
   if (loading) return <div className="py-20 text-center">로딩 중...</div>;
   if (!guideData) return <div className="py-20 text-center">데이터가 없습니다.</div>;
 

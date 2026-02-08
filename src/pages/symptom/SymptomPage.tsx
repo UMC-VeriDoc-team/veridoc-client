@@ -14,8 +14,6 @@ const SymptomPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { painAreaID } = useAuthStore();
 
-  const symptomId = searchParams.get("symptomId");
-  //const symptomId = 2; // [임시 하드코딩]
   const tab = (searchParams.get("tab") as TabKey) ?? "life";
 
   const symptomName = useMemo(() => {
@@ -76,7 +74,7 @@ const SymptomPage = () => {
               "md:mx-0 md:w-full md:max-w-[1020px] md:px-0",
             ].join(" ")}
           >
-            {!symptomId ? (
+            {!painAreaID ? (
               <SymptomEmptyState onClickSelectSymptom={onClickSelectSymptom} />
             ) : tab === "guide" ? (
               <SymptomGuideTab symptomName={symptomName} />
