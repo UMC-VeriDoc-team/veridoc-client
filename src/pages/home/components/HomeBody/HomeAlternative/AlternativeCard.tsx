@@ -83,7 +83,7 @@ const AlternativeCard = ({
 
         <div className="text-base text-[#6C757D] md:h-36 md:text-xl">
           {descLines.length > 0 ? (
-            descLines.map((line, idx) => <p key={`${safeGuideId}-desc-${idx}`}>{line}</p>)
+            descLines.map((line, idx) => <p key={`-desc-${idx}`}>{line}</p>)
           ) : (
             <p />
           )}
