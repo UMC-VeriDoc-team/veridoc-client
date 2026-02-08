@@ -1,15 +1,30 @@
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
+import { useDeleteAccount } from "@/hooks/useDeleteAccount";
+import { useAuthStore } from "@/stores/login/useAuthStore";
 
 // 회원탈퇴 안내 모달
 const MyWithdrawNoticeModal = () => {
   const { setModalType, closeModal } = useBaseModal();
+  const { name } = useAuthStore();
+
+  // 회원탈퇴 Mutation 훅 선언
+  const { mutate: deleteAccount, isPending } = useDeleteAccount();
 
   // 회원탈퇴 버튼 클릭
   const handleWithdrawAccount = () => {
-    // 회원탈퇴 API 호출
-    setModalType(ModalType.MY_WITHDRAW_DONE);
+    // 실제 회원탈퇴 API 호출
+    deleteAccount(undefined, {
+      onSuccess: () => {
+        // 탈퇴 성공 시에만 완료 모달로 전환
+        setModalType(ModalType.MY_WITHDRAW_DONE);
+      },
+      onError: (error) => {
+        // 실패 시 에러 처리 (alert은 훅 내부에서 이미 처리됨)
+        console.error("회원탈퇴 연동 실패:", error);
+      },
+    });
   };
 
   return (
@@ -22,7 +37,7 @@ const MyWithdrawNoticeModal = () => {
         <div className="flex flex-col items-center gap-2">
           <div>
             <div className="flex items-center justify-center">
-              <p className="text-center text-lg font-bold text-brand-primary sm:text-xl">홍길동</p>
+              <p className="text-center text-lg font-bold text-brand-primary sm:text-xl">{name}</p>
               <p className="text-center text-lg font-bold text-gray-950 sm:text-xl">님 정말로</p>
             </div>
             <p className="text-center text-lg font-bold text-gray-950 sm:text-xl">
@@ -44,6 +59,7 @@ const MyWithdrawNoticeModal = () => {
           <button
             type="button"
             onClick={closeModal}
+            disabled={isPending}
             className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-gray-50 text-center text-base font-semibold leading-none text-gray-600 transition-colors hover:bg-gray-100 sm:text-lg"
           >
             취소
@@ -51,9 +67,10 @@ const MyWithdrawNoticeModal = () => {
           <button
             type="button"
             onClick={handleWithdrawAccount}
+            disabled={isPending} // 3. 탈퇴 중 버튼 비활성화
             className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-brand-primary text-center text-base font-semibold leading-none text-white transition-colors hover:opacity-90 sm:text-lg"
           >
-            회원탈퇴
+            {isPending ? "처리 중..." : "회원탈퇴"}
           </button>
         </div>
       </div>
