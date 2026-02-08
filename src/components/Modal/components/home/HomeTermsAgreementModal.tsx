@@ -16,6 +16,7 @@ import {
   requestLocationOnce,
 } from "@/utils/locationPermission";
 import { usePostTerm } from "@/hooks/term/usePostTerm";
+import { useAuthStore } from "@/stores/login/useAuthStore";
 
 // 서비스 약관 동의 모달 (체크 상태는 Zustand, 전송은 usePostTerm. API response는 사용하지 않음)
 const HomeTermsAgreementModal = () => {
@@ -23,6 +24,7 @@ const HomeTermsAgreementModal = () => {
   const { mutate: postTerm } = usePostTerm();
   const { checked, toggleChecked, setChecked, setAll, reset, locationError, setLocationError } =
     useTermsAgreementStore();
+  const { name } = useAuthStore();
 
   const termsItems = TERMS_ITEMS;
 
@@ -167,7 +169,7 @@ const HomeTermsAgreementModal = () => {
       {/* 타이틀 */}
       <div className="text-center">
         <div className="flex justify-center">
-          <p className="text-lg font-bold text-brand-primary sm:text-xl">홍길동</p>
+          <p className="text-lg font-bold text-brand-primary sm:text-xl">{name}</p>
           <p className="text-lg font-bold text-gray-950 sm:text-xl">님 환영합니다!</p>
         </div>
         <p className="mt-1 text-lg font-bold text-gray-950 sm:text-xl">

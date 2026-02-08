@@ -21,8 +21,6 @@ const hasAgreedAt = (v?: { agreed_at: string | null }) => Boolean(v?.agreed_at);
 export const normalizeAgreement = (input: AgreementStatusDto | ApiResponse<AgreementStatusDto>) => {
   const dto = "data" in input ? input.data : input;
 
-  if (!dto?.ok) return false;
-
   const a = dto.agreements;
   if (!a) return false;
 
