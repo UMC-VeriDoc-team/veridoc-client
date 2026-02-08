@@ -7,5 +7,5 @@ export type PatchUserMeRequest = {
 };
 
 export const putUserMe = async (payload: PatchUserMeRequest) => {
-  return await authApiWrapper.put<{}>("/users/me/profile", payload);
+  return await authApiWrapper.put<Record<string, never>>("/users/me/profile", payload);
 };
