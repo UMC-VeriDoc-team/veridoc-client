@@ -2,13 +2,13 @@ import AlternativeCard from "./HomeAlternative/AlternativeCard";
 import { useHomeStore } from "@/stores/home/useHomeStore";
 
 const HomeManage = () => {
-  const { temporaryGuides } = useHomeStore();
+  const { painAreaName, temporaryGuides } = useHomeStore();
 
   return (
     <section className="flex w-full flex-col pl-[30px] text-left sm:px-0">
       <div className="flex flex-col">
         <span className="italic-normal text-xl font-bold leading-[140%] text-gray-950 sm:text-3xl">
-          어깨 통증 임시 대처 방안
+          {painAreaName} 통증 임시 대처 방안
         </span>
         <div className="mt-[10px] flex items-center self-stretch">
           <span className="text-base font-semibold leading-[140%] text-gray-950 sm:text-xl">
