@@ -2,17 +2,19 @@ import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { useDeleteAccount } from "@/hooks/useDeleteAccount";
+import { useAuthStore } from "@/stores/login/useAuthStore";
 
 // 회원탈퇴 안내 모달
 const MyWithdrawNoticeModal = () => {
   const { setModalType, closeModal } = useBaseModal();
+  const { name } = useAuthStore();
 
-  // 1. 회원탈퇴 Mutation 훅 선언
+  // 회원탈퇴 Mutation 훅 선언
   const { mutate: deleteAccount, isPending } = useDeleteAccount();
 
   // 회원탈퇴 버튼 클릭
   const handleWithdrawAccount = () => {
-    // 2. 실제 회원탈퇴 API 호출
+    // 실제 회원탈퇴 API 호출
     deleteAccount(undefined, {
       onSuccess: () => {
         // 탈퇴 성공 시에만 완료 모달로 전환
@@ -35,7 +37,7 @@ const MyWithdrawNoticeModal = () => {
         <div className="flex flex-col items-center gap-2">
           <div>
             <div className="flex items-center justify-center">
-              <p className="text-center text-lg font-bold text-brand-primary sm:text-xl">홍길동</p>
+              <p className="text-center text-lg font-bold text-brand-primary sm:text-xl">{name}</p>
               <p className="text-center text-lg font-bold text-gray-950 sm:text-xl">님 정말로</p>
             </div>
             <p className="text-center text-lg font-bold text-gray-950 sm:text-xl">
