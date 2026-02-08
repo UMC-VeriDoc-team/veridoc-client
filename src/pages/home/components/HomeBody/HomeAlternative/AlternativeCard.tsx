@@ -1,7 +1,9 @@
 import Icon from "@/components/Icon/Icon";
 import { ModalType } from "@/components/Modal/types/modal";
+import useIsMobile from "@/hooks/useIsMobile";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
+import { useNavigate } from "react-router-dom";
 
 interface AlternativeCardProps {
   guideId: number;
@@ -22,17 +24,23 @@ const AlternativeCard = ({
   type,
   duration,
 }: AlternativeCardProps) => {
+  const navigate = useNavigate();
   const { openModal } = useBaseModal();
   const { setMeasureId } = useTemporaryMeasureModalStore();
+  const isMobile = useIsMobile();
 
   const handleShowTemporaryMeasure = () => {
+    if (isMobile) {
+      navigate(`/symptom/measure/${guideId}`);
+      return;
+    }
+
     setMeasureId(String(guideId));
     openModal(ModalType.HOME_TEMPORARY_MEASURE);
   };
 
   return (
     <div
-      key={guideId}
       onClick={handleShowTemporaryMeasure}
       className="flex w-full min-w-[220px] cursor-pointer flex-col justify-between hover:opacity-80 sm:min-w-[250px]"
     >
@@ -44,7 +52,7 @@ const AlternativeCard = ({
             className="h-[170px] w-full rounded-[5px] object-cover brightness-50 sm:h-[300px] md:z-20"
           />
           <div className="absolute left-3 top-3 z-30 flex gap-x-1 md:left-5 md:top-5">
-            {badges.map((badge: string, idx) => (
+            {badges.map((badge, idx) => (
               <div
                 key={idx}
                 className="rounded-[4px] bg-[#FFFFFF33] px-2 py-1 text-xs text-white sm:py-2 sm:text-base md:px-[10px]"
