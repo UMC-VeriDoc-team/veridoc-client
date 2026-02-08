@@ -13,6 +13,7 @@ const SymptomPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const symptomId = searchParams.get("symptomId");
+  //const symptomId = 2; // [임시 하드코딩]
   const tab = (searchParams.get("tab") as TabKey) ?? "life";
 
   const symptomName = useMemo(() => {
@@ -92,7 +93,8 @@ const SymptomPage = () => {
             ) : tab === "guide" ? (
               <SymptomGuideTab symptomName={symptomName} />
             ) : (
-              <LifeGuideTab symptomName={symptomName} />
+              //<LifeGuideTab symptomName={symptomName} />
+              <LifeGuideTab />
             )}
           </div>
         </div>

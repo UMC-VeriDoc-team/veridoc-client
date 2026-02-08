@@ -1,26 +1,68 @@
 import Icon from "@/components/Icon/Icon";
 import SectionTitle from "@/pages/symptom/components/common/SectionTitle";
 
-interface LifeGuideTabProps {
-  symptomName: string;
-}
+import { useEffect, useState } from "react";
+import { useAuthStore } from "@/stores/login/useAuthStore";
+import { getLifeStyleGuide } from "@/pages/symptom/services/getLifeStyleGuide";
+import type { LifeStyleGuideData } from "@/types/symptom";
 
-export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
+export const LifeGuideTab = () => {
+  //console.log("🔥 LifeGuideTab 컴포넌트 렌더링됨!");
+
+  const { painAreaID } = useAuthStore();
+  //const painAreaID = 2; // [임시 하드코딩]
+
+  const [guideData, setGuideData] = useState<LifeStyleGuideData | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    //console.log("✅ useEffect 실행됨, painAreaID:", painAreaID);
+    const fetchData = async () => {
+      // ID가 없거나 '미선택(8)'이면 실행하지 않음
+      if (!painAreaID || painAreaID === 8) return;
+      setLoading(true);
+      try {
+        const res = await getLifeStyleGuide(painAreaID);
+        //console.log(" 서버에서 온 데이터:", res); // [디버그]
+        if (res && res.data) {
+          setGuideData(res.data);
+        }
+      } catch (error) {
+        console.error("가이드 로딩 실패:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [painAreaID]);
+
+  //  4. 유튜브 링크 변환 함수 (watch?v= -> embed/)
+  const getEmbedUrl = (url: string) => {
+    if (!url) return "";
+    const videoIdMatch = url.match(/(?:v=|\/)([\w-]{11})(?:\?|&|$)/);
+    const videoId = videoIdMatch ? videoIdMatch[1] : "";
+
+    return `https://www.youtube.com/embed/${videoId}`;
+  };
+
+  //  5. 로딩 중이거나 데이터가 없을 때 방어 코드
+  if (loading) return <div className="py-20 text-center">로딩 중...</div>;
+  if (!guideData) return <div className="py-20 text-center">데이터가 없습니다.</div>;
+
+  const mainVideo = guideData.videos[0]; // 첫 번째 영상을 메인으로 사용 -> 나중에 정해진대로 변경
+
   return (
     <section>
       <SectionTitle
-        title={`${symptomName} 스트레칭`}
+        title={guideData.title}
         description={
           <>
             {/* 모바일 */}
-            <span className="block whitespace-pre-line md:hidden">
-              아래 영상은 {symptomName} 불편 시 가볍게 참고할 수 있는 스트레칭{"\n"}예시예요
-            </span>
+            <span className="block whitespace-pre-line md:hidden">{guideData.subtitle}</span>
 
             {/* 데스크탑 */}
-            <span className="hidden md:block">
-              아래 영상은 {symptomName} 불편 시 가볍게 참고할 수 있는 스트레칭 예시예요
-            </span>
+            <span className="hidden md:block">{guideData.subtitle}</span>
           </>
         }
       />
@@ -31,8 +73,8 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
         <div className="mt-3 w-full overflow-hidden rounded-[18px] md:max-w-[777px] md:rounded-[30px]">
           <div className="aspect-video w-full md:aspect-auto md:h-[448px]">
             <iframe
-              src="https://www.youtube.com/embed/I81IixZqFKY?si=MsrboBCmq9PPbOMO"
-              title="stretching"
+              src={getEmbedUrl(mainVideo.youtubeUrl)}
+              title={mainVideo.youtubeTitle}
               className="h-full w-full border-0 md:h-[443px] md:w-[789px] md:translate-x-[-4px] md:translate-y-[2px]"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               referrerPolicy="strict-origin-when-cross-origin"
@@ -45,14 +87,10 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
         <div className="mt-[30px] w-full max-w-[777px] text-left text-[28px] font-bold leading-[100%] tracking-[-0.025em] text-gray-950">
           <>
             {/* 모바일 */}
-            <span className="block whitespace-pre-line md:hidden">
-              어깨가 뻐근할 때 따라 {"\n"}해볼 수 있는 스트레칭 영상{"\n"}
-            </span>
+            <span className="block whitespace-pre-line md:hidden">{mainVideo.youtubeTitle}</span>
 
             {/* 데스크탑 */}
-            <span className="hidden md:block">
-              어깨가 뻐근할 때 따라 해볼 수 있는 스트레칭 영상
-            </span>
+            <span className="hidden md:block">{mainVideo.youtubeTitle}</span>
           </>
         </div>
 
@@ -61,14 +99,23 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
           <div className="flex items-center gap-3">
             <Icon name="doctor" className="h-10 w-10 rounded-full" />
             <span className="text-sm font-medium leading-[16px] tracking-[-0.025em] text-brand-primary">
-              새움병원
+              새움병원 {/* 채널명은 임시 하드코딩?? api에 없음 */}
             </span>
           </div>
 
           {/* 출처 */}
           <div className="flex items-center gap-[10px] text-[16px] font-medium leading-[140%] tracking-[-0.025em] text-gray-200">
-            <span>원문 출처 보기</span>
-            <Icon name="link" className="h-5 w-5" />
+            {mainVideo?.youtubeUrl && (
+              <a
+                href={mainVideo.youtubeUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-[10px] hover:text-brand-primary"
+              >
+                <span>원문 출처 보기</span>
+                <Icon name="link" className="h-5 w-5" />
+              </a>
+            )}
           </div>
         </div>
 
@@ -117,18 +164,7 @@ export const LifeGuideTab = ({ symptomName }: LifeGuideTabProps) => {
           </p>
 
           <div className="mt-5 text-base font-medium leading-[160%] text-gray-600">
-            <p>
-              이 스트레칭은 근육의 길이와 탄성을 회복시키고, 관절 주변의 움직임을 부드럽게 만들어
-              목과 어깨에 걸리는 부담을 줄이는 데 도움이 될 수 있습니다. 특히 오랜 시간 고정된
-              자세로 일하거나 스마트기기를 자주 사용하는 사람에게는, 근육에 쌓인 미세한 긴장을 풀고
-              재발성 통증을 예방하는 데 의미가 있습니다.
-            </p>
-            <p>
-              다만 이 스트레칭은 염증이나 신경 손상, 디스크 질환을 직접 치료하는 것은 아니며, 통증이
-              심하거나 팔 저림, 감각 이상이 동반 된다면 전문적인 진료가 필요합니다. 정상적인 근육
-              긴장과 자세 문제로 인한 목·어깨 불편감이라면, 이 루틴은 일상 속에서 통증을 관리하고
-              몸의 균형을 되찾는 데 유용한 보조 수단이 될 수 있습니다.
-            </p>
+            <p className="whitespace-pre-line">{mainVideo?.description}</p>
           </div>
         </div>
       </div>
