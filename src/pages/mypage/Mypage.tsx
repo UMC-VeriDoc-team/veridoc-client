@@ -11,6 +11,8 @@ import { SYMPTOMS } from "@/constants/symptoms";
 import { getPainAreas, type PainArea } from "@/pages/signup/services/getPainAreas";
 import { useAuthStore } from "@/stores/login/useAuthStore";
 import { parseBirthYMD } from "@/utils/formatBirth";
+import { putMyPainArea } from "./services/putMyPainArea";
+import { putUserMe } from "./services/putUserMe";
 
 export const UNSELECTED_PAIN_AREA_ID = 8;
 
@@ -88,6 +90,8 @@ const MyPage = () => {
 
   const viewSelectedKey = isEditing ? selectedKey : storeSelectedKey;
 
+  const birthIso = `${birth.year}-${birth.month.padStart(2, "0")}-${birth.day.padStart(2, "0")}`;
+
   // 증상 선택
   const handleSelectSymptom = (key: string) => {
     if (!isEditing) return;
@@ -98,7 +102,7 @@ const MyPage = () => {
     });
   };
 
-  const handleSaveSymptom = () => {
+  const handleSaveSymptom = async () => {
     if (!isEditing) {
       setSelectedKey(storeSelectedKey);
       setIsEditing(true);
@@ -110,8 +114,13 @@ const MyPage = () => {
 
     // 선택 안 함: 미선택(8)
     if (selectedKey === null) {
-      setPainAreaID(UNSELECTED_PAIN_AREA_ID);
-      openModal(ModalType.MY_SYMPTOM_NOT_SELECTED);
+      try {
+        await putMyPainArea({ painAreaID: UNSELECTED_PAIN_AREA_ID });
+        setPainAreaID(UNSELECTED_PAIN_AREA_ID);
+        openModal(ModalType.MY_SYMPTOM_NOT_SELECTED);
+      } catch (e) {
+        console.error(e);
+      }
       return;
     }
 
@@ -121,12 +130,21 @@ const MyPage = () => {
       ? (painAreaIdByName.get(label) ?? UNSELECTED_PAIN_AREA_ID)
       : UNSELECTED_PAIN_AREA_ID;
 
-    setPainAreaID(nextId);
-    openModal(ModalType.MY_SYMPTOM_CHANGED);
+    try {
+      const res = await putMyPainArea({ painAreaID: nextId });
+
+      // 서버 응답으로 store 동기화
+      const savedId = res.data?.painAreaID ?? nextId;
+      setPainAreaID(savedId);
+
+      openModal(ModalType.MY_SYMPTOM_CHANGED);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   // 프로필 저장
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async () => {
     if (!isProfileEditing) {
       setName(storeName ?? "");
       setGender(storeGender ?? "MALE");
@@ -167,8 +185,21 @@ const MyPage = () => {
     if (!isValid) return;
 
     // 프로필 수정 API 호출 + 성공 시 store 반영
-    openModal(ModalType.MY_PROFILE_UPDATED);
-    setIsProfileEditing(false);
+    try {
+      await putUserMe({
+        name: name.trim(),
+        birth: birthIso,
+        gender,
+      });
+
+      // 성공하면 서버에서 다시 받아서 store 동기화
+      await fetchMe();
+
+      openModal(ModalType.MY_PROFILE_UPDATED);
+      setIsProfileEditing(false);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   // 나의 증상 관리
