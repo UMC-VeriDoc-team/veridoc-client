@@ -5,22 +5,13 @@ export interface ConsultationGuideItem {
   id: string;
   title: string;
   description: string;
+  iconUrl?: string | null;
 }
 
 // 진료 권유 가이드 컴포넌트 props
 export type MedicalConsultationGuideProps = {
   items: ConsultationGuideItem[];
 };
-
-// 임시: 아이콘 매핑 정보
-const iconMaps: {
-  id: number;
-  iconName: "calendar" | "health" | "sleep";
-}[] = [
-  { id: 0, iconName: "calendar" },
-  { id: 1, iconName: "health" },
-  { id: 2, iconName: "sleep" },
-];
 
 // 진료 권유 가이드 컴포넌트
 export const MedicalConsultationGuide = ({ items }: MedicalConsultationGuideProps) => {
@@ -31,9 +22,6 @@ export const MedicalConsultationGuide = ({ items }: MedicalConsultationGuideProp
           // 마지막 항목 여부
           const isLast = index === items.length - 1;
 
-          // 현재 아이템에 대응되는 아이콘 정보
-          const icon = iconMaps[index];
-
           return (
             <li
               key={item.id}
@@ -42,16 +30,17 @@ export const MedicalConsultationGuide = ({ items }: MedicalConsultationGuideProp
               {/* 왼쪽 아이콘 + 세로 라인 */}
               <div className="relative w-14 flex-shrink-0 sm:w-16">
                 {/* 아이콘 원 */}
-                <div
-                  className={`z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#2B7FFF1A] sm:h-16 sm:w-16`}
-                >
-                  {icon && <Icon name={icon.iconName} className="h-5 w-5" />}
+                <div className="z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#2B7FFF1A] sm:h-16 sm:w-16">
+                  {item.iconUrl ? (
+                    <img src={item.iconUrl} alt={item.title || "icon"} className="h-5 w-5" />
+                  ) : (
+                    // fallback: 기존처럼 아이콘이 없으면 기본 아이콘 하나
+                    <Icon name="health" className="h-5 w-5" />
+                  )}
                 </div>
 
                 {!isLast && (
-                  <div
-                    className={`absolute bottom-[-40px] left-1/2 top-14 h-[85px] w-1 -translate-x-1/2 bg-brand-primary sm:top-16 sm:h-[41px]`}
-                  />
+                  <div className="absolute bottom-[-40px] left-1/2 top-14 h-[85px] w-1 -translate-x-1/2 bg-brand-primary sm:top-16 sm:h-[41px]" />
                 )}
               </div>
 
