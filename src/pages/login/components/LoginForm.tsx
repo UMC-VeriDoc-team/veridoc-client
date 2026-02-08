@@ -47,7 +47,11 @@ const LoginForm = () => {
 
     // 로그인 성공 후 홈으로 이동
     if (result.ok) {
-      painAreaID !== 8 && navigate("/home");
+      if (painAreaID !== 8) {
+        navigate("/home");
+      } else {
+        navigate("/guide");
+      }
       return;
     }
 
