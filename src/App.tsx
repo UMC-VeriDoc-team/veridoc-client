@@ -90,7 +90,7 @@ const App = () => {
               <Route path="/password/reset" element={<PasswordResetPage />} />
             </Route>
 
-            {/* 프리뷰: 비로그인 전용으로 하고 싶으면 PublicOnly로 감싸기 */}
+            {/* 프리뷰: 비로그인 전용 */}
             <Route
               path="/preview"
               element={
@@ -120,7 +120,7 @@ const App = () => {
                 }
               />
 
-              {/* guide: painAreaID 없어도 들어갈 수 있어야 함 */}
+              {/* guide */}
               <Route path="/guide">
                 <Route index element={<HomeSymptomOnboarding />} />
                 <Route path="detail" element={<GuideDetailPage />} />
