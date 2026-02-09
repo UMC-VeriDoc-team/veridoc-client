@@ -18,13 +18,12 @@ import {
 import { usePostTerm } from "@/hooks/term/usePostTerm";
 import { useAuthStore } from "@/stores/login/useAuthStore";
 
-// 서비스 약관 동의 모달 (체크 상태는 Zustand, 전송은 usePostTerm. API response는 사용하지 않음)
 const HomeTermsAgreementModal = () => {
   const { openModal, closeModal } = useBaseModal();
   const { mutate: postTerm } = usePostTerm();
   const { checked, toggleChecked, setChecked, setAll, reset, locationError, setLocationError } =
     useTermsAgreementStore();
-  const { name } = useAuthStore();
+  const { name, fetchAgreement } = useAuthStore();
 
   const termsItems = TERMS_ITEMS;
 
@@ -147,6 +146,7 @@ const HomeTermsAgreementModal = () => {
 
     postTerm(requestData, {
       onSuccess: () => {
+        fetchAgreement();
         reset();
         closeModal();
       },
