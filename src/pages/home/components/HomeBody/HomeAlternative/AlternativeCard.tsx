@@ -31,7 +31,7 @@ const AlternativeCard = ({
 
   const handleShowTemporaryMeasure = () => {
     if (isMobile) {
-      navigate(`/symptom/measure/${guideId}`);
+      navigate(`/home/measure/${guideId}`);
       return;
     }
 

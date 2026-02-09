@@ -70,7 +70,7 @@ const ModalPage = () => {
     }
 
     closeModal();
-    navigate(`/symptom/measure/${measureId}`);
+    navigate(`/home/measure/${measureId}`);
   }, [isModalOpen, modalType, isMobile, closeModal, navigate, measureId]);
 
   // 모바일: 전문의소견 모달에서 페이지로 전환
@@ -84,7 +84,7 @@ const ModalPage = () => {
     }
 
     closeModal();
-    navigate(`/symptom/doctor/${doctorOpinionId}`);
+    navigate(`/home/doctor/${doctorOpinionId}`);
   }, [isModalOpen, modalType, isMobile, closeModal, navigate, doctorOpinionId]);
 
   // 모달 열리면 body scroll lock
