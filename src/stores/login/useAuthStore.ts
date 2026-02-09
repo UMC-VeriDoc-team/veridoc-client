@@ -203,10 +203,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     await get().fetchMe();
 
     // 약관 체크
-    const agreed = await get().fetchAgreement();
-
-    if (!agreed) {
-      set({ needsAgreementModal: true });
-    }
+    await get().fetchAgreement();
   },
 }));

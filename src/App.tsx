@@ -40,8 +40,6 @@ import PublicOnly from "./components/Guard/PublicOnly";
 import RequireAuth from "./components/Guard/RequireAuth";
 import RequirePainArea from "./components/Guard/RequirePainArea";
 
-/* route guards */
-
 const queryClient = new QueryClient();
 
 const App = () => {
