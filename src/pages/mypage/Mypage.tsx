@@ -429,7 +429,7 @@ const MyPage = () => {
   );
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-white">
+    <div className="max-w-dvw flex min-h-screen w-full flex-col items-center bg-white">
       <header className="flex w-full items-center justify-center md:hidden">
         <span className="pt-10 text-lg font-semibold text-gray-950">마이페이지</span>
       </header>
