@@ -75,15 +75,15 @@ const useSharePost = (): UseSharePostReturn => {
   }, []);
 
   // 카카오톡 공유
-  const shareKakao = useCallback(async (_payload: SharePayload) => {
+  const shareKakao = useCallback(async () => {
     const w = window as Window & { Kakao?: unknown };
     if (!w.Kakao) return false;
 
     return false;
   }, []);
 
-  // 인스타: 링크 복사
-  const shareInstagram = useCallback(async (_payload: SharePayload) => {
+  // 인스타그램 공유
+  const shareInstagram = useCallback(async () => {
     return false;
   }, []);
 
