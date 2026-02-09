@@ -64,7 +64,7 @@ const SymptomPage = () => {
       {/* 공통 wrapper: life/guide 모두 여기 안에서 렌더 */}
       <div className="flex w-full flex-col items-center bg-white px-[30px] pb-10">
         {/* 탭 */}
-        <div className="mb-8 mt-[24px] flex w-full justify-center px-[30px] md:mt-0 md:w-[777px] md:px-0">
+        <div className="mb-8 mt-[24px] flex w-full justify-center md:mt-0 md:w-[777px] md:px-0">
           <SymptomTabs value={tab} onChange={setTab} />
         </div>
 
@@ -73,12 +73,12 @@ const SymptomPage = () => {
           <div
             className={[
               // 모바일
-              "mx-auto w-[354px]",
+              "mx-auto w-full",
               // 데스크탑
               "md:mx-0 md:w-full md:max-w-[1020px] md:px-0",
             ].join(" ")}
           >
-            {!painAreaID ? (
+            {painAreaID === 8 ? (
               <SymptomEmptyState onClickSelectSymptom={onClickSelectSymptom} />
             ) : tab === "guide" ? (
               <SymptomGuideTab symptomName={symptomName} />

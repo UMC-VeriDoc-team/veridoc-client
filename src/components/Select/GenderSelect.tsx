@@ -34,7 +34,7 @@ const GenderSelect = ({
   };
 
   return (
-    <div className={`flex h-[36px] w-[404px] gap-[7px] ${className}`}>
+    <div className={`flex h-[36px] w-full gap-[7px] ${className}`}>
       <button
         type="button"
         className={getButtonClass(value === "MALE")}

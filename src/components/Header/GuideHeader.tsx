@@ -1,10 +1,12 @@
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { useNavigate } from "react-router-dom";
 import { ModalType } from "../Modal/types/modal";
+import { useAuthStore } from "@/stores/login/useAuthStore";
 
 const GuideHeader = () => {
   const navigate = useNavigate();
   const { openModal } = useBaseModal();
+  const { authStatus } = useAuthStore();
 
   return (
     <div className="relative">
@@ -27,15 +29,27 @@ const GuideHeader = () => {
           className="mt-6 h-[40px] w-auto"
           draggable={false}
         />
-        <button type="button" aria-label="Logout" className="shrink-0">
-          <img
-            src="/images/logout-button.svg"
-            alt="Logout"
-            className="mt-6 h-[32px] w-auto"
-            draggable={false}
-            onClick={() => openModal(ModalType.AUTH_LOGOUT)}
-          />
-        </button>
+        {authStatus !== "authenticated" ? (
+          <button type="button" aria-label="login" className="shrink-0">
+            <img
+              src="/images/login-button.svg"
+              alt="login"
+              className="mt-6 h-[32px] w-auto"
+              draggable={false}
+              onClick={() => navigate("/login")}
+            />
+          </button>
+        ) : (
+          <button type="button" aria-label="Logout" className="shrink-0">
+            <img
+              src="/images/logout-button.svg"
+              alt="Logout"
+              className="mt-6 h-[32px] w-auto"
+              draggable={false}
+              onClick={() => openModal(ModalType.AUTH_LOGOUT)}
+            />
+          </button>
+        )}
       </div>
 
       {/* 텍스트 영역 */}
