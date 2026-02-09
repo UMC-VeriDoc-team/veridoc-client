@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/stores/login/useAuthStore";
 import axios, { AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
 
 // 쿠키 미포함
@@ -30,6 +31,22 @@ const addAuthHeader = (config: InternalAxiosRequestConfig): InternalAxiosRequest
 
   return config;
 };
+
+authApi.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    const status = error?.response?.status;
+
+    if (status === 401) {
+      const { logout } = useAuthStore.getState();
+      logout();
+
+      window.location.href = "/";
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 baseApi.interceptors.request.use(addAuthHeader);
 authApi.interceptors.request.use(addAuthHeader);

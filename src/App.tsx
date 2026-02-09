@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import useIsMobile from "@/hooks/useIsMobile";
@@ -113,10 +113,14 @@ const App = () => {
                 path="/home"
                 element={
                   <RequirePainArea>
-                    <MainPage />
+                    <Outlet />
                   </RequirePainArea>
                 }
-              />
+              >
+                <Route index element={<MainPage />} />
+                <Route path="measure/:id" element={<HomeTemporaryMeasurePage />} />
+                <Route path="doctor/:id" element={<HomeDoctorOpinionPage />} />
+              </Route>
 
               {/* guide */}
               <Route path="/guide">
@@ -127,9 +131,6 @@ const App = () => {
               {/* 증상 */}
               <Route path="/symptom">
                 <Route index element={<SymptomPage />} />
-                {/* 모바일: 모달 상세 */}
-                <Route path="measure/:id" element={<HomeTemporaryMeasurePage />} />
-                <Route path="doctor/:id" element={<HomeDoctorOpinionPage />} />
               </Route>
 
               {/* 병원 */}

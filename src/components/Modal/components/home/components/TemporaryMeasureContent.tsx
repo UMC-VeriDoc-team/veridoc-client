@@ -8,19 +8,10 @@ import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureMod
 import useIsMobile from "@/hooks/useIsMobile";
 import type { TemporaryGuideDetail } from "@/types/temporaryGuide";
 import { getTemporaryGuideDetail } from "@/components/Modal/services/getTemporaryDetail";
-
-interface ShareItem {
-  iconName: string;
-}
-
-const shares: ShareItem[] = [
-  { iconName: "facebook-fill" },
-  { iconName: "kakao-fill" },
-  { iconName: "instagram-fill" },
-];
+import SharePost from "./SharePost";
 
 const TemporaryMeasureContent = () => {
-  const { id } = useParams(); // /symptom/measure/:id
+  const { id } = useParams();
   const isMobile = useIsMobile();
   const { measureId, setMeasureId } = useTemporaryMeasureModalStore();
   const navigate = useNavigate();
@@ -54,7 +45,7 @@ const TemporaryMeasureContent = () => {
 
   const handleSelectMorePost = (answerId: number) => {
     if (isMobile) {
-      navigate(`/symptom/measure/${answerId}`);
+      navigate(`/home/measure/${answerId}`);
       return;
     }
 
@@ -224,13 +215,7 @@ const TemporaryMeasureContent = () => {
             {/* 공유 */}
             <div className="flex items-center gap-3 sm:gap-4">
               <p className="truncate text-sm font-medium text-gray-950 sm:text-base">Share this</p>
-              <div className="flex gap-2">
-                {shares.map((item) => (
-                  <button key={item.iconName} type="button">
-                    <Icon name={item.iconName} className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </button>
-                ))}
-              </div>
+              <SharePost title={detail.title} subtitle={detail.subtitle ?? undefined} />
             </div>
 
             {/* 해시태그 */}
@@ -257,7 +242,7 @@ const TemporaryMeasureContent = () => {
                     key={idx}
                     type="button"
                     className="flex w-44 shrink-0 cursor-pointer flex-col gap-2 sm:w-60"
-                    onClick={() => handleSelectMorePost(post.answerId)}
+                    onClick={() => handleSelectMorePost(post.guideId)}
                   >
                     <div className="h-32 w-full bg-gray-100">
                       {post.imageUrl ? (

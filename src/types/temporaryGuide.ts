@@ -18,7 +18,7 @@ export interface TemporaryGuideHelp {
 }
 
 export interface TemporaryGuideMorePost {
-  answerId: number;
+  guideId: number;
   painAreaId: number;
   title: string;
   imageUrl: string;

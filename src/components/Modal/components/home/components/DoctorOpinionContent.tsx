@@ -1,49 +1,61 @@
 import Icon from "@/components/Icon/Icon";
-
-interface ShareItem {
-  iconName: string;
-}
-
-const shares: ShareItem[] = [
-  { iconName: "facebook-fill" },
-  { iconName: "kakao-fill" },
-  { iconName: "instagram-fill" },
-];
-
-interface HashtagItem {
-  content: string;
-}
-
-// 임시 해시태그
-const hashtags: HashtagItem[] = [{ content: "집·사무실" }, { content: "하루 1-2회" }];
-
-interface PostItem {
-  image: string;
-  title: string;
-}
-
-// 임시 포스트
-const posts: PostItem[] = [
-  { image: "null", title: "통증 부위 온찜질/냉찜질" },
-  { image: "null", title: "가벼운 일상 동작" },
-];
+import GetDoctorOpinionDetail from "@/pages/home/services/getDoctorOpinionDetail";
+import type { OpinionDetail } from "@/pages/home/types/homeDoctorOpinion";
+import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
+import { useEffect, useState } from "react";
+import SharePost from "./SharePost";
 
 const DoctorOpinionContent = () => {
+  const { doctorOpinionId, setDoctorOpinionId } = useDoctorOpinionModalStore();
+
+  const [data, setData] = useState<OpinionDetail | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  // 다른 포스터로 이동
+  const handleGoToAnotherPost = (answerId: number) => {
+    setDoctorOpinionId(answerId);
+  };
+
+  useEffect(() => {
+    if (!doctorOpinionId) return;
+
+    const run = async () => {
+      try {
+        setLoading(true);
+        const detail = await GetDoctorOpinionDetail({ answerId: doctorOpinionId });
+        setData(detail);
+      } catch {
+        setData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void run();
+  }, [doctorOpinionId]);
+
+  const handleOpenSource = (url: string) => {
+    if (!url) return;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  if (!doctorOpinionId) return null;
+
+  if (loading) return <div>불러오는 중...</div>;
+  if (!data) return <div>전문의 답변을 불러올 수 없어요.</div>;
+
   return (
     <div className="flex-1 overflow-y-auto px-1 py-2 sm:px-4 sm:py-4 md:px-7 md:py-6">
       <div className="flex flex-col gap-6 sm:gap-8">
         <div className="flex gap-4">
-          <p className="text-xs text-[#000D2F] underline sm:text-sm">어깨</p>
+          <p className="text-xs text-[#000D2F] underline sm:text-sm">{data.painAreaName}</p>
           <p className="text-xs text-[#000D2F] underline sm:text-sm">전문의소견</p>
         </div>
 
         {/* 제목 */}
         <div className="flex flex-col space-y-2">
           <p className="text-2xl font-extrabold leading-[-2.5%] text-gray-950 sm:text-4xl md:text-4xl">
-            반복되는 두통과 어깨 결림,
-          </p>
-          <p className="text-2xl font-extrabold leading-[-2.5%] text-gray-950 sm:text-4xl md:text-4xl">
-            거북목증후군을 의심해보세요
+            {data.title}
           </p>
         </div>
 
@@ -70,7 +82,12 @@ const DoctorOpinionContent = () => {
               </div>
             </div>
 
-            <button type="button" className="flex items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleOpenSource(data.sourceUrl)}
+              disabled={!data.sourceUrl}
+              className={`flex items-center justify-center gap-2 ${data.sourceUrl ? "cursor-pointer" : "cursor-not-allowed opacity-40"}`}
+            >
               <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
                 원문 출처 보기
               </p>
@@ -79,19 +96,13 @@ const DoctorOpinionContent = () => {
           </div>
         </div>
 
-        {/* 이미지 */}
+        {/* 이미지: 추가 예정 */}
         <div className="h-[180px] w-full rounded-[10px] bg-gray-100 sm:h-[220px] md:h-[260px]"></div>
 
         {/* 본문 / 경고문 */}
         <div className="flex flex-col gap-10 sm:gap-[80px]">
-          <pre className="whitespace-pre-wrap text-sm font-medium leading-6 text-gray-950 sm:text-base">
-            말씀하신 목과 어깨의 뻐근함과 두통은 거북목증후군에서 흔히 나타나는 특징일 수 있습니다.
-            거북목증후군은 목이 정상적인 위치보다 앞으로 돌출되면서 척추 그자체와 해당부분과
-            이어지는 날개뼈 및 어깨에까지 영향을 끼칠 수 있는 만성적 질환입니다. 장시간 목을
-            숙인상태로 컴퓨터를 사용하거나, 스마트폰 시청처럼 고개를 숙인 자세가 지속되면 근육간의
-            균형이 깨지고 뭉쳐서, 주변 표피신경의 포착증상으로 진행되게 되면 목 주변 및 어깨죽지,
-            날개죽지의 만성적인 통증과 피로를 유발합니다. 시간이 지나면 어깨 결림이나 팔 저림 같은
-            디스크에 의한 신경근압박증상으로도 이어질 수 있습니다.
+          <pre className="whitespace-pre-wrap font-kr text-sm font-medium leading-6 text-gray-950 sm:text-base">
+            {data.content}
           </pre>
 
           {/* 경고문 */}
@@ -115,25 +126,14 @@ const DoctorOpinionContent = () => {
             {/* 공유 */}
             <div className="flex items-center gap-3 sm:gap-4">
               <p className="truncate text-sm font-medium text-gray-950 sm:text-base">Share this</p>
-              <div className="flex gap-2">
-                {shares.map((item) => (
-                  <button key={item.iconName} type="button">
-                    <Icon name={item.iconName} className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </button>
-                ))}
-              </div>
+              <SharePost title={data.title} />
             </div>
 
-            {/* 해시태그 */}
+            {/* 해시태그: 증상명 */}
             <div className="flex gap-2">
-              {hashtags.map((hashtag) => (
-                <div
-                  key={hashtag.content}
-                  className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-xs font-medium text-brand-primary sm:text-sm"
-                >
-                  {hashtag.content}
-                </div>
-              ))}
+              <div className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-xs font-medium text-brand-primary sm:text-sm">
+                {data.symptomName}
+              </div>
             </div>
           </div>
 
@@ -142,14 +142,15 @@ const DoctorOpinionContent = () => {
             <p className="text-base font-medium text-gray-950">More Posts</p>
 
             <div className="mt-3 flex w-full flex-nowrap gap-5 overflow-x-auto pb-2">
-              {posts.map((post) => (
-                <div
-                  key={post.title}
+              {data.morePosts.map((post, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleGoToAnotherPost(post.answerId)}
                   className="flex w-44 shrink-0 cursor-pointer flex-col gap-2 sm:w-60"
                 >
                   <div className="h-32 w-full bg-gray-100"></div>
-                  <p className="text-sm font-medium text-gray-950">{post.title}</p>
-                </div>
+                  <p className="text-left text-sm font-medium text-gray-950">{post.title}</p>
+                </button>
               ))}
             </div>
           </div>

@@ -55,7 +55,7 @@ const HomeOpinion = ({ answerId }: HomeOpinionProps) => {
 
   // 전문의 소견 전체 보기 모달 오픈
   const handleShowDoctorOpinion = () => {
-    setDoctorOpinionId(answerId);
+    setDoctorOpinionId(Number(answerId));
     openModal(ModalType.HOME_DOCTOR_OPINION);
   };
 

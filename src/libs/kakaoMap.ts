@@ -56,3 +56,16 @@ declare global {
     };
   }
 }
+
+declare global {
+  interface Window {
+    Kakao?: {
+      isInitialized: () => boolean;
+      init: (key: string) => void;
+      maps: KakaoMaps;
+      Share: {
+        sendDefault: (options: unknown) => void;
+      };
+    };
+  }
+}
