@@ -9,12 +9,17 @@ import useIsMobile from "@/hooks/useIsMobile";
 import type { TemporaryGuideDetail } from "@/types/temporaryGuide";
 import { getTemporaryGuideDetail } from "@/components/Modal/services/getTemporaryDetail";
 import SharePost from "./SharePost";
+import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
 
 const TemporaryMeasureContent = () => {
   const { id } = useParams();
   const isMobile = useIsMobile();
-  const { measureId, setMeasureId } = useTemporaryMeasureModalStore();
   const navigate = useNavigate();
+
+  const { measureId, setMeasureId } = useTemporaryMeasureModalStore();
+  const { painAreaID } = useAuthStore();
+  const { recordEvent } = useSymptomGuideStore();
 
   const guideId = useMemo(() => {
     const raw = measureId ?? id;
@@ -34,6 +39,11 @@ const TemporaryMeasureContent = () => {
       try {
         const res = await getTemporaryGuideDetail(guideId);
         setDetail(res.data ?? null);
+
+        // 트리거 해제
+        if (painAreaID) {
+          await recordEvent(painAreaID, "TREATMENT_INFO_VIEWED");
+        }
       } catch (e) {
         console.error("[TemporaryGuideDetail] error:", e);
         setDetail(null);
@@ -41,7 +51,7 @@ const TemporaryMeasureContent = () => {
     };
 
     run();
-  }, [guideId]);
+  }, [guideId, painAreaID, recordEvent]);
 
   const handleSelectMorePost = (answerId: number) => {
     if (isMobile) {
@@ -49,7 +59,6 @@ const TemporaryMeasureContent = () => {
       return;
     }
 
-    // 데스크탑(모달)에서는 모달 내용만 교체
     setMeasureId(String(answerId));
   };
 

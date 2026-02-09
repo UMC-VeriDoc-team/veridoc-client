@@ -1,4 +1,3 @@
-// StepCardList.tsx
 import StepCard from "./StepCard";
 import type { SymptomGuideStep } from "@/pages/symptom/tabs/symptom-guide/SymptomGuideTab";
 import img1 from "/images/test/symptom_test1.png";
