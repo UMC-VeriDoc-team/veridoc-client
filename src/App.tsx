@@ -44,7 +44,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const isMobile = useIsMobile();
-  const { isLoggedIn, painAreaID } = useAuthStore();
+  const { authStatus, painAreaID } = useAuthStore();
 
   const [showSplash, setShowSplash] = useState(true);
   const shouldShowSplash = isMobile && showSplash;
@@ -64,7 +64,7 @@ const App = () => {
             <Route
               path="/"
               element={
-                !isLoggedIn ? (
+                authStatus !== "authenticated" ? (
                   <OnboardingLayout />
                 ) : (
                   <Navigate to={painAreaID == null ? "/guide" : "/home"} replace />

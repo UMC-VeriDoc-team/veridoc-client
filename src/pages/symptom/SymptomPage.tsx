@@ -45,7 +45,7 @@ const SymptomPage = () => {
 
   useEffect(() => {
     void fetchMe();
-  }, []);
+  }, [painAreaID]);
 
   return (
     <>

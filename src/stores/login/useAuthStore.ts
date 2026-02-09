@@ -12,6 +12,7 @@ import getAgreementStatus, {
 type LoginFailReason = "INVALID" | "UNKNOWN";
 type LoginResult = { ok: true } | { ok: false; reason: LoginFailReason };
 type LoginErrorBody = { code?: string };
+
 type AuthStatus = "unknown" | "authenticated" | "unauthenticated";
 
 interface AuthState {
@@ -34,9 +35,6 @@ interface AuthState {
   painAreaID: number | null;
   painAreaName: string | null;
 
-  // derived (선택)
-  isLoggedIn: () => boolean;
-
   // actions
   login: (payload: { email: string; password: string }) => Promise<LoginResult>;
   logout: () => void;
@@ -45,6 +43,7 @@ interface AuthState {
   resetMe: () => void;
 
   setPainAreaID: (id: number | null) => void;
+
   fetchAgreement: () => Promise<boolean>;
 
   initAuth: () => Promise<void>;
@@ -83,8 +82,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   painAreaID: null,
   painAreaName: null,
 
-  isLoggedIn: () => get().authStatus === "authenticated",
-
   resetMe: () =>
     set({
       userID: null,
@@ -119,6 +116,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
+  // 성공 여부 반환
   fetchMe: async () => {
     const token = get().accessToken;
     if (!token) {
@@ -129,19 +127,23 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const dto = await getUserData();
       const mapped = mapUserMeToState(dto);
-
-      set({
-        ...mapped,
-      });
-
+      set(mapped);
       return true;
     } catch (e) {
-      const status = (e as any)?.response?.status;
-      if (status === 401 || status === 403) {
-        get().logout();
-      } else {
+      const status = getAxiosStatus(e);
+
+      // 토큰이 만료/무효면 즉시 로그아웃 처리
+      if (status === 401) {
+        localStorage.removeItem("accessToken");
+        set({
+          accessToken: null,
+          authStatus: "unauthenticated",
+          hasAgreedTerms: null,
+          needsAgreementModal: false,
+        });
         get().resetMe();
       }
+
       return false;
     }
   },
@@ -151,18 +153,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     try {
       const data = await postLogin(payload);
-
       localStorage.setItem("accessToken", data.accessToken);
 
       set({
         accessToken: data.accessToken,
-        authStatus: "authenticated",
+        authStatus: "unknown", // 검증 전
       });
 
-      await get().fetchMe();
-      await get().fetchAgreement();
+      // 로그인 직후 검증/초기화
+      await get().initAuth();
 
-      return { ok: true };
+      return get().authStatus === "authenticated" ? { ok: true } : { ok: false, reason: "UNKNOWN" };
     } catch (error: unknown) {
       const status = getAxiosStatus(error);
       if (status === 400 || status === 401) return { ok: false, reason: "INVALID" };
@@ -187,9 +188,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   setPainAreaID: (id) => set({ painAreaID: id }),
 
   initAuth: async () => {
-    set({ authStatus: "unknown" });
-
     const token = localStorage.getItem("accessToken");
+
+    // 토큰 미보유
     if (!token) {
       set({
         accessToken: null,
@@ -201,15 +202,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       return;
     }
 
-    set({ accessToken: token });
+    // 토큰 O, 아직 검증 전
+    set({ accessToken: token, authStatus: "unknown" });
 
-    const ok = await get().fetchMe();
-    if (!ok) {
-      set({ authStatus: "unauthenticated" });
+    // 서버로 내 정보 검증
+    const okMe = await get().fetchMe();
+    if (!okMe) {
+      if (get().authStatus === "unknown") {
+        get().logout();
+      }
       return;
     }
 
+    // 인증 확정
     set({ authStatus: "authenticated" });
+
+    // 약관 체크
     await get().fetchAgreement();
   },
 }));

@@ -24,12 +24,13 @@ const Header = ({ className }: HeaderProps) => {
   const navigate = useNavigate();
 
   const { openModal } = useBaseModal();
-  const { isLoggedIn, painAreaID } = useAuthStore();
+  const { authStatus, painAreaID } = useAuthStore();
 
   // 증상 선택 여부
   const hasSymptom = Boolean(painAreaID);
 
-  const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guide") : "/preview";
+  const homeTarget =
+    authStatus === "authenticated" ? (hasSymptom ? "/home" : "/guide") : "/preview";
 
   const isHomeActive = HOME_ACTIVE_PATHS.some((p) => location.pathname.startsWith(p));
   const isSymptomActive = location.pathname.startsWith("/symptom");
@@ -42,7 +43,7 @@ const Header = ({ className }: HeaderProps) => {
 
   const handleSymptomClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!isLoggedIn) {
+    if (authStatus !== "authenticated") {
       openModal(ModalType.AUTH_REQUIRED);
       return;
     }
@@ -51,7 +52,7 @@ const Header = ({ className }: HeaderProps) => {
 
   const handleMyClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!isLoggedIn) {
+    if (authStatus !== "authenticated") {
       openModal(ModalType.AUTH_REQUIRED);
       return;
     }
@@ -114,7 +115,7 @@ const Header = ({ className }: HeaderProps) => {
               마이페이지
             </NavLink>
           </div>
-          {isLoggedIn ? (
+          {authStatus === "authenticated" ? (
             <div className="flex w-[200px] justify-end">
               <button
                 onClick={() => openModal(ModalType.AUTH_LOGOUT)}

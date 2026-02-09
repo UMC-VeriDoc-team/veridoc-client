@@ -43,7 +43,6 @@ export const LifeGuideTab = () => {
 
     // 만약 ID를 찾지 못했다면 빈 문자열이나 기본 에러 화면을 반환
     if (!videoId) {
-      console.warn("유효한 유튜브 비디오 ID를 찾을 수 없습니다:", url);
       return "";
     }
 
