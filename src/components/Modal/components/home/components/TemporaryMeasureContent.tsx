@@ -54,7 +54,7 @@ const TemporaryMeasureContent = () => {
 
   const handleSelectMorePost = (answerId: number) => {
     if (isMobile) {
-      navigate(`/symptom/measure/${answerId}`);
+      navigate(`/home/measure/${answerId}`);
       return;
     }
 
