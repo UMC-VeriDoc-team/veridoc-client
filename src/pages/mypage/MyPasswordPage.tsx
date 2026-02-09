@@ -4,9 +4,14 @@ import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import Icon from "../../components/Icon/Icon";
 import LogoImage from "/images/logo.svg";
+import { putMyPassword } from "./services/putMyPassword";
+import axios from "axios";
 
-// [TODO: 백엔드 연동 시 삭제] 테스트용 가짜 비밀번호
-const MOCK_CURRENT_PASSWORD = "12345678";
+type ApiErrorBody = {
+  code?: string;
+  message?: string;
+  data?: unknown | null;
+};
 
 const MyPasswordPage = () => {
   const { openModal } = useBaseModal();
@@ -42,10 +47,12 @@ const MyPasswordPage = () => {
     });
   };
 
-  const handleSavePassword = () => {
+  const handleSavePassword = async () => {
     const { current, new: newPwd, confirm } = passwordForm;
+
     const newErrors = { current: "", new: "", confirm: "" };
     let isValid = true;
+
     if (!current) {
       newErrors.current = "필수 입력 사항입니다";
       isValid = false;
@@ -58,10 +65,6 @@ const MyPasswordPage = () => {
       newErrors.confirm = "필수 입력 사항입니다";
       isValid = false;
     }
-    if (current && current !== MOCK_CURRENT_PASSWORD) {
-      newErrors.current = "기존 비밀번호를 입력해주세요";
-      isValid = false;
-    }
     if (newPwd && newPwd.length < 8) {
       newErrors.new = "새 비밀번호 형식이 올바르지 않습니다";
       isValid = false;
@@ -70,9 +73,39 @@ const MyPasswordPage = () => {
       newErrors.confirm = "입력한 비밀번호가 서로 일치하는지 확인해 주세요";
       isValid = false;
     }
+
     setPwdErrors(newErrors);
     if (!isValid) return;
-    openModal(ModalType.AUTH_PASSWORD_CHANGED);
+
+    try {
+      await putMyPassword({ currentPassword: current, newPassword: newPwd });
+      openModal(ModalType.AUTH_PASSWORD_CHANGED);
+      setPasswordForm({ current: "", new: "", confirm: "" });
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        const status = e.response?.status;
+        const body = e.response?.data as ApiErrorBody | undefined;
+
+        const apiCode = body?.code;
+        console.log(apiCode);
+        if (apiCode === "INVALID_CREDENTIALS") {
+          setPwdErrors((prev) => ({
+            ...prev,
+            current: "현재 비밀번호가 올바르지 않습니다.",
+          }));
+          return;
+        }
+
+        if (status === 401) {
+          localStorage.removeItem("accessToken");
+          navigate("/login");
+          return;
+        }
+      }
+
+      // AxiosError가 아니거나 정보가 없을 때
+      console.error(e);
+    }
   };
 
   return (
@@ -162,7 +195,7 @@ const MyPasswordPage = () => {
                   {/* (2) 전체 삭제 버튼 */}
                   <button
                     type="button"
-                    onClick={() => handleChange("current", "")} // ✨ 해당 필드 초기화
+                    onClick={() => handleChange("current", "")}
                     className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-600"
                   >
                     <Icon name="password-delete" className="h-5 w-5" />
