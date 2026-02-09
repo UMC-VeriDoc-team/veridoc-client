@@ -112,9 +112,9 @@ const TemporaryMeasureContent = () => {
           </div>
 
           {/* 평균 소요 시간 / 증상 / 출처 링크 */}
-          <div className="flex justify-between gap-3 sm:items-end">
+          <div className="flex items-center justify-between gap-3">
             <div className="flex flex-col gap-2 sm:flex-row">
-              <div className="flex w-fit gap-2 border border-brand-primary px-2 py-1">
+              <div className="flex w-fit items-center gap-2 border border-brand-primary px-2 py-1">
                 <Icon name="repeat" className="w-3 sm:w-4" />
                 <p className="pt-[2px] text-center text-sm font-medium text-brand-primary sm:text-base">
                   {duration}
@@ -133,7 +133,7 @@ const TemporaryMeasureContent = () => {
               type="button"
               onClick={handleOpenSource}
               disabled={!sourceUrl}
-              className="flex items-center justify-center gap-2 self-end"
+              className="flex h-full items-center justify-center gap-2 self-end sm:self-center"
             >
               <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
                 원문 출처 보기
@@ -146,7 +146,7 @@ const TemporaryMeasureContent = () => {
         {/* 이미지 */}
         <div className="h-[180px] w-full rounded-[5px] bg-gray-100 sm:h-[220px] md:h-[260px]">
           {imageUrl ? (
-            <img src={imageUrl} alt={title} className="h-full w-full object-cover" />
+            <img src={imageUrl} alt={title} className="h-full w-full rounded-[5px] object-cover" />
           ) : (
             <div className="h-full w-full" />
           )}
@@ -165,11 +165,11 @@ const TemporaryMeasureContent = () => {
               <div className="flex flex-col gap-9">
                 {notes.map((item) => (
                   <GuideItem
-                    key={item.id}
-                    id={String(item.id)}
-                    title={item.title}
-                    description={item.description}
-                    icon={{ src: item.imageUrl, alt: item.title || "guide" }}
+                    key={item.noteId}
+                    id={String(item.noteId)}
+                    bold={item.bold}
+                    text={item.text}
+                    icon={{ src: item.imageUrl, alt: item.bold || "guide" }}
                   />
                 ))}
               </div>
@@ -181,11 +181,11 @@ const TemporaryMeasureContent = () => {
             <SectionHeader iconName="warning" title="이런 증상이 있다면 진료가 필요할 수 있어요" />
             {cautions.length > 0 ? (
               <MedicalConsultationGuide
-                items={cautions.map((c) => ({
-                  id: String(c.id),
-                  title: c.title,
-                  description: c.description,
-                  iconUrl: c.iconUrl,
+                items={cautions.map((caution) => ({
+                  id: String(caution.cautionId),
+                  bold: caution.bold,
+                  text: caution.text,
+                  iconUrl: caution.iconUrl,
                 }))}
               />
             ) : null}
@@ -196,9 +196,9 @@ const TemporaryMeasureContent = () => {
             <SectionHeader iconName="help-chat" title="이런 경우라면 도움이 될 수 있어요" />
             {helps.length > 0 ? (
               <ul className="pl-6">
-                {helps.map((h) => (
-                  <li key={h.id} className="list-disc text-base font-medium text-gray-950">
-                    {h.description}
+                {helps.map((help) => (
+                  <li key={help.helpId} className="list-disc text-base font-medium text-gray-950">
+                    {help.text}
                   </li>
                 ))}
               </ul>
