@@ -13,7 +13,7 @@ import { useAuthStore } from "@/stores/login/useAuthStore";
 const HomeSymptomOnboarding = () => {
   const { openModal } = useBaseModal();
   const { setGuideType } = useGuideDetailModalStore();
-  const { initAuth } = useAuthStore();
+  const { initAuth, needsAgreementModal } = useAuthStore();
 
   const onClickOpenGuideDetail = (guideType: GuideDetailType) => {
     setGuideType(guideType);
@@ -23,6 +23,12 @@ const HomeSymptomOnboarding = () => {
   useEffect(() => {
     void initAuth();
   }, [initAuth]);
+
+  useEffect(() => {
+    if (needsAgreementModal) {
+      openModal(ModalType.HOME_TERMS_AGREEMENT);
+    }
+  }, [needsAgreementModal, openModal]);
 
   return (
     <>

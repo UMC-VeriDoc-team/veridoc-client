@@ -5,15 +5,24 @@ import HomeManage from "@/pages/home/components/HomeBody/HomeManage";
 import HomeMap from "@/pages/home/components/map/HomeMap";
 import HomeMovingImage from "@/pages/home/components/banner/HomeMovingImage";
 import { useAuthStore } from "@/stores/login/useAuthStore";
+import useBaseModal from "@/stores/modal/useBaseModal";
+import { ModalType } from "@/components/Modal/types/modal";
 
 const MainPage = () => {
-  const { initAuth } = useAuthStore();
+  const { initAuth, needsAgreementModal } = useAuthStore();
   const { fetchHome } = useHomeStore();
+  const { openModal } = useBaseModal();
 
   useEffect(() => {
     void initAuth();
     void fetchHome();
   }, [fetchHome, initAuth]);
+
+  useEffect(() => {
+    if (needsAgreementModal) {
+      openModal(ModalType.HOME_TERMS_AGREEMENT);
+    }
+  }, [needsAgreementModal, openModal]);
 
   return (
     <div className="w-full">
