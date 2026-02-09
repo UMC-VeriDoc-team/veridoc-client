@@ -1,16 +1,22 @@
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
+import { useForgotPasswordStore } from "@/stores/password/useForgotPasswordStore";
 import { useNavigate } from "react-router-dom";
 
 // 메일 발송 완료 모달
 const AuthMailSentModal = () => {
   const navigate = useNavigate();
   const { closeModal } = useBaseModal();
+  const { resendMail, loading, error } = useForgotPasswordStore();
 
   // 로그인 페이지로 이동
   const handleGoToLogin = () => {
     closeModal();
     navigate("/login");
+  };
+
+  const handleResendMail = async () => {
+    await resendMail();
   };
 
   return (
@@ -32,17 +38,23 @@ const AuthMailSentModal = () => {
               메일함을 확인해 주세요
             </p>
           </div>
+
+          {error ? (
+            <p className="mt-2 text-center text-sm font-medium text-error">{error}</p>
+          ) : null}
         </div>
 
         {/* Buttons */}
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={closeModal} // 메일 재전송 API 호출
-            className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-gray-50 text-center text-base font-semibold leading-none text-gray-600 transition-colors hover:bg-gray-100 sm:text-lg"
+            onClick={handleResendMail}
+            disabled={loading}
+            className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-gray-50 text-center text-base font-semibold leading-none text-gray-600 transition-colors hover:bg-gray-100 disabled:opacity-60 sm:text-lg"
           >
-            메일 재발송
+            {loading ? "재발송 중..." : "메일 재발송"}
           </button>
+
           <button
             type="button"
             onClick={handleGoToLogin}
