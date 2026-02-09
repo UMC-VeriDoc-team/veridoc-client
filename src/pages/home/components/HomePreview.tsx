@@ -36,9 +36,9 @@ const HomePreview = () => {
       <GuideHeader />
 
       {/* 모바일 */}
-      <div className="xl:hidden">
+      <div className="flex w-full flex-col items-center xl:hidden">
         {/* About US (모바일) */}
-        <section className="px-5 pt-10">
+        <section className="w-full max-w-[900px] px-5 pt-10">
           <div className="overflow-hidden rounded-[20px]">
             <img
               src={aboutUs.src}
@@ -75,79 +75,107 @@ const HomePreview = () => {
         </section>
 
         {/* Symptoms (모바일) */}
-        <section className="mt-10 bg-[#F8FBFF] px-5 pb-16 pt-10">
-          <p className="mt-5 font-en text-[18px] font-semibold text-brand-primary">Symptoms</p>
+        <section className="mt-10 flex w-full flex-col items-center bg-[#F8FBFF] pb-16 pt-10">
+          <div className="w-full max-w-[900px] px-5 pt-10">
+            <p className="mt-5 font-en text-[18px] font-semibold text-brand-primary">Symptoms</p>
 
-          <p className="mt-2 text-[32px] font-extrabold leading-[130%] text-gray-900">
-            증상부터 정보까지,
-            <br />
-            사용자에게 필요한
-            <br />
-            의료 가이드를 제공합니다
-          </p>
+            <p className="mt-2 text-[32px] font-extrabold leading-[130%] text-gray-900">
+              증상부터 정보까지,
+              <br />
+              사용자에게 필요한
+              <br />
+              의료 가이드를 제공합니다
+            </p>
 
-          <p className="mt-3 text-[15px] font-medium leading-[150%] text-gray-600">
-            선택한 증상에 따라 전문의가 검토한 답변을 확인할 수 있어요.
-          </p>
+            <p className="mt-3 text-[15px] font-medium leading-[150%] text-gray-600">
+              선택한 증상에 따라 전문의가 검토한 답변을 확인할 수 있어요.
+            </p>
 
-          <div className="mt-6 grid grid-cols-2 gap-4">
-            {SYMPTOMS.map((symptom, idx) => (
-              <SymptomsItem
-                key={idx}
-                iconName={symptom.iconName}
-                symptomsName={symptom.label}
-                description={symptom.description}
-              />
-            ))}
+            <div className="mt-6 grid grid-cols-2 gap-4">
+              {SYMPTOMS.map((symptom, idx) => (
+                <SymptomsItem
+                  key={idx}
+                  iconName={symptom.iconName}
+                  symptomsName={symptom.label}
+                  description={symptom.description}
+                />
+              ))}
+            </div>
           </div>
         </section>
 
         {/* Hospital (모바일) */}
-        <section className="mt-5 px-5 pb-14 pt-10">
-          <p className="font-en text-[18px] font-semibold text-brand-primary">Hospital</p>
+        <section className="mt-5 flex w-full flex-col items-center pb-14 pt-10">
+          <div className="w-full max-w-[900px] px-5 pt-10">
+            <p className="font-en text-[18px] font-semibold text-brand-primary">Hospital</p>
 
-          <p className="mt-2 text-[36px] font-extrabold leading-[130%] text-gray-900">
-            가까운 병원을 찾아보세요
-          </p>
+            <p className="mt-2 text-[36px] font-extrabold leading-[130%] text-gray-900">
+              가까운 병원을 찾아보세요
+            </p>
 
-          <p className="mt-3 text-[16px] font-medium leading-[150%] text-gray-600">
-            현재 위치를 기준으로 주변 병원 정보를 확인할 수 있습니다.
-            <br />
-            증상에 따라 참고할 수 있는 병원을 안내합니다.
-            <br />
-            필요한 경우 병원 방문을 고려해 보세요.
-          </p>
+            <p className="mt-3 text-[16px] font-medium leading-[150%] text-gray-600">
+              현재 위치를 기준으로 주변 병원 정보를 확인할 수 있습니다.
+              <br />
+              증상에 따라 참고할 수 있는 병원을 안내합니다.
+              <br />
+              필요한 경우 병원 방문을 고려해 보세요.
+            </p>
 
-          {/* 버튼: 모바일은 가로 2개 */}
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <Link
-              to="/select-symptom"
-              className="inline-flex h-12 items-center justify-center rounded-[4px] border border-brand-primary bg-white text-[16px] font-semibold text-brand-primary"
-            >
-              회원가입
-            </Link>
-            <Link
-              to="/login"
-              className="inline-flex h-12 items-center justify-center rounded-[4px] bg-brand-primary text-[16px] font-semibold text-white"
-            >
-              로그인
-            </Link>
-          </div>
+            {/* 버튼: 모바일은 가로 2개 */}
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <Link
+                to="/select-symptom"
+                className="inline-flex h-12 items-center justify-center rounded-[4px] border border-brand-primary bg-white text-[16px] font-semibold text-brand-primary"
+              >
+                회원가입
+              </Link>
+              <Link
+                to="/login"
+                className="inline-flex h-12 items-center justify-center rounded-[4px] bg-brand-primary text-[16px] font-semibold text-white"
+              >
+                로그인
+              </Link>
+            </div>
 
-          {/* 콜라주 (모바일) */}
-          <div className="mt-6 flex justify-center">
-            <div className="relative h-[460px] w-[360px]">
-              <div className="absolute left-0 top-0 w-[170px] rounded-[28px]">
-                <img src={img1.src} alt={img1.alt} className="h-[200px] w-full object-cover" />
-              </div>
-              <div className="absolute right-0 top-10 w-[170px] rounded-[28px]">
-                <img src={img2.src} alt={img2.alt} className="h-[200px] w-full object-cover" />
-              </div>
-              <div className="absolute bottom-10 left-0 w-[170px] rounded-[28px]">
-                <img src={img3.src} alt={img3.alt} className="h-[200px] w-full object-cover" />
-              </div>
-              <div className="top-70 absolute bottom-0 right-0 w-[170px] rounded-[28px]">
-                <img src={img4.src} alt={img4.alt} className="h-[200px] w-full object-cover" />
+            {/* 콜라주 (모바일) */}
+            <div className="mt-6 flex justify-center md:mt-12">
+              {/* 컨테이너: 모바일(360x460) -> 태블릿(540x620) 확장 */}
+              <div className="relative h-[460px] w-[360px] md:h-[660px] md:w-[530px]">
+                {/* 이미지 1: 좌측 상단 */}
+                <div className="absolute left-0 top-0 w-[170px] overflow-hidden rounded-[28px] md:w-[250px] md:rounded-[40px]">
+                  <img
+                    src={img1.src}
+                    alt={img1.alt}
+                    className="h-[200px] w-full object-cover transition-transform duration-300 hover:scale-105 md:h-[280px]"
+                  />
+                </div>
+
+                {/* 이미지 2: 우측 상단 (태블릿에서 top 간격 살짝 상향) */}
+                <div className="absolute right-0 top-10 w-[170px] overflow-hidden rounded-[28px] md:top-16 md:w-[250px] md:rounded-[40px]">
+                  <img
+                    src={img2.src}
+                    alt={img2.alt}
+                    className="h-[200px] w-full object-cover transition-transform duration-300 hover:scale-105 md:h-[280px]"
+                  />
+                </div>
+
+                {/* 이미지 3: 좌측 하단 (태블릿에서 bottom 간격 조정) */}
+                <div className="absolute bottom-10 left-0 w-[170px] overflow-hidden rounded-[28px] md:bottom-16 md:w-[250px] md:rounded-[40px]">
+                  <img
+                    src={img3.src}
+                    alt={img3.alt}
+                    className="h-[200px] w-full object-cover transition-transform duration-300 hover:scale-105 md:h-[280px]"
+                  />
+                </div>
+
+                {/* 이미지 4: 우측 하단 */}
+                <div className="absolute bottom-0 right-0 w-[170px] overflow-hidden rounded-[28px] md:w-[250px] md:rounded-[40px]">
+                  <img
+                    src={img4.src}
+                    alt={img4.alt}
+                    className="h-[200px] w-full object-cover transition-transform duration-300 hover:scale-105 md:h-[280px]"
+                  />
+                </div>
               </div>
             </div>
           </div>
