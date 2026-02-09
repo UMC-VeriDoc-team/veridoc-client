@@ -3,16 +3,7 @@ import GetDoctorOpinionDetail from "@/pages/home/services/getDoctorOpinionDetail
 import type { OpinionDetail } from "@/pages/home/types/homeDoctorOpinion";
 import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
 import { useEffect, useState } from "react";
-
-interface ShareItem {
-  iconName: string;
-}
-
-const shares: ShareItem[] = [
-  { iconName: "facebook-fill" },
-  { iconName: "kakao-fill" },
-  { iconName: "instagram-fill" },
-];
+import SharePost from "./SharePost";
 
 const DoctorOpinionContent = () => {
   const { doctorOpinionId, setDoctorOpinionId } = useDoctorOpinionModalStore();
@@ -110,7 +101,7 @@ const DoctorOpinionContent = () => {
 
         {/* 본문 / 경고문 */}
         <div className="flex flex-col gap-10 sm:gap-[80px]">
-          <pre className="whitespace-pre-wrap text-sm font-medium leading-6 text-gray-950 sm:text-base">
+          <pre className="whitespace-pre-wrap font-kr text-sm font-medium leading-6 text-gray-950 sm:text-base">
             {data.content}
           </pre>
 
@@ -135,13 +126,7 @@ const DoctorOpinionContent = () => {
             {/* 공유 */}
             <div className="flex items-center gap-3 sm:gap-4">
               <p className="truncate text-sm font-medium text-gray-950 sm:text-base">Share this</p>
-              <div className="flex gap-2">
-                {shares.map((item) => (
-                  <button key={item.iconName} type="button">
-                    <Icon name={item.iconName} className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </button>
-                ))}
-              </div>
+              <SharePost title={data.title} />
             </div>
 
             {/* 해시태그: 증상명 */}

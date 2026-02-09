@@ -1,16 +1,7 @@
 import Icon from "@/components/Icon/Icon";
 import { GUIDE_DETAIL_CONTENTS } from "@/constants/guideDetailContents";
 import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
-
-interface ShareItem {
-  iconName: string;
-}
-
-const shares: ShareItem[] = [
-  { iconName: "facebook-fill" },
-  { iconName: "kakao-fill" },
-  { iconName: "instagram-fill" },
-];
+import SharePost from "../../home/components/SharePost";
 
 interface HashtagItem {
   content: string;
@@ -124,13 +115,7 @@ const GuideDetailContent = () => {
               {/* 공유 */}
               <div className="flex gap-3 sm:items-center sm:gap-4">
                 <p className="text-base font-medium text-gray-950">Share this</p>
-                <div className="flex gap-2">
-                  {shares.map((item) => (
-                    <button key={item.iconName} type="button">
-                      <Icon name={item.iconName} className="h-6 w-6" />
-                    </button>
-                  ))}
-                </div>
+                <SharePost title={content.header.title} subtitle={content.header.subtitle} />
               </div>
 
               {/* 해시태그 */}

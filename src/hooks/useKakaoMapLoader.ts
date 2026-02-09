@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const KAKAO_SCRIPT_ID = import.meta.env.VITE_KAKAO_MAP_KEY;
+const KAKAO_SCRIPT_ID = import.meta.env.VITE_KAKAO_KEY;
 
 interface UseKakaoMapLoaderOptions {
   appKey: string;
