@@ -1,15 +1,31 @@
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { useNavigate } from "react-router-dom";
-import { ModalType } from "../../types/modal";
+import { useHomeStore } from "@/stores/home/useHomeStore";
+import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
+import { ModalType } from "@/components/Modal/types/modal";
 
 // 전문의 답변 미확인 모달 (2 → 3단계)
 const StepDoctorOpinionRequiredModal = () => {
   const navigate = useNavigate();
   const { openModal, closeModal } = useBaseModal();
 
+  const { symptoms } = useHomeStore();
+  const { setDoctorOpinionId } = useDoctorOpinionModalStore();
+
   // 전문의 답변 상세 보기 모달 조회
   const handleOpenDoctorOpinion = () => {
+    const targetSymptom = symptoms[0];
+    const answerId = targetSymptom?.answerId;
+
+    if (!answerId) {
+      alert("전문의 답변 정보를 찾을 수 없습니다.");
+      return;
+    }
+
+    // 상세 모달에 필요한 ID 설정
+    setDoctorOpinionId(answerId);
+
     navigate("/home");
     openModal(ModalType.HOME_DOCTOR_OPINION);
   };

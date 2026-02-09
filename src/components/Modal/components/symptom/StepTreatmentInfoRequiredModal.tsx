@@ -1,15 +1,31 @@
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
+import { ModalType } from "../../types/modal";
+import { useHomeStore } from "@/stores/home/useHomeStore";
+import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
 import { useNavigate } from "react-router-dom";
 
 // 대처 방법 / 병원 정보 미확인 모달 (3 → 4단계)
 const StepTreatmentInfoRequiredModal = () => {
   const navigate = useNavigate();
-  const { closeModal } = useBaseModal();
+  const { openModal, closeModal } = useBaseModal();
 
-  // 홈으로 이동
-  const handleGoHome = () => {
+  const { temporaryGuides } = useHomeStore();
+  const { setMeasureId } = useTemporaryMeasureModalStore();
+
+  const goToTreatmentInfo = () => {
+    // 리스트의 첫 번째 아이템의 guideId 확인
+    const firstGuideId = temporaryGuides[0]?.guideId;
+
+    if (!firstGuideId) {
+      alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
+      return;
+    }
+
+    // 상세 페이지에 보여줄 ID 설정
+    setMeasureId(String(firstGuideId));
     navigate("/home");
+    openModal(ModalType.HOME_TEMPORARY_MEASURE);
   };
 
   return (
@@ -33,7 +49,6 @@ const StepTreatmentInfoRequiredModal = () => {
           </div>
         </div>
 
-        {/* Buttons */}
         <div className="flex gap-2">
           <button
             type="button"
@@ -44,7 +59,7 @@ const StepTreatmentInfoRequiredModal = () => {
           </button>
           <button
             type="button"
-            onClick={handleGoHome}
+            onClick={goToTreatmentInfo}
             className="inline-flex h-12 w-full items-center justify-center rounded-[4px] bg-brand-primary text-center text-base font-semibold leading-none text-white transition-colors hover:opacity-90 sm:text-lg"
           >
             대처·병원 확인하기

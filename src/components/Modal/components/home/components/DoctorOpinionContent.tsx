@@ -4,9 +4,14 @@ import type { OpinionDetail } from "@/pages/home/types/homeDoctorOpinion";
 import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
 import { useEffect, useState } from "react";
 import SharePost from "./SharePost";
+import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
 
 const DoctorOpinionContent = () => {
   const { doctorOpinionId, setDoctorOpinionId } = useDoctorOpinionModalStore();
+
+  const { painAreaID } = useAuthStore();
+  const { recordEvent } = useSymptomGuideStore();
 
   const [data, setData] = useState<OpinionDetail | null>(null);
   const [loading, setLoading] = useState(false);
@@ -24,6 +29,11 @@ const DoctorOpinionContent = () => {
         setLoading(true);
         const detail = await GetDoctorOpinionDetail({ answerId: doctorOpinionId });
         setData(detail);
+
+        // 트리거 해제
+        if (painAreaID) {
+          await recordEvent(painAreaID, "DOCTOR_OPINION_VIEWED");
+        }
       } catch {
         setData(null);
       } finally {
@@ -32,7 +42,7 @@ const DoctorOpinionContent = () => {
     };
 
     void run();
-  }, [doctorOpinionId]);
+  }, [doctorOpinionId, painAreaID, recordEvent]);
 
   const handleOpenSource = (url: string) => {
     if (!url) return;
