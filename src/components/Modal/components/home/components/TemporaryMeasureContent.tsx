@@ -257,7 +257,7 @@ const TemporaryMeasureContent = () => {
                     key={idx}
                     type="button"
                     className="flex w-44 shrink-0 cursor-pointer flex-col gap-2 sm:w-60"
-                    onClick={() => handleSelectMorePost(post.answerId)}
+                    onClick={() => handleSelectMorePost(post.guideId)}
                   >
                     <div className="h-32 w-full bg-gray-100">
                       {post.imageUrl ? (
