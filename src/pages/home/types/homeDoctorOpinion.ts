@@ -14,7 +14,3 @@ export interface OpinionDetail extends Post {
   updatedAt: string;
   morePosts: Post[];
 }
-
-export interface GetDoctorOpinionDetailResponse {
-  opinion: OpinionDetail;
-}

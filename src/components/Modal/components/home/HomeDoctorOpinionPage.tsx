@@ -6,21 +6,22 @@ import DoctorOpinionContent from "./components/DoctorOpinionContent";
 const HomeDoctorOpinionPage = () => {
   const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+  const handleBack = () => navigate(-1);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-white p-[30px]">
+    <div className="min-h-dvh bg-white p-[30px]">
       {/* 상단 바 */}
-      <button className="pb-[40px]" type="button" onClick={handleBack} aria-label="뒤로가기">
+      <button
+        type="button"
+        onClick={handleBack}
+        aria-label="뒤로가기"
+        className="flex w-full items-start bg-white pb-[40px]"
+      >
         <Icon name="arrow-back" className="h-5 w-5" />
       </button>
 
       {/* 본문 */}
-      <div className="min-h-0 flex-1">
-        <DoctorOpinionContent />
-      </div>
+      <DoctorOpinionContent />
     </div>
   );
 };

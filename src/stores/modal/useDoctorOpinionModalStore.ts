@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 interface DoctorOpinionModalState {
-  doctorOpinionId: string | null;
-  setDoctorOpinionId: (id: string) => void;
+  doctorOpinionId: number | null;
+  setDoctorOpinionId: (id: number) => void;
   reset: () => void;
 }
 
