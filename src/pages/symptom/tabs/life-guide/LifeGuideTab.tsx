@@ -31,11 +31,20 @@ export const LifeGuideTab = () => {
     fetchData();
   }, [painAreaID]);
 
-  // 유튜브 링크 변환 함수 (watch?v= -> embed/)
+  // 유튜브 링크 변환 함수 개선
   const getEmbedUrl = (url: string) => {
     if (!url) return "";
-    const videoIdMatch = url.match(/(?:v=|\/)([\w-]{11})(?:\?|&|$)/);
-    const videoId = videoIdMatch ? videoIdMatch[1] : "";
+
+    // 11자리의 유튜브 비디오 ID를 찾는 정규식
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    const match = url.match(regExp);
+
+    const videoId = match && match[7].length === 11 ? match[7] : null;
+
+    // 만약 ID를 찾지 못했다면 빈 문자열이나 기본 에러 화면을 반환
+    if (!videoId) {
+      return "";
+    }
 
     return `https://www.youtube.com/embed/${videoId}`;
   };
@@ -65,15 +74,21 @@ export const LifeGuideTab = () => {
       <div className="flex flex-col items-center rounded bg-white md:mt-12">
         {/* 유튜브 영상 */}
         <div className="mt-3 w-full overflow-hidden rounded-[18px] md:max-w-[777px] md:rounded-[30px]">
+          {/* 유튜브 영상 영역 수정 예시 */}
           <div className="aspect-video w-full md:aspect-auto md:h-[448px]">
-            <iframe
-              src={getEmbedUrl(mainVideo.youtubeUrl)}
-              title={mainVideo.youtubeTitle}
-              className="h-full w-full border-0 md:h-[443px] md:w-[789px] md:translate-x-[-4px] md:translate-y-[2px]"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
+            {getEmbedUrl(mainVideo.youtubeUrl) ? (
+              <iframe
+                src={getEmbedUrl(mainVideo.youtubeUrl)}
+                title={mainVideo.youtubeTitle}
+                className="h-full w-full border-0 md:h-[443px] md:w-[789px]"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-gray-100 text-gray-500">
+                유효하지 않은 영상 주소입니다.
+              </div>
+            )}
           </div>
         </div>
 
@@ -93,7 +108,7 @@ export const LifeGuideTab = () => {
           <div className="flex items-center gap-3">
             <Icon name="doctor" className="h-10 w-10 rounded-full" />
             <span className="text-sm font-medium leading-[16px] tracking-[-0.025em] text-brand-primary">
-              새움병원 {/* 채널명은 임시 하드코딩?? api에 없음 */}
+              {mainVideo.source.name}
             </span>
           </div>
 

@@ -10,12 +10,13 @@ const BottomTabBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { openModal } = useBaseModal();
-  const { isLoggedIn, painAreaID } = useAuthStore();
+  const { authStatus, painAreaID } = useAuthStore();
 
   // 증상 선택 여부
   const hasSymptom = Boolean(painAreaID);
 
-  const homeTarget = isLoggedIn ? (hasSymptom ? "/home" : "/guide") : "/preview";
+  const homeTarget =
+    authStatus === "authenticated" ? (hasSymptom ? "/home" : "/guide") : "/preview";
 
   const isHomeActive = HOME_ACTIVE_PATHS.some((p) => location.pathname.startsWith(p));
   const isMyActive = location.pathname.startsWith("/my");
@@ -32,13 +33,13 @@ const BottomTabBar = () => {
 
   const handleSymptomClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
-    if (!isLoggedIn) return requireLogin();
+    if (authStatus !== "authenticated") return requireLogin();
     navigate("/symptom");
   };
 
   const handleMyClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
-    if (!isLoggedIn) return requireLogin();
+    if (authStatus !== "authenticated") return requireLogin();
     navigate("/my");
   };
 

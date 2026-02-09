@@ -11,13 +11,14 @@ import getAgreementStatus, {
 
 type LoginFailReason = "INVALID" | "UNKNOWN";
 type LoginResult = { ok: true } | { ok: false; reason: LoginFailReason };
-
 type LoginErrorBody = { code?: string };
+
+type AuthStatus = "unknown" | "authenticated" | "unauthenticated";
 
 interface AuthState {
   // auth
   accessToken: string | null;
-  isLoggedIn: boolean;
+  authStatus: AuthStatus;
   loading: boolean;
 
   // term
@@ -38,14 +39,13 @@ interface AuthState {
   login: (payload: { email: string; password: string }) => Promise<LoginResult>;
   logout: () => void;
 
-  fetchMe: () => Promise<void>;
+  fetchMe: () => Promise<boolean>;
   resetMe: () => void;
 
   setPainAreaID: (id: number | null) => void;
 
   fetchAgreement: () => Promise<boolean>;
 
-  // 앱 시작 시 토큰 기반 초기화
   initAuth: () => Promise<void>;
 }
 
@@ -57,20 +57,18 @@ const getAxiosStatus = (error: unknown): number | undefined => {
   return undefined;
 };
 
-const mapUserMeToState = (dto: GetUserDataResponse) => {
-  return {
-    userID: dto.user_id ?? null,
-    name: dto.name ?? null,
-    email: dto.email ?? null,
-    birth: dto.birth ?? null,
-    gender: (dto.gender ?? null) as Gender | null,
-    painAreaID: dto.painAreaID ?? null,
-  };
-};
+const mapUserMeToState = (dto: GetUserDataResponse) => ({
+  userID: dto.user_id ?? null,
+  name: dto.name ?? null,
+  email: dto.email ?? null,
+  birth: dto.birth ?? null,
+  gender: (dto.gender ?? null) as Gender | null,
+  painAreaID: dto.painAreaID ?? null,
+});
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   accessToken: localStorage.getItem("accessToken"),
-  isLoggedIn: Boolean(localStorage.getItem("accessToken")),
+  authStatus: "unknown",
   loading: false,
 
   hasAgreedTerms: null,
@@ -97,7 +95,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   fetchAgreement: async () => {
     const token = get().accessToken;
-
     if (!token) {
       set({ hasAgreedTerms: null, needsAgreementModal: false });
       return false;
@@ -114,29 +111,40 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       return agreed;
     } catch {
-      console.log("약관 동의 현황 조회 실패");
       set({ hasAgreedTerms: false, needsAgreementModal: true });
       return false;
     }
   },
 
+  // 성공 여부 반환
   fetchMe: async () => {
-    if (!get().accessToken) {
-      set({ isLoggedIn: false });
+    const token = get().accessToken;
+    if (!token) {
       get().resetMe();
-      return;
+      return false;
     }
 
     try {
       const dto = await getUserData();
       const mapped = mapUserMeToState(dto);
+      set(mapped);
+      return true;
+    } catch (e) {
+      const status = getAxiosStatus(e);
 
-      set({
-        ...mapped,
-        isLoggedIn: true,
-      });
-    } catch {
-      get().resetMe();
+      // 토큰이 만료/무효면 즉시 로그아웃 처리
+      if (status === 401) {
+        localStorage.removeItem("accessToken");
+        set({
+          accessToken: null,
+          authStatus: "unauthenticated",
+          hasAgreedTerms: null,
+          needsAgreementModal: false,
+        });
+        get().resetMe();
+      }
+
+      return false;
     }
   },
 
@@ -145,21 +153,20 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     try {
       const data = await postLogin(payload);
-
       localStorage.setItem("accessToken", data.accessToken);
 
       set({
         accessToken: data.accessToken,
-        isLoggedIn: true,
+        authStatus: "unknown", // 검증 전
       });
 
-      return { ok: true };
+      // 로그인 직후 검증/초기화
+      await get().initAuth();
+
+      return get().authStatus === "authenticated" ? { ok: true } : { ok: false, reason: "UNKNOWN" };
     } catch (error: unknown) {
       const status = getAxiosStatus(error);
-
-      if (status === 400 || status === 401) {
-        return { ok: false, reason: "INVALID" };
-      }
+      if (status === 400 || status === 401) return { ok: false, reason: "INVALID" };
       return { ok: false, reason: "UNKNOWN" };
     } finally {
       set({ loading: false });
@@ -170,7 +177,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     localStorage.removeItem("accessToken");
     set({
       accessToken: null,
-      isLoggedIn: false,
+      authStatus: "unauthenticated",
       loading: false,
       hasAgreedTerms: null,
       needsAgreementModal: false,
@@ -178,18 +185,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     get().resetMe();
   },
 
-  setPainAreaID: (id) =>
-    set({
-      painAreaID: id,
-    }),
+  setPainAreaID: (id) => set({ painAreaID: id }),
 
   initAuth: async () => {
     const token = localStorage.getItem("accessToken");
 
+    // 토큰 미보유
     if (!token) {
       set({
         accessToken: null,
-        isLoggedIn: false,
+        authStatus: "unauthenticated",
         hasAgreedTerms: null,
         needsAgreementModal: false,
       });
@@ -197,10 +202,20 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       return;
     }
 
-    set({ accessToken: token, isLoggedIn: true });
+    // 토큰 O, 아직 검증 전
+    set({ accessToken: token, authStatus: "unknown" });
 
-    // 내 정보
-    await get().fetchMe();
+    // 서버로 내 정보 검증
+    const okMe = await get().fetchMe();
+    if (!okMe) {
+      if (get().authStatus === "unknown") {
+        get().logout();
+      }
+      return;
+    }
+
+    // 인증 확정
+    set({ authStatus: "authenticated" });
 
     // 약관 체크
     await get().fetchAgreement();
