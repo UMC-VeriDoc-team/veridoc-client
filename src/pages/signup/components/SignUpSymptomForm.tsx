@@ -121,9 +121,9 @@ const SignUpSymptomForm = () => {
   };
 
   return (
-    <>
+    <div className="relative">
       {errorConfig && (
-        <div className="fixed left-1/2 top-[330px] z-50 -translate-x-1/2 md:top-[287px]">
+        <div className="-mt-[78px] mb-8 flex justify-center md:-mt-[60px]">
           <div
             className={[
               errorConfig.widthClass,
@@ -166,7 +166,7 @@ const SignUpSymptomForm = () => {
           계속하기
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 
