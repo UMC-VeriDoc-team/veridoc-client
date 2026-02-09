@@ -4,22 +4,25 @@ import { ModalType } from "@/components/Modal/types/modal";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useState } from "react";
+import { useForgotPasswordStore } from "@/stores/password/useForgotPasswordStore";
 
 const EmailRequestForm = () => {
   const { openModal } = useBaseModal();
 
-  const [email, setEmail] = useState("");
+  const { email, setEmail, sendMail, loading, error } = useForgotPasswordStore();
+
   const [touchedEmail, setTouchedEmail] = useState(false);
 
   const emailError = touchedEmail ? validateEmail(email) : "";
   const isFormValid = !validateEmail(email);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setTouchedEmail(true);
     if (!isFormValid) return;
 
-    // 메일 발송 모달 오픈
-    openModal(ModalType.AUTH_MAIL_SENT);
+    const ok = await sendMail();
+    // 메일 전송 모달 오픈
+    if (ok) openModal(ModalType.AUTH_MAIL_SENT);
   };
 
   return (
@@ -52,12 +55,21 @@ const EmailRequestForm = () => {
                 {emailError}
               </p>
             ) : null}
+
+            {/* 서버 에러 */}
+            {error ? (
+              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+                {error}
+              </p>
+            ) : null}
           </div>
         </div>
       </div>
 
       <div className="mt-[60px]">
-        <Button onClick={handleSubmit}>비밀번호 재설정 메일 발송</Button>
+        <Button onClick={handleSubmit} disabled={loading}>
+          {loading ? "메일 발송 중..." : "비밀번호 재설정 메일 발송"}
+        </Button>
       </div>
     </div>
   );
