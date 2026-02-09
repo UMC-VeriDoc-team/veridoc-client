@@ -101,13 +101,19 @@ const DoctorOpinionContent = () => {
               <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
                 원문 출처 보기
               </p>
-              <Icon name="link" className="h-5 w-5 rounded-full bg-gray-200 sm:h-6 sm:w-6" />
+              <Icon name="link" className="h-4 w-4 rounded-full bg-gray-200 sm:h-6 sm:w-6" />
             </button>
           </div>
         </div>
 
-        {/* 이미지: 추가 예정 */}
-        <div className="h-[180px] w-full rounded-[10px] bg-gray-100 sm:h-[220px] md:h-[260px]"></div>
+        {/* 이미지 */}
+        <div className="h-[180px] w-full rounded-[5px] bg-gray-100 sm:h-[220px] md:h-[260px]">
+          {data.imageUrl ? (
+            <img src={data.imageUrl} alt={data.title} className="h-full w-full object-cover" />
+          ) : (
+            <div className="h-full w-full" />
+          )}
+        </div>
 
         {/* 본문 / 경고문 */}
         <div className="flex flex-col gap-10 sm:gap-[80px]">
@@ -135,13 +141,13 @@ const DoctorOpinionContent = () => {
           <div className="flex items-center justify-between gap-6">
             {/* 공유 */}
             <div className="flex items-center gap-3 sm:gap-4">
-              <p className="truncate text-sm font-medium text-gray-950 sm:text-base">Share this</p>
+              <p className="truncate text-base font-medium text-gray-950">Share this</p>
               <SharePost title={data.title} />
             </div>
 
             {/* 해시태그: 증상명 */}
             <div className="flex gap-2">
-              <div className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-xs font-medium text-brand-primary sm:text-sm">
+              <div className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-sm font-medium text-brand-primary">
                 {data.symptomName}
               </div>
             </div>
@@ -158,8 +164,22 @@ const DoctorOpinionContent = () => {
                   onClick={() => handleGoToAnotherPost(post.answerId)}
                   className="flex w-44 shrink-0 cursor-pointer flex-col gap-2 sm:w-60"
                 >
-                  <div className="h-32 w-full bg-gray-100"></div>
-                  <p className="text-left text-sm font-medium text-gray-950">{post.title}</p>
+                  <div className="h-32 w-full overflow-hidden rounded-[10px] bg-gray-100 sm:h-40">
+                    {post.imageUrl ? (
+                      <img
+                        src={post.imageUrl}
+                        alt={post.title}
+                        className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <span className="text-xs text-gray-400">No Image</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="line-clamp-2 text-left text-sm font-medium text-gray-950 sm:text-base">
+                    {post.title}
+                  </p>
                 </button>
               ))}
             </div>

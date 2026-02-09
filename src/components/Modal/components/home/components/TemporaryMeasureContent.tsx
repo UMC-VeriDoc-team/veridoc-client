@@ -112,9 +112,9 @@ const TemporaryMeasureContent = () => {
           </div>
 
           {/* 평균 소요 시간 / 증상 / 출처 링크 */}
-          <div className="flex justify-between gap-3 sm:items-end">
+          <div className="flex items-center justify-between gap-3">
             <div className="flex flex-col gap-2 sm:flex-row">
-              <div className="flex w-fit gap-2 border border-brand-primary px-2 py-1">
+              <div className="flex w-fit items-center gap-2 border border-brand-primary px-2 py-1">
                 <Icon name="repeat" className="w-3 sm:w-4" />
                 <p className="pt-[2px] text-center text-sm font-medium text-brand-primary sm:text-base">
                   {duration}
@@ -133,12 +133,12 @@ const TemporaryMeasureContent = () => {
               type="button"
               onClick={handleOpenSource}
               disabled={!sourceUrl}
-              className="flex items-center justify-center gap-2 self-end"
+              className="flex h-full items-center justify-center gap-2 self-end sm:self-center"
             >
               <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
                 원문 출처 보기
               </p>
-              <Icon name="link" className="h-6 w-6 rounded-full bg-gray-200" />
+              <Icon name="link" className="h-4 w-4 rounded-full bg-gray-200 sm:h-6 sm:w-6" />
             </button>
           </div>
         </div>
@@ -146,7 +146,7 @@ const TemporaryMeasureContent = () => {
         {/* 이미지 */}
         <div className="h-[180px] w-full rounded-[5px] bg-gray-100 sm:h-[220px] md:h-[260px]">
           {imageUrl ? (
-            <img src={imageUrl} alt={title} className="h-full w-full object-cover" />
+            <img src={imageUrl} alt={title} className="h-full w-full rounded-[5px] object-cover" />
           ) : (
             <div className="h-full w-full" />
           )}
@@ -165,11 +165,11 @@ const TemporaryMeasureContent = () => {
               <div className="flex flex-col gap-9">
                 {notes.map((item) => (
                   <GuideItem
-                    key={item.id}
-                    id={String(item.id)}
-                    title={item.title}
-                    description={item.description}
-                    icon={{ src: item.imageUrl, alt: item.title || "guide" }}
+                    key={item.noteId}
+                    id={String(item.noteId)}
+                    bold={item.bold}
+                    text={item.text}
+                    icon={{ src: item.imageUrl, alt: item.bold || "guide" }}
                   />
                 ))}
               </div>
@@ -181,11 +181,11 @@ const TemporaryMeasureContent = () => {
             <SectionHeader iconName="warning" title="이런 증상이 있다면 진료가 필요할 수 있어요" />
             {cautions.length > 0 ? (
               <MedicalConsultationGuide
-                items={cautions.map((c) => ({
-                  id: String(c.id),
-                  title: c.title,
-                  description: c.description,
-                  iconUrl: c.iconUrl,
+                items={cautions.map((caution) => ({
+                  id: String(caution.cautionId),
+                  bold: caution.bold,
+                  text: caution.text,
+                  iconUrl: caution.iconUrl,
                 }))}
               />
             ) : null}
@@ -196,9 +196,9 @@ const TemporaryMeasureContent = () => {
             <SectionHeader iconName="help-chat" title="이런 경우라면 도움이 될 수 있어요" />
             {helps.length > 0 ? (
               <ul className="pl-6">
-                {helps.map((h) => (
-                  <li key={h.id} className="list-disc text-base font-medium text-gray-950">
-                    {h.description}
+                {helps.map((help) => (
+                  <li key={help.helpId} className="list-disc text-base font-medium text-gray-950">
+                    {help.text}
                   </li>
                 ))}
               </ul>
@@ -207,7 +207,7 @@ const TemporaryMeasureContent = () => {
 
           {/* 경고문 */}
           <div className="flex w-full items-center gap-4 rounded-md border border-brand-orange px-5 py-4 sm:items-center sm:gap-5">
-            <Icon name="info" className="h-5 w-5 shrink-0" />
+            <Icon name="info" className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
             <p className="text-sm font-medium text-brand-orange">
               본 콘텐츠는 의료기관에서 제공하는 건강 정보 콘텐츠를 기준으로 베리닥 내부 검토 및 정제
               과정을 거쳐 구성되었습니다. 본 내용은 의료 진단이나 치료를 대체하지 않습니다.
@@ -220,10 +220,10 @@ const TemporaryMeasureContent = () => {
 
         {/* 하단: 공유 / 해시태그 / 포스트 더보기 */}
         <div className="flex flex-col gap-10 sm:gap-16">
-          <div className="flex items-center justify-between gap-6">
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
             {/* 공유 */}
             <div className="flex items-center gap-3 sm:gap-4">
-              <p className="truncate text-sm font-medium text-gray-950 sm:text-base">Share this</p>
+              <p className="truncate text-base font-medium text-gray-950">Share this</p>
               <SharePost title={detail.title} subtitle={detail.subtitle ?? undefined} />
             </div>
 
@@ -232,7 +232,7 @@ const TemporaryMeasureContent = () => {
               {badges.map((b) => (
                 <div
                   key={b}
-                  className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-xs font-medium text-brand-primary sm:text-sm"
+                  className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-sm font-medium text-brand-primary"
                 >
                   {b}
                 </div>
@@ -264,7 +264,7 @@ const TemporaryMeasureContent = () => {
                         <div className="h-full w-full" />
                       )}
                     </div>
-                    <p className="text-sm font-medium text-gray-950">{post.title}</p>
+                    <p className="text-left text-sm font-medium text-gray-950">{post.title}</p>
                   </button>
                 ))}
               </div>

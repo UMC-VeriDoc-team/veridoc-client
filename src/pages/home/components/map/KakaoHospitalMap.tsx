@@ -240,7 +240,7 @@ const KakaoHospitalMap = ({
         <button
           type="button"
           onClick={handleZoomIn}
-          className="flex h-10 w-10 items-center justify-center bg-white"
+          className="flex h-10 w-10 items-center justify-center bg-white active:brightness-50"
         >
           <Icon name="zoom-in" className="h-5 w-5" />
         </button>
@@ -248,7 +248,7 @@ const KakaoHospitalMap = ({
         <button
           type="button"
           onClick={handleZoomOut}
-          className="flex h-10 w-10 items-center justify-center bg-white"
+          className="flex h-10 w-10 items-center justify-center bg-white active:brightness-50"
         >
           <Icon name="zoom-out" className="h-5 w-5" />
         </button>

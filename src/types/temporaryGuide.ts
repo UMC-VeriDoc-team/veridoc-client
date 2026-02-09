@@ -1,20 +1,20 @@
 export interface TemporaryGuideNote {
-  id: number;
+  noteId: number;
   imageUrl: string;
-  title: string;
-  description: string;
+  bold: string;
+  text: string;
 }
 
 export interface TemporaryGuideCaution {
-  id: number;
+  cautionId: number;
   iconUrl: string;
-  title: string;
-  description: string;
+  bold: string;
+  text: string;
 }
 
 export interface TemporaryGuideHelp {
-  id: number;
-  description: string;
+  helpId: number;
+  text: string;
 }
 
 export interface TemporaryGuideMorePost {

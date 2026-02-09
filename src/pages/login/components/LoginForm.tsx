@@ -21,6 +21,8 @@ const LoginForm = () => {
     password: false,
   });
 
+  const [serverError, setServerError] = useState("");
+
   const emailError = useMemo(() => {
     if (!touched.email) return "";
     return validateEmail(email);
@@ -36,16 +38,18 @@ const LoginForm = () => {
   const isFormValid =
     !emailError && !passwordError && email.trim() !== "" && password.trim() !== "";
 
-  const [serverError, setServerError] = useState("");
+  // 엔터 키 입력 시 호출될 핸들러
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
 
-  const handleSubmit = async () => {
     setTouched({ email: true, password: true });
     setServerError("");
+
     if (!isFormValid) return;
 
     const result = await login({ email: email.trim(), password });
 
-    // 로그인 성공 후 홈으로 이동
+    // 로그인 성공 후 처리
     if (result.ok) {
       if (painAreaID !== 8) {
         navigate("/home");
@@ -55,6 +59,7 @@ const LoginForm = () => {
       return;
     }
 
+    // 로그인 실패 처리
     if (result.reason === "INVALID") {
       openModal(ModalType.AUTH_LOGIN_FAILED);
     } else {
@@ -63,11 +68,12 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex w-full flex-col">
+    <form onSubmit={handleSubmit} className="flex w-full flex-col">
       <div className="flex flex-col gap-2">
         <h2 className="text-[20px] font-bold leading-[24px] text-gray-950">로그인</h2>
 
         <div className="mt-[30px] flex flex-col gap-[30px]">
+          {/* 이메일 입력 섹션 */}
           <div className="flex flex-col gap-2">
             <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
               이메일 <span className="text-error">*</span>
@@ -80,13 +86,14 @@ const LoginForm = () => {
               hasError={!!emailError}
             />
 
-            {emailError ? (
+            {emailError && (
               <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
                 {emailError}
               </p>
-            ) : null}
+            )}
           </div>
 
+          {/* 비밀번호 입력 섹션 */}
           <div className="flex flex-col gap-2">
             <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
               비밀번호 <span className="text-error">*</span>
@@ -104,28 +111,28 @@ const LoginForm = () => {
               onClear={() => setPassword("")}
             />
 
-            {passwordError ? (
+            {passwordError && (
               <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
                 {passwordError}
               </p>
-            ) : null}
+            )}
           </div>
         </div>
       </div>
 
       <div className="mt-[60px]">
         {/* 서버 에러 메시지 */}
-        {serverError ? (
+        {serverError && (
           <p className="-mt-8 pb-3 text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
             {serverError}
           </p>
-        ) : null}
+        )}
 
-        <Button onClick={handleSubmit} disabled={loading}>
+        <Button type="submit" disabled={loading}>
           로그인
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

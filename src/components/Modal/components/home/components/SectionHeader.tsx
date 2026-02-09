@@ -10,7 +10,7 @@ const SectionHeader = ({ iconName, title }: SectionHeaderProps) => {
   return (
     <div className="mb-[8px] flex items-center gap-2 bg-[#EBF3FF]">
       <Icon name={iconName} className="h-6 w-6" />
-      <p className="text-gray-95 text-xl font-bold">{title}</p>
+      <p className="text-gray-95 text-lg font-bold sm:text-xl">{title}</p>
     </div>
   );
 };

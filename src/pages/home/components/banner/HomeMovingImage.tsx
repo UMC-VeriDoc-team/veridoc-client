@@ -28,7 +28,6 @@ const HomeMovingImage = () => {
 
   const index = num - 1;
 
-  // refactoring 고려
   const iconName = useMemo(() => {
     const matched = SYMPTOMS.find((s) => s.label === painAreaName);
     return matched?.iconName ?? "";
@@ -95,10 +94,10 @@ const HomeMovingImage = () => {
       {/* 텍스트 및 Dot 컨텐츠 (슬라이드 위로) */}
       <div className="pointer-events-none relative inset-0 z-10">
         <div className="absolute bottom-10 left-0 ml-[30px] md:ml-[90px]">
-          <div className="mb-5 flex h-[66px] w-[70px] items-center justify-center rounded-[10px] sm:h-[95px] sm:w-[101px]">
+          <div className="mb-5 flex h-[70px] w-[70px] items-center justify-center rounded-[10px] sm:h-[100px] sm:w-[100px]">
             <Icon
               name={iconName}
-              className="h-full w-full rounded-[10px] shadow-[1px_2px_4px_rgba(0,0,0,0.25)]"
+              className="h-full w-full rounded-[10px] object-cover shadow-[1px_2px_4px_rgba(0,0,0,0.25)]"
             />
           </div>
 
