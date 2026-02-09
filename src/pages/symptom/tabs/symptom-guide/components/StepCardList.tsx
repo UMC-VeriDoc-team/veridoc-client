@@ -1,9 +1,5 @@
 import StepCard from "./StepCard";
 import type { SymptomGuideStep } from "@/pages/symptom/tabs/symptom-guide/SymptomGuideTab";
-import img1 from "/images/test/symptom_test1.png";
-import img2 from "/images/test/symptom_test2.jpg";
-import img3 from "/images/test/symptom_test3.jpg";
-import img4 from "/images/test/symptom_test4.png";
 
 interface StepCardListProps {
   steps: SymptomGuideStep[];
@@ -19,10 +15,7 @@ const BASE_CARD_H = 455;
 const SELECT_CARD_H = 483;
 const SELECT_RAISE = 14;
 
-const images = [img1, img2, img3, img4];
-
 const MOBILE_COMPLETED_CENTER_INDEX = 1;
-
 const MOBILE_COMPLETED_GAP = 16;
 
 const StepCardList = ({ steps, currentIndex, completed = false }: StepCardListProps) => {
@@ -52,7 +45,6 @@ const StepCardList = ({ steps, currentIndex, completed = false }: StepCardListPr
   return (
     <div className="w-full overflow-visible">
       <div className="relative overflow-visible">
-        {/* 데스크탑 헤더 라인 유지 */}
         <div
           className="pointer-events-none absolute left-0 top-0 z-10 hidden rounded-[6px] border border-gray-200 bg-white md:block"
           style={{ width: GRID_W, height: HEADER_H }}
@@ -76,7 +68,7 @@ const StepCardList = ({ steps, currentIndex, completed = false }: StepCardListPr
                     title={s.title}
                     subtitle={s.subtitle}
                     caption={s.caption}
-                    imageUrl={images[idx]}
+                    imageUrl={s.imageUrl}
                     state={getState(idx)}
                     selected={false}
                     completed={true}
@@ -98,7 +90,7 @@ const StepCardList = ({ steps, currentIndex, completed = false }: StepCardListPr
                 title={cur.title}
                 subtitle={cur.subtitle}
                 caption={cur.caption}
-                imageUrl={images[currentIndex]}
+                imageUrl={cur.imageUrl}
                 state={getState(currentIndex)}
                 selected={true}
                 completed={false}
@@ -122,7 +114,7 @@ const StepCardList = ({ steps, currentIndex, completed = false }: StepCardListPr
                     title={steps[prevIdx].title}
                     subtitle={steps[prevIdx].subtitle}
                     caption={steps[prevIdx].caption}
-                    imageUrl={images[prevIdx]}
+                    imageUrl={steps[prevIdx].imageUrl}
                     state={getState(prevIdx)}
                     selected={false}
                     completed={false}
@@ -148,7 +140,7 @@ const StepCardList = ({ steps, currentIndex, completed = false }: StepCardListPr
                     title={steps[nextIdx].title}
                     subtitle={steps[nextIdx].subtitle}
                     caption={steps[nextIdx].caption}
-                    imageUrl={images[nextIdx]}
+                    imageUrl={steps[nextIdx].imageUrl}
                     state={getState(nextIdx)}
                     selected={false}
                     completed={false}
@@ -178,7 +170,7 @@ const StepCardList = ({ steps, currentIndex, completed = false }: StepCardListPr
                   title={s.title}
                   subtitle={s.subtitle}
                   caption={s.caption}
-                  imageUrl={images[idx]}
+                  imageUrl={s.imageUrl}
                   state={state}
                   selected={isCurrent}
                   completed={completed}

@@ -138,7 +138,7 @@ const TemporaryMeasureContent = () => {
               <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
                 원문 출처 보기
               </p>
-              <Icon name="link" className="h-6 w-6 rounded-full bg-gray-200" />
+              <Icon name="link" className="h-4 w-4 rounded-full bg-gray-200 sm:h-6 sm:w-6" />
             </button>
           </div>
         </div>
@@ -207,7 +207,7 @@ const TemporaryMeasureContent = () => {
 
           {/* 경고문 */}
           <div className="flex w-full items-center gap-4 rounded-md border border-brand-orange px-5 py-4 sm:items-center sm:gap-5">
-            <Icon name="info" className="h-5 w-5 shrink-0" />
+            <Icon name="info" className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
             <p className="text-sm font-medium text-brand-orange">
               본 콘텐츠는 의료기관에서 제공하는 건강 정보 콘텐츠를 기준으로 베리닥 내부 검토 및 정제
               과정을 거쳐 구성되었습니다. 본 내용은 의료 진단이나 치료를 대체하지 않습니다.
@@ -220,10 +220,10 @@ const TemporaryMeasureContent = () => {
 
         {/* 하단: 공유 / 해시태그 / 포스트 더보기 */}
         <div className="flex flex-col gap-10 sm:gap-16">
-          <div className="flex items-center justify-between gap-6">
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
             {/* 공유 */}
             <div className="flex items-center gap-3 sm:gap-4">
-              <p className="truncate text-sm font-medium text-gray-950 sm:text-base">Share this</p>
+              <p className="truncate text-base font-medium text-gray-950">Share this</p>
               <SharePost title={detail.title} subtitle={detail.subtitle ?? undefined} />
             </div>
 
@@ -232,7 +232,7 @@ const TemporaryMeasureContent = () => {
               {badges.map((b) => (
                 <div
                   key={b}
-                  className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-xs font-medium text-brand-primary sm:text-sm"
+                  className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-sm font-medium text-brand-primary"
                 >
                   {b}
                 </div>
@@ -264,7 +264,7 @@ const TemporaryMeasureContent = () => {
                         <div className="h-full w-full" />
                       )}
                     </div>
-                    <p className="text-sm font-medium text-gray-950">{post.title}</p>
+                    <p className="text-left text-sm font-medium text-gray-950">{post.title}</p>
                   </button>
                 ))}
               </div>
