@@ -87,7 +87,6 @@ const MyPasswordPage = () => {
         const body = e.response?.data as ApiErrorBody | undefined;
 
         const apiCode = body?.code;
-        console.log(apiCode);
         if (apiCode === "INVALID_CREDENTIALS") {
           setPwdErrors((prev) => ({
             ...prev,
