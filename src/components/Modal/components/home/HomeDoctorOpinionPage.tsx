@@ -1,12 +1,23 @@
-import Icon from "@/components/Icon/Icon";
+import { useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Icon from "@/components/Icon/Icon";
+import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
 import DoctorOpinionContent from "./components/DoctorOpinionContent";
 
-// 모바일: 전문의 소견 상세 페이지
 const HomeDoctorOpinionPage = () => {
   const navigate = useNavigate();
+  const { doctorOpinionId } = useDoctorOpinionModalStore();
 
   const handleBack = () => navigate(-1);
+
+  useLayoutEffect(() => {
+    const container = document.getElementById("app-scroll-container");
+    if (container) {
+      container.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [doctorOpinionId]);
 
   return (
     <div className="min-h-dvh bg-white p-[30px]">
@@ -15,7 +26,7 @@ const HomeDoctorOpinionPage = () => {
         type="button"
         onClick={handleBack}
         aria-label="뒤로가기"
-        className="flex w-full items-start bg-white pb-[40px]"
+        className="z-10 bg-white pb-[40px]"
       >
         <Icon name="arrow-back" className="h-5 w-5" />
       </button>
