@@ -34,17 +34,13 @@ const addAuthHeader = (config: InternalAxiosRequestConfig): InternalAxiosRequest
 
 authApi.interceptors.response.use(
   (res) => res,
-  (error) => {
-    const status = error?.response?.status;
-
-    if (status === 401) {
-      const { logout } = useAuthStore.getState();
-      logout();
-
-      window.location.href = "/";
+  (err) => {
+    const status = err?.response?.status;
+    if (status === 401 || status === 403) {
+      useAuthStore.getState().logout();
+      window.location.replace("/");
     }
-
-    return Promise.reject(error);
+    return Promise.reject(err);
   }
 );
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import logo from "/images/logo.svg";
 import { SymptomTabs } from "@/pages/symptom/components/SymptomTabs";
@@ -12,7 +12,7 @@ type TabKey = "life" | "guide";
 const SymptomPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { painAreaID } = useAuthStore();
+  const { fetchMe, painAreaID } = useAuthStore();
 
   const tab = (searchParams.get("tab") as TabKey) ?? "life";
 
@@ -42,6 +42,10 @@ const SymptomPage = () => {
   const onClickSelectSymptom = () => {
     navigate("/my?tab=symptom");
   };
+
+  useEffect(() => {
+    void fetchMe();
+  }, []);
 
   return (
     <>
