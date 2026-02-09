@@ -71,7 +71,7 @@ export const LifeGuideTab = () => {
       />
 
       {/* 콘텐츠 카드 */}
-      <div className="flex flex-col items-center rounded bg-white md:mt-12">
+      <div className="flex w-full flex-col items-center rounded bg-white md:mt-12">
         {/* 유튜브 영상 */}
         <div className="mt-3 w-full overflow-hidden rounded-[18px] md:max-w-[777px] md:rounded-[30px]">
           {/* 유튜브 영상 영역 수정 예시 */}
