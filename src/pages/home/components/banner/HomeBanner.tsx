@@ -44,10 +44,15 @@ const HomeBanner = () => {
   return (
     <div className="relative h-[420px] w-full overflow-hidden sm:h-[578px]">
       {/* 모바일 로고 및 로그아웃 */}
-      <div className="absolute left-0 right-0 top-0 z-10 flex items-start justify-between px-6 pt-6 md:hidden">
-        <img src="/images/responsive-logo.svg" alt="VeriDoc" className="mt-6 h-[40px] w-auto" />
-        <button type="button" onClick={() => openModal(ModalType.AUTH_LOGOUT)} className="shrink-0">
-          <img src="/images/logout-button.svg" alt="Logout" className="mt-6 h-[32px] w-auto" />
+      <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between px-6 pt-6 md:hidden">
+        <Icon name="responsive-logo" className="mt-6 h-[40px] w-auto" />
+        <button
+          type="button"
+          aria-label="Logout"
+          className="shrink-0"
+          onClick={() => openModal(ModalType.AUTH_LOGOUT)}
+        >
+          <Icon name="logout-button" className="mt-6 h-[32px] w-auto" />
         </button>
       </div>
 
