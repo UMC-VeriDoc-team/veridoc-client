@@ -7,3 +7,14 @@ export type ApiErrorBody = {
 };
 
 export type ApiError<T = ApiErrorBody> = AxiosError<T>;
+
+export interface ApiErrorDetail {
+  message?: string;
+  code?: string;
+}
+
+export interface ActionResult {
+  ok: boolean;
+  message?: string;
+  error?: unknown;
+}

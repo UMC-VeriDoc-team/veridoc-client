@@ -8,11 +8,14 @@ import type { Gender } from "@/components/Select/GenderSelect";
 import getAgreementStatus, {
   normalizeAgreement,
 } from "@/components/Modal/services/getAgreementStatus";
+import type { PostTermRequest } from "@/components/Modal/types/terms";
+import type { ActionResult, ApiError } from "@/types/error";
+import deleteUser from "@/pages/mypage/services/deleteUser";
+import postTerm from "@/components/Modal/services/postTerm";
 
 type LoginFailReason = "INVALID" | "UNKNOWN";
 type LoginResult = { ok: true } | { ok: false; reason: LoginFailReason };
-type LoginErrorBody = { code?: string };
-
+type LoginErrorBody = { code?: string; message?: string };
 type AuthStatus = "unknown" | "authenticated" | "unauthenticated";
 
 interface AuthState {
@@ -45,12 +48,23 @@ interface AuthState {
   setPainAreaID: (id: number | null) => void;
 
   fetchAgreement: () => Promise<boolean>;
+  submitTerms: (payload: PostTermRequest) => Promise<ActionResult>;
 
   initAuth: () => Promise<void>;
+
+  withdraw: () => Promise<ActionResult>;
 }
 
+const getErrorMessage = (error: unknown, defaultMsg: string): string => {
+  if (error instanceof Error && (error as ApiError).isAxiosError) {
+    const axiosError = error as AxiosError<LoginErrorBody>;
+    return axiosError.response?.data?.message || defaultMsg;
+  }
+  return defaultMsg;
+};
+
 const getAxiosStatus = (error: unknown): number | undefined => {
-  if (error instanceof Error && "isAxiosError" in error) {
+  if (error instanceof Error && (error as ApiError).isAxiosError) {
     const axiosError = error as AxiosError<LoginErrorBody>;
     return axiosError.response?.status;
   }
@@ -116,7 +130,25 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  // 성공 여부 반환
+  submitTerms: async (payload) => {
+    set({ loading: true });
+    try {
+      await postTerm(payload);
+      const { fetchAgreement } = get();
+      if (fetchAgreement) await fetchAgreement();
+
+      set({ loading: false });
+      return { ok: true };
+    } catch (error: unknown) {
+      set({ loading: false });
+      return {
+        ok: false,
+        error,
+        message: getErrorMessage(error, "약관 동의 처리 중 오류가 발생했습니다."),
+      };
+    }
+  },
+
   fetchMe: async () => {
     const token = get().accessToken;
     if (!token) {
@@ -132,7 +164,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch (e) {
       const status = getAxiosStatus(e);
 
-      // 토큰이 만료/무효면 즉시 로그아웃 처리
       if (status === 401) {
         localStorage.removeItem("accessToken");
         set({
@@ -157,7 +188,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       set({
         accessToken: data.accessToken,
-        authStatus: "unknown", // 검증 전
+        authStatus: "unknown",
       });
 
       // 로그인 직후 검증/초기화
@@ -190,7 +221,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   initAuth: async () => {
     const token = localStorage.getItem("accessToken");
 
-    // 토큰 미보유
     if (!token) {
       set({
         accessToken: null,
@@ -219,5 +249,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     // 약관 체크
     await get().fetchAgreement();
+  },
+
+  withdraw: async () => {
+    set({ loading: true });
+    try {
+      await deleteUser();
+      localStorage.removeItem("accessToken");
+      set({ authStatus: "unauthenticated", loading: false });
+      return { ok: true };
+    } catch (error: unknown) {
+      set({ loading: false });
+      return {
+        ok: false,
+        error,
+        message: getErrorMessage(error, "회원탈퇴 처리 중 오류가 발생했습니다."),
+      };
+    }
   },
 }));

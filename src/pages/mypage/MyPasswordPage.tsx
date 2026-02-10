@@ -7,12 +7,6 @@ import LogoImage from "/images/logo.svg";
 import { putMyPassword } from "./services/putMyPassword";
 import axios from "axios";
 
-type ApiErrorBody = {
-  code?: string;
-  message?: string;
-  data?: unknown | null;
-};
-
 const MyPasswordPage = () => {
   const { openModal } = useBaseModal();
   const navigate = useNavigate();
@@ -84,7 +78,7 @@ const MyPasswordPage = () => {
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
         const status = e.response?.status;
-        const body = e.response?.data as ApiErrorBody | undefined;
+        const body = e.response?.data;
 
         const apiCode = body?.code;
         if (apiCode === "INVALID_CREDENTIALS") {
@@ -109,9 +103,7 @@ const MyPasswordPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-white">
-      {/* [1] PC 전용 헤더 (Logo + Tabs) 
-          - 1280px 이상에서만 보임
-      */}
+      {/* PC 전용 헤더 (Logo + Tabs) - 1280px 이상에서만 보임 */}
       <div className="hidden w-full flex-col items-center xl:flex">
         <div className="md:mb-8 md:mt-10 md:flex md:items-center md:justify-center">
           <div className="h-[85px]">
@@ -136,9 +128,7 @@ const MyPasswordPage = () => {
         </div>
       </div>
 
-      {/* [2] 컨텐츠 영역
-          - md:w-[450px]: 태블릿에서 너비가 450px로 고정됨
-      */}
+      {/* 컨텐츠 영역 태블릿에서 너비가 450px */}
       <div className="mt-[40px] flex w-full flex-col px-[30px] md:w-[450px] md:px-0 xl:mt-[60px] xl:w-[400px] xl:px-0">
         {/* 뒤로 가기 버튼 (모바일 전용) */}
         <div className="mb-6 w-full xl:hidden">

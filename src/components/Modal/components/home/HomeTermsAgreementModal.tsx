@@ -15,15 +15,14 @@ import {
   makeGeoErrorMessage,
   requestLocationOnce,
 } from "@/utils/locationPermission";
-import { usePostTerm } from "@/hooks/term/usePostTerm";
 import { useAuthStore } from "@/stores/login/useAuthStore";
+import toast from "react-hot-toast";
 
 const HomeTermsAgreementModal = () => {
   const { openModal, closeModal } = useBaseModal();
-  const { mutate: postTerm } = usePostTerm();
+  const { name, submitTerms, loading } = useAuthStore();
   const { checked, toggleChecked, setChecked, setAll, reset, locationError, setLocationError } =
     useTermsAgreementStore();
-  const { name, fetchAgreement } = useAuthStore();
 
   const termsItems = TERMS_ITEMS;
 
@@ -136,25 +135,31 @@ const HomeTermsAgreementModal = () => {
     toggleChecked(key);
   };
 
-  // 동의하고 가입하기 (usePostTerm으로 전송만 수행, 응답값은 사용하지 않음)
-  const handleSubmit = () => {
+  // 동의하고 가입하기
+  const handleSubmit = async () => {
     const requestData: PostTermRequest = {
       termsOfService: checked[TermsKey.SERVICE],
       privacyPolicy: checked[TermsKey.PRIVACY],
       locationService: checked[TermsKey.LOCATION],
     };
 
-    postTerm(requestData, {
-      onSuccess: () => {
-        fetchAgreement();
-        reset();
-        closeModal();
-      },
-      onError: (error) => {
-        console.error(error);
-        alert("API 연동 중 오류가 발생했습니다.");
-      },
-    });
+    // 가입 처리 중임을 알리는 로딩 토스트
+    const loadingToast = toast.loading("동의 정보를 저장하고 있습니다...");
+
+    const result = await submitTerms(requestData);
+
+    if (result.ok) {
+      toast.success("약관 동의가 완료되었습니다!", { id: loadingToast });
+      reset();
+      closeModal();
+    } else {
+      toast.error(
+        result.message || "서비스 연동 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+        {
+          id: loadingToast,
+        }
+      );
+    }
   };
 
   return (
@@ -242,14 +247,16 @@ const HomeTermsAgreementModal = () => {
       <div className="mt-6">
         <button
           type="button"
-          disabled={!canJoin || requesting}
+          disabled={!canJoin || requesting || loading}
           onClick={handleSubmit}
           className={[
             "inline-flex h-12 w-full items-center justify-center rounded-[4px] text-lg font-semibold",
-            canJoin ? "bg-brand-primary text-white hover:opacity-90" : "bg-gray-50 text-gray-600",
+            canJoin && !loading
+              ? "bg-brand-primary text-white hover:opacity-90"
+              : "bg-gray-50 text-gray-600",
           ].join(" ")}
         >
-          {requesting ? "위치 권한 확인 중..." : "동의하고 가입하기"}
+          {requesting || loading ? "처리 중..." : "동의하고 가입하기"}
         </button>
       </div>
     </div>
