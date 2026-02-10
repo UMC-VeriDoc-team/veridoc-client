@@ -136,7 +136,7 @@ const DoctorOpinionContent = () => {
                   onClick={() => handleGoToAnotherPost(post.answerId)}
                   className="flex w-44 shrink-0 cursor-pointer flex-col gap-2 sm:w-60"
                 >
-                  <div className="h-32 w-full overflow-hidden rounded-[10px] bg-gray-100 sm:h-40">
+                  <div className="h-32 w-full overflow-hidden bg-gray-100 sm:h-40">
                     {post.imageUrl ? (
                       <img
                         src={post.imageUrl}
