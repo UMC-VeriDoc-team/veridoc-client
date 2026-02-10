@@ -9,6 +9,8 @@ import getAgreementStatus, {
   normalizeAgreement,
 } from "@/components/Modal/services/getAgreementStatus";
 import deleteUser from "@/pages/mypage/services/deleteUser";
+import type { PostTermRequest } from "@/components/Modal/types/terms";
+import postTerm from "@/components/Modal/services/postTerm";
 
 type LoginFailReason = "INVALID" | "UNKNOWN";
 type LoginResult = { ok: true } | { ok: false; reason: LoginFailReason };
@@ -46,6 +48,9 @@ interface AuthState {
   setPainAreaID: (id: number | null) => void;
 
   fetchAgreement: () => Promise<boolean>;
+  submitTerms: (
+    payload: PostTermRequest
+  ) => Promise<{ ok: boolean; message?: string; error?: any }>;
 
   initAuth: () => Promise<void>;
 
@@ -120,6 +125,25 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch {
       set({ hasAgreedTerms: false, needsAgreementModal: true });
       return false;
+    }
+  },
+
+  submitTerms: async (payload) => {
+    set({ loading: true });
+    try {
+      await postTerm(payload);
+      const { fetchAgreement } = get();
+      if (fetchAgreement) await fetchAgreement();
+
+      set({ loading: false });
+      return { ok: true };
+    } catch (error: any) {
+      set({ loading: false });
+      return {
+        ok: false,
+        error,
+        message: error.response?.data?.message || "약관 동의 처리 중 오류가 발생했습니다.",
+      };
     }
   },
 
