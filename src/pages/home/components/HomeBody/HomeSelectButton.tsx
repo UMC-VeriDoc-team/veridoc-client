@@ -1,4 +1,4 @@
-import type { SymptomTag } from "@/types/symptom";
+import type { SymptomTag } from "@/pages/symptom/types/symptom";
 
 type HomeSelectButtonProps = {
   tags: SymptomTag[];

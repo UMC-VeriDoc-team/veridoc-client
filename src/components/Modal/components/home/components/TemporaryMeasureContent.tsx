@@ -6,7 +6,7 @@ import SectionHeader from "@/components/Modal/components/home/components/Section
 import { MedicalConsultationGuide } from "@/components/Modal/components/home/components/MedicalConsultationGuide";
 import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
 import useIsMobile from "@/hooks/useIsMobile";
-import type { TemporaryGuideDetail } from "@/types/temporaryGuide";
+import type { TemporaryGuideDetail } from "@/pages/home/types/temporaryGuide";
 import { getTemporaryGuideDetail } from "@/components/Modal/services/getTemporaryDetail";
 import SharePost from "./SharePost";
 import { useAuthStore } from "@/stores/user/useAuthStore";
