@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import type { AxiosError } from "axios";
 
-import { postLogin } from "@/pages/login/services/postLogin";
+import postLogin from "@/pages/login/services/postLogin";
 import getUserData from "@/pages/login/services/getUserData";
 import type { GetUserDataResponse } from "@/pages/login/services/getUserData";
 import type { Gender } from "@/components/Select/GenderSelect";

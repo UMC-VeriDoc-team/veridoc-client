@@ -3,7 +3,7 @@ import Icon from "@/components/Icon/Icon";
 import type { HospitalMapItem, LatLng } from "@/libs/kakaoMap";
 import getNearbyHospital from "@/pages/home/services/getNearbyHospital";
 import { useAuthStore } from "@/stores/user/useAuthStore";
-import KakaoHospitalMap from "./KakaoHospitalMap";
+import KakaoHospitalMap from "@/pages/home/components/sections/map/fragments/KakaoHospitalMap";
 
 type UserLocation = LatLng & { accuracy: number };
 

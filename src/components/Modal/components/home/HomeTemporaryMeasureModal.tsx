@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
-import MeasureContent from "./components/MeasureContent";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
+import MeasureContent from "@/components/Modal/components/home/components//MeasureContent";
 
 // 데스크탑: 임시 대처 방안 상세 모달
 const HomeTemporaryMeasureModal = () => {

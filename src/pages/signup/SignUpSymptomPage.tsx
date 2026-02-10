@@ -1,7 +1,7 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import AuthHeader from "@/components/Header/AuthHeader";
 import Icon from "@/components/Icon/Icon";
-import SignUpSymptomForm from "./components/SignUpSymptomForm";
-import { useLocation, useNavigate } from "react-router-dom";
+import SignUpSymptomForm from "@/pages/signup/components/SignUpSymptomForm";
 
 type LocationState = { from?: string };
 

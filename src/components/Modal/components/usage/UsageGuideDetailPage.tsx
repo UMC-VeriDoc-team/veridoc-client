@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
 import Icon from "@/components/Icon/Icon";
-import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
-import UsageGuideDetailContent from "./components/UsageGuideDetailContent";
+import { useGuideDetailModalStore } from "@/stores/modal/useGuideDetailModal";
+import UsageGuideDetailContent from "@/components/Modal/components/usage/components/UsageGuideDetailContent";
 
 // 모바일: 모달 대신 전체 페이지로 범용 가이드 상세 렌더링
 const UsageGuideDetailPage = () => {

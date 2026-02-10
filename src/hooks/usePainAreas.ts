@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
-import { getPainAreas, type PainArea } from "@/pages/signup/services/getPainAreas";
 import { SYMPTOMS } from "@/constants/symptoms";
+import getPainAreas, { type PainArea } from "@/pages/signup/services/getPainAreas";
 
 export const UNSELECTED_PAIN_AREA_ID = 8;
 

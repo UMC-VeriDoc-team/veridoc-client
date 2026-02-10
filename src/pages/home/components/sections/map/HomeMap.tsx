@@ -1,5 +1,5 @@
 import { useHomeStore } from "@/stores/home/useHomeStore";
-import HospitalMapSection from "./fragments/HospitalMapSection";
+import HospitalMapSection from "@/pages/home/components/sections/map/fragments/HospitalMapSection";
 
 const HomeMap = () => {
   const { painAreaName } = useHomeStore();

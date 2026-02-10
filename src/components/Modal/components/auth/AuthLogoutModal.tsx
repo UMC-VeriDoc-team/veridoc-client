@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon/Icon";
 import { useAuthStore } from "@/stores/user/useAuthStore";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { useNavigate } from "react-router-dom";
 
 // 로그아웃 모달

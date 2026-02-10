@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Icon from "@/components/Icon/Icon";
-import BannerDot from "./fragments/BannerDot";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import BannerDot from "@/pages/home/components/banner/fragments/BannerDot";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { SYMPTOMS } from "@/constants/symptoms";
 import { useHomeStore } from "@/stores/home/useHomeStore";

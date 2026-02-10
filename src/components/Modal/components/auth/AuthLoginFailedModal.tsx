@@ -1,5 +1,5 @@
 import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 
 // 로그인 실패 모달
 const AuthLoginFailedModal = () => {

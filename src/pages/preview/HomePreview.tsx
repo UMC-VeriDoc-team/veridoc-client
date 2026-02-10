@@ -1,11 +1,11 @@
-import useBaseModal from "@/stores/modal/useBaseModal";
-import GuideHeader from "@/components/Header/GuideHeader";
-import SymptomVisualBanner from "@/components/Banner/SymptomVisualBanner";
-import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
+import { Link } from "react-router-dom";
 import { ModalType } from "@/components/Modal/types/modal";
 import { SYMPTOMS } from "@/constants/symptoms";
-import PreviewSymptomsItem from "./components/PreviewSymptomsItem";
-import { Link } from "react-router-dom";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
+import GuideHeader from "@/components/Header/GuideHeader";
+import SymptomVisualBanner from "@/components/Banner/SymptomVisualBanner";
+import { useGuideDetailModalStore } from "@/stores/modal/useGuideDetailModal";
+import PreviewSymptomsItem from "@/pages/preview/components/PreviewSymptomsItem";
 
 // 로그인 X
 const HomePreview = () => {

@@ -6,13 +6,13 @@ import ExpertBadge from "@/components/Box/ExpertBadge";
 import Icon from "@/components/Icon/Icon";
 
 // 내부 fragments 및 로직
-import SymptomTagButton from "./fragments/SymptomTagButton";
-import { DoctorOpinion } from "./fragments/DoctorOpinion";
+import SymptomTagButton from "@/pages/home/components/sections/doctor/fragments/SymptomTagButton";
+import DoctorOpinion from "@/pages/home/components/sections/doctor/fragments/DoctorOpinion";
 
 // 상태 및 API
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
-import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
+import { useDoctorOpinionModalStore } from "@/stores/modal/useDoctorOpinionModalStore";
 import { useHomeStore } from "@/stores/home/useHomeStore";
 import type { GetDoctorOpinionSummaryResponse } from "@/pages/home/services/getDoctorOpinionSummary";
 import getDoctorOpinionSummary from "@/pages/home/services/getDoctorOpinionSummary";

@@ -10,8 +10,11 @@ export interface LoginData {
   accessToken: string;
 }
 
-export const postLogin = async (payload: LoginPayload) => {
+// 사용자 로그인
+const postLogin = async (payload: LoginPayload) => {
   const res = await api.post<LoginData>("/users/login", payload);
 
   return res.data;
 };
+
+export default postLogin;

@@ -2,7 +2,7 @@ type DoctorOpinionProps = {
   text: string;
 };
 
-export const DoctorOpinion = ({ text }: DoctorOpinionProps) => {
+const DoctorOpinion = ({ text }: DoctorOpinionProps) => {
   return (
     <div className="flex flex-col justify-center rounded-[5px] border border-brand-primary p-6">
       {text.split("\n").map((line, index) => (
@@ -17,3 +17,5 @@ export const DoctorOpinion = ({ text }: DoctorOpinionProps) => {
     </div>
   );
 };
+
+export default DoctorOpinion;

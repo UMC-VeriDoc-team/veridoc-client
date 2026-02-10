@@ -4,7 +4,7 @@ import SectionTitle from "@/pages/symptom/components/common/SectionTitle";
 import StepCardList from "@/pages/symptom/components/tabs/symptom/fragments/StepCardList";
 import StepDescription from "@/pages/symptom/components/tabs/symptom/fragments/StepDescription";
 import Button from "@/components/Button/Button";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import useIsMobile from "@/hooks/useIsMobile";
 import { useAuthStore } from "@/stores/user/useAuthStore";

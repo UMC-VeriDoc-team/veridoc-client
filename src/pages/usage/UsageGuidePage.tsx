@@ -1,7 +1,7 @@
 import { USAGE_GUIDE_CARDS } from "@/constants/usage/usageGuideCards";
 import { ModalType } from "@/components/Modal/types/modal";
-import useBaseModal from "@/stores/modal/useBaseModal";
-import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
+import { useGuideDetailModalStore } from "@/stores/modal/useGuideDetailModal";
 import type { GuideDetailType } from "@/components/Modal/types/usageGuideDetail";
 import Icon from "@/components/Icon/Icon";
 import GuideHeader from "@/components/Header/GuideHeader";

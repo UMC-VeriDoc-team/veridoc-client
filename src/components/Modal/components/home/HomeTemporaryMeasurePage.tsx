@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon/Icon";
 import { useNavigate } from "react-router-dom";
-import MeasureContent from "./components/MeasureContent";
+import MeasureContent from "@/components/Modal/components/home/components/MeasureContent";
 
 // 데스크탑: 임시 대처 방안 상세 모달
 const HomeTemporaryMeasurePage = () => {

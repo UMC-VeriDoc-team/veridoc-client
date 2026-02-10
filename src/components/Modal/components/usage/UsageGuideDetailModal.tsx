@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
-import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
+import { useGuideDetailModalStore } from "@/stores/modal/useGuideDetailModal";
 import UsageGuideDetailContent from "@/components/Modal/components/usage/components/UsageGuideDetailContent";
 
 // 범용 가이드 상세 모달

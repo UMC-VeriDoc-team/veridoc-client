@@ -1,11 +1,11 @@
+import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import Icon from "@/components/Icon/Icon";
 import LogoImage from "/images/logo.svg";
-import { putMyPassword } from "./services/putMyPassword";
-import axios from "axios";
+import putMyPassword from "@/pages/mypage/services/putMyPassword";
 
 const MyPasswordPage = () => {
   const { openModal } = useBaseModal();

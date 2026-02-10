@@ -1,8 +1,8 @@
 import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { useNavigate } from "react-router-dom";
 import { useHomeStore } from "@/stores/home/useHomeStore";
-import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
+import { useDoctorOpinionModalStore } from "@/stores/modal/useDoctorOpinionModalStore";
 import { ModalType } from "@/components/Modal/types/modal";
 import toast from "react-hot-toast";
 

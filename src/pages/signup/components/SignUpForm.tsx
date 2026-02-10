@@ -5,7 +5,7 @@ import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import InputField from "@/components/Input/InputField";
 import type { Gender } from "@/components/Select/GenderSelect";
 import GenderSelect from "@/components/Select/GenderSelect";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useSignupStore } from "@/stores/signup/useSignupStore";

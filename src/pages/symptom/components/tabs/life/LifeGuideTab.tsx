@@ -3,8 +3,8 @@ import SectionTitle from "@/pages/symptom/components/common/SectionTitle";
 
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/user/useAuthStore";
-import { getLifeStyleGuide } from "@/pages/symptom/services/getLifeStyleGuide";
 import type { LifeStyleGuideData } from "@/pages/symptom/types/symptom";
+import getLifeStyleGuide from "@/pages/symptom/services/getLifeStyleGuide";
 import SourceButton from "@/components/Button/SourceButton";
 import MedicalDisclaimer from "@/components/Box/MedicalDisclaimer";
 

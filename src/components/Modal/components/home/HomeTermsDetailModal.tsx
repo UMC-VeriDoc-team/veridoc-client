@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { TermsKey } from "@/components/Modal/types/terms";
 import { TERMS_ITEMS } from "@/constants/terms/termsItems";
-import useTermsAgreementStore from "@/stores/modal/useTermsAgreementStore";
+import { useTermsAgreementStore } from "@/stores/modal/useTermsAgreementStore";
 import {
   getLocationPermissionState,
   makeGeoErrorMessage,

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import Icon from "@/components/Icon/Icon";
 import Logo from "/images/logo.svg";
@@ -9,9 +9,9 @@ import Button from "@/components/Button/Button";
 import GenderSelect, { type Gender } from "@/components/Select/GenderSelect";
 import { useAuthStore } from "@/stores/user/useAuthStore";
 import { parseBirthYMD } from "@/utils/formatBirth";
-import { putMyPainArea } from "./services/putMyPainArea";
-import { putUserMe } from "./services/putUserMe";
+import putUserMe from "@/pages/mypage/services/putUserMe";
 import { UNSELECTED_PAIN_AREA_ID, usePainAreas } from "@/hooks/usePainAreas";
+import putMyPainArea from "@/pages/mypage/services/putMyPainArea";
 
 const MyPage = () => {
   const navigate = useNavigate();

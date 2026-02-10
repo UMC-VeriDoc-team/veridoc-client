@@ -1,8 +1,8 @@
-import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
-import DoctorOpinionDetailContent from "./components/DoctorOpinionContent";
 import { useLayoutEffect, useRef } from "react";
-import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
+import Icon from "@/components/Icon/Icon";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
+import { useDoctorOpinionModalStore } from "@/stores/modal/useDoctorOpinionModalStore";
+import DoctorOpinionDetailContent from "@/components/Modal/components/home/components/DoctorOpinionContent";
 
 // 데스크탑: 전문의 소견 상세 모달
 const HomeDoctorOpinionModal = () => {

@@ -35,9 +35,9 @@ import ColorGuide from "@/pages/guide/ColorGuide";
 import UsageGuideDetailPage from "@/components/Modal/components/usage/UsageGuideDetailPage";
 import HomeTemporaryMeasurePage from "@/components/Modal/components/home/HomeTemporaryMeasurePage";
 import HomeDoctorOpinionPage from "@/components/Modal/components/home/HomeDoctorOpinionPage";
-import PublicOnly from "./components/Guard/PublicOnly";
-import RequireAuth from "./components/Guard/RequireAuth";
-import RequirePainArea from "./components/Guard/RequirePainArea";
+import PublicOnly from "@/components/Guard/PublicOnly";
+import RequireAuth from "@/components/Guard/RequireAuth";
+import RequirePainArea from "@/components/Guard/RequirePainArea";
 import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();

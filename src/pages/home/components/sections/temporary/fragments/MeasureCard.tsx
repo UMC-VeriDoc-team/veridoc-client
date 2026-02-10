@@ -1,8 +1,8 @@
 import Icon from "@/components/Icon/Icon";
 import { ModalType } from "@/components/Modal/types/modal";
 import useIsMobile from "@/hooks/useIsMobile";
-import useBaseModal from "@/stores/modal/useBaseModal";
-import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
+import { useTemporaryMeasureModalStore } from "@/stores/modal/useTemporaryMeasureModalStore";
 import { useNavigate } from "react-router-dom";
 
 interface MeasureCardProps {

@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useHomeStore } from "@/stores/home/useHomeStore";
 import HomeBanner from "@/pages/home/components/banner/HomeBanner";
 import { useAuthStore } from "@/stores/user/useAuthStore";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
-import DoctorOpinionSection from "./components/sections/doctor/DoctorOpinionSection";
-import TemporaryMeasureSection from "./components/sections/temporary/TemporaryMeasureSection";
-import HomeMap from "./components/sections/map/HomeMap";
+import DoctorOpinionSection from "@/pages/home/components/sections/doctor/DoctorOpinionSection";
+import TemporaryMeasureSection from "@/pages/home/components/sections/temporary/TemporaryMeasureSection";
+import HomeMap from "@/pages/home/components/sections/map/HomeMap";
 
 const MainPage = () => {
   const { needsAgreementModal } = useAuthStore();

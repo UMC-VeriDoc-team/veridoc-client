@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import axios, { AxiosError } from "axios";
-import {
-  postSignup,
+import postSignup, {
   type SignupPayload,
   type SignupResponse,
 } from "@/pages/signup/services/postSignup";

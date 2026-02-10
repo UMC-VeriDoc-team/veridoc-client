@@ -1,4 +1,4 @@
-import SymptomCard from "./SymptomCard";
+import SymptomCard from "@/components/Symptom/SymptomCard";
 import { SYMPTOMS } from "@/constants/symptoms";
 
 interface SymptomGridProps {

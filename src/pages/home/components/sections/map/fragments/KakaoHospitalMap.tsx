@@ -9,7 +9,7 @@ import type {
   LatLng,
 } from "@/libs/kakaoMap";
 import Icon from "@/components/Icon/Icon";
-import HospitalMarker from "./HospitalMarker";
+import HospitalMarker from "@/pages/home/components/sections/map/fragments/HospitalMarker";
 
 interface KakaoHospitalMapProps {
   center: LatLng;

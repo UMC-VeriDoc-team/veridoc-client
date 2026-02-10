@@ -1,5 +1,5 @@
 import { useHomeStore } from "@/stores/home/useHomeStore";
-import MeasureCard from "./fragments/MeasureCard";
+import MeasureCard from "@/pages/home/components/sections/temporary/fragments/MeasureCard";
 
 const TemporaryMeasureSection = () => {
   const { painAreaName, temporaryGuides } = useHomeStore();

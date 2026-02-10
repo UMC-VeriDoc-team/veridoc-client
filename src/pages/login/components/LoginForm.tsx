@@ -3,7 +3,7 @@ import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import InputField from "@/components/Input/InputField";
 import { ModalType } from "@/components/Modal/types/modal";
 import { useAuthStore } from "@/stores/user/useAuthStore";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";

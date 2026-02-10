@@ -8,6 +8,7 @@ interface GetNearbyHospitalParams {
   limit: number;
 }
 
+// 근처 병원 정보 조회
 const getNearbyHospital = async ({
   lat,
   lng,

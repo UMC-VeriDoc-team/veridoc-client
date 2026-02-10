@@ -2,7 +2,7 @@ import Button from "@/components/Button/Button";
 import Icon from "@/components/Icon/Icon";
 import Input from "@/components/Input/Input";
 import { ModalType } from "@/components/Modal/types/modal";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { useMemo, useState } from "react";
 import postResetPassword from "@/pages/password/services/postResetPassword";
 import { useSearchParams } from "react-router-dom";
