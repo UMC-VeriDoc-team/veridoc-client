@@ -18,7 +18,7 @@ const HospitalMarker = ({ active, imageUrl }: HospitalMarkerProps) => {
         <img
           src={imageUrl}
           alt="thumbnail"
-          className="absolute left-1/2 top-[8px] h-[28px] w-[28px] -translate-x-1/2 rounded-full border border-white object-cover"
+          className="absolute left-1/2 top-[3px] h-8 w-8 -translate-x-1/2 rounded-full object-cover sm:top-1 sm:h-14 sm:w-14"
           draggable={false}
         />
       ) : null}
