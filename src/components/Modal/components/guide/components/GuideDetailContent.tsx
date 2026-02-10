@@ -39,7 +39,7 @@ const GuideDetailContent = () => {
 
             <button type="button" className="ml-auto flex items-center gap-2">
               <p className="text-sm font-medium text-white sm:text-base">원문 출처 보기</p>
-              <Icon name="link" className="h-5 w-5" />
+              <Icon name="link" className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
           </div>
         </div>

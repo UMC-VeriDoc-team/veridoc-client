@@ -101,7 +101,7 @@ const DoctorOpinionContent = () => {
               <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
                 원문 출처 보기
               </p>
-              <Icon name="link" className="h-4 w-4 rounded-full bg-gray-200 sm:h-6 sm:w-6" />
+              <Icon name="link" className="h-5 w-5 rounded-full bg-gray-200 sm:h-6 sm:w-6" />
             </button>
           </div>
         </div>
