@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
@@ -80,26 +80,24 @@ const MyPage = () => {
   const [gender, setGender] = useState<Gender>("MALE");
   const [birth, setBirth] = useState({ year: "", month: "", day: "" });
   const [errors, setErrors] = useState({ name: "", birth: "", gender: "" });
-
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
-  // 화면에 보여줄 값: 편집 중이면 local, 아니면 store
   const viewName = isProfileEditing ? name : (storeName ?? "");
   const viewGender = isProfileEditing ? gender : (storeGender ?? "MALE");
-  const viewBirth = isProfileEditing ? birth : parseBirthYMD(storeBirth);
+
+  // parseBirthYMD의 결과를 메모이제이션하여 의존성 최적화
+  const viewBirth = useMemo(
+    () => (isProfileEditing ? birth : parseBirthYMD(storeBirth)),
+    [isProfileEditing, birth, storeBirth]
+  );
 
   const viewSelectedKey = isEditing ? selectedKey : storeSelectedKey;
-
   const birthIso = `${birth.year}-${birth.month.padStart(2, "0")}-${birth.day.padStart(2, "0")}`;
 
   // 증상 선택
   const handleSelectSymptom = (key: string) => {
     if (!isEditing) return;
-
-    setSelectedKey((prev) => {
-      if (prev === key) return null;
-      return key;
-    });
+    setSelectedKey((prev) => (prev === key ? null : key));
   };
 
   const handleSaveSymptom = async () => {
@@ -109,10 +107,8 @@ const MyPage = () => {
       return;
     }
 
-    // 저장
     setIsEditing(false);
 
-    // 선택 안 함: 미선택(8)
     if (selectedKey === null) {
       try {
         await putMyPainArea({ painAreaID: UNSELECTED_PAIN_AREA_ID });
@@ -132,11 +128,8 @@ const MyPage = () => {
 
     try {
       const res = await putMyPainArea({ painAreaID: nextId });
-
-      // 서버 응답으로 store 동기화
       const savedId = res.data?.painAreaID ?? nextId;
       setPainAreaID(savedId);
-
       openModal(ModalType.MY_SYMPTOM_CHANGED);
     } catch (e) {
       console.error(e);
@@ -184,17 +177,9 @@ const MyPage = () => {
     setErrors(newErrors);
     if (!isValid) return;
 
-    // 프로필 수정 API 호출 + 성공 시 store 반영
     try {
-      await putUserMe({
-        name: name.trim(),
-        birth: birthIso,
-        gender,
-      });
-
-      // 성공하면 서버에서 다시 받아서 store 동기화
+      await putUserMe({ name: name.trim(), birth: birthIso, gender });
       await fetchMe();
-
       openModal(ModalType.MY_PROFILE_UPDATED);
       setIsProfileEditing(false);
     } catch (e) {
@@ -202,14 +187,17 @@ const MyPage = () => {
     }
   };
 
-  // 탭 전환 시 편집 모드 초기화
-  useEffect(() => {
-    setIsEditing(false);
-    setIsProfileEditing(false);
-    setErrors({ name: "", birth: "", gender: "" });
-  }, [activeTab]);
+  const handleTabChange = useCallback(
+    (tab: "symptom" | "info") => {
+      setSearchParams({ tab });
+      setIsEditing(false);
+      setIsProfileEditing(false);
+      setErrors({ name: "", birth: "", gender: "" });
+    },
+    [setSearchParams]
+  );
 
-  // 다른 페이지로 이동 시 초기화
+  // 페이지 이탈 시에만 클린업 수행 (불필요한 리렌더링 방지)
   useEffect(() => {
     return () => {
       setIsEditing(false);
@@ -339,7 +327,7 @@ const MyPage = () => {
               }`}
             >
               <input
-                id="edit-birth-year" // 라벨 클릭 시 첫 번째 input으로 포커스
+                id="edit-birth-year"
                 type="text"
                 value={viewBirth.year}
                 onChange={(e) => setBirth({ ...birth, year: e.target.value })}
@@ -423,7 +411,6 @@ const MyPage = () => {
         </div>
       </div>
 
-      {/* === 하단: 보안설정 & 회원탈퇴 === */}
       <div className="mb-[100px] mt-[60px] space-y-[60px]">
         {/* 보안설정 섹션 */}
         <section>
@@ -489,7 +476,7 @@ const MyPage = () => {
             className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-base font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
               activeTab === "symptom" ? "bg-white text-gray-950" : "bg-transparent text-gray-400"
             } `}
-            onClick={() => setSearchParams({ tab: "symptom" })}
+            onClick={() => handleTabChange("symptom")}
           >
             나의 증상 관리
           </button>
@@ -499,14 +486,13 @@ const MyPage = () => {
             className={`flex h-full flex-1 items-center justify-center rounded-[7px] text-base font-semibold tracking-[-0.025em] transition-all duration-200 md:text-[20px] md:font-bold ${
               activeTab === "info" ? "bg-white text-gray-950" : "bg-transparent text-gray-400"
             } `}
-            onClick={() => setSearchParams({ tab: "info" })}
+            onClick={() => handleTabChange("info")}
           >
             정보 수정
           </button>
         </div>
       </div>
 
-      {/* 컨텐츠 렌더링 (이건 아까 수정한 함수들이 실행됨) */}
       {activeTab === "symptom" ? renderSymptomContent() : renderProfileForm()}
     </div>
   );
