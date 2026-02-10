@@ -2,6 +2,9 @@ import Icon from "@/components/Icon/Icon";
 import { GUIDE_DETAIL_CONTENTS } from "@/constants/guideDetailContents";
 import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
 import SharePost from "../../home/components/SharePost";
+import { useAuthStore } from "@/stores/login/useAuthStore";
+import { GUIDE_CARDS } from "@/constants/guideCards";
+import type { UsageGuide } from "@/components/Modal/services/getUsageGuide";
 
 interface HashtagItem {
   content: string;
@@ -12,7 +15,25 @@ const hashtags: HashtagItem[] = [{ content: "범용가이드" }];
 
 const GuideDetailContent = () => {
   const { guideType } = useGuideDetailModalStore();
+  const { usageGuide } = useAuthStore();
   const content = GUIDE_DETAIL_CONTENTS[guideType];
+
+  // 현재 guideType(id)과 일치하는 카드를 찾아 cardNumber 알아내기
+  const currentCard = GUIDE_CARDS.find((card) => card.id === guideType);
+  const currentCardNumber = currentCard?.cardNumber;
+
+  const matchedGuide = usageGuide?.guides.find(
+    (guide: UsageGuide) => guide.cardNumber === currentCardNumber
+  );
+
+  // 매칭된 가이드가 있고 sourceUrl이 있을 때만 버튼 노출
+  const shouldShowSourceButton = !!matchedGuide?.sourceUrl;
+
+  const handleOpenSource = () => {
+    if (matchedGuide?.sourceUrl) {
+      window.open(matchedGuide.sourceUrl, "_blank", "noopener,noreferrer");
+    }
+  };
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -37,10 +58,16 @@ const GuideDetailContent = () => {
             <Icon name="hospital-white" className="h-10 w-10 text-white sm:h-12 sm:w-12" />
             <p className="text-sm font-medium text-white sm:text-base">{content.source.name}</p>
 
-            <button type="button" className="ml-auto flex items-center gap-2">
-              <p className="text-sm font-medium text-white sm:text-base">원문 출처 보기</p>
-              <Icon name="link" className="h-5 w-5 sm:h-6 sm:w-6" />
-            </button>
+            {shouldShowSourceButton && (
+              <button
+                type="button"
+                onClick={handleOpenSource}
+                className="ml-auto flex items-center gap-2 transition-opacity hover:opacity-80 active:scale-95"
+              >
+                <p className="text-sm font-medium text-white sm:text-base">원문 출처 보기</p>
+                <Icon name="link" className="h-5 w-5 sm:h-6 sm:w-6" />
+              </button>
+            )}
           </div>
         </div>
       </div>
