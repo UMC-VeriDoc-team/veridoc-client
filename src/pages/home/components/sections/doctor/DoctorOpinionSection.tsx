@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 
 // 공통 컴포넌트 및 아이콘
-import { BlueBox } from "@/components/Box/BlueBox";
-import { OrangeBox } from "@/components/Box/OrangeBox";
-import { GreenBox } from "@/components/Box/GreenBox";
+import MedicalInfoBadge from "@/components/Box/MedicalInfoBadge";
+import ExpertBadge from "@/components/Box/ExpertBadge";
 import Icon from "@/components/Icon/Icon";
 
 // 내부 fragments 및 로직
@@ -17,6 +16,7 @@ import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStor
 import { useHomeStore } from "@/stores/home/useHomeStore";
 import type { GetDoctorOpinionSummaryResponse } from "@/pages/home/services/getDoctorOpinionSummary";
 import getDoctorOpinionSummary from "@/pages/home/services/getDoctorOpinionSummary";
+import MedicalDisclaimer from "@/components/Box/MedicalDisclaimer";
 
 const PRIMARY_AREAS = ["어깨", "무릎", "복통"];
 
@@ -108,8 +108,8 @@ const DoctorOpinionSection = () => {
             />
             {/* 모바일 전용 박스 */}
             <div className="flex gap-x-2 pb-2 sm:hidden">
-              <BlueBox />
-              <GreenBox />
+              <MedicalInfoBadge />
+              <ExpertBadge />
             </div>
           </div>
 
@@ -121,14 +121,14 @@ const DoctorOpinionSection = () => {
 
             {/* 데스크탑 전용 박스 */}
             <div className="hidden sm:mb-[30px] sm:flex sm:gap-2.5">
-              <BlueBox />
-              <GreenBox />
-              <OrangeBox />
+              <MedicalInfoBadge />
+              <ExpertBadge />
+              <MedicalDisclaimer type="summary" className="py-2.5" />
             </div>
 
             {/* 모바일 전용 박스 */}
             <div className="mb-[10px] sm:hidden">
-              <OrangeBox />
+              <MedicalDisclaimer type="summary" className="py-2.5" />
             </div>
 
             {/* 전문의 요약 텍스트 영역 */}

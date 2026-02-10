@@ -1,12 +1,13 @@
 import Icon from "@/components/Icon/Icon";
 import { USAGE_GUIDE_DETAIL_CONTENTS } from "@/constants/usage/usageGuideDetailContents";
 import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
-import SharePost from "@/components/Button/SharePost";
+import SharePost from "../../../../Button/SharePost";
 import { useAuthStore } from "@/stores/user/useAuthStore";
 import { USAGE_GUIDE_CARDS } from "@/constants/usage/usageGuideCards";
 import type { UsageGuide } from "@/components/Modal/services/getUsageGuide";
 import Hashtag from "@/components/HashTag/HashTag";
 import SourceButton from "@/components/Button/SourceButton";
+import MedicalDisclaimer from "@/components/Box/MedicalDisclaimer";
 
 const UsageGuideDetailContent = () => {
   const { guideType } = useGuideDetailModalStore();
@@ -115,12 +116,7 @@ const UsageGuideDetailContent = () => {
 
           <div className="flex flex-col gap-10">
             {/* 경고문 */}
-            <div className="flex w-full items-center gap-4 rounded-md border border-brand-orange px-5 py-[10px] sm:items-center sm:gap-5">
-              <Icon name="info" className="h-5 w-5" />
-              <p className="text-sm font-medium text-brand-orange">
-                본 내용은 일반적인 건강 정보 안내이며, 개인의 상태에 따라 다르게 느껴질 수 있습니다.
-              </p>
-            </div>
+            <MedicalDisclaimer type="usage" className="rounded-[4px] py-[10px]" />
 
             {/* 구분선 */}
             <div className="w-full border-b border-gray-100"></div>

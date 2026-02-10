@@ -13,6 +13,7 @@ import { useAuthStore } from "@/stores/user/useAuthStore";
 import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
 import Hashtag from "@/components/HashTag/HashTag";
 import SourceButton from "@/components/Button/SourceButton";
+import MedicalDisclaimer from "@/components/Box/MedicalDisclaimer";
 
 const MeasureContent = () => {
   const { id } = useParams();
@@ -196,13 +197,7 @@ const MeasureContent = () => {
           </div>
 
           {/* 경고문 */}
-          <div className="flex w-full items-center gap-4 rounded-md border border-brand-orange px-5 py-4 sm:items-center sm:gap-5">
-            <Icon name="info" className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
-            <p className="text-sm font-medium text-brand-orange">
-              본 콘텐츠는 의료기관에서 제공하는 건강 정보 콘텐츠를 기준으로 베리닥 내부 검토 및 정제
-              과정을 거쳐 구성되었습니다. 본 내용은 의료 진단이나 치료를 대체하지 않습니다.
-            </p>
-          </div>
+          <MedicalDisclaimer type="measure" className="rounded-md py-4" />
         </div>
 
         {/* 구분선 */}

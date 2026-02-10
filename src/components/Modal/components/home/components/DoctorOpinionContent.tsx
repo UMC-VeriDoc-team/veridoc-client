@@ -8,6 +8,9 @@ import { useAuthStore } from "@/stores/user/useAuthStore";
 import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
 import Hashtag from "@/components/HashTag/HashTag";
 import SourceButton from "@/components/Button/SourceButton";
+import MedicalDisclaimer from "@/components/Box/MedicalDisclaimer";
+import ExpertBadge from "@/components/Box/ExpertBadge";
+import MedicalInfoBadge from "@/components/Box/MedicalInfoBadge";
 
 const DoctorOpinionContent = () => {
   const { doctorOpinionId, setDoctorOpinionId } = useDoctorOpinionModalStore();
@@ -75,18 +78,8 @@ const DoctorOpinionContent = () => {
           {/* 공개의료 Q&A / export / 출처 링크 */}
           <div className="flex items-center justify-between gap-3">
             <div className="flex flex-wrap gap-2">
-              <div className="flex gap-1 border border-brand-primary px-2 py-1">
-                <Icon name="medical-info" className="w-3 sm:w-4" />
-                <p className="pt-[2px] text-center text-xs font-medium text-brand-primary sm:text-base">
-                  공개 의료 Q&A
-                </p>
-              </div>
-              <div className="flex items-center gap-1 border border-brand-green px-2 py-1">
-                <Icon name="check-fill-green" className="w-3 sm:w-4" />
-                <p className="pt-[2px] text-center text-xs font-medium text-brand-green sm:text-base">
-                  export
-                </p>
-              </div>
+              <MedicalInfoBadge />
+              <ExpertBadge />
             </div>
 
             <SourceButton url={data.sourceUrl} />
@@ -113,15 +106,7 @@ const DoctorOpinionContent = () => {
           </pre>
 
           {/* 경고문 */}
-          <div className="flex w-full items-center gap-4 rounded-md border border-brand-orange px-5 py-4 sm:items-center sm:gap-5">
-            <Icon name="info" className="h-5 w-5 shrink-0" />
-            <div className="flex flex-col">
-              <p className="text-sm font-medium text-brand-orange">
-                본 내용은 공개된 의료 상담을 바탕으로 정리된 정보이며, 개인의 상태에 따라 다를 수
-                있습니다. 통증이 지속되거나 심해질 경우 의료기관 방문이 필요할 수 있습니다.
-              </p>
-            </div>
-          </div>
+          <MedicalDisclaimer type="default" className="rounded-md py-4" />
         </div>
 
         {/* 구분선 */}

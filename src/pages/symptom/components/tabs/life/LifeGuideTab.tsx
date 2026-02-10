@@ -6,6 +6,7 @@ import { useAuthStore } from "@/stores/user/useAuthStore";
 import { getLifeStyleGuide } from "@/pages/symptom/services/getLifeStyleGuide";
 import type { LifeStyleGuideData } from "@/pages/symptom/types/symptom";
 import SourceButton from "@/components/Button/SourceButton";
+import MedicalDisclaimer from "@/components/Box/MedicalDisclaimer";
 
 export const LifeGuideTab = () => {
   const { painAreaID } = useAuthStore();
@@ -169,22 +170,7 @@ export const LifeGuideTab = () => {
         </div>
       </div>
 
-      <div className="mb-28 mt-20 w-full max-w-[778px] rounded-[6px] border border-brand-orange px-2 py-2 md:mx-auto">
-        <div className="flex h-full items-center gap-x-3">
-          <div className="flex h-full w-[45px] items-center justify-center">
-            <Icon name="info" className="h-[20px] w-[20px] text-brand-orange" />
-          </div>
-
-          <div className="flex h-full items-center">
-            <p className="font-medium tracking-[-0.025em] text-brand-orange">
-              <span className="text-[13px] leading-[140%] sm:text-sm">
-                해당 내용은 증상 이해를 돕기 위한 전문의 공개 설명 사례입니다. 개인 진단이나 치료
-                판단을 대체하지 않습니다.
-              </span>
-            </p>
-          </div>
-        </div>
-      </div>
+      <MedicalDisclaimer type="life" className="mb-28 mt-20 rounded-md py-2" />
     </section>
   );
 };
