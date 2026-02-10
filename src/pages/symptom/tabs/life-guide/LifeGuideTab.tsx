@@ -2,7 +2,7 @@ import Icon from "@/components/Icon/Icon";
 import SectionTitle from "@/pages/symptom/components/common/SectionTitle";
 
 import { useEffect, useState } from "react";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import { getLifeStyleGuide } from "@/pages/symptom/services/getLifeStyleGuide";
 import type { LifeStyleGuideData } from "@/types/symptom";
 import SourceButton from "@/components/Button/SourceButton";

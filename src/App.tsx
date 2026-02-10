@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate, Outlet } from "react-router-dom
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import useIsMobile from "@/hooks/useIsMobile";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 
 import ScrollToTop from "@/components/Scroll/ScrollToTop";
 import ModalPage from "@/components/Modal/ModalPage";

@@ -7,7 +7,7 @@ import Button from "@/components/Button/Button";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import useIsMobile from "@/hooks/useIsMobile";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
 
 export interface SymptomGuideStep {

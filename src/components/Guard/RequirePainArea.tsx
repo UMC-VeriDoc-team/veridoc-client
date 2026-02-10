@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import { Navigate, Outlet } from "react-router-dom";
 
 const RequirePainArea = ({ children }: { children?: React.ReactNode }) => {

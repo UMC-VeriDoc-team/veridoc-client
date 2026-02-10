@@ -4,7 +4,7 @@ import HomeBody from "@/pages/home/components/HomeBody/HomeBody";
 import HomeManage from "@/pages/home/components/HomeBody/HomeManage";
 import HomeMap from "@/pages/home/components/map/HomeMap";
 import HomeMovingImage from "@/pages/home/components/banner/HomeMovingImage";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 

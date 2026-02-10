@@ -2,7 +2,7 @@ import Icon from "@/components/Icon/Icon";
 import { GUIDE_DETAIL_CONTENTS } from "@/constants/guideDetailContents";
 import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
 import SharePost from "../../home/components/SharePost";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import { GUIDE_CARDS } from "@/constants/guideCards";
 import type { UsageGuide } from "@/components/Modal/services/getUsageGuide";
 import Hashtag from "@/components/HashTag/HashTag";

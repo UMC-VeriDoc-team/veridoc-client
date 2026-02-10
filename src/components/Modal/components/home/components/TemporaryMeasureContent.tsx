@@ -9,7 +9,7 @@ import useIsMobile from "@/hooks/useIsMobile";
 import type { TemporaryGuideDetail } from "@/types/temporaryGuide";
 import { getTemporaryGuideDetail } from "@/components/Modal/services/getTemporaryDetail";
 import SharePost from "./SharePost";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
 import Hashtag from "@/components/HashTag/HashTag";
 import SourceButton from "@/components/Button/SourceButton";

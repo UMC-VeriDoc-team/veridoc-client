@@ -7,7 +7,7 @@ import Icon from "@/components/Icon/Icon";
 import GuideHeader from "@/components/Header/GuideHeader";
 import RecommendEntry from "./RecommendEntry";
 import { useEffect } from "react";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 
 // 로그인 O, 증상 미선택
 const HomeSymptomOnboarding = () => {

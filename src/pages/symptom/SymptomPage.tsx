@@ -5,7 +5,7 @@ import { SymptomTabs } from "@/pages/symptom/components/SymptomTabs";
 import { SymptomEmptyState } from "@/pages/symptom/components/SymptomEmptyState";
 import { LifeGuideTab } from "@/pages/symptom/tabs/life-guide/LifeGuideTab";
 import SymptomGuideTab from "@/pages/symptom/tabs/symptom-guide/SymptomGuideTab";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 
 type TabKey = "life" | "guide";
 

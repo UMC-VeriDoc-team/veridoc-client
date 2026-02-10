@@ -1,5 +1,5 @@
 import Icon from "@/components/Icon/Icon";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { useNavigate } from "react-router-dom";
 

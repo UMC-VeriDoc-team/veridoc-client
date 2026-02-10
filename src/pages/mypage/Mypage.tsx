@@ -9,7 +9,7 @@ import Button from "@/components/Button/Button";
 import GenderSelect, { type Gender } from "@/components/Select/GenderSelect";
 import { SYMPTOMS } from "@/constants/symptoms";
 import { getPainAreas, type PainArea } from "@/pages/signup/services/getPainAreas";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import { parseBirthYMD } from "@/utils/formatBirth";
 import { putMyPainArea } from "./services/putMyPainArea";
 import { putUserMe } from "./services/putUserMe";

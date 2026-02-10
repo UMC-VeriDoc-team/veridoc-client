@@ -15,7 +15,7 @@ import {
   makeGeoErrorMessage,
   requestLocationOnce,
 } from "@/utils/locationPermission";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import toast from "react-hot-toast";
 
 const HomeTermsAgreementModal = () => {

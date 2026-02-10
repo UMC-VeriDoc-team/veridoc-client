@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import axios, { AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
 
 // 쿠키 미포함

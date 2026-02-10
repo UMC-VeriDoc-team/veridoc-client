@@ -1,7 +1,7 @@
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { useNavigate } from "react-router-dom";
 import { ModalType } from "../Modal/types/modal";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 
 const GuideHeader = () => {
   const navigate = useNavigate();
