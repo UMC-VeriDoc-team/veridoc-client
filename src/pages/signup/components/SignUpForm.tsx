@@ -9,7 +9,7 @@ import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useSignupStore } from "@/stores/signup/useSignupStore";
-import { PASSWORD_REGEX } from "@/utils/vaildatePassword";
+import { PASSWORD_REGEX } from "@/utils/validatePassword";
 import type { SignupPayload } from "@/pages/signup/services/postSignup";
 import toast from "react-hot-toast";
 
