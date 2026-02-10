@@ -12,6 +12,9 @@ import type { PostTermRequest } from "@/components/Modal/types/terms";
 import type { ActionResult, ApiError } from "@/types/error";
 import deleteUser from "@/pages/mypage/services/deleteUser";
 import postTerm from "@/components/Modal/services/postTerm";
+import getUsageGuide, {
+  type GetUsageGuideResponse,
+} from "@/components/Modal/services/getUsageGuide";
 
 type LoginFailReason = "INVALID" | "UNKNOWN";
 type LoginResult = { ok: true } | { ok: false; reason: LoginFailReason };
@@ -38,6 +41,9 @@ interface AuthState {
   painAreaID: number | null;
   painAreaName: string | null;
 
+  // guide
+  usageGuide: GetUsageGuideResponse | null;
+
   // actions
   login: (payload: { email: string; password: string }) => Promise<LoginResult>;
   logout: () => void;
@@ -49,6 +55,7 @@ interface AuthState {
 
   fetchAgreement: () => Promise<boolean>;
   submitTerms: (payload: PostTermRequest) => Promise<ActionResult>;
+  fetchUsageGuide: () => Promise<void>;
 
   initAuth: () => Promise<void>;
 
@@ -96,6 +103,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   painAreaID: null,
   painAreaName: null,
 
+  usageGuide: null,
+
   resetMe: () =>
     set({
       userID: null,
@@ -105,6 +114,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       gender: null,
       painAreaID: null,
       painAreaName: null,
+      usageGuide: null,
     }),
 
   fetchAgreement: async () => {
@@ -149,6 +159,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
+  fetchUsageGuide: async () => {
+    try {
+      const data = await getUsageGuide();
+      set({ usageGuide: data });
+    } catch (error) {
+      console.error("가이드 조회 실패:", error);
+      set({ usageGuide: null });
+    }
+  },
+
   fetchMe: async () => {
     const token = get().accessToken;
     if (!token) {
@@ -160,21 +180,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const dto = await getUserData();
       const mapped = mapUserMeToState(dto);
       set(mapped);
-      return true;
-    } catch (e) {
-      const status = getAxiosStatus(e);
 
-      if (status === 401) {
-        localStorage.removeItem("accessToken");
-        set({
-          accessToken: null,
-          authStatus: "unauthenticated",
-          hasAgreedTerms: null,
-          needsAgreementModal: false,
-        });
-        get().resetMe();
+      // ✅ painAreaID가 8일 경우 가이드 호출
+      if (mapped.painAreaID === 8) {
+        await get().fetchUsageGuide();
+      } else {
+        set({ usageGuide: null }); // 다른 ID일 경우 초기화
       }
 
+      return true;
+    } catch (e) {
+      // ... 기존 에러 처리
       return false;
     }
   },
@@ -216,7 +232,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     get().resetMe();
   },
 
-  setPainAreaID: (id) => set({ painAreaID: id }),
+  setPainAreaID: (id) => {
+    set({ painAreaID: id });
+    if (id === 8) {
+      void get().fetchUsageGuide();
+    } else {
+      set({ usageGuide: null });
+    }
+  },
 
   initAuth: async () => {
     const token = localStorage.getItem("accessToken");

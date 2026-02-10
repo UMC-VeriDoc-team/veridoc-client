@@ -133,7 +133,7 @@ const App = () => {
                 <Route path="doctor/:id" element={<HomeDoctorOpinionPage />} />
               </Route>
 
-              {/* guide */}
+              {/* 범용가이드 */}
               <Route path="/guide">
                 <Route index element={<HomeSymptomOnboarding />} />
                 <Route path="detail" element={<GuideDetailPage />} />
