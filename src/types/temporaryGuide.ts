@@ -36,7 +36,7 @@ export interface TemporaryGuideDetail {
 
   duration: string;
 
-  sourceName: string | null; //  원문 제공 출처
+  sourceName: string | null;
   sourceUrl: string | null;
 
   highlighter: string | null;
