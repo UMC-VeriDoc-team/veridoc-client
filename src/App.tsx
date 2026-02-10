@@ -38,6 +38,7 @@ import HomeDoctorOpinionPage from "@/components/Modal/components/home/HomeDoctor
 import PublicOnly from "./components/Guard/PublicOnly";
 import RequireAuth from "./components/Guard/RequireAuth";
 import RequirePainArea from "./components/Guard/RequirePainArea";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
 
@@ -157,6 +158,19 @@ const App = () => {
           </Routes>
         )}
       </BrowserRouter>
+      <Toaster
+        position="bottom-center"
+        reverseOrder={false}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            fontSize: "14px",
+            borderRadius: "8px",
+            background: "#333",
+            color: "#fff",
+          },
+        }}
+      />
     </QueryClientProvider>
   );
 };

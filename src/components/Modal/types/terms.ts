@@ -35,16 +35,14 @@ export interface TermsContent {
   sections: TermsSection[];
 }
 
-// --- 약관 동의 API 전송 시 필요한 타입만 추가 (usePostTerm 등에서 사용) ---
-
-/** 약관 동의 API 요청 바디 (백엔드 agreement 구조분해 할당명과 일치) */
+// 약관 동의 API 요청 바디
 export interface PostTermRequest {
   termsOfService: boolean;
   privacyPolicy: boolean;
   locationService: boolean;
 }
 
-/** 약관 동의 API 응답 */
+// 약관 동의 API 응답
 export interface PostTermResponse {
   ok: boolean;
   agreedAt: string;
