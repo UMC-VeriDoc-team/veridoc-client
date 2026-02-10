@@ -9,6 +9,7 @@ export interface GuideStepItem {
 
 // 가이드 상세 콘텐츠 타입
 export interface GuideDetailContent {
+  cardNumber: number;
   // 헤더 영역
   header: {
     title: string;
