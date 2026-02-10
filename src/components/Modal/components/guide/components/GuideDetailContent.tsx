@@ -5,13 +5,7 @@ import SharePost from "../../home/components/SharePost";
 import { useAuthStore } from "@/stores/login/useAuthStore";
 import { GUIDE_CARDS } from "@/constants/guideCards";
 import type { UsageGuide } from "@/components/Modal/services/getUsageGuide";
-
-interface HashtagItem {
-  content: string;
-}
-
-// 해시태그
-const hashtags: HashtagItem[] = [{ content: "범용가이드" }];
+import Hashtag from "@/components/HashTag/HashTag";
 
 const GuideDetailContent = () => {
   const { guideType } = useGuideDetailModalStore();
@@ -146,16 +140,7 @@ const GuideDetailContent = () => {
               </div>
 
               {/* 해시태그 */}
-              <div className="flex flex-wrap gap-2">
-                {hashtags.map((hashtag) => (
-                  <div
-                    key={hashtag.content}
-                    className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-sm font-medium text-brand-primary"
-                  >
-                    {hashtag.content}
-                  </div>
-                ))}
-              </div>
+              <Hashtag content="범용가이드" />
             </div>
           </div>
         </div>

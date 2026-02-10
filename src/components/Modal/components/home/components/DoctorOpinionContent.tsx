@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import SharePost from "./SharePost";
 import { useAuthStore } from "@/stores/login/useAuthStore";
 import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
+import Hashtag from "@/components/HashTag/HashTag";
 
 const DoctorOpinionContent = () => {
   const { doctorOpinionId, setDoctorOpinionId } = useDoctorOpinionModalStore();
@@ -150,11 +151,7 @@ const DoctorOpinionContent = () => {
             </div>
 
             {/* 해시태그: 증상명 */}
-            <div className="flex gap-2">
-              <div className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-sm font-medium text-brand-primary">
-                {data.symptomName}
-              </div>
-            </div>
+            <Hashtag content={data.symptomName} />
           </div>
 
           {/* 포스트 더보기 */}

@@ -11,6 +11,7 @@ import { getTemporaryGuideDetail } from "@/components/Modal/services/getTemporar
 import SharePost from "./SharePost";
 import { useAuthStore } from "@/stores/login/useAuthStore";
 import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
+import Hashtag from "@/components/HashTag/HashTag";
 
 const TemporaryMeasureContent = () => {
   const { id } = useParams();
@@ -229,13 +230,8 @@ const TemporaryMeasureContent = () => {
 
             {/* 해시태그 */}
             <div className="flex gap-2">
-              {badges.map((b) => (
-                <div
-                  key={b}
-                  className="rounded-full border border-brand-primary px-2 pt-[2px] text-center text-sm font-medium text-brand-primary"
-                >
-                  {b}
-                </div>
+              {badges.map((b, idx) => (
+                <Hashtag key={idx} content={b} />
               ))}
             </div>
           </div>
