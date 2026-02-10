@@ -8,6 +8,7 @@ import type { Gender } from "@/components/Select/GenderSelect";
 import getAgreementStatus, {
   normalizeAgreement,
 } from "@/components/Modal/services/getAgreementStatus";
+import deleteUser from "@/pages/mypage/services/deleteUser";
 
 type LoginFailReason = "INVALID" | "UNKNOWN";
 type LoginResult = { ok: true } | { ok: false; reason: LoginFailReason };
@@ -47,6 +48,12 @@ interface AuthState {
   fetchAgreement: () => Promise<boolean>;
 
   initAuth: () => Promise<void>;
+
+  withdraw: () => Promise<{
+    ok: boolean;
+    message?: string;
+    error?: any;
+  }>;
 }
 
 const getAxiosStatus = (error: unknown): number | undefined => {
@@ -219,5 +226,23 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     // 약관 체크
     await get().fetchAgreement();
+  },
+
+  withdraw: async () => {
+    set({ loading: true });
+    try {
+      await deleteUser();
+      localStorage.removeItem("accessToken");
+      set({ authStatus: "unauthenticated", loading: false });
+      return { ok: true };
+    } catch (error: any) {
+      set({ loading: false });
+      // 에러 객체에 담긴 실제 메시지를 반환하거나 로깅
+      return {
+        ok: false,
+        error: error,
+        message: error.response?.data?.message || "서버 오류",
+      };
+    }
   },
 }));

@@ -17,6 +17,7 @@ import {
 } from "@/utils/locationPermission";
 import { usePostTerm } from "@/hooks/term/usePostTerm";
 import { useAuthStore } from "@/stores/login/useAuthStore";
+import toast from "react-hot-toast";
 
 const HomeTermsAgreementModal = () => {
   const { openModal, closeModal } = useBaseModal();
@@ -136,7 +137,7 @@ const HomeTermsAgreementModal = () => {
     toggleChecked(key);
   };
 
-  // 동의하고 가입하기 (usePostTerm으로 전송만 수행, 응답값은 사용하지 않음)
+  // 동의하고 가입하기
   const handleSubmit = () => {
     const requestData: PostTermRequest = {
       termsOfService: checked[TermsKey.SERVICE],
@@ -144,15 +145,22 @@ const HomeTermsAgreementModal = () => {
       locationService: checked[TermsKey.LOCATION],
     };
 
+    // 가입 처리 중임을 알리는 로딩 토스트
+    const loadingToast = toast.loading("동의 정보를 저장하고 있습니다...");
+
     postTerm(requestData, {
       onSuccess: () => {
+        toast.success("약관 동의가 완료되었습니다!", { id: loadingToast });
         fetchAgreement();
         reset();
         closeModal();
       },
       onError: (error) => {
         console.error(error);
-        alert("API 연동 중 오류가 발생했습니다.");
+        // API 오류 발생 시 토스트 노출
+        toast.error("서비스 연동 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.", {
+          id: loadingToast,
+        });
       },
     });
   };
