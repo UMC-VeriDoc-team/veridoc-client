@@ -4,6 +4,7 @@ import { ModalType } from "../../types/modal";
 import { useHomeStore } from "@/stores/home/useHomeStore";
 import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 // 대처 방법 / 병원 정보 미확인 모달 (3 → 4단계)
 const StepTreatmentInfoRequiredModal = () => {
@@ -18,7 +19,7 @@ const StepTreatmentInfoRequiredModal = () => {
     const firstGuideId = temporaryGuides[0]?.guideId;
 
     if (!firstGuideId) {
-      alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
+      toast.error("전문의 답변 정보를 찾을 수 없습니다.");
       return;
     }
 
