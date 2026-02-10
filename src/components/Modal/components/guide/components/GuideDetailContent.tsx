@@ -6,6 +6,7 @@ import { useAuthStore } from "@/stores/login/useAuthStore";
 import { GUIDE_CARDS } from "@/constants/guideCards";
 import type { UsageGuide } from "@/components/Modal/services/getUsageGuide";
 import Hashtag from "@/components/HashTag/HashTag";
+import SourceButton from "@/components/Button/SourceButton";
 
 const GuideDetailContent = () => {
   const { guideType } = useGuideDetailModalStore();
@@ -22,12 +23,6 @@ const GuideDetailContent = () => {
 
   // 매칭된 가이드가 있고 sourceUrl이 있을 때만 버튼 노출
   const shouldShowSourceButton = !!matchedGuide?.sourceUrl;
-
-  const handleOpenSource = () => {
-    if (matchedGuide?.sourceUrl) {
-      window.open(matchedGuide.sourceUrl, "_blank", "noopener,noreferrer");
-    }
-  };
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -53,14 +48,12 @@ const GuideDetailContent = () => {
             <p className="text-sm font-medium text-white sm:text-base">{content.source.name}</p>
 
             {shouldShowSourceButton && (
-              <button
-                type="button"
-                onClick={handleOpenSource}
-                className="ml-auto flex items-center gap-2 transition-opacity hover:opacity-80 active:scale-95"
-              >
-                <p className="text-sm font-medium text-white sm:text-base">원문 출처 보기</p>
-                <Icon name="link" className="h-5 w-5 sm:h-6 sm:w-6" />
-              </button>
+              <SourceButton
+                url={matchedGuide?.sourceUrl}
+                className="ml-auto"
+                textClassName="text-white"
+                iconBgClassName="bg-white/20"
+              />
             )}
           </div>
         </div>

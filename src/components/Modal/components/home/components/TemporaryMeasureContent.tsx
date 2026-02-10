@@ -12,6 +12,7 @@ import SharePost from "./SharePost";
 import { useAuthStore } from "@/stores/login/useAuthStore";
 import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
 import Hashtag from "@/components/HashTag/HashTag";
+import SourceButton from "@/components/Button/SourceButton";
 
 const TemporaryMeasureContent = () => {
   const { id } = useParams();
@@ -130,17 +131,7 @@ const TemporaryMeasureContent = () => {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={handleOpenSource}
-              disabled={!sourceUrl}
-              className="flex h-full items-center justify-center gap-2 self-end sm:self-center"
-            >
-              <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
-                원문 출처 보기
-              </p>
-              <Icon name="link" className="h-5 w-5 rounded-full bg-gray-200 sm:h-6 sm:w-6" />
-            </button>
+            <SourceButton url={sourceUrl} className="self-end sm:self-center" />
           </div>
         </div>
 

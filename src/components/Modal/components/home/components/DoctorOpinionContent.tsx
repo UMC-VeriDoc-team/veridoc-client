@@ -7,6 +7,7 @@ import SharePost from "./SharePost";
 import { useAuthStore } from "@/stores/login/useAuthStore";
 import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
 import Hashtag from "@/components/HashTag/HashTag";
+import SourceButton from "@/components/Button/SourceButton";
 
 const DoctorOpinionContent = () => {
   const { doctorOpinionId, setDoctorOpinionId } = useDoctorOpinionModalStore();
@@ -44,11 +45,6 @@ const DoctorOpinionContent = () => {
 
     void run();
   }, [doctorOpinionId, painAreaID, recordEvent]);
-
-  const handleOpenSource = (url: string) => {
-    if (!url) return;
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
 
   if (!doctorOpinionId) return null;
 
@@ -93,17 +89,7 @@ const DoctorOpinionContent = () => {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => handleOpenSource(data.sourceUrl)}
-              disabled={!data.sourceUrl}
-              className={`flex items-center justify-center gap-2 ${data.sourceUrl ? "cursor-pointer" : "cursor-not-allowed opacity-40"}`}
-            >
-              <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
-                원문 출처 보기
-              </p>
-              <Icon name="link" className="h-5 w-5 rounded-full bg-gray-200 sm:h-6 sm:w-6" />
-            </button>
+            <SourceButton url={data.sourceUrl} />
           </div>
         </div>
 

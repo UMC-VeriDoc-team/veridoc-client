@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/login/useAuthStore";
 import { getLifeStyleGuide } from "@/pages/symptom/services/getLifeStyleGuide";
 import type { LifeStyleGuideData } from "@/types/symptom";
+import SourceButton from "@/components/Button/SourceButton";
 
 export const LifeGuideTab = () => {
   const { painAreaID } = useAuthStore();
@@ -114,19 +115,7 @@ export const LifeGuideTab = () => {
 
           {/* 출처 */}
           <div className="flex items-center gap-[10px] text-[16px] font-medium leading-[140%] tracking-[-0.025em] text-gray-200">
-            {mainVideo?.youtubeUrl && (
-              <a
-                href={mainVideo.youtubeUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-[10px] hover:text-brand-primary"
-              >
-                <p className="text-center text-sm font-medium text-gray-200 sm:text-base">
-                  원문 출처 보기
-                </p>
-                <Icon name="link" className="h-5 w-5 rounded-full bg-gray-200 sm:h-6 sm:w-6" />
-              </a>
-            )}
+            {mainVideo?.youtubeUrl && <SourceButton url={mainVideo.youtubeUrl} />}
           </div>
         </div>
 
