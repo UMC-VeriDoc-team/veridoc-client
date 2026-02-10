@@ -181,16 +181,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const mapped = mapUserMeToState(dto);
       set(mapped);
 
-      // ✅ painAreaID가 8일 경우 가이드 호출
       if (mapped.painAreaID === 8) {
         await get().fetchUsageGuide();
       } else {
-        set({ usageGuide: null }); // 다른 ID일 경우 초기화
+        set({ usageGuide: null });
       }
 
       return true;
-    } catch (e) {
-      // ... 기존 에러 처리
+    } catch (e: unknown) {
+      console.error("사용자 정보 조회 실패:", e);
       return false;
     }
   },
