@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
-import { ModalType } from "../Modal/types/modal";
+import { ModalType } from "@/components/Modal/types/modal";
 import { useAuthStore } from "@/stores/user/useAuthStore";
 
 const HOME_ACTIVE_PATHS = ["/home", "/usage", "/preview"];

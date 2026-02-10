@@ -1,7 +1,7 @@
 import Icon from "@/components/Icon/Icon";
 import { USAGE_GUIDE_DETAIL_CONTENTS } from "@/constants/usage/usageGuideDetailContents";
 import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
-import SharePost from "../../../../Button/SharePost";
+import SharePost from "@/components/Button/SharePost";
 import { useAuthStore } from "@/stores/user/useAuthStore";
 import { USAGE_GUIDE_CARDS } from "@/constants/usage/usageGuideCards";
 import type { UsageGuide } from "@/components/Modal/services/getUsageGuide";

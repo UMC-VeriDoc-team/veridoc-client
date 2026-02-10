@@ -8,10 +8,10 @@ import GenderSelect from "@/components/Select/GenderSelect";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { validateEmail } from "@/utils/validateEmail";
-import useSignupSymptomStore from "@/stores/signup/useSignupSymptomStore";
-import { useSignup } from "../hooks/useSignup";
+import { useSignupStore } from "@/stores/signup/useSignupStore";
 import { PASSWORD_REGEX } from "@/utils/vaildatePassword";
-import type { SignupPayload } from "../services/postSignup";
+import type { SignupPayload } from "@/pages/signup/services/postSignup";
+import toast from "react-hot-toast";
 
 type TouchedState = {
   name: boolean;
@@ -22,9 +22,9 @@ type TouchedState = {
 
 const SignUpForm = () => {
   const { openModal } = useBaseModal();
-  const { loading, fieldErrors, formError, clearFieldError, signup } = useSignup();
 
-  const painAreaID = useSignupSymptomStore((s) => s.selectedPainAreaID);
+  const { loading, fieldErrors, formError, clearFieldError, signup, selectedPainAreaID, resetAll } =
+    useSignupStore();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,6 +42,7 @@ const SignUpForm = () => {
 
   const shouldShowError = (key: keyof TouchedState) => touched[key] || submitted;
 
+  // 클라이언트 사이드 유효성 검사 로직 (기존과 동일)
   const nameClientError = useMemo(() => {
     if (!shouldShowError("name")) return null;
     return name.trim().length === 0 ? "필수 입력 사항입니다" : null;
@@ -94,14 +95,15 @@ const SignUpForm = () => {
       password,
       birth,
       gender: gender as Gender,
-      painAreaID: painAreaID ?? null,
+      painAreaID: selectedPainAreaID,
     };
 
     try {
       await signup(payload);
+      resetAll();
       openModal(ModalType.AUTH_SIGNUP_SUCCESS);
     } catch {
-      // useSignup에서 fieldErrors/formError 세팅
+      toast.error("회원가입에 실패했습니다.");
     }
   };
 
@@ -241,7 +243,7 @@ const SignUpForm = () => {
 
       <div className="mt-[60px]">
         <Button type="button" onClick={handleSubmit} disabled={loading}>
-          회원가입
+          {loading ? "가입 중..." : "회원가입"}
         </Button>
       </div>
     </div>

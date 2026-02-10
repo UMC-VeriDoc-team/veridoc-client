@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon/Icon";
 import useBaseModal from "@/stores/modal/useBaseModal";
-import { ModalType } from "../../types/modal";
+import { ModalType } from "@/components/Modal/types/modal";
 import { useHomeStore } from "@/stores/home/useHomeStore";
 import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
 import { useNavigate } from "react-router-dom";

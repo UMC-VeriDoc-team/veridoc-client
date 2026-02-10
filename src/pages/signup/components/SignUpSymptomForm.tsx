@@ -4,21 +4,21 @@ import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button/Button";
 import Icon from "@/components/Icon/Icon";
 import SymptomGrid from "@/components/Symptom/SymptomGrid";
-import useSignupSymptomStore from "@/stores/signup/useSignupSymptomStore";
+
+import { useSignupStore } from "@/stores/signup/useSignupStore";
 import { UNSELECTED_PAIN_AREA_ID, usePainAreas } from "@/hooks/usePainAreas";
 
 type ErrorType = "multi" | null;
 
 const SignUpSymptomForm = () => {
   const navigate = useNavigate();
-
   const { painAreaIdByKey } = usePainAreas();
-  const { selectedKey, setSelectedSymptom } = useSignupSymptomStore();
+  const { selectedKey, setSelectedSymptom } = useSignupStore();
 
   const [multiAttemptedKey, setMultiAttemptedKey] = useState<string | null>(null);
   const [errorType, setErrorType] = useState<ErrorType>(null);
 
-  // 에러 메시지 설정
+  // 상단 에러 메시지 설정
   const errorConfig = useMemo(() => {
     if (errorType === "multi") {
       return {
@@ -29,9 +29,8 @@ const SignUpSymptomForm = () => {
     return null;
   }, [errorType]);
 
-  // key + painAreaID를 store에 함께 저장
+  // 스토어에 선택 정보 확정 저장
   const confirmSelect = (key: string | null) => {
-    // 훅에서 제공하는 painAreaIdByKey 맵을 활용해 ID 추출
     const painAreaID = key
       ? (painAreaIdByKey.get(key) ?? UNSELECTED_PAIN_AREA_ID)
       : UNSELECTED_PAIN_AREA_ID;
@@ -52,7 +51,7 @@ const SignUpSymptomForm = () => {
 
     // 중복 선택 시도 중인 상태
     if (multiAttemptedKey) {
-      // 현재 빨간색(시도 중)인 카드를 다시 누르면 -> 해당 카드로 교체 선택
+      // 현재 빨간색인 카드를 다시 누르면 -> 해당 카드로 교체 선택
       if (key === multiAttemptedKey) {
         confirmSelect(multiAttemptedKey);
         return;
@@ -88,17 +87,17 @@ const SignUpSymptomForm = () => {
       return;
     }
 
-    // 아무것도 선택하지 않았다면 기본값(8)으로 저장
+    // 아무것도 선택하지 않았다면 기본 ID로 세팅
     if (selectedKey === null) {
       setSelectedSymptom(null, UNSELECTED_PAIN_AREA_ID);
     }
 
+    // 다음 회원가입 정보 입력 단계로 이동
     navigate("/signup");
   };
 
   return (
     <div className="relative">
-      {/* 에러 메시지 상단 노출 */}
       {errorConfig && (
         <div className="-mt-[78px] mb-8 flex justify-center md:-mt-[60px]">
           <div

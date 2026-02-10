@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
-import Icon from "../../components/Icon/Icon";
+import Icon from "@/components/Icon/Icon";
 import Logo from "/images/logo.svg";
 import SymptomGrid from "@/components/Symptom/SymptomGrid";
 import Button from "@/components/Button/Button";

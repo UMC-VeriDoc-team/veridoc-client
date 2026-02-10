@@ -4,7 +4,7 @@ import Input from "@/components/Input/Input";
 import { ModalType } from "@/components/Modal/types/modal";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { useMemo, useState } from "react";
-import postResetPassword from "../services/postResetPassword";
+import postResetPassword from "@/pages/password/services/postResetPassword";
 import { useSearchParams } from "react-router-dom";
 
 // 새 비밀번호 형식 검증: 미입력 / 8자 미만
