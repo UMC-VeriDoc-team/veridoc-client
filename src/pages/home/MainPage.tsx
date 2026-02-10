@@ -9,14 +9,13 @@ import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 
 const MainPage = () => {
-  const { initAuth, needsAgreementModal } = useAuthStore();
+  const { needsAgreementModal } = useAuthStore();
   const { fetchHome } = useHomeStore();
   const { openModal } = useBaseModal();
 
   useEffect(() => {
-    void initAuth();
     void fetchHome();
-  }, [fetchHome, initAuth]);
+  }, [fetchHome]);
 
   useEffect(() => {
     if (needsAgreementModal) {
