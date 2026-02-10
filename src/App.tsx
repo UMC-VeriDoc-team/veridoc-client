@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, Navigate, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -26,7 +26,6 @@ import MainPage from "@/pages/home/MainPage";
 import MyPage from "@/pages/mypage/Mypage";
 import MyPasswordPage from "@/pages/mypage/MyPasswordPage";
 import SymptomPage from "@/pages/symptom/SymptomPage";
-import HospitalMapSection from "@/pages/home/components/map/HospitalMapSection";
 import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding";
 import HomePreview from "@/pages/home/components/HomePreview";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
@@ -44,10 +43,21 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const isMobile = useIsMobile();
-  const { authStatus, painAreaID } = useAuthStore();
 
   const [showSplash, setShowSplash] = useState(true);
   const shouldShowSplash = isMobile && showSplash;
+  const { initAuth, authStatus, painAreaID } = useAuthStore();
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  useEffect(() => {
+    const setup = async () => {
+      await initAuth();
+      setIsInitializing(false);
+    };
+    setup();
+  }, [initAuth]);
+
+  if (isInitializing) return null;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -132,9 +142,6 @@ const App = () => {
               <Route path="/symptom">
                 <Route index element={<SymptomPage />} />
               </Route>
-
-              {/* 병원 */}
-              <Route path="/hospital" element={<HospitalMapSection />} />
 
               {/* 마이페이지 */}
               <Route path="/my" element={<MyPage />} />
