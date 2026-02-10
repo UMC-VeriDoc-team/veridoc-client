@@ -1,5 +1,5 @@
+import type { SymptomGuideStep } from "../SymptomGuideTab";
 import StepCard from "./StepCard";
-import type { SymptomGuideStep } from "@/pages/symptom/tabs/symptom-guide/SymptomGuideTab";
 
 interface StepCardListProps {
   steps: SymptomGuideStep[];
