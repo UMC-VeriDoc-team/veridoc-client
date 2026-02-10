@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import {
   TermsKey,
@@ -8,14 +8,14 @@ import {
   type PostTermRequest,
   type TermsItem,
 } from "@/components/Modal/types/terms";
-import useTermsAgreementStore from "@/stores/modal/useTermsAgreementStore";
+import { useTermsAgreementStore } from "@/stores/modal/useTermsAgreementStore";
 import { TERMS_ITEMS } from "@/constants/terms/termsItems";
 import {
   getLocationPermissionState,
   makeGeoErrorMessage,
   requestLocationOnce,
 } from "@/utils/locationPermission";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 import toast from "react-hot-toast";
 
 const HomeTermsAgreementModal = () => {

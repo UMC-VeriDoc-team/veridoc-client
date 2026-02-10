@@ -12,6 +12,9 @@ export type PutMyPasswordResponse = {
   errorCode?: string;
 };
 
-export const putMyPassword = async (body: PutMyPasswordBody) => {
+// 마이페이지 내 비밀번호 변경
+const putMyPassword = async (body: PutMyPasswordBody) => {
   return await authApiWrapper.put<PutMyPasswordResponse>("/users/me/password", body);
 };
+
+export default putMyPassword;

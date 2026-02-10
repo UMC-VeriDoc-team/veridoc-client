@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon/Icon";
 import { useNavigate } from "react-router-dom";
-import TemporaryMeasureContent from "./components/TemporaryMeasureContent";
+import MeasureContent from "@/components/Modal/components/home/components/MeasureContent";
 
 // 데스크탑: 임시 대처 방안 상세 모달
 const HomeTemporaryMeasurePage = () => {
@@ -19,7 +19,7 @@ const HomeTemporaryMeasurePage = () => {
 
       {/* 본문 */}
       <div className="min-h-0 flex-1">
-        <TemporaryMeasureContent />
+        <MeasureContent />
       </div>
     </div>
   );

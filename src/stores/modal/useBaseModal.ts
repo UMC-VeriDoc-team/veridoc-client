@@ -23,7 +23,7 @@ interface BaseModal {
   closeModal: () => void;
 }
 
-const useBaseModal = create<BaseModal>((set) => ({
+export const useBaseModal = create<BaseModal>((set) => ({
   isModalOpen: false,
   modalType: null,
   modalPayload: undefined,
@@ -34,5 +34,3 @@ const useBaseModal = create<BaseModal>((set) => ({
 
   closeModal: () => set({ isModalOpen: false, modalType: null, modalPayload: undefined }),
 }));
-
-export default useBaseModal;

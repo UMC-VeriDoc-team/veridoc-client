@@ -1,5 +1,5 @@
 import { TermsKey, type TermsItem } from "@/components/Modal/types/terms";
-import { LOCATION_TERMS, PRIVACY_TERMS, SERVICE_TERMS } from "./termsContent";
+import { LOCATION_TERMS, PRIVACY_TERMS, SERVICE_TERMS } from "@/constants/terms/termsContent";
 
 export const TERMS_ITEMS: TermsItem[] = [
   {

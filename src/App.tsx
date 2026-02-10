@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate, Outlet } from "react-router-dom
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import useIsMobile from "@/hooks/useIsMobile";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 
 import ScrollToTop from "@/components/Scroll/ScrollToTop";
 import ModalPage from "@/components/Modal/ModalPage";
@@ -26,18 +26,18 @@ import MainPage from "@/pages/home/MainPage";
 import MyPage from "@/pages/mypage/Mypage";
 import MyPasswordPage from "@/pages/mypage/MyPasswordPage";
 import SymptomPage from "@/pages/symptom/SymptomPage";
-import HomeSymptomOnboarding from "@/pages/home/components/HomeSymptomOnboarding";
-import HomePreview from "@/pages/home/components/HomePreview";
+import HomeSymptomOnboarding from "@/pages/usage/UsageGuidePage";
+import HomePreview from "@/pages/preview/HomePreview";
 import ModalGuidePage from "@/pages/guide/ModalGuidePage";
 import ColorGuide from "@/pages/guide/ColorGuide";
 
 /* modal pages */
-import GuideDetailPage from "@/components/Modal/components/guide/GuideDetailPage";
+import UsageGuideDetailPage from "@/components/Modal/components/usage/UsageGuideDetailPage";
 import HomeTemporaryMeasurePage from "@/components/Modal/components/home/HomeTemporaryMeasurePage";
 import HomeDoctorOpinionPage from "@/components/Modal/components/home/HomeDoctorOpinionPage";
-import PublicOnly from "./components/Guard/PublicOnly";
-import RequireAuth from "./components/Guard/RequireAuth";
-import RequirePainArea from "./components/Guard/RequirePainArea";
+import PublicOnly from "@/components/Guard/PublicOnly";
+import RequireAuth from "@/components/Guard/RequireAuth";
+import RequirePainArea from "@/components/Guard/RequirePainArea";
 import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
@@ -78,7 +78,7 @@ const App = () => {
                 authStatus !== "authenticated" ? (
                   <OnboardingLayout />
                 ) : (
-                  <Navigate to={painAreaID == null ? "/guide" : "/home"} replace />
+                  <Navigate to={painAreaID == null ? "/usage" : "/home"} replace />
                 )
               }
             >
@@ -119,7 +119,7 @@ const App = () => {
                 </RequireAuth>
               }
             >
-              {/* 홈: painAreaID 없으면 /guide로 */}
+              {/* 홈: painAreaID 없으면 /usage */}
               <Route
                 path="/home"
                 element={
@@ -134,9 +134,9 @@ const App = () => {
               </Route>
 
               {/* 범용가이드 */}
-              <Route path="/guide">
+              <Route path="/usage">
                 <Route index element={<HomeSymptomOnboarding />} />
-                <Route path="detail" element={<GuideDetailPage />} />
+                <Route path="detail" element={<UsageGuideDetailPage />} />
               </Route>
 
               {/* 증상 */}

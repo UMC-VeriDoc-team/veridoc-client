@@ -1,5 +1,5 @@
 import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 
 // 개인정보 변경 완료 모달
 const MyProfileUpdatedModal = () => {

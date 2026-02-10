@@ -1,5 +1,5 @@
-import type { Gender } from "@/components/Select/GenderSelect";
 import { api } from "@/utils/api/api";
+import type { Gender } from "@/components/Select/GenderSelect";
 
 export interface SignupPayload {
   name: string;
@@ -19,6 +19,9 @@ export interface SignupResponse {
   };
 }
 
-export const postSignup = (payload: SignupPayload) => {
+// 회원가입
+const postSignup = (payload: SignupPayload) => {
   return api.post<SignupResponse>("/users/signup", payload);
 };
+
+export default postSignup;

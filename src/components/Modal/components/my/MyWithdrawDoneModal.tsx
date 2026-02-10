@@ -1,5 +1,5 @@
 import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { useNavigate } from "react-router-dom";
 
 // 회원탈퇴 완료 모달

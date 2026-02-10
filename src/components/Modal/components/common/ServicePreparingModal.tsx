@@ -1,5 +1,5 @@
 import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 
 // 서비스 준비 중 안내 모달
 const ServicePreparingModal = () => {

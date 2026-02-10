@@ -1,7 +1,7 @@
 import Button from "@/components/Button/Button";
 import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import { ModalType } from "@/components/Modal/types/modal";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useState, useMemo } from "react";
 import { useForgotPasswordStore } from "@/stores/password/useForgotPasswordStore";

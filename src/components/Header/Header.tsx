@@ -1,10 +1,10 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "/images/logo.svg";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 
-const HOME_ACTIVE_PATHS = ["/home", "/guide", "/preview"];
+const HOME_ACTIVE_PATHS = ["/home", "/usage", "/preview"];
 
 const authButtonVisiblePaths = [
   "/",
@@ -30,7 +30,7 @@ const Header = ({ className }: HeaderProps) => {
   const hasSymptom = Boolean(painAreaID);
 
   const homeTarget =
-    authStatus === "authenticated" ? (hasSymptom ? "/home" : "/guide") : "/preview";
+    authStatus === "authenticated" ? (hasSymptom ? "/home" : "/usage") : "/preview";
 
   const isHomeActive = HOME_ACTIVE_PATHS.some((p) => location.pathname.startsWith(p));
   const isSymptomActive = location.pathname.startsWith("/symptom");

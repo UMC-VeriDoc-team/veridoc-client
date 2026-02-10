@@ -7,6 +7,9 @@ export type PatchUserMeRequest = {
   gender: Gender;
 };
 
-export const putUserMe = async (payload: PatchUserMeRequest) => {
+// 사용자 정보 수정
+const putUserMe = async (payload: PatchUserMeRequest) => {
   return await authApiWrapper.put<Record<string, never>>("/users/me/profile", payload);
 };
+
+export default putUserMe;

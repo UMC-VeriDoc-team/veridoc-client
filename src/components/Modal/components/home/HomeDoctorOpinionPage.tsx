@@ -1,8 +1,8 @@
 import { useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/Icon/Icon";
-import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
-import DoctorOpinionContent from "./components/DoctorOpinionContent";
+import { useDoctorOpinionModalStore } from "@/stores/modal/useDoctorOpinionModalStore";
+import DoctorOpinionContent from "@/components/Modal/components/home/components/DoctorOpinionContent";
 
 const HomeDoctorOpinionPage = () => {
   const navigate = useNavigate();
