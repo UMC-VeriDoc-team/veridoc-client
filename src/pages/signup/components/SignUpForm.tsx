@@ -24,7 +24,6 @@ const SignUpForm = () => {
   const { openModal } = useBaseModal();
   const { loading, fieldErrors, formError, clearFieldError, signup } = useSignup();
 
-  // 서버로 보낼 painAreaID를 store에서 바로 가져오기(선택->ID매칭 다시 안해도 됨)
   const painAreaID = useSignupSymptomStore((s) => s.selectedPainAreaID);
 
   const [name, setName] = useState("");
@@ -106,10 +105,21 @@ const SignUpForm = () => {
     }
   };
 
-  const renderField = (label: string, children: React.ReactNode, error: string | null) => (
+  const renderField = (
+    id: string,
+    label: string,
+    children: React.ReactNode,
+    error: string | null
+  ) => (
     <div className="flex flex-col gap-2">
-      <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
-        {label} <span className="text-error">*</span>
+      <label
+        htmlFor={id}
+        className="flex cursor-pointer items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950"
+      >
+        {label}{" "}
+        <span className="text-error" aria-hidden="true">
+          *
+        </span>
       </label>
       {children}
       {error && (
@@ -127,8 +137,10 @@ const SignUpForm = () => {
 
         <div className="mt-[30px] flex flex-col gap-[30px]">
           {renderField(
+            "signup-name",
             "이름",
             <InputField
+              id="signup-name"
               type="text"
               placeholder="이름을 입력해주세요"
               value={name}
@@ -145,8 +157,10 @@ const SignUpForm = () => {
           )}
 
           {renderField(
+            "signup-email",
             "이메일",
             <EmailDomainInput
+              id="signup-email"
               value={email}
               onChange={(next) => {
                 setEmail(next);
@@ -159,8 +173,10 @@ const SignUpForm = () => {
           )}
 
           {renderField(
+            "signup-password",
             "비밀번호",
             <InputField
+              id="signup-password"
               type="password"
               placeholder="비밀번호를 입력해주세요 (8자 이상)"
               value={password}
@@ -178,8 +194,10 @@ const SignUpForm = () => {
           )}
 
           {renderField(
+            "signup-birth",
             "생년월일",
             <DateOfBirthInput
+              id="signup-birth"
               value={dob}
               onChange={(next) => {
                 setDob(next);
@@ -191,8 +209,13 @@ const SignUpForm = () => {
             dobError
           )}
 
-          {renderField(
-            "성별",
+          <div className="flex flex-col gap-2">
+            <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
+              성별{" "}
+              <span className="text-error" aria-hidden="true">
+                *
+              </span>
+            </label>
             <GenderSelect
               value={gender}
               onChange={(next) => {
@@ -200,9 +223,13 @@ const SignUpForm = () => {
                 clearFieldError("gender");
               }}
               touched={submitted}
-            />,
-            genderError
-          )}
+            />
+            {genderError && (
+              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+                {genderError}
+              </p>
+            )}
+          </div>
         </div>
 
         {formError && (

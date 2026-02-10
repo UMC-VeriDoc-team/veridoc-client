@@ -38,10 +38,8 @@ const LoginForm = () => {
   const isFormValid =
     !emailError && !passwordError && email.trim() !== "" && password.trim() !== "";
 
-  // 엔터 키 입력 시 호출될 핸들러
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-
     setTouched({ email: true, password: true });
     setServerError("");
 
@@ -49,7 +47,6 @@ const LoginForm = () => {
 
     const result = await login({ email: email.trim(), password });
 
-    // 로그인 성공 후 처리
     if (result.ok) {
       if (painAreaID !== 8) {
         navigate("/home");
@@ -59,7 +56,6 @@ const LoginForm = () => {
       return;
     }
 
-    // 로그인 실패 처리
     if (result.reason === "INVALID") {
       openModal(ModalType.AUTH_LOGIN_FAILED);
     } else {
@@ -75,11 +71,19 @@ const LoginForm = () => {
         <div className="mt-[30px] flex flex-col gap-[30px]">
           {/* 이메일 입력 섹션 */}
           <div className="flex flex-col gap-2">
-            <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
-              이메일 <span className="text-error">*</span>
+            {/* id="email-input"과 연결 */}
+            <label
+              htmlFor="email-input"
+              className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950"
+            >
+              이메일{" "}
+              <span className="text-error" aria-hidden="true">
+                *
+              </span>
             </label>
 
             <EmailDomainInput
+              id="email-input"
               value={email}
               onChange={setEmail}
               onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
@@ -95,11 +99,19 @@ const LoginForm = () => {
 
           {/* 비밀번호 입력 섹션 */}
           <div className="flex flex-col gap-2">
-            <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
-              비밀번호 <span className="text-error">*</span>
+            {/* id="password-input"과 연결 */}
+            <label
+              htmlFor="password-input"
+              className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950"
+            >
+              비밀번호{" "}
+              <span className="text-error" aria-hidden="true">
+                *
+              </span>
             </label>
 
             <InputField
+              id="password-input"
               type="password"
               placeholder="비밀번호를 입력해주세요 (8자 이상)"
               value={password}
@@ -121,7 +133,6 @@ const LoginForm = () => {
       </div>
 
       <div className="mt-[60px]">
-        {/* 서버 에러 메시지 */}
         {serverError && (
           <p className="-mt-8 pb-3 text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
             {serverError}

@@ -3,6 +3,7 @@ import { EMAIL_DOMAIN_OPTIONS, type EmailDomainOption } from "@/constants/email"
 import Icon from "@/components/Icon/Icon";
 
 interface EmailDomainInputProps {
+  id: string;
   value: string; // full email: local@domain
   onChange: (nextEmail: string) => void;
   placeholderLocal?: string; // @ 앞 placeholder
@@ -19,6 +20,7 @@ const splitEmail = (value: string) => {
 };
 
 const EmailDomainInput = ({
+  id,
   value,
   onChange,
   placeholderLocal = "이메일을 입력해주세요",
@@ -26,26 +28,14 @@ const EmailDomainInput = ({
   hasError = false,
   onBlur,
 }: EmailDomainInputProps) => {
-  // value -> local/domain 분리
   const parsed = useMemo(() => splitEmail(value), [value]);
 
-  const [emailLocal, setEmailLocal] = useState(parsed.local);
-  const [emailDomain, setEmailDomain] = useState(parsed.domain);
-  const [domainOption, setDomainOption] = useState<EmailDomainOption>("직접입력");
   const [isOpen, setIsOpen] = useState(false);
 
-  // 부모 value가 바뀌면 내부도 동기화
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (parsed.local !== emailLocal) setEmailLocal(parsed.local);
-    if (parsed.domain !== emailDomain) setEmailDomain(parsed.domain);
-
+  const domainOption = useMemo((): EmailDomainOption => {
     const isInOptions = EMAIL_DOMAIN_OPTIONS.includes(parsed.domain as EmailDomainOption);
-    const nextOption: EmailDomainOption =
-      parsed.domain && isInOptions ? (parsed.domain as EmailDomainOption) : "직접입력";
-
-    if (nextOption !== domainOption) setDomainOption(nextOption);
-  }, [parsed.local, parsed.domain]);
+    return parsed.domain && isInOptions ? (parsed.domain as EmailDomainOption) : "직접입력";
+  }, [parsed.domain]);
 
   const isCustom = domainOption === "직접입력";
 
@@ -69,29 +59,25 @@ const EmailDomainInput = ({
   }, []);
 
   const handleChangeLocal = (nextLocal: string) => {
-    setEmailLocal(nextLocal);
-    onChange(fullEmail(nextLocal, emailDomain));
+    onChange(fullEmail(nextLocal, parsed.domain));
   };
 
   const handleChangeDomain = (nextDomain: string) => {
-    setEmailDomain(nextDomain);
-    onChange(fullEmail(emailLocal, nextDomain));
+    onChange(fullEmail(parsed.local, nextDomain));
   };
 
   const handleSelectDomain = (opt: EmailDomainOption) => {
-    setDomainOption(opt);
     setIsOpen(false);
 
     if (opt === "직접입력") {
-      setEmailDomain("");
-      onChange(fullEmail(emailLocal, ""));
+      onChange(fullEmail(parsed.local, ""));
     } else {
-      setEmailDomain(opt);
-      onChange(fullEmail(emailLocal, opt));
+      onChange(fullEmail(parsed.local, opt));
     }
 
     onBlur?.();
   };
+
   return (
     <div
       className={[
@@ -102,7 +88,8 @@ const EmailDomainInput = ({
     >
       {/* local */}
       <input
-        value={emailLocal}
+        id={id}
+        value={parsed.local} // 로컬 state 대신 parsed 값 사용
         onChange={(e) => handleChangeLocal(e.target.value)}
         placeholder={placeholderLocal}
         className="h-full w-[57%] rounded-l pl-3 text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200 md:px-3"
@@ -118,7 +105,8 @@ const EmailDomainInput = ({
 
           {isCustom ? (
             <input
-              value={emailDomain}
+              aria-label="이메일 도메인 직접 입력"
+              value={parsed.domain} // 로컬 state 대신 parsed 값 사용
               onChange={(e) => handleChangeDomain(e.target.value)}
               placeholder={placeholderDomain}
               className="h-full w-full rounded-r pr-8 text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200"

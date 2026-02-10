@@ -3,26 +3,34 @@ import EmailDomainInput from "@/components/Input/EmailDomainInput";
 import { ModalType } from "@/components/Modal/types/modal";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForgotPasswordStore } from "@/stores/password/useForgotPasswordStore";
 
 const EmailRequestForm = () => {
   const { openModal } = useBaseModal();
-
   const { email, setEmail, sendMail, loading, error } = useForgotPasswordStore();
 
   const [touchedEmail, setTouchedEmail] = useState(false);
 
-  const emailError = touchedEmail ? validateEmail(email) : "";
-  const isFormValid = !validateEmail(email);
+  const emailError = useMemo(() => {
+    return touchedEmail ? validateEmail(email) : "";
+  }, [touchedEmail, email]);
+
+  // 폼 유효성 여부
+  const isFormValid = useMemo(() => {
+    return email.length > 0 && !validateEmail(email);
+  }, [email]);
 
   const handleSubmit = async () => {
     setTouchedEmail(true);
+
     if (!isFormValid) return;
 
     const ok = await sendMail();
-    // 메일 전송 모달 오픈
-    if (ok) openModal(ModalType.AUTH_MAIL_SENT);
+    // 메일 전송 성공 시 모달 오픈
+    if (ok) {
+      openModal(ModalType.AUTH_MAIL_SENT);
+    }
   };
 
   return (
@@ -39,35 +47,40 @@ const EmailRequestForm = () => {
 
         <div className="mt-[30px] flex flex-col gap-[30px]">
           <div className="flex flex-col gap-2">
-            <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
+            <label
+              htmlFor="forgot-password-email"
+              className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950"
+            >
               이메일 <span className="text-error">*</span>
             </label>
 
             <EmailDomainInput
+              id="forgot-password-email"
               value={email}
-              onChange={(nextEmail) => setEmail(nextEmail)}
+              onChange={(nextEmail) => {
+                setEmail(nextEmail);
+              }}
               onBlur={() => setTouchedEmail(true)}
               hasError={!!emailError}
             />
 
-            {emailError ? (
+            {emailError && (
               <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
                 {emailError}
               </p>
-            ) : null}
+            )}
 
-            {/* 서버 에러 */}
-            {error ? (
+            {!emailError && error && (
               <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
                 {error}
               </p>
-            ) : null}
+            )}
           </div>
         </div>
       </div>
 
       <div className="mt-[60px]">
-        <Button onClick={handleSubmit} disabled={loading}>
+        <Button onClick={handleSubmit} disabled={loading || (touchedEmail && !isFormValid)}>
           {loading ? "메일 발송 중..." : "비밀번호 재설정 메일 발송"}
         </Button>
       </div>

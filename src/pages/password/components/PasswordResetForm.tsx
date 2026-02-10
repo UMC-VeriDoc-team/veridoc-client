@@ -88,12 +88,20 @@ const PasswordResetForm = () => {
         </p>
 
         <div className="mt-[30px] flex flex-col gap-[30px]">
+          {/* 새 비밀번호 입력 */}
           <div className="flex flex-col gap-2">
-            <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
-              새 비밀번호 <span className="text-error">*</span>
+            <label
+              htmlFor="reset-new-password"
+              className="flex cursor-pointer items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950"
+            >
+              새 비밀번호{" "}
+              <span className="text-error" aria-hidden="true">
+                *
+              </span>
             </label>
 
             <Input
+              id="reset-new-password"
               type="password"
               placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
               value={newPassword}
@@ -109,12 +117,20 @@ const PasswordResetForm = () => {
             ) : null}
           </div>
 
+          {/* 새 비밀번호 확인 입력 */}
           <div className="flex flex-col gap-2">
-            <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
-              새 비밀번호 확인 <span className="text-error">*</span>
+            <label
+              htmlFor="reset-confirm-password"
+              className="flex cursor-pointer items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950"
+            >
+              새 비밀번호 확인{" "}
+              <span className="text-error" aria-hidden="true">
+                *
+              </span>
             </label>
 
             <Input
+              id="reset-confirm-password"
               type="password"
               placeholder="새 비밀번호를 다시 입력하세요"
               value={confirmNewPassword}
