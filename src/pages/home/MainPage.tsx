@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useHomeStore } from "@/stores/home/useHomeStore";
-import HomeBody from "@/pages/home/components/HomeBody/HomeBody";
-import HomeManage from "@/pages/home/components/HomeBody/HomeManage";
-import HomeMap from "@/pages/home/components/map/HomeMap";
-import HomeMovingImage from "@/pages/home/components/banner/HomeMovingImage";
+import HomeBanner from "@/pages/home/components/banner/HomeBanner";
 import { useAuthStore } from "@/stores/user/useAuthStore";
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
+import DoctorOpinionSection from "./components/sections/doctor/DoctorOpinionSection";
+import TemporaryMeasureSection from "./components/sections/temporary/TemporaryMeasureSection";
+import HomeMap from "./components/sections/map/HomeMap";
 
 const MainPage = () => {
   const { needsAgreementModal } = useAuthStore();
@@ -25,13 +25,13 @@ const MainPage = () => {
 
   return (
     <div className="w-full">
-      <HomeMovingImage />
+      <HomeBanner />
 
       <div className="pb-24 pt-0 sm:pb-32 sm:pt-[69px]">
         <div className="mx-auto w-full max-w-[1360px] sm:px-8">
           <div className="flex flex-col gap-y-24 sm:gap-y-[140px]">
-            <HomeBody />
-            <HomeManage />
+            <DoctorOpinionSection />
+            <TemporaryMeasureSection />
             <HomeMap />
           </div>
         </div>

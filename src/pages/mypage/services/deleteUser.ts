@@ -1,5 +1,10 @@
-import type { DeleteAccountResponse } from "@/components/Modal/types/deleteAccount";
 import { authApiWrapper } from "@/utils/api/api";
+
+export interface DeleteAccountResponse {
+  code: number;
+  message: string;
+  data: object;
+}
 
 // 회원탈퇴
 const deleteUser = async (): Promise<DeleteAccountResponse> => {

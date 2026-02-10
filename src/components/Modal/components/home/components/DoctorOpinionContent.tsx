@@ -3,7 +3,7 @@ import GetDoctorOpinionDetail from "@/pages/home/services/getDoctorOpinionDetail
 import type { OpinionDetail } from "@/pages/home/types/homeDoctorOpinion";
 import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
 import { useEffect, useState } from "react";
-import SharePost from "./SharePost";
+import SharePost from "@/components/Button/SharePost";
 import { useAuthStore } from "@/stores/user/useAuthStore";
 import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
 import Hashtag from "@/components/HashTag/HashTag";

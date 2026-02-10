@@ -21,7 +21,7 @@ import HomeTermsAgreementModal from "@/components/Modal/components/home/HomeTerm
 import HomeTermsDetailModal from "@/components/Modal/components/home/HomeTermsDetailModal";
 import HomeDoctorOpinionModal from "@/components/Modal/components/home/HomeDoctorOpinionModal";
 import HomeTemporaryMeasureModal from "./components/home/HomeTemporaryMeasureModal";
-import GuideDetailModal from "./components/guide/GuideDetailModal";
+import GuideDetailModal from "./components/usage/UsageGuideDetailModal";
 
 import StepDoctorOpinionRequiredModal from "./components/symptom/StepDoctorOpinionRequiredModal";
 import StepTreatmentInfoRequiredModal from "./components/symptom/StepTreatmentInfoRequiredModal";
@@ -56,7 +56,7 @@ const ModalPage = () => {
     if (!isMobile) return;
 
     closeModal();
-    navigate("/guide/detail", { state: { guideType } });
+    navigate("/usage/detail", { state: { guideType } });
   }, [isModalOpen, modalType, isMobile, closeModal, navigate, guideType]);
 
   // 모바일: 임시대처방안 모달에서 페이지로 전환

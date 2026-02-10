@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { GuideDetailType } from "@/components/Modal/types/guideDetail";
+import type { GuideDetailType } from "@/components/Modal/types/usageGuideDetail";
 
 // 범용 가이드 상세 모달 전용 상태 타입
 interface GuideDetailModalState {

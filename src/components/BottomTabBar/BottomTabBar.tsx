@@ -4,7 +4,7 @@ import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "../Modal/types/modal";
 import { useAuthStore } from "@/stores/user/useAuthStore";
 
-const HOME_ACTIVE_PATHS = ["/home", "/guide", "/preview"];
+const HOME_ACTIVE_PATHS = ["/home", "/usage", "/preview"];
 
 const BottomTabBar = () => {
   const location = useLocation();
@@ -16,7 +16,7 @@ const BottomTabBar = () => {
   const hasSymptom = Boolean(painAreaID);
 
   const homeTarget =
-    authStatus === "authenticated" ? (hasSymptom ? "/home" : "/guide") : "/preview";
+    authStatus === "authenticated" ? (hasSymptom ? "/home" : "/usage") : "/preview";
 
   const isHomeActive = HOME_ACTIVE_PATHS.some((p) => location.pathname.startsWith(p));
   const isMyActive = location.pathname.startsWith("/my");

@@ -2,6 +2,7 @@ import useBaseModal from "@/stores/modal/useBaseModal";
 import { useNavigate } from "react-router-dom";
 import { ModalType } from "../Modal/types/modal";
 import { useAuthStore } from "@/stores/user/useAuthStore";
+import Icon from "@/components/Icon/Icon";
 
 const GuideHeader = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const GuideHeader = () => {
     <div className="relative">
       {/* 이미지 */}
       <img
-        src="/images/home/guides/banner/banner.svg"
+        src="/images/usage/banner/banner.svg"
         alt="범용 가이드 헤더"
         className="h-[360px] w-full object-cover sm:h-[420px] md:h-[520px] lg:h-[578px]"
         onClick={() => navigate("/")}
@@ -22,32 +23,25 @@ const GuideHeader = () => {
       <div className="absolute inset-0 bg-black/50" />
 
       {/* 모바일 */}
-      <div className="absolute left-0 right-0 top-0 z-10 flex items-start justify-between px-6 pt-6 md:hidden">
-        <img
-          src="/images/responsive-logo.svg"
-          alt="VeriDoc"
-          className="mt-6 h-[40px] w-auto"
-          draggable={false}
-        />
+      <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between px-6 pt-6 md:hidden">
+        <Icon name="responsive-logo" className="mt-6 h-[40px] w-auto" />
         {authStatus !== "authenticated" ? (
-          <button type="button" aria-label="login" className="shrink-0">
-            <img
-              src="/images/login-button.svg"
-              alt="login"
-              className="mt-6 h-[32px] w-auto"
-              draggable={false}
-              onClick={() => navigate("/login")}
-            />
+          <button
+            type="button"
+            aria-label="login"
+            className="shrink-0"
+            onClick={() => navigate("/login")}
+          >
+            <Icon name="login-button" className="mt-6 h-[32px] w-auto" />
           </button>
         ) : (
-          <button type="button" aria-label="Logout" className="shrink-0">
-            <img
-              src="/images/logout-button.svg"
-              alt="Logout"
-              className="mt-6 h-[32px] w-auto"
-              draggable={false}
-              onClick={() => openModal(ModalType.AUTH_LOGOUT)}
-            />
+          <button
+            type="button"
+            aria-label="Logout"
+            className="shrink-0"
+            onClick={() => openModal(ModalType.AUTH_LOGOUT)}
+          >
+            <Icon name="logout-button" className="mt-6 h-[32px] w-auto" />
           </button>
         )}
       </div>

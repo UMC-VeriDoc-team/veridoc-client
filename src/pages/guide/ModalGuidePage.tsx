@@ -1,7 +1,7 @@
 import useBaseModal from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
-import type { GuideDetailType } from "@/components/Modal/types/guideDetail";
+import type { GuideDetailType } from "@/components/Modal/types/usageGuideDetail";
 
 interface ModalTestItem {
   label: string;

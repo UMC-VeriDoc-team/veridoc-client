@@ -51,7 +51,7 @@ const LoginForm = () => {
       if (painAreaID !== 8) {
         navigate("/home");
       } else {
-        navigate("/guide");
+        navigate("/usage");
       }
       return;
     }
