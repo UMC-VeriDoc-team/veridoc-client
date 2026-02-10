@@ -9,6 +9,9 @@ export type PatchMyPainAreaResponse = {
   name: string;
 };
 
-export const putMyPainArea = async (payload: PatchMyPainAreaRequest) => {
+// 내 증상 부위 수정
+const putMyPainArea = async (payload: PatchMyPainAreaRequest) => {
   return await authApiWrapper.put<PatchMyPainAreaResponse>("/users/me/pain-area", payload);
 };
+
+export default putMyPainArea;

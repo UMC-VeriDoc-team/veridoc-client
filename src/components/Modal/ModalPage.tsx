@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ModalType } from "@/components/Modal/types/modal";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import ModalBackground from "@/components/Modal/components/ModalBackground";
 
 import AuthLoginFailedModal from "@/components/Modal/components/auth/AuthLoginFailedModal";
 import AuthMailSentModal from "@/components/Modal/components/auth/AuthMailSentModal";
 import AuthPasswordChangedModal from "@/components/Modal/components/auth/AuthPasswordChangedModal";
-import AuthLogoutModal from "./components/auth/AuthLogoutModal";
-import AuthSignUpSuccess from "./components/auth/AuthSignUpSuccess";
-import AuthLoginRequiredModal from "./components/auth/AuthRequiredModal";
+import AuthLogoutModal from "@/components/Modal/components/auth/AuthLogoutModal";
+import AuthSignUpSuccess from "@/components/Modal/components/auth/AuthSignUpSuccess";
+import AuthLoginRequiredModal from "@/components/Modal/components/auth/AuthRequiredModal";
 
 import MySymptomChangedModal from "@/components/Modal/components/my/MySymptomChangedModal";
 import MySymptomNotSelectedModal from "@/components/Modal/components/my/MySymptomNotSelectedModal";
@@ -20,17 +20,17 @@ import MyWithdrawDoneModal from "@/components/Modal/components/my/MyWithdrawDone
 import HomeTermsAgreementModal from "@/components/Modal/components/home/HomeTermsAgreementModal";
 import HomeTermsDetailModal from "@/components/Modal/components/home/HomeTermsDetailModal";
 import HomeDoctorOpinionModal from "@/components/Modal/components/home/HomeDoctorOpinionModal";
-import HomeTemporaryMeasureModal from "./components/home/HomeTemporaryMeasureModal";
-import GuideDetailModal from "./components/guide/GuideDetailModal";
+import HomeTemporaryMeasureModal from "@/components/Modal/components/home/HomeTemporaryMeasureModal";
+import GuideDetailModal from "@/components/Modal/components/usage/UsageGuideDetailModal";
 
-import StepDoctorOpinionRequiredModal from "./components/symptom/StepDoctorOpinionRequiredModal";
-import StepTreatmentInfoRequiredModal from "./components/symptom/StepTreatmentInfoRequiredModal";
+import StepDoctorOpinionRequiredModal from "@/components/Modal/components/symptom/StepDoctorOpinionRequiredModal";
+import StepTreatmentInfoRequiredModal from "@/components/Modal/components/symptom/StepTreatmentInfoRequiredModal";
 
 import useIsMobile from "@/hooks/useIsMobile";
-import useGuideDetailModalStore from "@/stores/modal/useGuideDetailModal";
-import useTemporaryMeasureModalStore from "@/stores/modal/useTemporaryMeasureModalStore";
-import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
-import ServicePreparingModal from "./components/common/ServicePreparingModal";
+import { useGuideDetailModalStore } from "@/stores/modal/useGuideDetailModal";
+import { useTemporaryMeasureModalStore } from "@/stores/modal/useTemporaryMeasureModalStore";
+import { useDoctorOpinionModalStore } from "@/stores/modal/useDoctorOpinionModalStore";
+import ServicePreparingModal from "@/components/Modal/components/common/ServicePreparingModal";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -56,7 +56,7 @@ const ModalPage = () => {
     if (!isMobile) return;
 
     closeModal();
-    navigate("/guide/detail", { state: { guideType } });
+    navigate("/usage/detail", { state: { guideType } });
   }, [isModalOpen, modalType, isMobile, closeModal, navigate, guideType]);
 
   // 모바일: 임시대처방안 모달에서 페이지로 전환

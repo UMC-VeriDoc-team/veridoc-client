@@ -1,9 +1,10 @@
 import Icon from "@/components/Icon/Icon";
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { useNavigate } from "react-router-dom";
 import { useHomeStore } from "@/stores/home/useHomeStore";
-import useDoctorOpinionModalStore from "@/stores/modal/useDoctorOpinionModalStore";
+import { useDoctorOpinionModalStore } from "@/stores/modal/useDoctorOpinionModalStore";
 import { ModalType } from "@/components/Modal/types/modal";
+import toast from "react-hot-toast";
 
 // 전문의 답변 미확인 모달 (2 → 3단계)
 const StepDoctorOpinionRequiredModal = () => {
@@ -19,7 +20,7 @@ const StepDoctorOpinionRequiredModal = () => {
     const answerId = targetSymptom?.answerId;
 
     if (!answerId) {
-      alert("전문의 답변 정보를 찾을 수 없습니다.");
+      toast.error("전문의 답변 정보를 찾을 수 없습니다.");
       return;
     }
 

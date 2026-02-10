@@ -16,7 +16,7 @@ export interface GetPainAreasResponse {
 }
 
 // 주요 아픈 부위 목록 조회
-export const getPainAreas = () => {
+const getPainAreas = () => {
   return api.get<{ painAreas: PainAreaApi[] }>("/pain-areas").then((res) => {
     const list = res.data?.painAreas ?? [];
     return {
@@ -27,3 +27,5 @@ export const getPainAreas = () => {
     };
   });
 };
+
+export default getPainAreas;

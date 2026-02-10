@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { GuideDetailType } from "@/components/Modal/types/guideDetail";
+import type { GuideDetailType } from "@/components/Modal/types/usageGuideDetail";
 
 // 범용 가이드 상세 모달 전용 상태 타입
 interface GuideDetailModalState {
@@ -9,10 +9,8 @@ interface GuideDetailModalState {
 }
 
 // 범용 가이드 상세 모달 전용 스토어
-const useGuideDetailModalStore = create<GuideDetailModalState>((set) => ({
+export const useGuideDetailModalStore = create<GuideDetailModalState>((set) => ({
   guideType: "COMMON_SYMPTOMS",
   setGuideType: (type) => set({ guideType: type }),
   resetGuideType: () => set({ guideType: "COMMON_SYMPTOMS" }),
 }));
-
-export default useGuideDetailModalStore;

@@ -19,7 +19,7 @@ const initialChecked: CheckedMap = {
   [TermsKey.LOCATION]: false,
 };
 
-const useTermsAgreementStore = create<TermsAgreementState>((set) => ({
+export const useTermsAgreementStore = create<TermsAgreementState>((set) => ({
   checked: initialChecked,
   locationError: null,
 
@@ -36,5 +36,3 @@ const useTermsAgreementStore = create<TermsAgreementState>((set) => ({
 
   setLocationError: (msg) => set({ locationError: msg }),
 }));
-
-export default useTermsAgreementStore;

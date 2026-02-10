@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuthStore } from "@/stores/login/useAuthStore";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 
 const RequireAuth = ({ children }: { children?: React.ReactNode }) => {
   const { authStatus } = useAuthStore();

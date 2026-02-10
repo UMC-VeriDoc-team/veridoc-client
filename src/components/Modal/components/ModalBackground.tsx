@@ -1,4 +1,4 @@
-import useBaseModal from "@/stores/modal/useBaseModal";
+import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { useEffect } from "react";
 
 interface ModalBackgroundProps {
