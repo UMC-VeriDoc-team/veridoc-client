@@ -202,6 +202,21 @@ const MyPage = () => {
     }
   };
 
+  // 탭 전환 시 편집 모드 초기화
+  useEffect(() => {
+    setIsEditing(false);
+    setIsProfileEditing(false);
+    setErrors({ name: "", birth: "", gender: "" });
+  }, [activeTab]);
+
+  // 다른 페이지로 이동 시 초기화
+  useEffect(() => {
+    return () => {
+      setIsEditing(false);
+      setIsProfileEditing(false);
+    };
+  }, []);
+
   // 나의 증상 관리
   const renderSymptomContent = () => (
     <>
