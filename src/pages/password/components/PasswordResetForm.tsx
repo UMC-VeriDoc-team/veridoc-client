@@ -20,12 +20,10 @@ const PasswordResetForm = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 
-  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const [touched, setTouched] = useState({
-    currentPassword: false,
     newPassword: false,
     confirmNewPassword: false,
   });
@@ -33,15 +31,6 @@ const PasswordResetForm = () => {
   const setTouchedPassword = (field: keyof typeof touched) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
-
-  const currentPasswordError = useMemo(() => {
-    if (!touched.currentPassword) return "";
-    if (!currentPassword.trim()) return "필수 입력 사항입니다";
-
-    // TODO: 서버에서 현재 비밀번호 불일치 -> "기존 비밀번호를 입력해주세요"
-
-    return "";
-  }, [currentPassword, touched.currentPassword]);
 
   // 새 비밀번호: 미입력 / 형식 오류
   const newPasswordError = useMemo(() => {
@@ -68,16 +57,14 @@ const PasswordResetForm = () => {
 
   // 실제 제출 가능 여부 (touched와 무관하게 값으로만 판단)
   const isFormValid = useMemo(() => {
-    const currentOk = currentPassword.trim() !== "";
     const newOk = validateNewPassword(newPassword) === "";
     const confirmOk = confirmNewPassword.trim() !== "" && confirmNewPassword === newPassword;
 
-    return currentOk && newOk && confirmOk;
-  }, [currentPassword, newPassword, confirmNewPassword]);
+    return newOk && confirmOk;
+  }, [newPassword, confirmNewPassword]);
 
   const handleSubmit = async () => {
     setTouched({
-      currentPassword: true,
       newPassword: true,
       confirmNewPassword: true,
     });
@@ -97,31 +84,10 @@ const PasswordResetForm = () => {
         </h2>
 
         <p className="text-[18px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-950">
-          계정 보안을 위해 현재 비밀번호를 먼저 확인합니다
+          기억하기 쉽고 안전한 비밀번호로 변경해 주세요
         </p>
 
         <div className="mt-[30px] flex flex-col gap-[30px]">
-          <div className="flex flex-col gap-2">
-            <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
-              현재 비밀번호 <span className="text-error">*</span>
-            </label>
-
-            <Input
-              type="password"
-              placeholder="현재 비밀번호를 입력해주세요"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              onBlur={() => setTouchedPassword("currentPassword")}
-              hasError={!!currentPasswordError}
-            />
-
-            {currentPasswordError ? (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
-                {currentPasswordError}
-              </p>
-            ) : null}
-          </div>
-
           <div className="flex flex-col gap-2">
             <label className="flex items-center gap-[1px] text-[16px] font-medium leading-[1.18] text-gray-950">
               새 비밀번호 <span className="text-error">*</span>
