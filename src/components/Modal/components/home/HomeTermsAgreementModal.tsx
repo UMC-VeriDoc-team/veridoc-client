@@ -186,8 +186,9 @@ const HomeTermsAgreementModal = () => {
       <div className="mt-4 flex flex-col gap-4">
         {/* 전체 동의 */}
         <div className="flex items-center justify-between">
-          <label className="flex cursor-pointer items-center gap-3">
+          <label htmlFor="all-terms" className="flex cursor-pointer items-center gap-3">
             <input
+              id="all-terms"
               type="checkbox"
               checked={allChecked}
               onChange={() => void handleToggleAll()}
@@ -211,8 +212,9 @@ const HomeTermsAgreementModal = () => {
         <div className="flex flex-col gap-3">
           {checkableItems.map((t) => (
             <div key={t.key} className="flex items-center justify-between">
-              <label className="flex cursor-pointer items-center gap-3">
+              <label htmlFor={`term-${t.key}`} className="flex cursor-pointer items-center gap-3">
                 <input
+                  id={`term-${t.key}`}
                   type="checkbox"
                   checked={checked[t.key]}
                   onChange={() => void handleToggleTerm(t.key)}
@@ -220,7 +222,11 @@ const HomeTermsAgreementModal = () => {
                   disabled={requesting && t.key === locationKey}
                 />
                 <span className="text-base font-medium text-gray-900 sm:text-lg">
-                  {t.required && <span className="text-brand-primary">[필수] </span>}
+                  {t.required && (
+                    <span className="text-brand-primary" aria-label="필수 항목">
+                      [필수]{" "}
+                    </span>
+                  )}
                   {t.label}
                 </span>
               </label>

@@ -109,7 +109,11 @@ const DoctorOpinionContent = () => {
         {/* 이미지 */}
         <div className="h-[180px] w-full rounded-[5px] bg-gray-100 sm:h-[220px] md:h-[260px]">
           {data.imageUrl ? (
-            <img src={data.imageUrl} alt={data.title} className="h-full w-full object-cover" />
+            <img
+              src={data.imageUrl}
+              alt={data.title}
+              className="h-full w-full rounded-[5px] object-cover"
+            />
           ) : (
             <div className="h-full w-full" />
           )}

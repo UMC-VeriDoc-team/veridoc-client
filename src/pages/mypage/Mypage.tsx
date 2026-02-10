@@ -270,6 +270,7 @@ const MyPage = () => {
       </h3>
 
       <div className="flex w-full flex-col items-center lg:flex-row lg:items-start lg:justify-between">
+        {/* 프로필 이미지 영역 */}
         <div className="flex flex-col items-center lg:block">
           <div className="relative">
             <div className="flex h-[218.4px] w-[218.4px] items-center justify-center overflow-hidden rounded-full border-[4px] border-brand-primary bg-gray-50 lg:h-[275px] lg:w-[275px]">
@@ -282,11 +283,16 @@ const MyPage = () => {
         </div>
 
         <div className="mt-[30px] flex w-full flex-col space-y-4 lg:mt-0 lg:w-[405px]">
+          {/* 이름 섹션 */}
           <div>
-            <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
+            <label
+              htmlFor="edit-name"
+              className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200"
+            >
               이름
             </label>
             <input
+              id="edit-name"
               type="text"
               value={viewName}
               onChange={(e) => setName(e.target.value)}
@@ -302,8 +308,12 @@ const MyPage = () => {
             {errors.name && <p className="mt-1 text-xs text-error">{errors.name}</p>}
           </div>
 
+          {/* 생년월일 섹션 */}
           <div>
-            <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
+            <label
+              htmlFor="edit-birth-year"
+              className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200"
+            >
               생년월일
             </label>
             <div
@@ -314,6 +324,7 @@ const MyPage = () => {
               }`}
             >
               <input
+                id="edit-birth-year" // 라벨 클릭 시 첫 번째 input으로 포커스
                 type="text"
                 value={viewBirth.year}
                 onChange={(e) => setBirth({ ...birth, year: e.target.value })}
@@ -323,8 +334,11 @@ const MyPage = () => {
                 }`}
                 placeholder="YYYY"
                 maxLength={4}
+                aria-label="태어난 연도 4자리"
               />
-              <span className="mx-2 text-gray-600">/</span>
+              <span className="mx-2 text-gray-600" aria-hidden="true">
+                /
+              </span>
               <input
                 type="text"
                 value={viewBirth.month}
@@ -335,8 +349,11 @@ const MyPage = () => {
                 }`}
                 placeholder="MM"
                 maxLength={2}
+                aria-label="태어난 월 2자리"
               />
-              <span className="mx-2 text-gray-600">/</span>
+              <span className="mx-2 text-gray-600" aria-hidden="true">
+                /
+              </span>
               <input
                 type="text"
                 value={viewBirth.day}
@@ -347,17 +364,23 @@ const MyPage = () => {
                 }`}
                 placeholder="DD"
                 maxLength={2}
+                aria-label="태어난 일 2자리"
               />
             </div>
             {errors.birth && <p className="mt-1 text-xs text-error">{errors.birth}</p>}
           </div>
 
+          {/* 이메일 섹션 (읽기 전용) */}
           <div>
-            <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
+            <label
+              htmlFor="view-email"
+              className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200"
+            >
               이메일
             </label>
             <div className="relative">
               <input
+                id="view-email"
                 type="email"
                 value={storeEmail ?? ""}
                 disabled
@@ -369,6 +392,7 @@ const MyPage = () => {
             </div>
           </div>
 
+          {/* 성별 섹션 */}
           <div>
             <label className="mb-2 block text-[14px] font-medium leading-[1.4] tracking-[-0.025em] text-gray-200">
               성별

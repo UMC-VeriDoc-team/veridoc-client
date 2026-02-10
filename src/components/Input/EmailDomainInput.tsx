@@ -3,6 +3,7 @@ import { EMAIL_DOMAIN_OPTIONS, type EmailDomainOption } from "@/constants/email"
 import Icon from "@/components/Icon/Icon";
 
 interface EmailDomainInputProps {
+  id: string;
   value: string; // full email: local@domain
   onChange: (nextEmail: string) => void;
   placeholderLocal?: string; // @ 앞 placeholder
@@ -19,6 +20,7 @@ const splitEmail = (value: string) => {
 };
 
 const EmailDomainInput = ({
+  id,
   value,
   onChange,
   placeholderLocal = "이메일을 입력해주세요",
@@ -26,7 +28,6 @@ const EmailDomainInput = ({
   hasError = false,
   onBlur,
 }: EmailDomainInputProps) => {
-  // value -> local/domain 분리
   const parsed = useMemo(() => splitEmail(value), [value]);
 
   const [emailLocal, setEmailLocal] = useState(parsed.local);
@@ -34,9 +35,7 @@ const EmailDomainInput = ({
   const [domainOption, setDomainOption] = useState<EmailDomainOption>("직접입력");
   const [isOpen, setIsOpen] = useState(false);
 
-  // 부모 value가 바뀌면 내부도 동기화
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (parsed.local !== emailLocal) setEmailLocal(parsed.local);
     if (parsed.domain !== emailDomain) setEmailDomain(parsed.domain);
 
@@ -102,6 +101,7 @@ const EmailDomainInput = ({
     >
       {/* local */}
       <input
+        id={id}
         value={emailLocal}
         onChange={(e) => handleChangeLocal(e.target.value)}
         placeholder={placeholderLocal}
@@ -118,6 +118,7 @@ const EmailDomainInput = ({
 
           {isCustom ? (
             <input
+              aria-label="이메일 도메인 직접 입력"
               value={emailDomain}
               onChange={(e) => handleChangeDomain(e.target.value)}
               placeholder={placeholderDomain}

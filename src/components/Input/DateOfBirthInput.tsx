@@ -9,6 +9,7 @@ export interface DateOfBirthValue {
 type DobErrorType = "required" | "invalid" | null;
 
 interface DateOfBirthInputProps {
+  id: string;
   value: DateOfBirthValue;
   onChange: (value: DateOfBirthValue) => void;
   touched?: boolean;
@@ -57,6 +58,7 @@ const getDobError = (value: DateOfBirthValue, required: boolean): DobErrorType =
 };
 
 const DateOfBirthInput = ({
+  id,
   value,
   onChange,
   touched = false,
@@ -78,7 +80,7 @@ const DateOfBirthInput = ({
 
   const containerClass = [
     "h-[46px] w-full rounded border px-4 text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200",
-    "flex items-center justify-between", // 레이아웃: space-between
+    "flex items-center justify-between",
     errorMessage ? "border-error focus:border-error" : "",
     className,
   ].join(" ");
@@ -102,12 +104,13 @@ const DateOfBirthInput = ({
         className={containerClass}
         onBlurCapture={(e) => {
           const next = (e.relatedTarget as Node) || null;
-          // 다음 포커스가 이 컴포넌트 내부(year -> month 이동)면 blur X
           if (next && e.currentTarget.contains(next)) return;
           onBlur?.();
         }}
       >
         <input
+          id={id}
+          aria-label="태어난 연도 4자리"
           inputMode="numeric"
           pattern="\d*"
           maxLength={4}
@@ -118,9 +121,12 @@ const DateOfBirthInput = ({
           onBlur={onBlur}
         />
 
-        <span className={slashClass}>/</span>
+        <span className={slashClass} aria-hidden="true">
+          /
+        </span>
 
         <input
+          aria-label="태어난 월 2자리"
           inputMode="numeric"
           pattern="\d*"
           maxLength={2}
@@ -131,9 +137,12 @@ const DateOfBirthInput = ({
           onBlur={onBlur}
         />
 
-        <span className={slashClass}>/</span>
+        <span className={slashClass} aria-hidden="true">
+          /
+        </span>
 
         <input
+          aria-label="태어난 일 2자리"
           inputMode="numeric"
           pattern="\d*"
           maxLength={2}
