@@ -128,7 +128,7 @@ const MyPasswordPage = () => {
         </div>
       </div>
 
-      {/* 컨텐츠 영역 태블릿에서 너비가 450px */}
+      {/* 컨텐츠 영역 */}
       <div className="mt-[40px] flex w-full flex-col px-[30px] md:w-[450px] md:px-0 xl:mt-[60px] xl:w-[400px] xl:px-0">
         {/* 뒤로 가기 버튼 (모바일 전용) */}
         <div className="mb-6 w-full xl:hidden">
@@ -150,13 +150,20 @@ const MyPasswordPage = () => {
 
         {/* 입력 폼 */}
         <div className="flex flex-col gap-6">
-          {/* 1. 현재 비밀번호 */}
+          {/* 현재 비밀번호 */}
           <div>
-            <label className="mb-2 block text-[16px] font-medium leading-[1.18] text-gray-900">
-              현재 비밀번호<span className="text-error">*</span>
+            <label
+              htmlFor="current-password"
+              className="mb-2 block text-[16px] font-medium leading-[1.18] text-gray-900"
+            >
+              현재 비밀번호
+              <span className="text-error" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="relative">
               <input
+                id="current-password"
                 type={showCurrent ? "text" : "password"}
                 placeholder="현재 비밀번호를 입력해주세요"
                 value={passwordForm.current}
@@ -169,7 +176,7 @@ const MyPasswordPage = () => {
               />
               {passwordForm.current && (
                 <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
-                  {/* (1) 눈 아이콘 */}
+                  {/* 눈 아이콘: 보기 버튼 */}
                   <button
                     type="button"
                     onClick={() => setShowCurrent(!showCurrent)}
@@ -181,7 +188,7 @@ const MyPasswordPage = () => {
                     />
                   </button>
 
-                  {/* (2) 전체 삭제 버튼 */}
+                  {/* 전체 삭제 버튼 */}
                   <button
                     type="button"
                     onClick={() => handleChange("current", "")}
@@ -195,13 +202,20 @@ const MyPasswordPage = () => {
             {pwdErrors.current && <p className="mt-2 text-sm text-error">{pwdErrors.current}</p>}
           </div>
 
-          {/* 2. 새 비밀번호 */}
+          {/* 새 비밀번호 */}
           <div>
-            <label className="mb-2 block text-[16px] font-medium leading-[1.18] text-gray-900">
-              새 비밀번호<span className="text-error">*</span>
+            <label
+              htmlFor="new-password"
+              className="mb-2 block text-[16px] font-medium leading-[1.18] text-gray-900"
+            >
+              새 비밀번호
+              <span className="text-error" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="relative">
               <input
+                id="new-password"
                 type={showNew ? "text" : "password"}
                 placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
                 value={passwordForm.new}
@@ -214,7 +228,7 @@ const MyPasswordPage = () => {
               />
               {passwordForm.new && (
                 <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
-                  {/* (1) 눈 아이콘 */}
+                  {/* 눈 아이: 보기 */}
                   <button
                     type="button"
                     onClick={() => setShowNew(!showNew)}
@@ -226,10 +240,10 @@ const MyPasswordPage = () => {
                     />
                   </button>
 
-                  {/* (2) 전체 삭제 버튼 */}
+                  {/* 전체 삭제 버튼 */}
                   <button
                     type="button"
-                    onClick={() => handleChange("new", "")} /* ✨ 여기가 "new"로 바뀜 */
+                    onClick={() => handleChange("new", "")}
                     className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-600"
                   >
                     <Icon name="password-delete" className="h-5 w-5" />
@@ -240,13 +254,20 @@ const MyPasswordPage = () => {
             {pwdErrors.new && <p className="mt-2 text-sm text-error">{pwdErrors.new}</p>}
           </div>
 
-          {/* 3. 새 비밀번호 확인 */}
+          {/* 새 비밀번호 확인 */}
           <div>
-            <label className="mb-2 block text-[16px] font-medium leading-[1.18] text-gray-900">
-              새 비밀번호 확인<span className="text-error">*</span>
+            <label
+              htmlFor="confirm-password"
+              className="mb-2 block text-[16px] font-medium leading-[1.18] text-gray-900"
+            >
+              새 비밀번호 확인
+              <span className="text-error" aria-hidden="true">
+                *
+              </span>
             </label>
             <div className="relative">
               <input
+                id="confirm-password"
                 type={showConfirm ? "text" : "password"}
                 placeholder="새 비밀번호를 다시 입력하세요"
                 value={passwordForm.confirm}
@@ -259,7 +280,7 @@ const MyPasswordPage = () => {
               />
               {passwordForm.confirm && (
                 <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
-                  {/* (1) 눈 아이콘 */}
+                  {/* 눈 아이콘: 보기 */}
                   <button
                     type="button"
                     onClick={() => setShowConfirm(!showConfirm)}
@@ -271,7 +292,7 @@ const MyPasswordPage = () => {
                     />
                   </button>
 
-                  {/* (2) 전체 삭제 버튼 */}
+                  {/* 전체 삭제 버튼 */}
                   <button
                     type="button"
                     onClick={() => handleChange("confirm", "")}

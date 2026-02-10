@@ -3,6 +3,7 @@ import Input from "./Input";
 import Icon from "@/components/Icon/Icon";
 
 interface InputFieldProps {
+  id: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClear?: () => void;
@@ -15,6 +16,7 @@ interface InputFieldProps {
 }
 
 const InputField = ({
+  id,
   value,
   onChange,
   onClear,
@@ -42,6 +44,7 @@ const InputField = ({
   return (
     <div className="relative">
       <Input
+        id={id}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
