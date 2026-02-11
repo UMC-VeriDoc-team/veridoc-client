@@ -109,6 +109,7 @@ const App = () => {
               }
             >
               <Route index element={<HomePreview />} />
+              <Route path="detail" element={<UsageGuideDetailPage />} />
             </Route>
 
             {/* 로그인 후 서비스 영역 */}
