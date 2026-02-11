@@ -80,7 +80,7 @@ const MeasureCard = ({
           {title ?? ""}
         </p>
 
-        <div className="text-base text-[#6C757D] md:h-36 md:text-xl">
+        <div className="text-base text-[#6C757D] md:h-40 md:text-lg xl:text-xl">
           {descLines.length > 0 ? (
             descLines.map((line, idx) => <p key={`-desc-${idx}`}>{line}</p>)
           ) : (
