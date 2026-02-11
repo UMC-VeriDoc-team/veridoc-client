@@ -4,6 +4,7 @@ import type { HospitalMapItem, LatLng } from "@/libs/kakaoMap";
 import getNearbyHospital from "@/pages/home/services/getNearbyHospital";
 import { useAuthStore } from "@/stores/user/useAuthStore";
 import KakaoHospitalMap from "@/pages/home/components/sections/map/fragments/KakaoHospitalMap";
+import useIsMobile from "@/hooks/useIsMobile";
 
 type UserLocation = LatLng & { accuracy: number };
 
@@ -37,6 +38,8 @@ const SkeletonHospitalCard = () => {
 };
 
 const HospitalMapSection = () => {
+  const isMobile = useIsMobile();
+
   const { painAreaID } = useAuthStore();
 
   const [center, setCenter] = useState<LatLng>(DEFAULT_CENTER);
@@ -85,7 +88,11 @@ const HospitalMapSection = () => {
 
     const applyErr = (err: GeolocationPositionError) => {
       if (err.code === 1) {
-        setLocationError("위치 권한이 거부되었습니다. 설정에서 허용해 주세요.");
+        if (isMobile) {
+          setLocationError("위치 권한이 거부되었습니다. 앱 설정에서 허용해 주세요.");
+        } else {
+          setLocationError("위치 권한이 거부되었습니다. 브라우저 설정에서 허용해 주세요.");
+        }
       } else if (err.code === 2) {
         setLocationError("위치 정보를 가져올 수 없습니다. 네트워크를 확인해 주세요.");
       } else if (err.code === 3) {
