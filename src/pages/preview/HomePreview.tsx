@@ -12,7 +12,8 @@ const HomePreview = () => {
   const { openModal } = useBaseModal();
   const { setGuideType } = useGuideDetailModalStore();
 
-  const openAboutUsModal = () => {
+  const openAboutUsModal = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     setGuideType("HOW_TO_USE");
     openModal(ModalType.HOME_GUIDE_DETAIL);
   };
@@ -66,7 +67,7 @@ const HomePreview = () => {
 
             <button
               type="button"
-              onClick={openAboutUsModal}
+              onClick={(e) => openAboutUsModal(e)}
               className="mt-4 h-[50px] w-[149px] rounded-[4px] bg-[#0086FF] px-4 text-[16px] font-bold text-white"
             >
               더 알아보기

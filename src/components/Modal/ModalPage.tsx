@@ -31,6 +31,7 @@ import { useGuideDetailModalStore } from "@/stores/modal/useGuideDetailModal";
 import { useTemporaryMeasureModalStore } from "@/stores/modal/useTemporaryMeasureModalStore";
 import { useDoctorOpinionModalStore } from "@/stores/modal/useDoctorOpinionModalStore";
 import ServicePreparingModal from "@/components/Modal/components/common/ServicePreparingModal";
+import { useAuthStore } from "@/stores/user/useAuthStore";
 
 // 약관 관련 모달: 배경 클릭 시 모달 닫힘 비활성화
 const MODAL_OVERLAY_CLOSABLE: Partial<Record<ModalType, boolean>> = {
@@ -49,6 +50,7 @@ const ModalPage = () => {
   const { measureId } = useTemporaryMeasureModalStore();
   // 전문의소견 스토어
   const { doctorOpinionId } = useDoctorOpinionModalStore();
+  const { authStatus } = useAuthStore();
 
   // 모바일: 범용가이드 모달에서 페이지로 전환
   useEffect(() => {
@@ -56,7 +58,12 @@ const ModalPage = () => {
     if (!isMobile) return;
 
     closeModal();
-    navigate("/usage/detail", { state: { guideType } });
+
+    if (authStatus === "authenticated") {
+      navigate("/usage/detail", { state: { guideType } });
+    } else {
+      navigate("/preview/detail", { state: { guideType } });
+    }
   }, [isModalOpen, modalType, isMobile, closeModal, navigate, guideType]);
 
   // 모바일: 임시대처방안 모달에서 페이지로 전환
