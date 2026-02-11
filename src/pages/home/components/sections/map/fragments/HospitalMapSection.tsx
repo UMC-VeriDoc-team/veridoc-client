@@ -196,7 +196,6 @@ const HospitalMapSection = () => {
           </p>
         </div>
 
-        {/* 🌟 카드 리스트 스크롤 영역: flex-1을 주어 남은 공간을 확보하고 잘림 방지 */}
         <div className="scrollbar-hide flex flex-1 flex-col gap-y-[10px] overflow-y-auto px-[2px] pb-4">
           {isLoading ? (
             <>
@@ -217,7 +216,6 @@ const HospitalMapSection = () => {
                   ].join(" ")}
                 >
                   <div className="flex gap-x-4">
-                    {/* 이미지 영역: shrink-0으로 압축 방지 */}
                     <div className="aspect-square min-w-[120px] max-w-[120px] shrink-0 overflow-hidden rounded-[5px] sm:min-w-[145px] sm:max-w-[145px]">
                       {hospital.imageUrl ? (
                         <img
