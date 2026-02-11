@@ -56,8 +56,7 @@ const SignUpForm = () => {
   const passwordClientError = useMemo(() => {
     if (!shouldShowError("password")) return null;
     if (!password.trim()) return "필수 입력 사항입니다";
-    if (!PASSWORD_REGEX.test(password))
-      return "비밀번호는 8자 이상이며 대문자/소문자/특수문자를 각각 1개 이상 포함해야 합니다";
+    if (!PASSWORD_REGEX.test(password)) return "8자 이상 (대소문자, 숫자, 특수문자 포함)";
     return null;
   }, [password, touched.password, submitted]);
 
