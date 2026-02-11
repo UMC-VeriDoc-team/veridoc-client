@@ -76,7 +76,7 @@ const HomeBanner = () => {
             <Icon name={iconName} className="h-full w-full rounded-[10px] object-cover" />
           </div>
 
-          <div className="mb-[70px] flex flex-col pr-[30px] text-xl font-bold text-white md:mb-[151px] md:gap-y-4 md:text-[36px]">
+          <div className="mb-[70px] flex flex-col pr-[30px] text-xl font-bold leading-snug text-white md:mb-[151px] md:pr-[60px] md:text-[36px] md:leading-normal">
             {isMobile ? (
               <p>{bannerTitle}</p>
             ) : (
