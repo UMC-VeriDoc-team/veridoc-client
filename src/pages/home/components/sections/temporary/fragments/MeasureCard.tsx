@@ -26,16 +26,15 @@ const MeasureCard = ({
 }: MeasureCardProps) => {
   const navigate = useNavigate();
   const { openModal } = useBaseModal();
-  const { setMeasureId } = useTemporaryMeasureModalStore();
+  const { measureId, setMeasureId } = useTemporaryMeasureModalStore();
   const isMobile = useIsMobile();
 
   const handleShowTemporaryMeasure = () => {
+    setMeasureId(String(guideId));
     if (isMobile) {
-      navigate(`/home/measure/${guideId}`);
+      navigate(`/home/measure/${measureId}`);
       return;
     }
-
-    setMeasureId(String(guideId));
     openModal(ModalType.HOME_TEMPORARY_MEASURE);
   };
 

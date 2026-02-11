@@ -57,12 +57,11 @@ const MeasureContent = () => {
   }, [guideId, painAreaID, recordEvent]);
 
   const handleSelectMorePost = (answerId: number) => {
+    setMeasureId(String(answerId));
     if (isMobile) {
-      navigate(`/home/measure/${answerId}`);
+      navigate(`/home/measure/${measureId}`);
       return;
     }
-
-    setMeasureId(String(answerId));
   };
 
   if (!detail) {
