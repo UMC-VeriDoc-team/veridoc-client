@@ -149,8 +149,8 @@ const HospitalMapSection = () => {
 
   return (
     <section className="flex w-full flex-col border border-[#17171940] md:h-[500px] md:flex-row lg:h-[670px]">
-      {/* 지도 영역 */}
-      <article className="order-1 h-[320px] w-full md:order-2 md:h-full md:flex-1">
+      {/* 지도 영역: md 미만에서 고정 높이, md 이상에서 flex-1로 리스트와 높이 동기화 */}
+      <article className="order-1 h-[320px] w-full shrink-0 md:order-2 md:h-full md:flex-1">
         <KakaoHospitalMap
           center={center}
           hospitals={hospitals}
@@ -159,32 +159,38 @@ const HospitalMapSection = () => {
         />
       </article>
 
-      {/* 리스트 영역 */}
-      <article className="order-2 w-full min-w-[400px] overflow-hidden border-t border-[#17171940] p-4 md:order-1 md:h-full md:w-[40%] md:border-r md:border-t-0">
-        <div className="mb-3 flex items-center justify-between gap-2">
-          <button
-            type="button"
-            onClick={startLocationTracking}
-            disabled={isLocating}
-            className="h-9 rounded-[4px] bg-brand-primary px-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-          >
-            {isLocating
-              ? "위치 확인 중..."
-              : hasStartedTracking
-                ? "위치로 새로고침"
-                : "내 위치로 찾기"}
-          </button>
+      {/* 리스트 영역: md 이상에서 flex-col로 내부 스크롤 구조 잡기 */}
+      <article className="order-2 flex w-full flex-col overflow-hidden border-t border-[#17171940] p-4 md:order-1 md:h-full md:w-[40%] md:min-w-[400px] md:border-r md:border-t-0">
+        {/* 상단 버튼 및 개수 (고정 영역) */}
+        <div className="shrink-0">
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <button
+              type="button"
+              onClick={startLocationTracking}
+              disabled={isLocating}
+              className="h-9 rounded-[4px] bg-brand-primary px-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+            >
+              {isLocating
+                ? "위치 확인 중..."
+                : hasStartedTracking
+                  ? "위치로 새로고침"
+                  : "내 위치로 찾기"}
+            </button>
+          </div>
+
+          {locationError && (
+            <div className="mb-3 rounded-md bg-red-50 p-3 text-xs text-red-600">
+              {locationError}
+            </div>
+          )}
+
+          <p className="p-[10px] text-base font-medium text-gray-950">
+            <span className="font-semibold text-brand-primary">{hospitals.length}</span> 개 병원
+          </p>
         </div>
 
-        {locationError && (
-          <div className="mb-3 rounded-md bg-red-50 p-3 text-xs text-red-600">{locationError}</div>
-        )}
-
-        <p className="p-[10px] text-base font-medium text-gray-950">
-          <span className="font-semibold text-brand-primary">{hospitals.length}</span> 개 병원
-        </p>
-
-        <div className="flex h-full max-h-[320px] flex-col gap-y-[10px] overflow-y-auto sm:max-h-full sm:pb-2 md:pb-16 xl:pb-2">
+        {/* 🌟 카드 리스트 스크롤 영역: flex-1을 주어 남은 공간을 확보하고 잘림 방지 */}
+        <div className="scrollbar-hide flex flex-1 flex-col gap-y-[10px] overflow-y-auto px-[2px] pb-4">
           {isLoading ? (
             <>
               <SkeletonHospitalCard />
@@ -199,47 +205,50 @@ const HospitalMapSection = () => {
                   key={hospital.hospitalId}
                   onClick={() => setSelectedHospitalId(hospital.hospitalId)}
                   className={[
-                    "cursor-pointer rounded-[10px] border px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)] transition-colors hover:bg-gray-50/80",
+                    "shrink-0 cursor-pointer rounded-[10px] border px-4 py-[14px] shadow-[0_4px_20px_0_rgba(32,32,32,0.06)] transition-all hover:bg-gray-50/80",
                     isSelected ? "border-brand-primary bg-gray-50/50" : "border-[#E9E9E9]",
                   ].join(" ")}
                 >
                   <div className="flex gap-x-4">
-                    {hospital.imageUrl ? (
-                      <img
-                        src={hospital.imageUrl}
-                        alt={hospital.name}
-                        className="aspect-square min-w-[129px] rounded-[5px] object-cover sm:min-w-[145px]"
-                      />
-                    ) : (
-                      <div className="aspect-square min-w-[129px] rounded-[5px] bg-gray-100 sm:min-w-[145px]" />
-                    )}
+                    {/* 이미지 영역: shrink-0으로 압축 방지 */}
+                    <div className="aspect-square min-w-[120px] max-w-[120px] shrink-0 overflow-hidden rounded-[5px] sm:min-w-[145px] sm:max-w-[145px]">
+                      {hospital.imageUrl ? (
+                        <img
+                          src={hospital.imageUrl}
+                          alt={hospital.name}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="h-full w-full bg-gray-100" />
+                      )}
+                    </div>
 
-                    <div className="flex w-full flex-col gap-y-2 sm:justify-between">
-                      <div className="flex flex-col gap-y-2">
-                        <p className="text-base font-semibold text-gray-950 sm:text-lg">
+                    <div className="flex min-w-0 flex-1 flex-col justify-between py-1">
+                      <div className="flex flex-col gap-y-1.5">
+                        <p className="truncate text-base font-semibold text-gray-950 sm:text-lg">
                           {hospital.name}
                         </p>
                         <div className="flex flex-wrap gap-x-[5px] gap-y-1">
-                          <div className="rounded-[4px] bg-brand-primary px-2 text-sm font-medium text-white">
+                          <div className="shrink-0 rounded-[4px] bg-brand-primary px-2 py-0.5 text-[12px] font-medium text-white sm:text-sm">
                             {hospital.category}
                           </div>
                           {hospital.matchedSpecialty && (
-                            <div className="rounded-[4px] border border-brand-primary bg-white px-2 text-sm font-medium text-brand-primary">
+                            <div className="shrink-0 rounded-[4px] border border-brand-primary bg-white px-2 py-0.5 text-[12px] font-medium text-brand-primary sm:text-sm">
                               {hospital.matchedSpecialty}
                             </div>
                           )}
                         </div>
                       </div>
 
-                      <div className="flex flex-col gap-y-1">
+                      <div className="mt-2 flex flex-col gap-y-1">
                         <div className="flex items-start gap-x-1">
-                          <Icon name="map-location" className="mt-[1px] h-4 w-4" />
+                          <Icon name="map-location" className="mt-[2px] h-3.5 w-3.5 shrink-0" />
                           <p className="text-xs font-medium text-gray-600 sm:text-sm">
                             {hospital.address}
                           </p>
                         </div>
                         <div className="flex items-center gap-x-1">
-                          <Icon name="map-walking" className="h-4 w-4" />
+                          <Icon name="map-walking" className="h-3.5 w-3.5 shrink-0" />
                           <p className="text-xs font-medium text-gray-600 sm:text-sm">
                             약 {hospital.distanceMeters}m
                           </p>
@@ -255,7 +264,7 @@ const HospitalMapSection = () => {
                         e.stopPropagation();
                         window.open(hospital.homepageUrl, "_blank", "noopener,noreferrer");
                       }}
-                      className="mt-[10px] h-[39px] w-full rounded-[4px] bg-brand-primary text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.98]"
+                      className="mt-3 h-[39px] w-full rounded-[4px] bg-brand-primary text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.98]"
                     >
                       홈페이지
                     </button>
@@ -264,7 +273,8 @@ const HospitalMapSection = () => {
               );
             })
           )}
-          <div className="h-6 shrink-0" />
+          {/* 하단 여백 확보용 */}
+          <div className="h-4 shrink-0" />
         </div>
       </article>
     </section>
