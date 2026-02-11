@@ -12,6 +12,7 @@ import { parseBirthYMD } from "@/utils/formatBirth";
 import putUserMe from "@/pages/mypage/services/putUserMe";
 import { UNSELECTED_PAIN_AREA_ID, usePainAreas } from "@/hooks/usePainAreas";
 import putMyPainArea from "@/pages/mypage/services/putMyPainArea";
+import { useHomeStore } from "@/stores/home/useHomeStore";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -31,10 +32,15 @@ const MyPage = () => {
     setPainAreaID,
     fetchMe,
   } = useAuthStore();
+  const { fetchHome } = useHomeStore();
 
   useEffect(() => {
     void fetchMe();
   }, [fetchMe]);
+
+  useEffect(() => {
+    fetchHome();
+  }, [storePainAreaID]);
 
   // painAreaID -> selectedKey(SYMPTOMS.key) 매칭
   const storeSelectedKey = useMemo(() => {
