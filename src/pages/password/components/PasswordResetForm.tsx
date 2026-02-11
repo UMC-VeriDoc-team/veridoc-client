@@ -1,11 +1,11 @@
 import Button from "@/components/Button/Button";
 import Icon from "@/components/Icon/Icon";
-import Input from "@/components/Input/Input";
 import { ModalType } from "@/components/Modal/types/modal";
 import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { useMemo, useState } from "react";
 import postResetPassword from "@/pages/password/services/postResetPassword";
 import { useSearchParams } from "react-router-dom";
+import InputField from "@/components/Input/InputField";
 
 // 새 비밀번호 형식 검증: 미입력 / 8자 미만
 const validateNewPassword = (password: string) => {
@@ -100,7 +100,7 @@ const PasswordResetForm = () => {
               </span>
             </label>
 
-            <Input
+            <InputField
               id="reset-new-password"
               type="password"
               placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
@@ -108,6 +108,9 @@ const PasswordResetForm = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               onBlur={() => setTouchedPassword("newPassword")}
               hasError={!!newPasswordError}
+              clearable
+              passwordToggle
+              onClear={() => setNewPassword("")}
             />
 
             {newPasswordError ? (
@@ -129,7 +132,7 @@ const PasswordResetForm = () => {
               </span>
             </label>
 
-            <Input
+            <InputField
               id="reset-confirm-password"
               type="password"
               placeholder="새 비밀번호를 다시 입력하세요"
@@ -137,6 +140,9 @@ const PasswordResetForm = () => {
               onChange={(e) => setConfirmNewPassword(e.target.value)}
               onBlur={() => setTouchedPassword("confirmNewPassword")}
               hasError={!!confirmNewPasswordError}
+              clearable
+              passwordToggle
+              onClear={() => setConfirmNewPassword("")}
             />
 
             {confirmNewPasswordError ? (
