@@ -148,7 +148,7 @@ const HospitalMapSection = () => {
   }, [selectedHospitalId, hospitals]);
 
   return (
-    <section className="flex w-full flex-col border border-[#17171940] md:h-[400px] md:flex-row lg:h-[670px]">
+    <section className="flex w-full flex-col border border-[#17171940] md:h-[500px] md:flex-row lg:h-[670px]">
       {/* 지도 영역 */}
       <article className="order-1 h-[320px] w-full md:order-2 md:h-full md:flex-1">
         <KakaoHospitalMap
@@ -160,7 +160,7 @@ const HospitalMapSection = () => {
       </article>
 
       {/* 리스트 영역 */}
-      <article className="order-2 w-full overflow-hidden border-t border-[#17171940] p-4 md:order-1 md:h-full md:w-[40%] md:min-w-[400px] md:border-r md:border-t-0">
+      <article className="order-2 w-full min-w-[400px] overflow-hidden border-t border-[#17171940] p-4 md:order-1 md:h-full md:w-[40%] md:border-r md:border-t-0">
         <div className="mb-3 flex items-center justify-between gap-2">
           <button
             type="button"
@@ -184,7 +184,7 @@ const HospitalMapSection = () => {
           <span className="font-semibold text-brand-primary">{hospitals.length}</span> 개 병원
         </p>
 
-        <div className="flex max-h-[320px] flex-col gap-y-[10px] overflow-y-auto sm:pb-2 md:h-full md:max-h-none">
+        <div className="flex h-full max-h-[320px] flex-col gap-y-[10px] overflow-y-auto sm:max-h-full sm:pb-2 md:pb-16 xl:pb-2">
           {isLoading ? (
             <>
               <SkeletonHospitalCard />
@@ -234,7 +234,7 @@ const HospitalMapSection = () => {
                       <div className="flex flex-col gap-y-1">
                         <div className="flex items-start gap-x-1">
                           <Icon name="map-location" className="mt-[1px] h-4 w-4" />
-                          <p className="line-clamp-1 text-xs font-medium text-gray-600 sm:text-sm">
+                          <p className="text-xs font-medium text-gray-600 sm:text-sm">
                             {hospital.address}
                           </p>
                         </div>
