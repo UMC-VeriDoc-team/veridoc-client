@@ -5,8 +5,10 @@ import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { SYMPTOMS } from "@/constants/symptoms";
 import { useHomeStore } from "@/stores/home/useHomeStore";
+import useIsMobile from "@/hooks/useIsMobile";
 
 const HomeBanner = () => {
+  const isMobile = useIsMobile();
   const { openModal } = useBaseModal();
   const { banners, painAreaName } = useHomeStore();
   const [num, setNum] = useState(1);
@@ -74,9 +76,15 @@ const HomeBanner = () => {
             <Icon name={iconName} className="h-full w-full rounded-[10px] object-cover" />
           </div>
 
-          <div className="mb-[70px] flex flex-col text-xl font-bold text-white md:mb-[151px] md:text-[36px]">
-            <div>{titleLine1}</div>
-            <div>{titleLine2}</div>
+          <div className="mb-[70px] flex flex-col pr-[30px] text-xl font-bold text-white md:mb-[151px] md:gap-y-4 md:text-[36px]">
+            {isMobile ? (
+              <p>{bannerTitle}</p>
+            ) : (
+              <>
+                <p>{titleLine1}</p>
+                <p>{titleLine2}</p>
+              </>
+            )}
           </div>
 
           {totalSlides > 1 && (
