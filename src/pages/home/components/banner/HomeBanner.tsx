@@ -73,7 +73,10 @@ const HomeBanner = () => {
       <div className="pointer-events-none relative inset-0 z-10">
         <div className="absolute bottom-10 left-0 ml-[30px] md:ml-[90px]">
           <div className="mb-5 flex h-[70px] w-[70px] items-center justify-center">
-            <Icon name={iconName} className="h-full w-full rounded-[10px] object-cover" />
+            <Icon
+              name={iconName}
+              className="h-full w-full rounded-[10px] object-cover shadow-[1px_2px_4px_0px_rgba(0,0,0,0.25)]"
+            />
           </div>
 
           <div className="mb-[70px] flex flex-col pr-[30px] text-xl font-bold leading-snug text-white md:mb-[151px] md:pr-[60px] md:text-[36px] md:leading-normal">
