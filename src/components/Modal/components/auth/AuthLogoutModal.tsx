@@ -11,10 +11,12 @@ const AuthLogoutModal = () => {
 
   // 로그아웃
   const handleLogout = () => {
-    // 로그아웃 API
     closeModal();
     logout();
-    navigate("/");
+    // 상태가 정리된 후 다음 이벤트 루프에서 이동
+    setTimeout(() => {
+      navigate("/preview");
+    }, 0);
   };
 
   return (
