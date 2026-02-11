@@ -70,7 +70,13 @@ export const useSignupStore = create<SignupState>((set) => ({
         const status = axiosError.response?.status;
         const code = axiosError.response?.data?.code;
 
-        if (status === 409 || code === "EMAIL_ALREADY_EXISTS") {
+        if (code === "ACCOUNT_RECENTLY_DELETED") {
+          set({
+            fieldErrors: {
+              email: "탈퇴 후 3일간 재가입이 불가능합니다.",
+            },
+          });
+        } else if (status === 409 || code === "EMAIL_ALREADY_EXISTS") {
           set({ fieldErrors: { email: "이미 가입된 이메일 주소입니다." } });
         } else if (status === 400) {
           switch (code) {
