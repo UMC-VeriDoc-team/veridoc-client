@@ -6,6 +6,7 @@ import { ModalType } from "@/components/Modal/types/modal";
 import Icon from "@/components/Icon/Icon";
 import LogoImage from "/images/logo.svg";
 import putMyPassword from "@/pages/mypage/services/putMyPassword";
+import { PASSWORD_REGEX } from "@/utils/validatePassword";
 
 const MyPasswordPage = () => {
   const { openModal } = useBaseModal();
@@ -28,7 +29,9 @@ const MyPasswordPage = () => {
 
   // --- [Logic] ---
   const isMatchSuccess =
-    passwordForm.new && passwordForm.new === passwordForm.confirm && passwordForm.new.length >= 8;
+    passwordForm.new &&
+    passwordForm.new === passwordForm.confirm &&
+    PASSWORD_REGEX.test(passwordForm.new);
 
   const handleChange = (field: "current" | "new" | "confirm", value: string) => {
     setPasswordForm((prev) => ({ ...prev, [field]: value }));
@@ -59,8 +62,8 @@ const MyPasswordPage = () => {
       newErrors.confirm = "필수 입력 사항입니다";
       isValid = false;
     }
-    if (newPwd && newPwd.length < 8) {
-      newErrors.new = "새 비밀번호 형식이 올바르지 않습니다";
+    if (newPwd && !PASSWORD_REGEX.test(newPwd)) {
+      newErrors.new = "8자 이상 (대소문자, 숫자, 특수문자 포함)";
       isValid = false;
     }
     if (confirm && newPwd !== confirm) {
