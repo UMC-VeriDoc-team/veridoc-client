@@ -24,7 +24,9 @@ const GuideHeader = () => {
 
       {/* 모바일 */}
       <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between px-6 pt-6 md:hidden">
-        <Icon name="responsive-logo" className="mt-6 h-[40px] w-auto" />
+        <button onClick={() => navigate("/")}>
+          <Icon name="responsive-logo" className="mt-6 h-[40px] w-auto" />
+        </button>
         {authStatus !== "authenticated" ? (
           <button
             type="button"
