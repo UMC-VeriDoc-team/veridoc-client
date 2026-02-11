@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import postForgotPassword from "@/pages/password/services/postForgotPassword";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 type ForgotPasswordState = {
   email: string;
@@ -27,11 +29,15 @@ export const useForgotPasswordStore = create<ForgotPasswordState>((set, get) => 
     }
 
     set({ loading: true, error: null });
+
     try {
       await postForgotPassword(email);
       return true;
-    } catch {
-      set({ error: "메일 발송에 실패했어요." });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error("가입되지 않은 이메일입니다.");
+      }
+      set({ error: "가입되지 않은 이메일입니다." });
       return false;
     } finally {
       set({ loading: false });
