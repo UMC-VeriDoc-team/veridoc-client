@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
@@ -13,6 +13,7 @@ import putUserMe from "@/pages/mypage/services/putUserMe";
 import { UNSELECTED_PAIN_AREA_ID, usePainAreas } from "@/hooks/usePainAreas";
 import putMyPainArea from "@/pages/mypage/services/putMyPainArea";
 import { useHomeStore } from "@/stores/home/useHomeStore";
+import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -33,14 +34,23 @@ const MyPage = () => {
     fetchMe,
   } = useAuthStore();
   const { fetchHome } = useHomeStore();
+  const { resetGuide } = useSymptomGuideStore();
+  const prevPainAreaID = useRef(storePainAreaID);
 
   useEffect(() => {
     void fetchMe();
   }, [fetchMe]);
 
   useEffect(() => {
-    fetchHome();
-  }, [storePainAreaID]);
+    // 이전 값과 현재 값이 다를 때만 실행
+    if (storePainAreaID !== null && prevPainAreaID.current !== storePainAreaID) {
+      fetchHome();
+      resetGuide(String(storePainAreaID));
+
+      // 실행 후 현재 값을 이전 값으로 업데이트
+      prevPainAreaID.current = storePainAreaID;
+    }
+  }, [storePainAreaID, fetchHome, resetGuide]);
 
   // painAreaID -> selectedKey(SYMPTOMS.key) 매칭
   const storeSelectedKey = useMemo(() => {
