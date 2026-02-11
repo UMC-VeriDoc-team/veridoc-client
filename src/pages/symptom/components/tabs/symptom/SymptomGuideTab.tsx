@@ -9,6 +9,7 @@ import { ModalType } from "@/components/Modal/types/modal";
 import useIsMobile from "@/hooks/useIsMobile";
 import { useAuthStore } from "@/stores/user/useAuthStore";
 import { useSymptomGuideStore } from "@/stores/symptom/useSymptomGuideStore";
+import { useHomeStore } from "@/stores/home/useHomeStore";
 
 export interface SymptomGuideStep {
   step: number;
@@ -42,13 +43,15 @@ const SymptomGuideTab = ({ symptomName }: SymptomGuideTabProps) => {
   const { openModal } = useBaseModal();
   const { steps, currentIndex, completed, loading, fetchGuide, moveToNextStep, resetGuide } =
     useSymptomGuideStore();
+  const { fetchHome } = useHomeStore();
 
   // 초기 데이터 패칭
   useEffect(() => {
     if (painAreaID) {
+      fetchHome();
       fetchGuide(painAreaID);
     }
-  }, [painAreaID, fetchGuide]);
+  }, [painAreaID, fetchGuide, fetchHome]);
 
   // 완료 시 컨페티 효과
   const didFireConfettiRef = useRef(false);

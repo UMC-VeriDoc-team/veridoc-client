@@ -9,13 +9,13 @@ import TemporaryMeasureSection from "@/pages/home/components/sections/temporary/
 import HomeMap from "@/pages/home/components/sections/map/HomeMap";
 
 const MainPage = () => {
-  const { needsAgreementModal } = useAuthStore();
+  const { needsAgreementModal, painAreaID } = useAuthStore();
   const { fetchHome } = useHomeStore();
   const { openModal } = useBaseModal();
 
   useEffect(() => {
     void fetchHome();
-  }, [fetchHome]);
+  }, [fetchHome, painAreaID]);
 
   useEffect(() => {
     if (needsAgreementModal) {
