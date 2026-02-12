@@ -79,7 +79,7 @@ const DateOfBirthInput = ({
         : null;
 
   const containerClass = [
-    "h-[46px] w-full rounded border px-4 text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200",
+    "h-[46px] w-full rounded border px-4 text-xs sm:text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200",
     "flex items-center justify-between",
     errorMessage ? "border-error focus:border-error" : "",
     className,

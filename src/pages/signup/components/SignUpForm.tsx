@@ -56,7 +56,7 @@ const SignUpForm = () => {
   const passwordClientError = useMemo(() => {
     if (!shouldShowError("password")) return null;
     if (!password.trim()) return "필수 입력 사항입니다";
-    if (!PASSWORD_REGEX.test(password)) return "8자 이상 (대소문자, 숫자, 특수문자 포함)";
+    if (!PASSWORD_REGEX.test(password)) return "비밀번호 형식이 올바르지 않습니다";
     return null;
   }, [password, touched.password, submitted]);
 
@@ -124,7 +124,7 @@ const SignUpForm = () => {
       </label>
       {children}
       {error && (
-        <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+        <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
           {error}
         </p>
       )}
@@ -179,7 +179,7 @@ const SignUpForm = () => {
             <InputField
               id="signup-password"
               type="password"
-              placeholder="비밀번호를 입력해주세요 (8자 이상)"
+              placeholder="비밀번호를 입력해주세요(대소문자, 숫자, 특수문자 포함 8자 이상)"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -226,7 +226,7 @@ const SignUpForm = () => {
               touched={submitted}
             />
             {genderError && (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {genderError}
               </p>
             )}
@@ -234,7 +234,7 @@ const SignUpForm = () => {
         </div>
 
         {formError && (
-          <p className="mt-4 text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+          <p className="mt-4 text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
             {formError}
           </p>
         )}
