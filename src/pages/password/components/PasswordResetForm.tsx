@@ -6,11 +6,12 @@ import { useMemo, useState } from "react";
 import postResetPassword from "@/pages/password/services/postResetPassword";
 import { useSearchParams } from "react-router-dom";
 import InputField from "@/components/Input/InputField";
+import { PASSWORD_REGEX } from "@/utils/validatePassword";
 
 // 새 비밀번호 형식 검증: 미입력 / 8자 미만
 const validateNewPassword = (password: string) => {
   if (!password.trim()) return "필수 입력 사항입니다";
-  if (password.length < 8) return "새 비밀번호 형식이 올바르지 않습니다";
+  if (!PASSWORD_REGEX.test(password)) return "새 비밀번호 형식이 올바르지 않습니다";
   return "";
 };
 
@@ -103,7 +104,7 @@ const PasswordResetForm = () => {
             <InputField
               id="reset-new-password"
               type="password"
-              placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
+              placeholder="새 비밀번호를 입력해주세요(대소문자, 숫자, 특수문자 포함 8자 이상)"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               onBlur={() => setTouchedPassword("newPassword")}
@@ -114,7 +115,7 @@ const PasswordResetForm = () => {
             />
 
             {newPasswordError ? (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {newPasswordError}
               </p>
             ) : null}
@@ -146,7 +147,7 @@ const PasswordResetForm = () => {
             />
 
             {confirmNewPasswordError ? (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {confirmNewPasswordError}
               </p>
             ) : null}

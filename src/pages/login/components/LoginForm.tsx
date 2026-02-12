@@ -7,6 +7,7 @@ import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { validateEmail } from "@/utils/validateEmail";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { PASSWORD_REGEX } from "@/utils/validatePassword";
 
 const LoginForm = () => {
   const { openModal } = useBaseModal();
@@ -31,7 +32,7 @@ const LoginForm = () => {
   const passwordError = useMemo(() => {
     if (!touched.password) return "";
     if (!password.trim()) return "필수 입력 사항입니다";
-    if (password.length < 8) return "비밀번호 형식이 올바르지 않습니다";
+    if (!PASSWORD_REGEX.test(password)) return "비밀번호 형식이 올바르지 않습니다";
     return "";
   }, [password, touched.password]);
 
@@ -91,7 +92,7 @@ const LoginForm = () => {
             />
 
             {emailError && (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {emailError}
               </p>
             )}
@@ -113,7 +114,7 @@ const LoginForm = () => {
             <InputField
               id="password-input"
               type="password"
-              placeholder="비밀번호를 입력해주세요 (8자 이상)"
+              placeholder="비밀번호를 입력해주세요(대소문자, 숫자, 특수문자 포함 8자 이상)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onBlur={() => setTouched((prev) => ({ ...prev, password: true }))}
@@ -124,7 +125,7 @@ const LoginForm = () => {
             />
 
             {passwordError && (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {passwordError}
               </p>
             )}
@@ -134,7 +135,7 @@ const LoginForm = () => {
 
       <div className="mt-[60px]">
         {serverError && (
-          <p className="-mt-8 pb-3 text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+          <p className="-mt-8 pb-3 text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
             {serverError}
           </p>
         )}

@@ -92,7 +92,7 @@ const EmailDomainInput = ({
         value={parsed.local} // 로컬 state 대신 parsed 값 사용
         onChange={(e) => handleChangeLocal(e.target.value)}
         placeholder={placeholderLocal}
-        className="h-full w-[57%] rounded-l pl-3 text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200 md:px-3"
+        className="h-full w-[57%] rounded-l pl-3 text-xs font-normal text-gray-950 outline-none placeholder:text-gray-200 sm:text-sm md:px-3"
       />
 
       {/* domain */}
@@ -101,7 +101,7 @@ const EmailDomainInput = ({
         className={`relative h-full w-[48%] border-l ${hasError ? "border-error" : "border-gray-200"}`}
       >
         <div className="flex h-full items-center">
-          <span className="pl-3 pr-2 text-sm font-normal text-gray-950">@</span>
+          <span className="pl-3 pr-2 text-xs font-normal text-gray-950 sm:text-sm">@</span>
 
           {isCustom ? (
             <input
@@ -109,7 +109,7 @@ const EmailDomainInput = ({
               value={parsed.domain} // 로컬 state 대신 parsed 값 사용
               onChange={(e) => handleChangeDomain(e.target.value)}
               placeholder={placeholderDomain}
-              className="h-full w-full rounded-r pr-8 text-sm font-normal text-gray-950 outline-none placeholder:text-gray-200"
+              className="h-full w-full rounded-r pr-8 text-xs font-normal text-gray-950 outline-none placeholder:text-gray-200 sm:text-sm"
             />
           ) : (
             <button

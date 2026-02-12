@@ -65,13 +65,13 @@ const EmailRequestForm = () => {
             />
 
             {emailError && (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {emailError}
               </p>
             )}
 
             {!emailError && error && (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {error}
               </p>
             )}
