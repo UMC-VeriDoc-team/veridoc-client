@@ -178,11 +178,18 @@ const KakaoHospitalMap = ({
       const cleanup = () => {
         container.removeEventListener("click", handleClick);
         overlay.setMap(null);
-        try {
-          reactRoot.unmount();
-        } catch (err) {
-          console.error("Unmount error:", err);
-        }
+
+        const timerId = setTimeout(() => {
+          try {
+            if (reactRoot) {
+              reactRoot.unmount();
+            }
+          } catch (err) {
+            void err;
+          }
+        }, 0);
+
+        return () => clearTimeout(timerId);
       };
 
       overlaysRef.current.set(h.hospitalId, {
