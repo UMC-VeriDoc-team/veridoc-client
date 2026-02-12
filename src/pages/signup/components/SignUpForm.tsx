@@ -124,7 +124,7 @@ const SignUpForm = () => {
       </label>
       {children}
       {error && (
-        <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+        <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
           {error}
         </p>
       )}
@@ -226,7 +226,7 @@ const SignUpForm = () => {
               touched={submitted}
             />
             {genderError && (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {genderError}
               </p>
             )}
@@ -234,7 +234,7 @@ const SignUpForm = () => {
         </div>
 
         {formError && (
-          <p className="mt-4 text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+          <p className="mt-4 text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
             {formError}
           </p>
         )}

@@ -92,7 +92,7 @@ const LoginForm = () => {
             />
 
             {emailError && (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {emailError}
               </p>
             )}
@@ -125,7 +125,7 @@ const LoginForm = () => {
             />
 
             {passwordError && (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {passwordError}
               </p>
             )}
@@ -135,7 +135,7 @@ const LoginForm = () => {
 
       <div className="mt-[60px]">
         {serverError && (
-          <p className="-mt-8 pb-3 text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+          <p className="-mt-8 pb-3 text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
             {serverError}
           </p>
         )}

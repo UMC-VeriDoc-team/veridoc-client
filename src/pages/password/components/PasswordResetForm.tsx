@@ -115,7 +115,7 @@ const PasswordResetForm = () => {
             />
 
             {newPasswordError ? (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {newPasswordError}
               </p>
             ) : null}
@@ -147,7 +147,7 @@ const PasswordResetForm = () => {
             />
 
             {confirmNewPasswordError ? (
-              <p className="text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-error">
+              <p className="text-xs font-medium leading-[1.18] tracking-[-0.025em] text-error sm:text-sm">
                 {confirmNewPasswordError}
               </p>
             ) : null}
