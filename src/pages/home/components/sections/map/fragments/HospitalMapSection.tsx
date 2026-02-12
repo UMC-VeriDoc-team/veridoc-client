@@ -222,7 +222,7 @@ const HospitalMapSection = () => {
 
                     <div className="flex min-w-0 flex-1 flex-col justify-between py-1">
                       <div className="flex flex-col gap-y-1.5">
-                        <p className="truncate text-base font-semibold text-gray-950 sm:text-lg">
+                        <p className="text-base font-semibold text-gray-950 sm:text-lg">
                           {hospital.name}
                         </p>
                         <div className="flex flex-wrap gap-x-[5px] gap-y-1">
