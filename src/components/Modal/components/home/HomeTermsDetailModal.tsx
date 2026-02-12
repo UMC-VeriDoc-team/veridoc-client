@@ -1,20 +1,14 @@
-import { useMemo, useState } from "react";
 import Icon from "@/components/Icon/Icon";
 import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
 import { TermsKey } from "@/components/Modal/types/terms";
 import { TERMS_ITEMS } from "@/constants/terms/termsItems";
 import { useTermsAgreementStore } from "@/stores/modal/useTermsAgreementStore";
-import {
-  getLocationPermissionState,
-  makeGeoErrorMessage,
-  requestLocationOnce,
-} from "@/utils/locationPermission";
 
 // 약관 상세 모달
 const HomeTermsDetailModal = () => {
   const { modalPayload, openModal, closeModal } = useBaseModal();
-  const { setChecked, setAll, locationError, setLocationError } = useTermsAgreementStore();
+  const { setChecked, setAll, setLocationError } = useTermsAgreementStore();
 
   const from = (modalPayload?.from as string | undefined) ?? "agreement";
   const isFooterView = from === "footer";
@@ -24,92 +18,28 @@ const HomeTermsDetailModal = () => {
   const activeKey: TermsKey = (modalPayload?.activeKey as TermsKey) ?? TermsKey.ALL;
   const activeItem = termsItems.find((t) => t.key === activeKey) ?? termsItems[0];
 
-  const locationItem = useMemo(
-    () => termsItems.find((t) => t.key === TermsKey.LOCATION),
-    [termsItems]
-  );
-  const locationRequired = Boolean(locationItem?.required);
-
-  const [requesting, setRequesting] = useState(false);
-
-  const isLocationDetail = activeKey === TermsKey.LOCATION;
-  const isAllDetail = activeKey === TermsKey.ALL;
-  const needsGeoCheck = (isLocationDetail || isAllDetail) && locationRequired;
-
   const handleBack = () => {
-    // 약관 동의 플로우에서만 뒤로가기 동작
     openModal(ModalType.HOME_TERMS_AGREEMENT);
   };
 
   // 하단 버튼 동작
-  const handlePrimaryAction = async () => {
+  const handlePrimaryAction = () => {
     if (isFooterView) {
       closeModal();
       return;
     }
 
-    // ALL 상세
-    if (isAllDetail) {
-      // 위치가 필수이면 위치 권한 확인/요청이 먼저 성공해야 전체 동의 가능
-      if (needsGeoCheck) {
-        setRequesting(true);
-        try {
-          const pState = await getLocationPermissionState();
-          if (pState === "denied") {
-            setLocationError(makeGeoErrorMessage("blocked"));
-            setChecked(TermsKey.LOCATION, false);
-            return;
-          }
-
-          const res = await requestLocationOnce();
-          if (!res.ok) {
-            setLocationError(makeGeoErrorMessage(res.reason));
-            setChecked(TermsKey.LOCATION, false);
-            return;
-          }
-
-          // 위치 OK
-          setLocationError(null);
-          setChecked(TermsKey.LOCATION, true);
-        } finally {
-          setRequesting(false);
-        }
-      }
-
-      // 전체 동의 처리
+    // ALL(전체) 상세일 때
+    if (activeKey === TermsKey.ALL) {
+      setLocationError(null); // 혹시 있을 에러 초기화
       setAll(true);
       openModal(ModalType.HOME_TERMS_AGREEMENT);
       return;
     }
 
-    // LOCATION 상세
-    if (isLocationDetail) {
-      setRequesting(true);
-      try {
-        const pState = await getLocationPermissionState();
-        if (pState === "denied") {
-          setLocationError(makeGeoErrorMessage("blocked"));
-          setChecked(TermsKey.LOCATION, false);
-          return;
-        }
-
-        const res = await requestLocationOnce();
-        if (!res.ok) {
-          setLocationError(makeGeoErrorMessage(res.reason));
-          setChecked(TermsKey.LOCATION, false);
-          return;
-        }
-
-        setLocationError(null);
-        setChecked(TermsKey.LOCATION, true);
-        openModal(ModalType.HOME_TERMS_AGREEMENT);
-        return;
-      } finally {
-        setRequesting(false);
-      }
-    }
-
-    // 기타 약관 상세
+    // LOCATION(위치정보) 상세 또는 기타 상세
+    // 팝업 없이 바로 체크 처리만 수행
+    setLocationError(null);
     setChecked(activeKey, true);
     openModal(ModalType.HOME_TERMS_AGREEMENT);
   };
@@ -206,19 +136,13 @@ const HomeTermsDetailModal = () => {
         ))}
       </div>
 
-      {/* 위치 에러 문구: 동의 플로우에서만 보여주기 */}
-      {!isFooterView && locationError && needsGeoCheck && (
-        <div className="rounded-md bg-gray-50 p-3 text-xs text-red-600">{locationError}</div>
-      )}
-
       {/* 하단 버튼 */}
       <button
         type="button"
-        onClick={() => void handlePrimaryAction()}
-        disabled={!isFooterView && requesting}
+        onClick={handlePrimaryAction}
         className="inline-flex h-12 w-full items-center justify-center rounded-[4px] bg-brand-primary text-lg font-semibold text-white hover:opacity-90 disabled:opacity-60"
       >
-        {isFooterView ? "확인" : requesting ? "위치 권한 확인 중..." : "동의하기"}
+        {isFooterView ? "확인" : "동의하기"}
       </button>
     </div>
   );
