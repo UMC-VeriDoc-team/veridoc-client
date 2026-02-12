@@ -26,10 +26,11 @@ import MainPage from "@/pages/home/MainPage";
 import MyPage from "@/pages/mypage/Mypage";
 import MyPasswordPage from "@/pages/mypage/MyPasswordPage";
 import SymptomPage from "@/pages/symptom/SymptomPage";
-import HomeSymptomOnboarding from "@/pages/usage/UsageGuidePage";
+import UsageGuidePage from "@/pages/usage/UsageGuidePage";
 import HomePreview from "@/pages/preview/HomePreview";
-import ModalGuidePage from "@/pages/guide/ModalGuidePage";
-import ColorGuide from "@/pages/guide/ColorGuide";
+// 서비스 시 필요없는 페이지
+// import ModalGuidePage from "@/pages/guide/ModalGuidePage";
+// import ColorGuide from "@/pages/guide/ColorGuide";
 
 /* modal pages */
 import UsageGuideDetailPage from "@/components/Modal/components/usage/UsageGuideDetailPage";
@@ -136,7 +137,7 @@ const App = () => {
 
               {/* 범용가이드 */}
               <Route path="/usage">
-                <Route index element={<HomeSymptomOnboarding />} />
+                <Route index element={<UsageGuidePage />} />
                 <Route path="detail" element={<UsageGuideDetailPage />} />
               </Route>
 
@@ -150,11 +151,11 @@ const App = () => {
               <Route path="/my/password" element={<MyPasswordPage />} />
 
               {/* 모달 테스트 */}
-              <Route path="/modal-guide" element={<ModalGuidePage />} />
+              {/* <Route path="/modal-guide" element={<ModalGuidePage />} /> */}
             </Route>
 
             {/* 기타 */}
-            <Route path="/color-guide" element={<ColorGuide />} />
+            {/* <Route path="/color-guide" element={<ColorGuide />} /> */}
             <Route path="*" element={<div className="p-8">Not Found</div>} />
           </Routes>
         )}
