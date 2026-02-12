@@ -35,24 +35,23 @@ const HomeTermsAgreementModal = () => {
   );
   const locationRequired = Boolean(locationItem?.required);
 
-  // 버튼 활성화 조건: 모든 필수 약관 동의 여부만 확인
   const canJoin = useMemo(() => {
     if (!allChecked) return false;
     if (locationRequired && !checked[locationKey]) return false;
     return true;
-  }, [allChecked, locationRequired, checked, locationKey]);
+  }, [allChecked, checked, locationRequired, locationKey]);
 
   const openDetail = (key: TermsKey) => {
     openModal(ModalType.HOME_TERMS_DETAIL, { activeKey: key });
   };
 
-  // 전체 동의 토글 (비동기 로직 제거)
+  // 전체 동의 토글
   const handleToggleAll = () => {
     const next = !allChecked;
     setAll(next);
   };
 
-  // 개별 약관 체크 (위치 권한 요청 로직 제거)
+  // 개별 약관 체크
   const handleToggleTerm = (key: CheckableTermsKey) => {
     setChecked(key, !checked[key]);
   };
