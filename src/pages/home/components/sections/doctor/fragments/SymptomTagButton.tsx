@@ -13,7 +13,7 @@ const SymptomTagButton = ({ tags, onClick, selectedTag }: SymptomTagButtonProps)
     }
   };
   return (
-    <div className="scrollbar-hide flex w-full gap-2 overflow-x-auto sm:px-[30px] sm:pb-4 md:px-0">
+    <div className="flex w-full gap-2 overflow-x-auto scrollbar-hide sm:px-[30px] sm:pb-4 md:px-0">
       {tags.map((tag) => (
         <button
           key={tag.id}
