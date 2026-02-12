@@ -7,6 +7,7 @@ import Icon from "@/components/Icon/Icon";
 import LogoImage from "/images/logo.svg";
 import putMyPassword from "@/pages/mypage/services/putMyPassword";
 import { PASSWORD_REGEX } from "@/utils/validatePassword";
+import Button from "@/components/Button/Button";
 
 const MyPasswordPage = () => {
   const { openModal } = useBaseModal();
@@ -31,6 +32,7 @@ const MyPasswordPage = () => {
   const isMatchSuccess =
     passwordForm.new &&
     passwordForm.new === passwordForm.confirm &&
+    passwordForm.current !== passwordForm.new &&
     PASSWORD_REGEX.test(passwordForm.new);
 
   const handleChange = (field: "current" | "new" | "confirm", value: string) => {
@@ -66,6 +68,13 @@ const MyPasswordPage = () => {
       newErrors.new = "비밀번호 형식이 올바르지 않습니다";
       isValid = false;
     }
+
+    // 현재와 새 비밀번호가 같은지 체크
+    if (current && newPwd && current === newPwd) {
+      newErrors.new = "현재 비밀번호와 다른 비밀번호를 입력해 주세요";
+      isValid = false;
+    }
+
     if (confirm && newPwd !== confirm) {
       newErrors.confirm = "입력한 비밀번호가 서로 일치하는지 확인해 주세요";
       isValid = false;
@@ -98,9 +107,6 @@ const MyPasswordPage = () => {
           return;
         }
       }
-
-      // AxiosError가 아니거나 정보가 없을 때
-      console.error(e);
     }
   };
 
@@ -147,7 +153,7 @@ const MyPasswordPage = () => {
         <div className="mb-12 text-left">
           <h2 className="mb-2 text-[20px] font-bold leading-[24px] text-gray-950">비밀번호 변경</h2>
           <p className="text-[18px] font-medium leading-[25px] text-gray-600">
-            계정 보안을 위해 현재 비밀번호를 먼저 확인합니다
+            기억하기 쉽고 안전한 비밀번호로 변경해 주세요
           </p>
         </div>
 
@@ -171,7 +177,7 @@ const MyPasswordPage = () => {
                 placeholder="현재 비밀번호를 입력해주세요"
                 value={passwordForm.current}
                 onChange={(e) => handleChange("current", e.target.value)}
-                className={`w-full rounded border p-4 pr-[85px] focus:outline-none ${
+                className={`w-full rounded border p-3 text-xs focus:outline-none sm:text-sm ${
                   pwdErrors.current
                     ? "border-error focus:border-error"
                     : "border-gray-200 focus:border-brand-primary"
@@ -179,7 +185,7 @@ const MyPasswordPage = () => {
               />
               {passwordForm.current && (
                 <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
-                  {/* 눈 아이콘: 보기 버튼 */}
+                  {/* 눈 아이콘: 보기 */}
                   <button
                     type="button"
                     onClick={() => setShowCurrent(!showCurrent)}
@@ -190,7 +196,6 @@ const MyPasswordPage = () => {
                       className="h-6 w-6"
                     />
                   </button>
-
                   {/* 전체 삭제 버튼 */}
                   <button
                     type="button"
@@ -202,7 +207,9 @@ const MyPasswordPage = () => {
                 </div>
               )}
             </div>
-            {pwdErrors.current && <p className="mt-2 text-sm text-error">{pwdErrors.current}</p>}
+            {pwdErrors.current && (
+              <p className="mt-2 text-xs text-error sm:text-sm">{pwdErrors.current}</p>
+            )}
           </div>
 
           {/* 새 비밀번호 */}
@@ -223,7 +230,7 @@ const MyPasswordPage = () => {
                 placeholder="새 비밀번호를 입력해주세요(대소문자, 숫자, 특수문자 포함 8자 이상)"
                 value={passwordForm.new}
                 onChange={(e) => handleChange("new", e.target.value)}
-                className={`w-full rounded border p-4 pr-[85px] focus:outline-none ${
+                className={`w-full rounded border p-3 text-xs focus:outline-none sm:text-sm ${
                   pwdErrors.new
                     ? "border-error focus:border-error"
                     : "border-gray-200 focus:border-brand-primary"
@@ -231,7 +238,7 @@ const MyPasswordPage = () => {
               />
               {passwordForm.new && (
                 <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
-                  {/* 눈 아이: 보기 */}
+                  {/* 눈 아이콘: 보기 */}
                   <button
                     type="button"
                     onClick={() => setShowNew(!showNew)}
@@ -242,7 +249,6 @@ const MyPasswordPage = () => {
                       className="h-6 w-6"
                     />
                   </button>
-
                   {/* 전체 삭제 버튼 */}
                   <button
                     type="button"
@@ -254,7 +260,7 @@ const MyPasswordPage = () => {
                 </div>
               )}
             </div>
-            {pwdErrors.new && <p className="mt-2 text-sm text-error">{pwdErrors.new}</p>}
+            {pwdErrors.new && <p className="mt-2 text-xs text-error sm:text-sm">{pwdErrors.new}</p>}
           </div>
 
           {/* 새 비밀번호 확인 */}
@@ -275,7 +281,7 @@ const MyPasswordPage = () => {
                 placeholder="새 비밀번호를 다시 입력하세요"
                 value={passwordForm.confirm}
                 onChange={(e) => handleChange("confirm", e.target.value)}
-                className={`w-full rounded border p-4 pr-[85px] focus:outline-none ${
+                className={`w-full rounded border p-3 text-xs focus:outline-none sm:text-sm ${
                   pwdErrors.confirm
                     ? "border-error focus:border-error"
                     : "border-gray-200 focus:border-brand-primary"
@@ -294,7 +300,6 @@ const MyPasswordPage = () => {
                       className="h-6 w-6"
                     />
                   </button>
-
                   {/* 전체 삭제 버튼 */}
                   <button
                     type="button"
@@ -306,10 +311,14 @@ const MyPasswordPage = () => {
                 </div>
               )}
             </div>
-            {pwdErrors.confirm && <p className="mt-2 text-sm text-error">{pwdErrors.confirm}</p>}
+            {pwdErrors.confirm && (
+              <p className="mt-2 text-xs text-error sm:text-sm">{pwdErrors.confirm}</p>
+            )}
             {isMatchSuccess && (
-              <div className="mt-2 flex items-center gap-1 text-sm text-green-500">
-                <span>✔</span>
+              <div className="flex items-center gap-[5px] text-[14px] font-medium leading-[1.18] tracking-[-0.025em] text-brand-green">
+                <span className="flex h-[22px] w-[22px] items-center justify-center px-[3px] py-2">
+                  <Icon name="check" className="h-full w-full" />
+                </span>
                 <span>입력한 비밀번호가 서로 일치합니다</span>
               </div>
             )}
@@ -317,12 +326,7 @@ const MyPasswordPage = () => {
 
           {/* 저장 버튼 */}
           <div className="mb-[100px] mt-[60px] w-full">
-            <button
-              onClick={handleSavePassword}
-              className="w-full rounded bg-brand-primary py-4 text-lg font-bold text-white transition-colors hover:bg-blue-600"
-            >
-              비밀번호 변경
-            </button>
+            <Button onClick={handleSavePassword}>비밀번호 변경</Button>
           </div>
         </div>
       </div>
