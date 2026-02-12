@@ -56,7 +56,7 @@ const SignUpForm = () => {
   const passwordClientError = useMemo(() => {
     if (!shouldShowError("password")) return null;
     if (!password.trim()) return "필수 입력 사항입니다";
-    if (!PASSWORD_REGEX.test(password)) return "8자 이상 (대소문자, 숫자, 특수문자 포함)";
+    if (!PASSWORD_REGEX.test(password)) return "비밀번호 형식이 올바르지 않습니다";
     return null;
   }, [password, touched.password, submitted]);
 
@@ -179,7 +179,7 @@ const SignUpForm = () => {
             <InputField
               id="signup-password"
               type="password"
-              placeholder="비밀번호를 입력해주세요 (8자 이상)"
+              placeholder="비밀번호를 입력해주세요(대소문자, 숫자, 특수문자 포함 8자 이상)"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);

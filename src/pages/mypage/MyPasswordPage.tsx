@@ -63,7 +63,7 @@ const MyPasswordPage = () => {
       isValid = false;
     }
     if (newPwd && !PASSWORD_REGEX.test(newPwd)) {
-      newErrors.new = "8자 이상 (대소문자, 숫자, 특수문자 포함)";
+      newErrors.new = "비밀번호 형식이 올바르지 않습니다";
       isValid = false;
     }
     if (confirm && newPwd !== confirm) {
@@ -220,7 +220,7 @@ const MyPasswordPage = () => {
               <input
                 id="new-password"
                 type={showNew ? "text" : "password"}
-                placeholder="새 비밀번호를 입력해주세요 (8자 이상)"
+                placeholder="새 비밀번호를 입력해주세요(대소문자, 숫자, 특수문자 포함 8자 이상)"
                 value={passwordForm.new}
                 onChange={(e) => handleChange("new", e.target.value)}
                 className={`w-full rounded border p-4 pr-[85px] focus:outline-none ${
