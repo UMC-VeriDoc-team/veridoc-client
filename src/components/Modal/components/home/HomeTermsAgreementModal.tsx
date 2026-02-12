@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Icon from "@/components/Icon/Icon";
 import { useBaseModal } from "@/stores/modal/useBaseModal";
 import { ModalType } from "@/components/Modal/types/modal";
@@ -10,23 +10,17 @@ import {
 } from "@/components/Modal/types/terms";
 import { useTermsAgreementStore } from "@/stores/modal/useTermsAgreementStore";
 import { TERMS_ITEMS } from "@/constants/terms/termsItems";
-import {
-  getLocationPermissionState,
-  makeGeoErrorMessage,
-  requestLocationOnce,
-} from "@/utils/locationPermission";
 import { useAuthStore } from "@/stores/user/useAuthStore";
 import toast from "react-hot-toast";
 
 const HomeTermsAgreementModal = () => {
   const { openModal, closeModal } = useBaseModal();
   const { name, submitTerms, loading } = useAuthStore();
-  const { checked, toggleChecked, setChecked, setAll, reset, locationError, setLocationError } =
-    useTermsAgreementStore();
+  const { checked, setChecked, setAll, reset } = useTermsAgreementStore();
 
   const termsItems = TERMS_ITEMS;
 
-  // 전체 동의 여부 (ALL 제외)
+  // 전체 동의 여부 계산 (ALL 키 제외)
   const checkableItems = termsItems.filter(
     (t): t is TermsItem & { key: CheckableTermsKey } => t.key !== TermsKey.ALL
   );
@@ -41,98 +35,21 @@ const HomeTermsAgreementModal = () => {
   );
   const locationRequired = Boolean(locationItem?.required);
 
-  // 위치 권한 요청 중
-  const [requesting, setRequesting] = useState(false);
-
-  const canJoin = useMemo(() => {
-    if (!allChecked) return false;
-    if (locationRequired && !checked[locationKey]) return false;
-    if (locationRequired && locationError) return false;
-    return true;
-  }, [allChecked, locationRequired, checked, locationKey, locationError]);
+  const canJoin = allChecked && (!locationRequired || checked[locationKey]);
 
   const openDetail = (key: TermsKey) => {
     openModal(ModalType.HOME_TERMS_DETAIL, { activeKey: key });
   };
 
-  // 위치 약관을 체크하려는 순간 실행되는 공통 함수
-  const ensureLocationAllowedAndCheck = async (): Promise<boolean> => {
-    setRequesting(true);
-    try {
-      const pState = await getLocationPermissionState();
-
-      // 차단 상태면 요청 자체를 하지 않고 에러만 노출
-      if (pState === "denied") {
-        const msg = makeGeoErrorMessage("blocked");
-        setLocationError(msg);
-        setChecked(locationKey, false);
-        return false;
-      }
-
-      // prompt/unknown/granted면 실제 요청을 한 번 시도
-      const res = await requestLocationOnce();
-      if (res.ok) {
-        setLocationError(null);
-        setChecked(locationKey, true);
-        return true;
-      }
-
-      // 거부/불가/타임아웃 등
-      const msg = makeGeoErrorMessage(res.reason);
-      setLocationError(msg);
-      setChecked(locationKey, false);
-      return false;
-    } finally {
-      setRequesting(false);
-    }
-  };
-
   // 전체 동의 토글
-  const handleToggleAll = async () => {
+  const handleToggleAll = () => {
     const next = !allChecked;
-
-    // 전체 해제
-    if (!next) {
-      setAll(false);
-      // 위치 체크 해제 시 에러도 제거
-      setLocationError(null);
-      return;
-    }
-
-    // 전체 동의 ON 시
-    if (locationRequired) {
-      const ok = await ensureLocationAllowedAndCheck();
-      if (!ok) {
-        // 전체 동의는 성립하지 않게 유지
-        setAll(false);
-        return;
-      }
-    }
-
-    // 위치 문제 없으면 전체 체크
-    setAll(true);
+    setAll(next);
   };
 
   // 개별 약관 체크
-  const handleToggleTerm = async (key: CheckableTermsKey) => {
-    // 위치 약관일 때: 체크하려는 순간 권한 확인/요청
-    if (key === locationKey) {
-      const next = !checked[key];
-
-      // 체크 해제면 그냥 해제 + 에러 제거
-      if (!next) {
-        setChecked(key, false);
-        setLocationError(null);
-        return;
-      }
-
-      // 체크 ON 시도
-      await ensureLocationAllowedAndCheck();
-      return;
-    }
-
-    // 나머지 약관은 기존 토글
-    toggleChecked(key);
+  const handleToggleTerm = (key: CheckableTermsKey) => {
+    setChecked(key, !checked[key]);
   };
 
   // 동의하고 가입하기
@@ -143,7 +60,6 @@ const HomeTermsAgreementModal = () => {
       locationService: checked[TermsKey.LOCATION],
     };
 
-    // 가입 처리 중임을 알리는 로딩 토스트
     const loadingToast = toast.loading("동의 정보를 저장하고 있습니다...");
 
     const result = await submitTerms(requestData);
@@ -155,9 +71,7 @@ const HomeTermsAgreementModal = () => {
     } else {
       toast.error(
         result.message || "서비스 연동 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.",
-        {
-          id: loadingToast,
-        }
+        { id: loadingToast }
       );
     }
   };
@@ -191,24 +105,18 @@ const HomeTermsAgreementModal = () => {
               id="all-terms"
               type="checkbox"
               checked={allChecked}
-              onChange={() => void handleToggleAll()}
+              onChange={handleToggleAll}
               className="h-6 w-6 accent-brand-primary"
-              disabled={requesting}
             />
             <span className="text-base font-semibold text-gray-900 sm:text-lg">약관 전체 동의</span>
           </label>
 
-          <button
-            type="button"
-            onClick={() => openDetail(TermsKey.ALL)}
-            aria-label="전체 약관 내용 보기"
-            className="rounded-md p-1"
-          >
+          <button type="button" onClick={() => openDetail(TermsKey.ALL)} className="rounded-md p-1">
             <Icon name="chevron-right" className="h-5 w-5 text-gray-400" />
           </button>
         </div>
 
-        {/* 개별 약관 */}
+        {/* 개별 약관 리스트 */}
         <div className="flex flex-col gap-3">
           {checkableItems.map((t) => (
             <div key={t.key} className="flex items-center justify-between">
@@ -217,9 +125,8 @@ const HomeTermsAgreementModal = () => {
                   id={`term-${t.key}`}
                   type="checkbox"
                   checked={checked[t.key]}
-                  onChange={() => void handleToggleTerm(t.key)}
+                  onChange={() => handleToggleTerm(t.key)}
                   className="h-6 w-6 accent-brand-primary"
-                  disabled={requesting && t.key === locationKey}
                 />
                 <span className="text-base font-medium text-gray-900 sm:text-lg">
                   {t.required && (
@@ -231,29 +138,19 @@ const HomeTermsAgreementModal = () => {
                 </span>
               </label>
 
-              <button
-                type="button"
-                onClick={() => openDetail(t.key)}
-                aria-label={`${t.label} 상세 보기`}
-                className="rounded-md p-1"
-              >
+              <button type="button" onClick={() => openDetail(t.key)} className="rounded-md p-1">
                 <Icon name="chevron-right" className="h-5 w-5 text-gray-400" />
               </button>
             </div>
           ))}
         </div>
-
-        {/* 위치 에러 문구 (차단/거부/불가일 때만) */}
-        {locationError && (
-          <div className="rounded-md bg-gray-50 p-3 text-xs text-red-600">{locationError}</div>
-        )}
       </div>
 
       {/* 하단 버튼 */}
       <div className="mt-6">
         <button
           type="button"
-          disabled={!canJoin || requesting || loading}
+          disabled={!canJoin || loading}
           onClick={handleSubmit}
           className={[
             "inline-flex h-12 w-full items-center justify-center rounded-[4px] text-lg font-semibold",
@@ -262,7 +159,7 @@ const HomeTermsAgreementModal = () => {
               : "bg-gray-50 text-gray-600",
           ].join(" ")}
         >
-          {requesting || loading ? "처리 중..." : "동의하고 가입하기"}
+          {loading ? "처리 중..." : "동의하고 가입하기"}
         </button>
       </div>
     </div>
