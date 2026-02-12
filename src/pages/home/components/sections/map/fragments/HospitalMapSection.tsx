@@ -196,7 +196,7 @@ const HospitalMapSection = () => {
           </p>
         </div>
 
-        <div className="scrollbar-hide flex flex-1 flex-col gap-y-[10px] overflow-y-auto px-[2px] pb-4">
+        <div className="flex flex-1 flex-col gap-y-[10px] overflow-y-auto px-[2px] pb-4 scrollbar-hide">
           {isLoading ? (
             <>
               <SkeletonHospitalCard />
@@ -217,15 +217,7 @@ const HospitalMapSection = () => {
                 >
                   <div className="flex gap-x-4">
                     <div className="aspect-square min-w-[120px] max-w-[120px] shrink-0 overflow-hidden rounded-[5px] sm:min-w-[145px] sm:max-w-[145px]">
-                      {hospital.imageUrl ? (
-                        <img
-                          src={hospital.imageUrl}
-                          alt={hospital.name}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="h-full w-full bg-gray-100" />
-                      )}
+                      <Icon name="veridoc" className="h-full w-full rounded-[5px] object-cover" />
                     </div>
 
                     <div className="flex min-w-0 flex-1 flex-col justify-between py-1">

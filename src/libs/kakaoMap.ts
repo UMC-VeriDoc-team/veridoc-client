@@ -31,6 +31,7 @@ export interface KakaoMap {
 export interface KakaoCustomOverlay {
   setMap: (map: KakaoMap | null) => void;
   setPosition: (latlng: KakaoLatLng) => void;
+  setZIndex: (zIndex: number) => void;
 }
 
 export interface KakaoMaps {
@@ -45,6 +46,7 @@ export interface KakaoMaps {
     content: HTMLElement;
     xAnchor?: number;
     yAnchor?: number;
+    zIndex?: number;
     clickable?: boolean;
   }) => KakaoCustomOverlay;
 }
