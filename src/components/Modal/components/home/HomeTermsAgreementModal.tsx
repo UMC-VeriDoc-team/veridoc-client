@@ -35,11 +35,7 @@ const HomeTermsAgreementModal = () => {
   );
   const locationRequired = Boolean(locationItem?.required);
 
-  const canJoin = useMemo(() => {
-    if (!allChecked) return false;
-    if (locationRequired && !checked[locationKey]) return false;
-    return true;
-  }, [allChecked, checked, locationRequired, locationKey]);
+  const canJoin = allChecked && (!locationRequired || checked[locationKey]);
 
   const openDetail = (key: TermsKey) => {
     openModal(ModalType.HOME_TERMS_DETAIL, { activeKey: key });
