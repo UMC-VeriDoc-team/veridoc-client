@@ -118,7 +118,7 @@ const KakaoHospitalMap = ({
     map.panTo(pos);
   }, [isMapReady, center.lat, center.lng]);
 
-  // 오버레이 생성/갱신 (hospitals가 바뀔 때만)
+  // 오버레이 생성/갱신
   useEffect(() => {
     const map = mapRef.current;
     const maps = window.kakao?.maps;
@@ -128,59 +128,68 @@ const KakaoHospitalMap = ({
     overlaysRef.current.forEach((item) => item.cleanup());
     overlaysRef.current.clear();
 
-    hospitals.forEach((h) => {
-      const position = new maps.LatLng(h.coordinate.lat, h.coordinate.lng);
+    hospitals.forEach((h, idx) => {
+      // 동일하거나 인접한 좌표에 마커가 몰려 겹쳐보이는 현상을 막기 위해 나선형으로 미세하게 분산 시킴
+      const angle = idx * 0.5; // 마커가 회전하며 퍼지는 각도
+      const radius = 0.00002 * idx; // 중심점에서 멀어지는 거리
 
+      const latJitter = Math.cos(angle) * radius;
+      const lngJitter = Math.sin(angle) * radius;
+
+      const position = new maps.LatLng(h.coordinate.lat + latJitter, h.coordinate.lng + lngJitter);
+
+      // 마커를 담을 컨테이너 생성 및 스타일 설정
       const container = document.createElement("div");
-      container.style.width = "44px";
-      container.style.height = "56px";
+      container.style.width = "64px";
+      container.style.height = "80px";
+      container.style.display = "flex";
+      container.style.alignItems = "center";
+      container.style.justifyContent = "center";
       container.style.cursor = "pointer";
 
-      const reactRoot = createRoot(container);
-      reactRoot.render(
-        <HospitalMarker
-          active={h.hospitalId === selectedHospitalId} // 초기 한번만
-          imageUrl={h.imageUrl ?? null}
-        />
-      );
+      const isSelected = h.hospitalId === selectedHospitalId;
 
+      container.style.zIndex = isSelected ? "999" : `${10 + idx}`;
+      container.style.position = "relative";
+
+      // 클릭 핸들러
       const handleClick = (e: MouseEvent) => {
         e.preventDefault();
+        e.stopPropagation(); // 지도 클릭 이벤트가 발생하는 것 방지
         onSelectHospitalRef.current(h.hospitalId);
       };
+
       container.addEventListener("click", handleClick);
 
+      const reactRoot = createRoot(container);
+      reactRoot.render(<HospitalMarker active={isSelected} />);
+
+      // 카카오 커스텀 오버레이 생성
       const overlay = new maps.CustomOverlay({
         position,
         content: container,
         xAnchor: 0.5,
         yAnchor: 1,
-        clickable: true,
+        zIndex: isSelected ? 999 : 10 + idx,
       });
 
       overlay.setMap(map);
 
       const cleanup = () => {
-        try {
-          container.removeEventListener("click", handleClick);
-        } catch (err) {
-          void err;
-        }
+        container.removeEventListener("click", handleClick);
+        overlay.setMap(null);
 
-        try {
-          overlay.setMap(null);
-        } catch (err) {
-          void err;
-        }
-
-        // React가 렌더링 중일 때 unmount는 다음 tick으로
-        queueMicrotask(() => {
+        const timerId = setTimeout(() => {
           try {
-            reactRoot.unmount();
+            if (reactRoot) {
+              reactRoot.unmount();
+            }
           } catch (err) {
             void err;
           }
-        });
+        }, 0);
+
+        return () => clearTimeout(timerId);
       };
 
       overlaysRef.current.set(h.hospitalId, {
@@ -195,28 +204,28 @@ const KakaoHospitalMap = ({
 
     return () => {
       overlaysRef.current.forEach((item) => item.cleanup());
-      overlaysRef.current.clear();
     };
-  }, [isMapReady, hospitals, onSelectHospital]);
+  }, [isMapReady, hospitals]);
 
   // 선택된 병원 이동 + active 상태 갱신
   useEffect(() => {
     const map = mapRef.current;
-    const maps = window.kakao?.maps;
-    if (!isMapReady || !map || !maps) return;
-    if (selectedHospitalId === null) return;
+    if (!isMapReady || !map) return;
 
-    const selected = overlaysRef.current.get(selectedHospitalId);
-    if (!selected) return;
-
-    map.panTo(selected.position);
+    const hospitalIndexMap = new Map(hospitals.map((h, i) => [h.hospitalId, i]));
 
     overlaysRef.current.forEach((item, id) => {
-      const hospital = hospitals.find((h) => h.hospitalId === id);
-      item.reactRoot.render(
-        <HospitalMarker active={id === selectedHospitalId} imageUrl={hospital?.imageUrl ?? null} />
-      );
+      const isSelected = id === selectedHospitalId;
+      const baseIndex = hospitalIndexMap.get(id) ?? 0;
+      item.overlay.setZIndex(isSelected ? 100 : baseIndex);
+
+      item.reactRoot.render(<HospitalMarker active={isSelected} />);
     });
+
+    if (selectedHospitalId) {
+      const selected = overlaysRef.current.get(selectedHospitalId);
+      if (selected) map.panTo(selected.position);
+    }
   }, [isMapReady, selectedHospitalId, hospitals]);
 
   // 줌 버튼

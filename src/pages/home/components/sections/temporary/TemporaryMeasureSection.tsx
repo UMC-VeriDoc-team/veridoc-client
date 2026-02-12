@@ -16,7 +16,7 @@ const TemporaryMeasureSection = () => {
         </div>
       </div>
       <article className="mt-5 flex md:mt-[40px] md:overflow-x-hidden">
-        <div className="flex flex-nowrap gap-x-5 overflow-x-scroll last:pr-[30px] md:grid md:grid-cols-3 md:gap-x-[30px] md:px-0">
+        <div className="flex flex-nowrap gap-x-5 overflow-x-scroll scrollbar-hide last:pr-[30px] md:grid md:grid-cols-3 md:gap-x-[30px] md:px-0">
           {temporaryGuides.map((guide) => (
             <MeasureCard
               key={guide.guideId}

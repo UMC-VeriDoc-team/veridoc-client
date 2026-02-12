@@ -129,7 +129,7 @@ const DoctorOpinionContent = () => {
           <div>
             <p className="text-base font-medium text-gray-950">More Posts</p>
 
-            <div className="mt-3 flex w-full flex-nowrap gap-5 overflow-x-auto pb-2">
+            <div className="mt-3 flex w-full flex-nowrap gap-5 overflow-x-auto pb-2 scrollbar-hide">
               {data.morePosts.map((post, idx) => (
                 <button
                   key={idx}
